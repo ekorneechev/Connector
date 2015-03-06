@@ -51,6 +51,7 @@ class Gui:
         self.treeview = self.builder.get_object("treeview_connections")
         self.treeview.set_model(self.sortedFiltered)
         self.getServersFromDb()
+        self.citrixEditClick = False
 
     def onDeleteWindow(self, *args):
         """Закрытие программы"""
