@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Connector
+Comment=Подключение к различным серверам
+Exec=/usr/bin/connector
+Icon=/usr/share/connector/data/emblem.png
+StartupNotify=true
+Terminal=false
+Type=Application
+Categories=Network;

@@ -1,0 +1,7 @@
+#!/usr/bin/python3
+
+import os, sys
+sys.path.append('/usr/share/connector')
+os.chdir('/usr/share/connector')
+import gui
+gui.f_main()
