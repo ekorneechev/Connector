@@ -552,12 +552,11 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <child>
-                      <object class="GtkImageMenuItem" id="help_prog">
-                        <property name="label">gtk-help</property>
+                      <object class="GtkMenuItem" id="help_prog">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <property name="use_underline">True</property>
-                        <property name="use_stock">True</property>
+                        <property name="label" translatable="yes">Wiki в Интернете</property>
+                        <signal name="activate" handler="onWiki" swapped="no"/>
                       </object>
                     </child>
                     <child>

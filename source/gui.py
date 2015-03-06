@@ -3,7 +3,7 @@
 
 from ctor import *
 from gi.repository import Gtk, Gdk, GdkPixbuf
-import random, sys
+import random, sys, webbrowser
 from GLOBAL import *
 
 
@@ -837,6 +837,9 @@ class Gui:
     def inputName(self, button):
         """Функция, активирующая кнопку Сохранить после ввода имени соединения"""
         button.set_sensitive(True)
+
+    def onWiki(self, *args):
+        webbrowser.open ('https://github.com/ekorneechev/Connector/wiki', new = 2)
 
 def f_main():
     createFolder()
