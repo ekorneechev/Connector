@@ -145,7 +145,7 @@ class XFreeRdp:
             if args[5]: command += ' /size:' + args[5]
             if args[6]: command += ' /bpp:' + args[6]
             if args[7]: command += ' /drive:LocalFolder,"' + args[7] + '"'
-            command += self.entryPwd + '/cert-ignore &' #для игнора ввода Y/N при запросе сертификата
+            command += self.entryPwd + ' /cert-ignore &' #для игнора ввода Y/N при запросе сертификата
             os.system(command)
 
 class NxRemmina(Remmina):
