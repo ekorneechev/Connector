@@ -196,8 +196,7 @@ class Vmware:
             if args[2]: command += ' -d ' + args[2]
             if args[3]: command += ' -p ' + args[3]
             if args[4]: command += ' --fullscreen'
-            command += ' &'
-            print(command)          
+            command += ' &'    
             os.system(command)
 
 class Citrix:
