@@ -203,8 +203,9 @@ class Vmware:
 class Citrix:
     """Класс для настройки ICA-соединения к Citrix-серверу"""
     def start(self, args):
-        try: addr = args[0]
-        except: addr = args
+        if type(args) == list:
+            addr = args[0]
+        else: addr = args
         os.system('/opt/Citrix/ICAClient/util/storebrowse --addstore ' + addr)
         os.system('/opt/Citrix/ICAClient/selfservice --icaroot /opt/Citrix/ICAClient &')
 

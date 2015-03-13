@@ -196,14 +196,16 @@ class Vmware:
             if args[2]: command += ' -d ' + args[2]
             if args[3]: command += ' -p ' + args[3]
             if args[4]: command += ' --fullscreen'
-            command += ' &'    
+            command += ' &'
+            print(command)          
             os.system(command)
 
 class Citrix:
     """Класс для настройки ICA-соединения к Citrix-серверу"""
     def start(self, args):
-        try: addr = args[0]
-        except: addr = args
+        if type(args) == list:
+            addr = args[0]
+        else: addr = args
         os.system('/opt/Citrix/ICAClient/util/storebrowse --addstore ' + addr)
         os.system('/opt/Citrix/ICAClient/selfservice --icaroot /opt/Citrix/ICAClient &')
 
