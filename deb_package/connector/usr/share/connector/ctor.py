@@ -135,7 +135,7 @@ class XFreeRdp:
     entryPwd = ' /p:$(zenity --entry --title="Аутентификация" --text="Введите пароль:" --hide-text)'
     def start(self, args):
         if type(args) == str:        
-            os.system('xfreerdp /v:' + args + self.entryUser + self.entryPwd + '/f /cert-ignore &')
+            os.system('xfreerdp /v:' + args + self.entryUser + self.entryPwd + ' /f /cert-ignore &')
         else:
             command = 'xfreerdp /v:' + args[0]
             if args[1]: command += ' /u:' + args[1]
