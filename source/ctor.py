@@ -139,6 +139,7 @@ class XFreeRdp:
         else:
             command = 'xfreerdp /v:' + args[0]
             if args[1]: command += ' /u:' + args[1]
+            else: command += self.entryUser
             if args[2]: command += ' /d:' + args[2]
             if args[3]: command += ' /f'
             if args[4]: command += ' +clipboard'
