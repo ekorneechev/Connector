@@ -12,3 +12,4 @@ Depends: libgtk-3-0 (>=3.10), remmina (>=1.0), python3 (>=3.2), python3-gi (>=3.
 Suggests: vncviewer, freerdp-x11 (>=1.2.0)
 Installed-Size: 420
 Priority: optional
+Homepage: https://github.com/ekorneechev/Connector
