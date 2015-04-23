@@ -17,9 +17,11 @@
 
 * Обновление файлов для сборки:
 
-`cp source/*.py deb_package/connector/usr/share/connector/ &&
-cp source/connector deb_package/connector/usr/bin/ &&
-cp -r data/ deb_package/connector/usr/share/connector/`
+`cp source/*.py deb_package/connector/usr/share/connector/ && \`
+
+`cp source/connector deb_package/connector/usr/bin/ && \`
+
+`cp -r data/ deb_package/connector/usr/share/connector/`
 
 * Настройка исполняемых файлов:
 
