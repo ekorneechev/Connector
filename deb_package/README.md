@@ -9,18 +9,21 @@
 
 `sudo apt-get update && sudo apt-get upgrade`
 
-!!!!!!!!!!!!!!!!!!!!!!!!!
-Следующий раздел тоже вскоре будет подправлен!
-!!!!!!!!!!!!!!!!!!!!!!!!!
 
 Для самостоятельной сборки deb-пакета Вам потребуется выполнить несколько команд: 
 * Установка необходимых для сборки пакетов:
 
 `sudo apt-get install dpkg debconf debhelper lintian`
 
+* Обновление файлов для сборки:
+
+`cp source/*.py deb_package/connector/usr/share/connector/ &&
+cp source/connector deb_package/connector/usr/bin/ &&
+cp -r data/ deb_package/connector/usr/share/connector/`
+
 * Настройка исполняемых файлов:
 
-`chmod 755 connector/usr/bin/connector && chmod 755 connector/DEBIAN/postrm`
+`cd deb_package/ && chmod 755 connector/usr/bin/connector && chmod 755 connector/DEBIAN/postrm`
 
 * Сборка пакета:
 
