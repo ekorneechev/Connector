@@ -21,7 +21,7 @@ def connectFile(filename):
             protocol = parameters.pop(0)
             connect = definition(protocol)
             connect.start(parameters)
-    except: os.system("zenity --error --text='Проверьте настройки программ по умолчанию' --no-wrap")
+    except (IndexError, KeyError): os.system("zenity --error --text='Проверьте настройки программ по умолчанию' --no-wrap")
 
 class Gui:
     def __init__(self):

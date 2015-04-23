@@ -14,7 +14,7 @@ def loadFromFile(fileName, window = None):
         dbfile.close()
         return obj
     except FileNotFoundError:
-        if fileName.find('.ctor') == -1: #если загружаем параметры программы
+        if fileName.find('default.conf') != -1: #если загружаем параметры программы
             #при неудаче - создает файл со значениями по умолчанию
             saveInFile(fileName, DEFAULT)
             return DEFAULT
@@ -29,7 +29,7 @@ def loadFromFile(fileName, window = None):
                  "Файл " + fileName + "\nимеет неверный формат")
         response = dialog.run()
         dialog.destroy()
-        return None            
+        return None        
 
 def saveInFile(fileName, obj):
     """Запись параметров в файл:
