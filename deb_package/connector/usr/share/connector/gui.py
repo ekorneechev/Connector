@@ -21,7 +21,7 @@ def connectFile(filename):
             protocol = parameters.pop(0)
             connect = definition(protocol)
             connect.start(parameters)
-    except: os.system("zenity --error --text='Проверьте настройки программ по умолчанию' --no-wrap")
+    except (IndexError, KeyError): os.system("zenity --error --text='Проверьте настройки программ по умолчанию' --no-wrap")
 
 class Gui:
     def __init__(self):
@@ -98,8 +98,8 @@ class Gui:
         dialog = self.createOpenDialog("Импорт файла с конфигурацией подключения")
         response = dialog.run()
         if response == Gtk.ResponseType.OK:
-            filename = os.path.basename(dialog.get_filename())
-            parameters = properties.loadFromFile(filename, self.window)
+            filename = dialog.get_filename()
+            parameters = properties.importFromFile(filename)
             if parameters != None:
                 if self.correctProgramm(parameters):
                     protocol = parameters.pop(0)

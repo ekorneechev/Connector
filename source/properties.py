@@ -29,7 +29,15 @@ def loadFromFile(fileName, window = None):
                  "Файл " + fileName + "\nимеет неверный формат")
         response = dialog.run()
         dialog.destroy()
-        return None        
+        return None
+
+def importFromFile(fileName):
+    """Импорт параметров из файла .ctor"""
+    dbfile = open(fileName, 'rb')
+    obj = pickle.load(dbfile)
+    dbfile.close()
+    return obj
+	        
 
 def saveInFile(fileName, obj):
     """Запись параметров в файл:

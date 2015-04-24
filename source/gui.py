@@ -98,8 +98,8 @@ class Gui:
         dialog = self.createOpenDialog("Импорт файла с конфигурацией подключения")
         response = dialog.run()
         if response == Gtk.ResponseType.OK:
-            filename = os.path.basename(dialog.get_filename())
-            parameters = properties.loadFromFile(filename, self.window)
+            filename = dialog.get_filename()
+            parameters = properties.importFromFile(filename)
             if parameters != None:
                 if self.correctProgramm(parameters):
                     protocol = parameters.pop(0)
