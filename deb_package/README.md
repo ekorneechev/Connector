@@ -24,9 +24,7 @@
 
 `cp -r data/ deb_package/connector/usr/share/connector/ && \`
 
-`mv deb_package/connector/usr/share/connector/data/connector.desktop \ `
-
-`deb_package/connector/usr/share/applications/data`
+`mv deb_package/connector/usr/share/connector/data/connector.desktop deb_package/connector/usr/share/applications/data`
 
 * Настройка исполняемых файлов:
 
