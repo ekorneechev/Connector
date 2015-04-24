@@ -31,3 +31,7 @@
 * Сборка пакета:
 
 `fakeroot dpkg-deb --build connector`
+
+* Установка пакета:
+
+`sudo dpkg -i connector.deb`
