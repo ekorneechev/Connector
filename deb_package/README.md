@@ -22,7 +22,11 @@
 
 `cp source/connector deb_package/connector/usr/bin/ && \`
 
-`cp -r data/ deb_package/connector/usr/share/connector/`
+`cp -r data/ deb_package/connector/usr/share/connector/ && \`
+
+`mv deb_package/connector/usr/share/connector/data/connector.desktop \ `
+
+`deb_package/connector/usr/share/applications/data`
 
 * Настройка исполняемых файлов:
 
