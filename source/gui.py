@@ -86,9 +86,15 @@ class Gui:
         dialog = self.createOpenDialog("Открытие файла с конфигурацией подключения")
         response = dialog.run()
         if response == Gtk.ResponseType.OK:
-            filename = os.path.basename(dialog.get_filename())
+            filename = dialog.get_filename()
+            basename = os.path.basename(filename)
+            os.system('cp "' + filename + '" ' + WORKFOLDER)
+            os.chdir(WORKFOLDER)
+            filename = 'tmp_' + basename
+            os.rename(basename, filename)            
             connectFile(filename)
-            viewStatus(self.statusbar, "Открывается файл " + filename)
+            os.remove(filename)
+            viewStatus(self.statusbar, "Открывается файл " + dialog.get_filename())
         else:
             viewStatus(self.statusbar, "Файл не был выбран")
         dialog.destroy()
