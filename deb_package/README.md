@@ -26,9 +26,9 @@
 
 `mv deb_package/connector/usr/share/connector/data/connector.desktop deb_package/connector/usr/share/applications/data`
 
-* Настройка исполняемых файлов:
+* Настройка исполняемого файла:
 
-`cd deb_package/ && chmod 755 connector/usr/bin/connector && chmod 755 connector/DEBIAN/postrm`
+`cd deb_package/ && chmod 755 connector/usr/bin/connector`
 
 * Сборка пакета:
 
