@@ -131,15 +131,16 @@ class XFreeRdp:
     """Класс для настройки RDP-соединения через xfreerdp"""
     #Утилита zenity – это средство создания диалоговых окон в режиме командной строки. 
     #http://www.ibm.com/developerworks/ru/library/l-zenity/index.html
-    entryUser = ' /u:$(zenity --entry --title="Аутентификация" --text="Введите имя пользователя:")'
-    entryPwd = ' /p:$(zenity --entry --title="Аутентификация" --text="Введите пароль:" --hide-text)'
+    entryUser = 'LOGIN=$(zenity --entry --title="Аутентификация" --text="Введите имя пользователя:") && '
+    entryPwd = ' /p:$(zenity --entry --title="Аутентификация" --text="Логин: $LOGIN\nВведите пароль:" --hide-text)'
     def start(self, args):
-        if type(args) == str:        
-            os.system('xfreerdp /v:' + args + self.entryUser + self.entryPwd + ' /f /cert-ignore &')
+        if type(args) == str:
+            os.system(self.entryUser + 'xfreerdp /v:' + args + ' /u:$LOGIN' + self.entryPwd + ' /f /cert-ignore &')
         else:
             command = 'xfreerdp /v:' + args[0]
-            if args[1]: command += ' /u:' + args[1]
-            else: command += self.entryUser
+            if args[1]: command = "LOGIN=" + args[1] + ' && ' + command
+            else: command = self.entryUser + command
+            command += ' /u:$LOGIN'
             if args[2]: command += ' /d:' + args[2]
             if args[3]: command += ' /f'
             if args[4]: command += ' +clipboard'
