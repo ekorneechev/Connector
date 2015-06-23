@@ -21,6 +21,8 @@
 
 `mkdir -p deb_package/connector/usr/share/applications/data`
 
+`mkdir -p deb_package/connector/usr/share/connector`
+
 `cp source/*.py deb_package/connector/usr/share/connector/`
 
 `cp source/connector deb_package/connector/usr/bin/`
