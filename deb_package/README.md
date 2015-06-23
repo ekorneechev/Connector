@@ -17,11 +17,15 @@
 
 * Копирование файлов для сборки:
 
-`cp source/*.py deb_package/connector/usr/share/connector/ && \`
+`mkdir -p deb_package/connector/usr/bin`
 
-`cp source/connector deb_package/connector/usr/bin/ && \`
+`mkdir -p deb_package/connector/usr/share/applications/data`
 
-`cp -r data/ deb_package/connector/usr/share/connector/ && \`
+`cp source/*.py deb_package/connector/usr/share/connector/`
+
+`cp source/connector deb_package/connector/usr/bin/`
+
+`cp -r data/ deb_package/connector/usr/share/connector/`
 
 `mv deb_package/connector/usr/share/connector/data/connector.desktop deb_package/connector/usr/share/applications/data`
 
