@@ -59,7 +59,8 @@ class Gui:
     
     def onViewAbout(self, *args):
         """Создает диалоговое окно 'О программе'"""
-        about = Gtk.AboutDialog("О программе Connector", self.window)
+        about = Gtk.AboutDialog()
+        about.set_title("О программе Connector")
         about.set_program_name("Connector")
         comments = """Программа-фронтэнд для удаленного администрирования 
                       компьютеров с различными операционными системами. 
