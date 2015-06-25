@@ -1,6 +1,6 @@
 Name: connector
-Version: 1.3.12
-Release: alt4
+Version: 1.3.14
+Release: alt1
 
 Summary: Remote desktop chooser
 License: GPL
@@ -38,6 +38,9 @@ install -p *.py %buildroot%basedir/
 %basedir/*.py
 
 %changelog
+* Thu Jun 25 2015 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.3.14-alt1
+- Update GUI and FreeRDP features
+
 * Tue Jun 23 2015 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.3.12-alt4
 - Update SPEC
 
