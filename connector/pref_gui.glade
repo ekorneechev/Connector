@@ -229,6 +229,7 @@
           <object class="GtkBox" id="box44">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="halign">end</property>
             <child>
               <object class="GtkLabel" id="label30">
                 <property name="visible">True</property>
@@ -243,6 +244,7 @@
             </child>
             <child>
               <object class="GtkEntry" id="entry_SFTP_execpath">
+                <property name="width_request">235</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="text" translatable="yes">/</property>
@@ -264,6 +266,7 @@
           <object class="GtkBox" id="box45">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="halign">end</property>
             <child>
               <object class="GtkLabel" id="label31">
                 <property name="visible">True</property>
@@ -279,6 +282,7 @@
             </child>
             <child>
               <object class="GtkEntry" id="entry_SFTP_charset">
+                <property name="width_request">235</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="placeholder_text" translatable="yes">UTF-8 (по умолчанию)</property>
@@ -328,7 +332,7 @@
             </child>
             <child>
               <object class="GtkEntry" id="entry_SFTP_name">
-                <property name="width_request">190</property>
+                <property name="width_request">235</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="placeholder_text" translatable="yes">Пример, MyServer</property>
@@ -648,6 +652,7 @@
       <object class="GtkBox" id="box38">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="halign">end</property>
         <child>
           <object class="GtkLabel" id="label25">
             <property name="visible">True</property>
@@ -662,6 +667,7 @@
         </child>
         <child>
           <object class="GtkEntry" id="entry_SSH_exec">
+            <property name="width_request">235</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
           </object>
@@ -682,6 +688,7 @@
       <object class="GtkBox" id="box39">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="halign">end</property>
         <child>
           <object class="GtkLabel" id="label26">
             <property name="visible">True</property>
@@ -697,6 +704,7 @@
         </child>
         <child>
           <object class="GtkEntry" id="entry_SSH_charset">
+            <property name="width_request">235</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="placeholder_text" translatable="yes">UTF-8 (по умолчанию)</property>
@@ -746,7 +754,7 @@
         </child>
         <child>
           <object class="GtkEntry" id="entry_SSH_name">
-            <property name="width_request">190</property>
+            <property name="width_request">235</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="placeholder_text" translatable="yes">Пример, MyServer</property>
@@ -876,7 +884,7 @@
         </child>
         <child>
           <object class="GtkComboBox" id="combo_VMWARE">
-            <property name="width_request">190</property>
+            <property name="width_request">235</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">start</property>
@@ -925,7 +933,7 @@
         </child>
         <child>
           <object class="GtkEntry" id="entry_VMWARE_user">
-            <property name="width_request">190</property>
+            <property name="width_request">235</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <signal name="activate" handler="onButtonConnect" object="entry_VMWARE_serv" swapped="no"/>
@@ -962,7 +970,7 @@
         </child>
         <child>
           <object class="GtkEntry" id="entry_VMWARE_pwd">
-            <property name="width_request">190</property>
+            <property name="width_request">235</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="halign">start</property>
@@ -1002,7 +1010,7 @@
         </child>
         <child>
           <object class="GtkEntry" id="entry_VMWARE_dom">
-            <property name="width_request">190</property>
+            <property name="width_request">235</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <signal name="activate" handler="onButtonConnect" object="entry_VMWARE_serv" swapped="no"/>
@@ -1070,7 +1078,7 @@
         </child>
         <child>
           <object class="GtkEntry" id="entry_VMWARE_name">
-            <property name="width_request">190</property>
+            <property name="width_request">235</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="placeholder_text" translatable="yes">Пример, MyServer</property>
@@ -1187,6 +1195,18 @@
           </packing>
         </child>
         <child>
+          <object class="GtkLabel" id="label58">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">"Real VNC"</property>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkLabel" id="label36">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
@@ -1196,12 +1216,12 @@
           <packing>
             <property name="expand">True</property>
             <property name="fill">True</property>
-            <property name="position">1</property>
+            <property name="position">2</property>
           </packing>
         </child>
         <child>
           <object class="GtkComboBox" id="combo_VNC1">
-            <property name="width_request">190</property>
+            <property name="width_request">235</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">start</property>
@@ -1220,7 +1240,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">2</property>
+            <property name="position">3</property>
           </packing>
         </child>
       </object>
@@ -1339,7 +1359,7 @@
         </child>
         <child>
           <object class="GtkEntry" id="entry_VNC1_name">
-            <property name="width_request">190</property>
+            <property name="width_request">235</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="placeholder_text" translatable="yes">Пример, MyServer</property>
@@ -1437,47 +1457,146 @@
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes">256 цветов (8 бит/пиксель)</col>
+        <col id="0" translatable="yes">256 цветов (8 бит)</col>
         <col id="1" translatable="yes">8</col>
       </row>
       <row>
-        <col id="0" translatable="yes">High Color (16 бит/пиксель)</col>
+        <col id="0" translatable="yes">High Color (16 бит)</col>
         <col id="1" translatable="yes">16</col>
       </row>
       <row>
-        <col id="0" translatable="yes">True Color (24 бит/пиксель)</col>
+        <col id="0" translatable="yes">True Color (24 бит)</col>
         <col id="1" translatable="yes">24</col>
       </row>
       <row>
-        <col id="0" translatable="yes">True Color (32 бит/пиксель)</col>
+        <col id="0" translatable="yes">True Color (32 бит)</col>
         <col id="1" translatable="yes">32</col>
       </row>
     </data>
   </object>
-  <object class="GtkBox" id="box_RDP1">
+  <object class="GtkBox" id="box1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="orientation">vertical</property>
     <child>
-      <object class="GtkBox" id="box_63">
-        <property name="width_request">350</property>
+      <object class="GtkLabel" id="label1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="margin_left">10</property>
-        <property name="margin_right">10</property>
-        <property name="margin_top">10</property>
-        <property name="margin_bottom">10</property>
-        <property name="orientation">vertical</property>
+        <property name="halign">end</property>
+        <property name="label" translatable="yes">Глубина цвета: </property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkComboBox" id="entry_RDP1_color1">
+        <property name="width_request">190</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="model">list_colordepth_RDP</property>
+        <property name="active">3</property>
+        <property name="id_column">1</property>
         <child>
-          <object class="GtkBox" id="box63">
+          <object class="GtkCellRendererText" id="cellrenderertext1"/>
+          <attributes>
+            <attribute name="text">0</attribute>
+          </attributes>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">1</property>
+      </packing>
+    </child>
+  </object>
+  <object class="GtkBox" id="box_RDP1">
+    <property name="width_request">350</property>
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="margin_left">10</property>
+    <property name="margin_right">10</property>
+    <property name="margin_top">10</property>
+    <property name="margin_bottom">10</property>
+    <property name="orientation">vertical</property>
+    <child>
+      <object class="GtkNotebook" id="notebook1">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <child>
+          <object class="GtkBox" id="box62">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="orientation">vertical</property>
             <child>
-              <object class="GtkImage" id="image9">
+              <object class="GtkBox" id="box63">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="pixbuf">RDP.png</property>
-                <property name="icon_size">1</property>
+                <child>
+                  <object class="GtkImage" id="image9">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="pixbuf">RDP.png</property>
+                    <property name="icon_size">1</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label55">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="label" translatable="yes">"Free RDP"</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label46">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes">Сервер: </property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBox" id="combo_RDP1">
+                    <property name="width_request">235</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="has_entry">True</property>
+                    <property name="entry_text_column">0</property>
+                    <child internal-child="entry">
+                      <object class="GtkEntry" id="entry_RDP1_serv">
+                        <property name="name">RDP</property>
+                        <property name="can_focus">True</property>
+                        <property name="tooltip_text" translatable="yes">Поддерживается следующий формат:
+ - сервер
+ - сервер:порт</property>
+                        <signal name="activate" handler="onButtonConnect" swapped="no"/>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -1486,35 +1605,71 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="label46">
+              <object class="GtkBox" id="box65">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">end</property>
-                <property name="label" translatable="yes">Сервер: </property>
+                <child>
+                  <object class="GtkLabel" id="label48">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes">Имя пользователя: </property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="entry_RDP1_user">
+                    <property name="width_request">235</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <signal name="activate" handler="onButtonConnect" object="entry_RDP1_serv" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
               </object>
               <packing>
-                <property name="expand">True</property>
+                <property name="expand">False</property>
                 <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
             </child>
             <child>
-              <object class="GtkComboBox" id="combo_RDP1">
-                <property name="width_request">190</property>
+              <object class="GtkBox" id="box64">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">start</property>
-                <property name="has_entry">True</property>
-                <property name="entry_text_column">0</property>
-                <child internal-child="entry">
-                  <object class="GtkEntry" id="entry_RDP1_serv">
-                    <property name="name">RDP</property>
-                    <property name="can_focus">True</property>
-                    <property name="tooltip_text" translatable="yes">Поддерживается следующий формат:
- - сервер
- - сервер:порт</property>
-                    <signal name="activate" handler="onButtonConnect" swapped="no"/>
+                <child>
+                  <object class="GtkLabel" id="label47">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes">Домен: </property>
                   </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="entry_RDP1_dom">
+                    <property name="width_request">235</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <signal name="activate" handler="onButtonConnect" object="entry_RDP1_serv" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
                 </child>
               </object>
               <packing>
@@ -1523,180 +1678,205 @@
                 <property name="position">2</property>
               </packing>
             </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox" id="box64">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <child>
-              <object class="GtkLabel" id="label47">
+              <object class="GtkSeparator" id="separator28">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="halign">end</property>
-                <property name="label" translatable="yes">Домен: </property>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkEntry" id="entry_RDP1_dom">
-                <property name="width_request">190</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <signal name="activate" handler="onButtonConnect" object="entry_RDP1_serv" swapped="no"/>
+                <property name="margin_top">10</property>
+                <property name="margin_bottom">10</property>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="position">3</property>
               </packing>
             </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox" id="box65">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <child>
-              <object class="GtkLabel" id="label48">
+              <object class="GtkBox" id="box66">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
-                <property name="label" translatable="yes">Имя пользователя: </property>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkEntry" id="entry_RDP1_user">
-                <property name="width_request">190</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <signal name="activate" handler="onButtonConnect" object="entry_RDP1_serv" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">2</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkSeparator" id="separator28">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="margin_top">10</property>
-            <property name="margin_bottom">10</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">3</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox" id="box66">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <child>
-              <object class="GtkLabel" id="label49">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="halign">end</property>
-                <property name="label" translatable="yes">Глубина цвета: </property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkComboBox" id="entry_RDP1_color">
-                <property name="width_request">190</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="model">list_colordepth_RDP</property>
-                <property name="active">3</property>
-                <property name="id_column">1</property>
                 <child>
-                  <object class="GtkCellRendererText" id="cellrenderertext11"/>
-                  <attributes>
-                    <attribute name="text">0</attribute>
-                  </attributes>
+                  <object class="GtkLabel" id="label49">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes">Глубина цвета: </property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBox" id="entry_RDP1_color">
+                    <property name="width_request">235</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="model">list_colordepth_RDP</property>
+                    <property name="active">3</property>
+                    <property name="id_column">1</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="cellrenderertext11"/>
+                      <attributes>
+                        <attribute name="text">0</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
                 </child>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="position">4</property>
               </packing>
             </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">4</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox" id="box68">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="double_buffered">False</property>
-            <property name="margin_left">11</property>
             <child>
-              <object class="GtkLabel" id="label51">
+              <object class="GtkBox" id="box68">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="valign">start</property>
-                <property name="margin_left">1</property>
-                <property name="margin_top">4</property>
-                <property name="label" translatable="yes">Размер окна: </property>
+                <property name="double_buffered">False</property>
+                <property name="halign">end</property>
+                <child>
+                  <object class="GtkLabel" id="label51">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="valign">start</property>
+                    <property name="margin_left">1</property>
+                    <property name="margin_top">4</property>
+                    <property name="label" translatable="yes">Размер окна: </property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="box69">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkCheckButton" id="check_RDP1_fullscreen">
+                        <property name="label" translatable="yes">Развернуть на весь экран
+(Ctrl+Alt+Enter для выхода)</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="xalign">0</property>
+                        <property name="active">True</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkRadioButton" id="radio_RDP1_resol_default">
+                        <property name="label" translatable="yes">Клиентское разрешение</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="xalign">0</property>
+                        <property name="active">True</property>
+                        <property name="draw_indicator">True</property>
+                        <signal name="toggled" handler="offResolutionSet" object="entry_RDP1_resolution" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="box70">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <object class="GtkRadioButton" id="radio_RDP1_resol_hand">
+                            <property name="label" translatable="yes">Вручную: </property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="xalign">0</property>
+                            <property name="draw_indicator">True</property>
+                            <property name="group">radio_RDP1_resol_default</property>
+                            <signal name="toggled" handler="onResolutionSet" object="entry_RDP1_resolution" swapped="no"/>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkEntry" id="entry_RDP1_resolution">
+                            <property name="width_request">235</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="placeholder_text" translatable="yes">Формат: 800x600</property>
+                            <signal name="activate" handler="onButtonConnect" object="entry_RDP1_serv" swapped="no"/>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">0</property>
+                <property name="position">5</property>
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="box69">
+              <object class="GtkSeparator" id="separator29">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="orientation">vertical</property>
+                <property name="margin_top">10</property>
+                <property name="margin_bottom">10</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">6</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="box71">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
                 <child>
-                  <object class="GtkCheckButton" id="check_RDP1_fullscreen">
-                    <property name="label" translatable="yes">Развернуть на весь экран
-(Ctrl+Alt+Enter для выхода)</property>
+                  <object class="GtkCheckButton" id="check_RDP1_folder">
+                    <property name="label" translatable="yes">Общая папка: </property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
                     <property name="xalign">0</property>
-                    <property name="active">True</property>
                     <property name="draw_indicator">True</property>
                   </object>
                   <packing>
@@ -1706,15 +1886,133 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkRadioButton" id="radio_RDP1_resol_default">
-                    <property name="label" translatable="yes">Использовать клиентское разрешение</property>
+                  <object class="GtkFileChooserButton" id="RDP1_share_folder">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="action">select-folder</property>
+                    <property name="title" translatable="yes">Выберите папку</property>
+                    <signal name="set-focus-child" handler="onFolderChoose" object="check_RDP1_folder" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">7</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="check_RDP1_clipboard">
+                <property name="label" translatable="yes">Буфер обмена</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="halign">start</property>
+                <property name="xalign">0</property>
+                <property name="active">True</property>
+                <property name="draw_indicator">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">8</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+        <child type="tab">
+          <object class="GtkLabel" id="label50">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes"> Основное </property>
+          </object>
+          <packing>
+            <property name="tab_fill">False</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="box67">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkBox" id="box75">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkImage" id="image10">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="pixbuf">RDP.png</property>
+                    <property name="icon_size">1</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label60">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes">Gateway Hostname: </property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="entry_RDP1_gserv">
+                    <property name="width_request">235</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="xalign">0</property>
-                    <property name="active">True</property>
-                    <property name="draw_indicator">True</property>
-                    <signal name="toggled" handler="offResolutionSet" object="entry_RDP1_resolution" swapped="no"/>
+                    <property name="margin_top">1</property>
+                    <property name="margin_bottom">1</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="box76">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkLabel" id="label59">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes">Gateway username: </property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="entry_RDP1_guser">
+                    <property name="width_request">235</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -1722,236 +2020,6 @@
                     <property name="position">1</property>
                   </packing>
                 </child>
-                <child>
-                  <object class="GtkBox" id="box70">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <child>
-                      <object class="GtkRadioButton" id="radio_RDP1_resol_hand">
-                        <property name="label" translatable="yes">Вручную</property>
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="receives_default">False</property>
-                        <property name="xalign">0</property>
-                        <property name="draw_indicator">True</property>
-                        <property name="group">radio_RDP1_resol_default</property>
-                        <signal name="toggled" handler="onResolutionSet" object="entry_RDP1_resolution" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkEntry" id="entry_RDP1_resolution">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="placeholder_text" translatable="yes">Формат: 800x600</property>
-                        <signal name="activate" handler="onButtonConnect" object="entry_RDP1_serv" swapped="no"/>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">6</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkSeparator" id="separator29">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="margin_top">10</property>
-            <property name="margin_bottom">10</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">7</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox" id="box71">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <child>
-              <object class="GtkCheckButton" id="check_RDP1_folder">
-                <property name="label" translatable="yes">Общая папка: </property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="xalign">0</property>
-                <property name="draw_indicator">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkFileChooserButton" id="RDP1_share_folder">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="action">select-folder</property>
-                <property name="title" translatable="yes">Выберите папку</property>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">8</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkCheckButton" id="check_RDP1_clipboard">
-            <property name="label" translatable="yes">Буфер обмена</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">False</property>
-            <property name="halign">start</property>
-            <property name="xalign">0</property>
-            <property name="active">True</property>
-            <property name="draw_indicator">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">11</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkSeparator" id="separator30">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="margin_top">10</property>
-            <property name="margin_bottom">10</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">13</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox" id="box73">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <child>
-              <object class="GtkLabel" id="label53">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="halign">end</property>
-                <property name="label" translatable="yes">Название соединения: </property>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkEntry" id="entry_RDP1_name">
-                <property name="width_request">190</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="placeholder_text" translatable="yes">Пример, MyServer</property>
-                <signal name="activate" handler="onButtonSave" object="entry_RDP1_serv" swapped="no"/>
-                <signal name="changed" handler="inputName" object="button_RDP1_save" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">14</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkSeparator" id="separator31">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="margin_top">10</property>
-            <property name="margin_bottom">10</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">15</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox" id="box74">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="halign">center</property>
-            <property name="homogeneous">True</property>
-            <child>
-              <object class="GtkButton" id="button_RDP1_save">
-                <property name="label" translatable="yes">Сохранить</property>
-                <property name="visible">True</property>
-                <property name="sensitive">False</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <signal name="clicked" handler="onButtonSave" object="entry_RDP1_serv" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="button_RDP1_cancel">
-                <property name="label" translatable="yes">Отмена</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="button_RDP1_connect">
-                <property name="label" translatable="yes">Подключиться</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <signal name="clicked" handler="onButtonConnect" object="entry_RDP1_serv" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -1959,11 +2027,123 @@
                 <property name="position">2</property>
               </packing>
             </child>
+            <child>
+              <object class="GtkBox" id="box77">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkLabel" id="label61">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes">Gateway domain: </property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="entry_RDP1_gdom">
+                    <property name="width_request">235</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="box78">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkLabel" id="label62">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes">Gateway password: </property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="entry_RDP1_gpwd">
+                    <property name="width_request">235</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="visibility">False</property>
+                    <property name="input_purpose">password</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">4</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSeparator" id="separator30">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="margin_top">10</property>
+                <property name="margin_bottom">10</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">5</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="check_RDP1_adm">
+                <property name="label" translatable="yes">Admin (or console) session</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="halign">start</property>
+                <property name="xalign">0</property>
+                <property name="draw_indicator">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">6</property>
+              </packing>
+            </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">16</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child type="tab">
+          <object class="GtkLabel" id="label52">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes"> Дополнительно </property>
+          </object>
+          <packing>
+            <property name="position">1</property>
+            <property name="tab_fill">False</property>
           </packing>
         </child>
       </object>
@@ -1971,6 +2151,113 @@
         <property name="expand">False</property>
         <property name="fill">True</property>
         <property name="position">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox" id="box73">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <child>
+          <object class="GtkLabel" id="label53">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="halign">end</property>
+            <property name="label" translatable="yes">Название соединения: </property>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="entry_RDP1_name">
+            <property name="width_request">235</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="placeholder_text" translatable="yes">Пример, MyServer</property>
+            <signal name="activate" handler="onButtonSave" object="entry_RDP1_serv" swapped="no"/>
+            <signal name="changed" handler="inputName" object="button_RDP1_save" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">2</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparator" id="separator31">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="margin_top">10</property>
+        <property name="margin_bottom">10</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">3</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox" id="box74">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="halign">center</property>
+        <property name="homogeneous">True</property>
+        <child>
+          <object class="GtkButton" id="button_RDP1_save">
+            <property name="label" translatable="yes">Сохранить</property>
+            <property name="visible">True</property>
+            <property name="sensitive">False</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <signal name="clicked" handler="onButtonSave" object="entry_RDP1_serv" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="button_RDP1_cancel">
+            <property name="label" translatable="yes">Отмена</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="button_RDP1_connect">
+            <property name="label" translatable="yes">Подключиться</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <signal name="clicked" handler="onButtonConnect" object="entry_RDP1_serv" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">4</property>
       </packing>
     </child>
   </object>
@@ -2079,6 +2366,18 @@
           </packing>
         </child>
         <child>
+          <object class="GtkLabel" id="label56">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">"Remmina"</property>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkLabel" id="label13">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
@@ -2088,12 +2387,12 @@
           <packing>
             <property name="expand">True</property>
             <property name="fill">True</property>
-            <property name="position">1</property>
+            <property name="position">2</property>
           </packing>
         </child>
         <child>
           <object class="GtkComboBox" id="combo_VNC">
-            <property name="width_request">190</property>
+            <property name="width_request">235</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">start</property>
@@ -2113,7 +2412,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">2</property>
+            <property name="position">3</property>
           </packing>
         </child>
       </object>
@@ -2142,7 +2441,7 @@
         </child>
         <child>
           <object class="GtkEntry" id="entry_VNC_user">
-            <property name="width_request">190</property>
+            <property name="width_request">235</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <signal name="activate" handler="onButtonConnect" object="entry_VNC_serv" swapped="no"/>
@@ -2177,6 +2476,7 @@
       <object class="GtkBox" id="box24">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="halign">end</property>
         <child>
           <object class="GtkLabel" id="label15">
             <property name="visible">True</property>
@@ -2192,7 +2492,7 @@
         </child>
         <child>
           <object class="GtkComboBox" id="entry_VNC_color">
-            <property name="width_request">190</property>
+            <property name="width_request">235</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="model">list_colordepth_VNC</property>
@@ -2222,6 +2522,7 @@
       <object class="GtkBox" id="box25">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="halign">end</property>
         <child>
           <object class="GtkLabel" id="label16">
             <property name="visible">True</property>
@@ -2238,7 +2539,7 @@
         </child>
         <child>
           <object class="GtkComboBox" id="entry_VNC_quality">
-            <property name="width_request">190</property>
+            <property name="width_request">235</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="model">list_quality</property>
@@ -2265,27 +2566,26 @@
       </packing>
     </child>
     <child>
+      <object class="GtkSeparator" id="separator8">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="margin_top">10</property>
+        <property name="margin_bottom">10</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">5</property>
+      </packing>
+    </child>
+    <child>
       <object class="GtkBox" id="box26">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child>
-          <object class="GtkLabel" id="label17">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="valign">start</property>
-            <property name="margin_left">11</property>
-            <property name="margin_top">4</property>
-            <property name="label" translatable="yes">Разрешение: </property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkCheckButton" id="check_VNC_fullscreen">
             <property name="label" translatable="yes">Развернуть на весь экран</property>
+            <property name="width_request">235</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
@@ -2298,19 +2598,6 @@
             <property name="position">1</property>
           </packing>
         </child>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">5</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkSeparator" id="separator8">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="margin_top">10</property>
-        <property name="margin_bottom">10</property>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -2415,7 +2702,7 @@
         </child>
         <child>
           <object class="GtkEntry" id="entry_VNC_name">
-            <property name="width_request">190</property>
+            <property name="width_request">235</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="placeholder_text" translatable="yes">Пример, MyServer</property>
@@ -2641,6 +2928,7 @@
       <object class="GtkBox" id="box14">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="halign">end</property>
         <child>
           <object class="GtkCheckButton" id="check_NX_keyfile">
             <property name="label" translatable="yes">Файл ключа:</property>
@@ -2696,6 +2984,7 @@
       <object class="GtkBox" id="box15">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="halign">end</property>
         <child>
           <object class="GtkLabel" id="label10">
             <property name="visible">True</property>
@@ -2712,7 +3001,7 @@
         </child>
         <child>
           <object class="GtkComboBox" id="entry_NX_quality">
-            <property name="width_request">190</property>
+            <property name="width_request">235</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="model">list_quality</property>
@@ -2818,7 +3107,7 @@
                 </child>
                 <child>
                   <object class="GtkComboBox" id="entry_NX_resolution">
-                    <property name="width_request">150</property>
+                    <property name="width_request">235</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="model">list_resolution</property>
@@ -2875,6 +3164,7 @@
       <object class="GtkBox" id="box20">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="halign">end</property>
         <child>
           <object class="GtkLabel" id="label12">
             <property name="visible">True</property>
@@ -2889,6 +3179,7 @@
         </child>
         <child>
           <object class="GtkEntry" id="entry_NX_exec">
+            <property name="width_request">235</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
           </object>
@@ -2969,7 +3260,7 @@
         </child>
         <child>
           <object class="GtkEntry" id="entry_NX_name">
-            <property name="width_request">190</property>
+            <property name="width_request">235</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="placeholder_text" translatable="yes">Пример, MyServer</property>
@@ -3146,6 +3437,7 @@
       <object class="GtkBox" id="box29">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="halign">end</property>
         <child>
           <object class="GtkLabel" id="label19">
             <property name="visible">True</property>
@@ -3161,7 +3453,7 @@
         </child>
         <child>
           <object class="GtkComboBox" id="entry_XDMCP_color">
-            <property name="width_request">190</property>
+            <property name="width_request">235</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="model">list_colordepth_XDMCP</property>
@@ -3229,7 +3521,7 @@
             </child>
             <child>
               <object class="GtkRadioButton" id="radio_XDMCP_resol_default">
-                <property name="label" translatable="yes">Использовать клиентское разрешение</property>
+                <property name="label" translatable="yes">Клиентское разрешение</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -3267,6 +3559,7 @@
                 </child>
                 <child>
                   <object class="GtkComboBox" id="entry_XDMCP_resolution">
+                    <property name="width_request">235</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="model">list_resolution</property>
@@ -3280,7 +3573,7 @@
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">True</property>
+                    <property name="expand">False</property>
                     <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
@@ -3323,6 +3616,7 @@
       <object class="GtkBox" id="box33">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="halign">end</property>
         <child>
           <object class="GtkLabel" id="label21">
             <property name="visible">True</property>
@@ -3337,6 +3631,7 @@
         </child>
         <child>
           <object class="GtkEntry" id="entry_XDMCP_exec">
+            <property name="width_request">235</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
           </object>
@@ -3417,7 +3712,7 @@
         </child>
         <child>
           <object class="GtkEntry" id="entry_XDMCP_name">
-            <property name="width_request">190</property>
+            <property name="width_request">235</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="placeholder_text" translatable="yes">Пример, MyServer</property>
@@ -3555,11 +3850,10 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel" id="label1">
+          <object class="GtkLabel" id="label57">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="halign">end</property>
-            <property name="label" translatable="yes">Сервер: </property>
+            <property name="label" translatable="yes">"Remmina"</property>
           </object>
           <packing>
             <property name="expand">True</property>
@@ -3568,8 +3862,21 @@
           </packing>
         </child>
         <child>
+          <object class="GtkLabel" id="label2">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="halign">end</property>
+            <property name="label" translatable="yes">Сервер: </property>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkComboBox" id="combo_RDP">
-            <property name="width_request">190</property>
+            <property name="width_request">235</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">start</property>
@@ -3589,7 +3896,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">2</property>
+            <property name="position">3</property>
           </packing>
         </child>
       </object>
@@ -3604,7 +3911,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child>
-          <object class="GtkLabel" id="label2">
+          <object class="GtkLabel" id="label3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">end</property>
@@ -3618,7 +3925,7 @@
         </child>
         <child>
           <object class="GtkEntry" id="entry_RDP_dom">
-            <property name="width_request">190</property>
+            <property name="width_request">235</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <signal name="activate" handler="onButtonConnect" object="entry_RDP_serv" swapped="no"/>
@@ -3641,7 +3948,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child>
-          <object class="GtkLabel" id="label3">
+          <object class="GtkLabel" id="label4">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">end</property>
@@ -3655,7 +3962,7 @@
         </child>
         <child>
           <object class="GtkEntry" id="entry_RDP_user">
-            <property name="width_request">190</property>
+            <property name="width_request">235</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <signal name="activate" handler="onButtonConnect" object="entry_RDP_serv" swapped="no"/>
@@ -3687,11 +3994,12 @@
       </packing>
     </child>
     <child>
-      <object class="GtkBox" id="box1">
+      <object class="GtkBox" id="box2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="halign">end</property>
         <child>
-          <object class="GtkLabel" id="label4">
+          <object class="GtkLabel" id="label5">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">end</property>
@@ -3705,14 +4013,14 @@
         </child>
         <child>
           <object class="GtkComboBox" id="entry_RDP_color">
-            <property name="width_request">190</property>
+            <property name="width_request">235</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="model">list_colordepth_RDP</property>
             <property name="active">3</property>
             <property name="id_column">1</property>
             <child>
-              <object class="GtkCellRendererText" id="cellrenderertext1"/>
+              <object class="GtkCellRendererText" id="cellrenderertext2"/>
               <attributes>
                 <attribute name="text">0</attribute>
               </attributes>
@@ -3735,6 +4043,7 @@
       <object class="GtkBox" id="box8">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
+        <property name="halign">end</property>
         <child>
           <object class="GtkLabel" id="label6">
             <property name="visible">True</property>
@@ -3751,7 +4060,7 @@
         </child>
         <child>
           <object class="GtkComboBox" id="entry_RDP_quality">
-            <property name="width_request">190</property>
+            <property name="width_request">235</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="model">list_quality</property>
@@ -3778,13 +4087,13 @@
       </packing>
     </child>
     <child>
-      <object class="GtkBox" id="box2">
+      <object class="GtkBox" id="box3">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="double_buffered">False</property>
         <property name="margin_left">11</property>
         <child>
-          <object class="GtkLabel" id="label5">
+          <object class="GtkLabel" id="label7">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="valign">start</property>
@@ -3798,7 +4107,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkBox" id="box3">
+          <object class="GtkBox" id="box4">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="orientation">vertical</property>
@@ -3820,7 +4129,7 @@
             </child>
             <child>
               <object class="GtkRadioButton" id="radio_RDP_resol_default">
-                <property name="label" translatable="yes">Использовать клиентское разрешение</property>
+                <property name="label" translatable="yes">Клиентское разрешение</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -3836,7 +4145,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="box4">
+              <object class="GtkBox" id="box6">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <child>
@@ -3858,13 +4167,14 @@
                 </child>
                 <child>
                   <object class="GtkComboBox" id="entry_RDP_resolution">
+                    <property name="width_request">235</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="model">list_resolution</property>
                     <property name="button_sensitivity">off</property>
                     <property name="id_column">0</property>
                     <child>
-                      <object class="GtkCellRendererText" id="cellrenderertext2"/>
+                      <object class="GtkCellRendererText" id="cellrenderertext4"/>
                       <attributes>
                         <attribute name="text">0</attribute>
                       </attributes>
@@ -3898,6 +4208,53 @@
       </packing>
     </child>
     <child>
+      <object class="GtkBox" id="box13">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="halign">end</property>
+        <child>
+          <object class="GtkLabel" id="label45">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="halign">end</property>
+            <property name="margin_left">24</property>
+            <property name="label" translatable="yes">Звук: </property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkComboBox" id="entry_RDP_sound">
+            <property name="width_request">235</property>
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="model">list_sound</property>
+            <property name="active">0</property>
+            <property name="id_column">0</property>
+            <child>
+              <object class="GtkCellRendererText" id="cellrenderertext12"/>
+              <attributes>
+                <attribute name="text">1</attribute>
+              </attributes>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">7</property>
+      </packing>
+    </child>
+    <child>
       <object class="GtkSeparator" id="separator2">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -3907,11 +4264,11 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">7</property>
+        <property name="position">8</property>
       </packing>
     </child>
     <child>
-      <object class="GtkBox" id="box6">
+      <object class="GtkBox" id="box10">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child>
@@ -3947,7 +4304,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">8</property>
+        <property name="position">9</property>
       </packing>
     </child>
     <child>
@@ -3963,7 +4320,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">9</property>
+        <property name="position">10</property>
       </packing>
     </child>
     <child>
@@ -3979,7 +4336,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">10</property>
+        <property name="position">11</property>
       </packing>
     </child>
     <child>
@@ -3992,52 +4349,6 @@
         <property name="xalign">0</property>
         <property name="active">True</property>
         <property name="draw_indicator">True</property>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">11</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkBox" id="box10">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <child>
-          <object class="GtkLabel" id="label7">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="halign">end</property>
-            <property name="margin_left">24</property>
-            <property name="label" translatable="yes">Звук: </property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">0</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkComboBox" id="entry_RDP_sound">
-            <property name="width_request">190</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="model">list_sound</property>
-            <property name="active">0</property>
-            <property name="id_column">0</property>
-            <child>
-              <object class="GtkCellRendererText" id="cellrenderertext4"/>
-              <attributes>
-                <attribute name="text">1</attribute>
-              </attributes>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -4063,7 +4374,7 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child>
-          <object class="GtkLabel" id="label45">
+          <object class="GtkLabel" id="label54">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="halign">end</property>
@@ -4077,7 +4388,7 @@
         </child>
         <child>
           <object class="GtkEntry" id="entry_RDP_name">
-            <property name="width_request">190</property>
+            <property name="width_request">235</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="placeholder_text" translatable="yes">Пример, MyServer</property>
@@ -4111,7 +4422,7 @@
       </packing>
     </child>
     <child>
-      <object class="GtkBox" id="box13">
+      <object class="GtkBox" id="box72">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">center</property>

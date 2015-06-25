@@ -147,6 +147,13 @@ class XFreeRdp:
             if args[5]: command += ' /size:' + args[5]
             if args[6]: command += ' /bpp:' + args[6]
             if args[7]: command += ' /drive:LocalFolder,"' + args[7] + '"'
+            if args[8]: command += ' /g:' + args[8]
+            if args[9]: command += ' /gu:' + args[9]
+            if args[10]: command += ' /gd:' + args[10]
+            if args[11]:
+                command = "GATEPWD='" + args[11] + "' && " + command 
+                command += ' /gp:$GATEPWD'
+            if args[12]: command += ' /admin'
             command += self.entryPwd + ' /cert-ignore &' #для игнора ввода Y/N при запросе сертификата
             os.system(command)
 

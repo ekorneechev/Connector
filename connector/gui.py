@@ -313,6 +313,12 @@ class Gui:
             else:
                 self.RDP_share_folder.set_active(True)
                 self.RDP_name_folder.set_filename(args[7])
+            self.RDP_gserver.set_text(args[8])
+            self.RDP_guser.set_text(args[9])
+            self.RDP_gdomain.set_text(args[10])
+            self.RDP_gpasswd.set_text(args[11])
+            if args[12]: self.RDP_admin.set_active(True)
+            else: self.RDP_admin.set_active(False)
 
 
     def initPreferences(self, protocol):
@@ -345,7 +351,12 @@ class Gui:
             self.RDP_share_folder = self.pref_builder.get_object("check_RDP1_folder")
             self.RDP_name_folder = self.pref_builder.get_object("RDP1_share_folder")
             self.RDP_name_folder.set_current_folder(HOMEFOLDER)
-            self.RDP_clipboard = self.pref_builder.get_object("check_RDP1_clipboard")   
+            self.RDP_clipboard = self.pref_builder.get_object("check_RDP1_clipboard")
+            self.RDP_guser = self.pref_builder.get_object("entry_RDP1_guser")
+            self.RDP_gdomain = self.pref_builder.get_object("entry_RDP1_gdom") 
+            self.RDP_gserver = self.pref_builder.get_object("entry_RDP1_gserv")
+            self.RDP_gpasswd = self.pref_builder.get_object("entry_RDP1_gpwd")
+            self.RDP_admin = self.pref_builder.get_object("check_RDP1_adm")
 
         if protocol == 'NX':
             self.NX_user = self.pref_builder.get_object("entry_NX_user")
@@ -450,7 +461,13 @@ class Gui:
             else: resolution = self.RDP_resolution.get_text()
             if self.RDP_share_folder.get_active(): folder = self.RDP_name_folder.get_filename()
             else: folder = ''
-            args = [user, domain, fullscreen, clipboard, resolution, color, folder]
+            gserver = self.RDP_gserver.get_text()
+            guser = self.RDP_guser.get_text()
+            gdomain = self.RDP_gdomain.get_text()
+            gpasswd = self.RDP_gpasswd.get_text()
+            if self.RDP_admin.get_active(): admin = 1
+            else: admin = 0
+            args = [user, domain, fullscreen, clipboard, resolution, color, folder, gserver, guser, gdomain, gpasswd, admin]
 
         if protocol == 'NX':
             user = self.NX_user.get_text()
@@ -698,8 +715,8 @@ class Gui:
             elif self.whatProgram['VNC'] == 0 and len(parameters) > 5: return True
             else: return False
         if parameters[0] == 'RDP':
-            if self.whatProgram['RDP'] == 1 and len(parameters) == 9: return True
-            elif self.whatProgram['RDP'] == 0 and len(parameters) > 9: return True
+            if self.whatProgram['RDP'] == 1 and len(parameters) == 14: return True
+            elif self.whatProgram['RDP'] == 0 and len(parameters) < 14: return True
             else: return False
         return True         
         
