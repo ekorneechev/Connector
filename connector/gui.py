@@ -59,8 +59,7 @@ class Gui:
     
     def onViewAbout(self, *args):
         """Создает диалоговое окно 'О программе'"""
-        about = Gtk.AboutDialog()
-        about.set_title("О программе Connector")
+        about = Gtk.AboutDialog("О программе Connector", self.window)
         about.set_program_name("Connector")
         comments = """Программа-фронтэнд для удаленного администрирования 
                       компьютеров с различными операционными системами. 
@@ -356,7 +355,7 @@ class Gui:
             self.RDP_gdomain = self.pref_builder.get_object("entry_RDP1_gdom") 
             self.RDP_gserver = self.pref_builder.get_object("entry_RDP1_gserv")
             self.RDP_gpasswd = self.pref_builder.get_object("entry_RDP1_gpwd")
-            self.RDP_admin = self.pref_builder.get_object("check_RDP1_adm")
+            self.RDP_admin = self.pref_builder.get_object("check_RDP1_adm")    
 
         if protocol == 'NX':
             self.NX_user = self.pref_builder.get_object("entry_NX_user")
@@ -695,7 +694,7 @@ class Gui:
         self.citrixEditClick = False 
         viewStatus(self.statusbar, "Сохранено...")
 
-    def onCitrixEdit(self, name, server):
+    def onCitrixEdit(self, name, server, edit = True):
         """Функция изменения Citrix-подключения"""
         main_note = self.builder.get_object("main_note")
         main_note.set_current_page(0)
@@ -705,7 +704,7 @@ class Gui:
         entry_serv.set_text(server)       
         entry_name = self.builder.get_object("entry_CITRIX_name")
         entry_name.set_text(name)
-        self.citrixEditClick = True 
+        self.citrixEditClick = edit 
 
     def correctProgramm(self, parameters):
         """Функция проверки корректоности параметров для запускаемой программы"""
@@ -756,6 +755,27 @@ class Gui:
                     self.onCitrixEdit(nameConnect, parameters[0])
                 else:
                     self.editClick = True
+                    analogEntry = self.AnalogEntry(protocol, parameters)
+                    self.onButtonPref(analogEntry, nameConnect)
+            else:
+                dialog = Gtk.MessageDialog(self.window, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.CLOSE,
+                        "Не удается загрузить параметры: неверный формат подключения!")
+                dialog.format_secondary_text("Попробуйте изменить программу по умолчанию в параметрах приложения")
+                response = dialog.run()
+                dialog.destroy()
+
+    def onPopupCopy(self, treeView):
+        """Копирование выбранного подключения"""
+        table, indexRow = treeView.get_selection().get_selected()
+        nameConnect, self.fileCtor = table[indexRow][0], table[indexRow][3]
+        parameters = properties.loadFromFile(self.fileCtor, self.window)
+        nameConnect = nameConnect + ' (копия)'
+        if parameters is not None: #если файл .ctor имеет верный формат
+            if self.correctProgramm(parameters):
+                protocol = parameters.pop(0)  #извлекаем протокол из файла коннекта
+                if protocol == 'CITRIX':
+                    self.onCitrixEdit(nameConnect, parameters[0], False)
+                else:
                     analogEntry = self.AnalogEntry(protocol, parameters)
                     self.onButtonPref(analogEntry, nameConnect)
             else:
