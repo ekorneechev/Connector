@@ -38,6 +38,9 @@ install -p *.py %buildroot%basedir/
 %basedir/*.py
 
 %changelog
+* Tue Aug 11 2015 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.3.17-alt1
+- Added WEB, smartcards
+
 * Thu Jul 02 2015 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.3.15-alt1
 - Added function Copy, update GTK >=3.10
 
