@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-import time, properties
+import time, properties, webbrowser
 from GLOBAL import *
 
 def f_write(f_name, cfg):
@@ -129,18 +129,12 @@ class RdpRemmina(Remmina):
 
 class XFreeRdp:
     """Класс для настройки RDP-соединения через xfreerdp"""
-    #Утилита zenity – это средство создания диалоговых окон в режиме командной строки. 
-    #http://www.ibm.com/developerworks/ru/library/l-zenity/index.html
-    entryUser = 'LOGIN=$(zenity --entry --title="Аутентификация" --text="Введите имя пользователя:") && '
-    entryPwd = ' /p:$(zenity --entry --title="Аутентификация" --text="Логин: $LOGIN\nВведите пароль:" --hide-text)'
     def start(self, args):
         if type(args) == str:
-            os.system(self.entryUser + 'xfreerdp /v:' + args + ' /u:$LOGIN' + self.entryPwd + ' /f /cert-ignore &')
+            os.system('xfreerdp -sec-nla /v:' + args + ' /f /cert-ignore &')
         else:
-            command = 'xfreerdp /v:' + args[0]
-            if args[1]: command = "LOGIN=" + args[1] + ' && ' + command
-            else: command = self.entryUser + command
-            command += ' /u:$LOGIN'
+            command = 'xfreerdp -sec-nla /v:' + args[0]
+            if args[1]: command += ' /u:' + args[1]
             if args[2]: command += ' /d:' + args[2]
             if args[3]: command += ' /f'
             if args[4]: command += ' +clipboard'
@@ -154,7 +148,8 @@ class XFreeRdp:
                 command = "GATEPWD='" + args[11] + "' && " + command 
                 command += ' /gp:$GATEPWD'
             if args[12]: command += ' /admin'
-            command += self.entryPwd + ' /cert-ignore &' #для игнора ввода Y/N при запросе сертификата
+            if args[13]: command += ' /smartcard'
+            command += ' /cert-ignore &' #для игнора ввода Y/N при запросе сертификата
             os.system(command)
 
 class NxRemmina(Remmina):
@@ -220,6 +215,16 @@ class Citrix:
     def preferences():
         os.system('/opt/Citrix/ICAClient/util/configmgr --icaroot /opt/Citrix/ICAClient &')
 
+class Web:
+    """Класс для настройки подключения к WEB-ресурсу"""
+    def start(self, args):
+        if type(args) == list:
+            addr = args[0]
+        else: addr = args
+        if  not addr.find("://") != -1:
+            addr = "http://" + addr
+        webbrowser.open (addr, new = 2)        
+
 def definition(protocol):
     """Функция определения протокола"""
     whatProgram = properties.loadFromFile('default.conf') #загрузка параметров с выбором программ для подключения
@@ -243,6 +248,8 @@ def definition(protocol):
         connect = Vmware()
     elif protocol == 'CITRIX':
         connect = Citrix()
+    elif protocol == 'WEB':
+        connect = Web()
     return connect  
 
 def __main():

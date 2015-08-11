@@ -3,7 +3,7 @@
 
 from ctor import *
 from gi.repository import Gtk, Gdk, GdkPixbuf
-import random, sys, webbrowser
+import random, sys
 from GLOBAL import *
 
 
@@ -40,7 +40,8 @@ class Gui:
                           'VMWARE' : self.builder.get_object("liststore_VMWARE"),
                           'CITRIX' : self.builder.get_object("liststore_CITRIX"),
                           'XDMCP' : self.builder.get_object("liststore_XDMCP"),
-                          'NX' : self.builder.get_object("liststore_NX")}
+                          'NX' : self.builder.get_object("liststore_NX"),
+                          'WEB' : self.builder.get_object("liststore_WEB")}
 
         self.liststore_connect = Gtk.ListStore(str, str, str, str)
         self.getSavesFromDb()#запись из файла в ListStore
@@ -52,6 +53,7 @@ class Gui:
         self.treeview.set_model(self.sortedFiltered)
         self.getServersFromDb()
         self.citrixEditClick = False
+        self.webEditClick = False
 
     def onDeleteWindow(self, *args):
         """Закрытие программы"""
@@ -59,7 +61,7 @@ class Gui:
     
     def onViewAbout(self, *args):
         """Создает диалоговое окно 'О программе'"""
-        about = Gtk.AboutDialog(title="О программе Connector", parent=self.window)
+        about = Gtk.AboutDialog(title = "О программе Connector", parent = self.window)
         about.set_program_name("Connector")
         comments = """Программа-фронтэнд для удаленного администрирования 
                       компьютеров с различными операционными системами. 
@@ -317,7 +319,7 @@ class Gui:
             self.RDP_gdomain.set_text(args[10])
             self.RDP_gpasswd.set_text(args[11])
             if args[12]: self.RDP_admin.set_active(True)
-            else: self.RDP_admin.set_active(False)
+            if args[13]: self.RDP_cards.set_active(True)
 
 
     def initPreferences(self, protocol):
@@ -336,8 +338,7 @@ class Gui:
             self.RDP_printers = self.pref_builder.get_object("check_RDP_printers")
             self.RDP_clipboard = self.pref_builder.get_object("check_RDP_clipboard")
             self.RDP_sound = self.pref_builder.get_object("entry_RDP_sound")
-            self.RDP_cards = self.pref_builder.get_object("check_RDP_cards")        
-  
+            self.RDP_cards = self.pref_builder.get_object("check_RDP_cards")
 
         if protocol == 'RDP' and self.whatProgram['RDP'] == 1:
             self.RDP_user = self.pref_builder.get_object("entry_RDP1_user")
@@ -355,7 +356,8 @@ class Gui:
             self.RDP_gdomain = self.pref_builder.get_object("entry_RDP1_gdom") 
             self.RDP_gserver = self.pref_builder.get_object("entry_RDP1_gserv")
             self.RDP_gpasswd = self.pref_builder.get_object("entry_RDP1_gpwd")
-            self.RDP_admin = self.pref_builder.get_object("check_RDP1_adm")    
+            self.RDP_admin = self.pref_builder.get_object("check_RDP1_adm")
+            self.RDP_cards = self.pref_builder.get_object("check_RDP1_cards")     
 
         if protocol == 'NX':
             self.NX_user = self.pref_builder.get_object("entry_NX_user")
@@ -466,7 +468,9 @@ class Gui:
             gpasswd = self.RDP_gpasswd.get_text()
             if self.RDP_admin.get_active(): admin = 1
             else: admin = 0
-            args = [user, domain, fullscreen, clipboard, resolution, color, folder, gserver, guser, gdomain, gpasswd, admin]
+            if self.RDP_cards.get_active(): smartcards = 1
+            else: smartcards = 0
+            args = [user, domain, fullscreen, clipboard, resolution, color, folder, gserver, guser, gdomain, gpasswd, admin, smartcards]
 
         if protocol == 'NX':
             user = self.NX_user.get_text()
@@ -665,46 +669,59 @@ class Gui:
         server = entry.get_text()
         protocol = entry.get_name()
         parameters = self.applyPreferences(protocol)
-        name = self.pref_builder.get_object("entry_" + self.changeProgram(protocol) + "_name" )
+        name = self.pref_builder.get_object("entry_" + self.changeProgram(protocol) + "_name" ).get_text()
         parameters.insert(0, server)
         parameters.insert(0, protocol) #протокол подключения также заносится в файл        
         if self.editClick:#если нажата кнопка Изменить, то пересохранить
-            fileName = self.resaveFileCtor(name.get_text(), protocol, server)
+            fileName = self.resaveFileCtor(name, protocol, server)
         else: 
-            fileName = self.saveFileCtor(name.get_text(), protocol, server)
+            fileName = self.saveFileCtor(name, protocol, server)
         properties.saveInFile(fileName, parameters)
         self.getSavesFromDb()#добавление в листсторе
         self.pref_window.destroy()
         self.editClick = False
-        viewStatus(self.statusbar, "Сохранено...")
+        self.changePage()
+        viewStatus(self.statusbar, "Подключение \"" + name + "\" сохранено...")
 
-    def onCitrixSave(self, entry):
-        """Сохранение имени сервера на основе Citrix для дальнейшего подключения с ними"""
+    def onWCSave(self, entry):
+        """Сохранение подключения к Citrix или WEB"""
         server = entry.get_text()
-        name = self.builder.get_object("entry_CITRIX_name" )
+        protocol = entry.get_name()
+        name = self.builder.get_object("entry_" + protocol + "_name").get_text()
         parameters = []
-        parameters.append('CITRIX')
+        parameters.append(protocol)
         parameters.append(server)
-        if self.citrixEditClick:
-            fileName = self.resaveFileCtor(name.get_text(), 'CITRIX', server)
+        if self.citrixEditClick or self.webEditClick:
+            fileName = self.resaveFileCtor(name, protocol, server)
         else:
-            fileName = self.saveFileCtor(name.get_text(), 'CITRIX', server)
+            fileName = self.saveFileCtor(name, protocol, server)
         properties.saveInFile(fileName, parameters)
         self.getSavesFromDb()
-        self.citrixEditClick = False 
-        viewStatus(self.statusbar, "Сохранено...")
+        self.citrixEditClick = False
+        self.webEditClick = False 
+        self.changePage()
+        viewStatus(self.statusbar, "Подключение \"" + name + "\" сохранено...")
 
-    def onCitrixEdit(self, name, server, edit = True):
-        """Функция изменения Citrix-подключения"""
+    def onWCEdit(self, name, server, protocol, edit = True):
+        """Функция изменения Citrix или WEB-подключения """
+        if protocol == "CITRIX": 
+            self.citrixEditClick = edit
+            index_tab = 5
+        if protocol == "WEB": 
+            self.webEditClick = edit
+            index_tab = 8 
         main_note = self.builder.get_object("main_note")
         main_note.set_current_page(0)
         conn_note = self.builder.get_object("list_connect")
-        conn_note.set_current_page(5)       
-        entry_serv = self.builder.get_object("entry_serv_CITRIX")
-        entry_serv.set_text(server)       
-        entry_name = self.builder.get_object("entry_CITRIX_name")
+        conn_note.set_current_page(index_tab)       
+        entry_serv = self.builder.get_object("entry_serv_" + protocol)               
+        entry_name = self.builder.get_object("entry_" + protocol + "_name")
+        entry_serv.set_text(server)
         entry_name.set_text(name)
-        self.citrixEditClick = edit 
+
+    def onWCMenu(self, item):
+        protocol = item.get_name()
+        self.onWCEdit('','', protocol, False)
 
     def correctProgramm(self, parameters):
         """Функция проверки корректоности параметров для запускаемой программы"""
@@ -714,8 +731,8 @@ class Gui:
             elif self.whatProgram['VNC'] == 0 and len(parameters) > 5: return True
             else: return False
         if parameters[0] == 'RDP':
-            if self.whatProgram['RDP'] == 1 and len(parameters) == 14: return True
-            elif self.whatProgram['RDP'] == 0 and len(parameters) < 14: return True
+            if self.whatProgram['RDP'] == 1 and len(parameters) == 15: return True
+            elif self.whatProgram['RDP'] == 0 and len(parameters) < 15: return True
             else: return False
         return True         
         
@@ -751,8 +768,8 @@ class Gui:
         if parameters is not None: #если файл .ctor имеет верный формат
             if self.correctProgramm(parameters):
                 protocol = parameters.pop(0)  #извлекаем протокол из файла коннекта
-                if protocol == 'CITRIX':
-                    self.onCitrixEdit(nameConnect, parameters[0])
+                if protocol == 'CITRIX' or protocol == 'WEB':
+                    self.onWCEdit(nameConnect, parameters[0], protocol)
                 else:
                     self.editClick = True
                     analogEntry = self.AnalogEntry(protocol, parameters)
@@ -773,8 +790,8 @@ class Gui:
         if parameters is not None: #если файл .ctor имеет верный формат
             if self.correctProgramm(parameters):
                 protocol = parameters.pop(0)  #извлекаем протокол из файла коннекта
-                if protocol == 'CITRIX':
-                    self.onCitrixEdit(nameConnect, parameters[0], False)
+                if protocol == 'CITRIX' or protocol == 'WEB':
+                    self.onWCEdit(nameConnect, parameters[0], protocol, False)
                 else:
                     analogEntry = self.AnalogEntry(protocol, parameters)
                     self.onButtonPref(analogEntry, nameConnect)
@@ -884,7 +901,12 @@ class Gui:
         button.set_sensitive(True)
 
     def onWiki(self, *args):
+        """Открытие wiki в Интернете"""
         webbrowser.open ('https://github.com/ekorneechev/Connector/wiki', new = 2)
+    
+    def changePage(self, index = 1):
+        note = self.builder.get_object("main_note")
+        note.set_current_page(index)    
 
 def f_main():
     createFolder()

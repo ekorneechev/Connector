@@ -120,6 +120,11 @@
     <property name="can_focus">False</property>
     <property name="icon_name">document-revert</property>
   </object>
+  <object class="GtkImage" id="image4">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">WEB.png</property>
+  </object>
   <object class="GtkListStore" id="liststore_CITRIX">
     <columns>
       <!-- column-name server -->
@@ -234,6 +239,23 @@
     <property name="inline_completion">True</property>
     <child>
       <object class="GtkCellRendererText" id="cellrenderertext3"/>
+      <attributes>
+        <attribute name="text">0</attribute>
+      </attributes>
+    </child>
+  </object>
+  <object class="GtkListStore" id="liststore_WEB">
+    <columns>
+      <!-- column-name server -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkEntryCompletion" id="completion_WEB">
+    <property name="model">liststore_WEB</property>
+    <property name="text_column">0</property>
+    <property name="inline_completion">True</property>
+    <child>
+      <object class="GtkCellRendererText" id="cellrenderertext12"/>
       <attributes>
         <attribute name="text">0</attribute>
       </attributes>
@@ -511,13 +533,13 @@
                     </child>
                     <child>
                       <object class="GtkImageMenuItem" id="menu_connect_CITRIX">
-                        <property name="label" translatable="yes">Citrix - Подключение к серверу, построенному на Citrix</property>
+                        <property name="label" translatable="yes">Citrix - Подключение к серверу Citrix</property>
                         <property name="name">CITRIX</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="image">CITRIX_image</property>
                         <property name="use_stock">False</property>
-                        <signal name="activate" handler="onCitrixPref" swapped="no"/>
+                        <signal name="activate" handler="onWCMenu" swapped="no"/>
                       </object>
                     </child>
                     <child>
@@ -546,6 +568,23 @@
                         <property name="image">SFTP_image</property>
                         <property name="use_stock">False</property>
                         <signal name="activate" handler="onButtonPref" object="entry_serv_SFTP" swapped="no"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkSeparatorMenuItem" id="separatormenuitem3">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImageMenuItem" id="menu_connect_WEB">
+                        <property name="label" translatable="yes">WEB - Веб-браузер</property>
+                        <property name="name">WEB</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="image">image4</property>
+                        <property name="use_stock">False</property>
+                        <signal name="activate" handler="onWCMenu" swapped="no"/>
                       </object>
                     </child>
                   </object>
@@ -1315,7 +1354,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="placeholder_text" translatable="yes">Пример, MyServer</property>
-                                <signal name="activate" handler="onCitrixSave" object="entry_serv_CITRIX" swapped="no"/>
+                                <signal name="activate" handler="onWCSave" object="entry_serv_CITRIX" swapped="no"/>
                                 <signal name="changed" handler="inputName" object="button_CITRIX_save" swapped="no"/>
                               </object>
                               <packing>
@@ -1333,7 +1372,7 @@
                                 <property name="sensitive">False</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
-                                <signal name="clicked" handler="onCitrixSave" object="entry_serv_CITRIX" swapped="no"/>
+                                <signal name="clicked" handler="onWCSave" object="entry_serv_CITRIX" swapped="no"/>
                               </object>
                               <packing>
                                 <property name="left_attach">1</property>
@@ -1626,6 +1665,136 @@
                       </object>
                       <packing>
                         <property name="position">7</property>
+                        <property name="tab_fill">False</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="box_WEB">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="valign">center</property>
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="GtkLabel" id="label_WW">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="margin_bottom">4</property>
+                            <property name="label" translatable="yes">Веб-браузер</property>
+                            <attributes>
+                              <attribute name="underline" value="True"/>
+                            </attributes>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkComboBox" id="combo_serv_WEB">
+                            <property name="width_request">340</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">center</property>
+                            <property name="model">liststore_WEB</property>
+                            <property name="has_entry">True</property>
+                            <property name="entry_text_column">0</property>
+                            <child internal-child="entry">
+                              <object class="GtkEntry" id="entry_serv_WEB">
+                                <property name="name">WEB</property>
+                                <property name="can_focus">True</property>
+                                <property name="tooltip_text" translatable="yes">Необходим следующий формат:
+[Протокол://] Адрес [:Порт]</property>
+                                <property name="primary_icon_pixbuf">WEB.png</property>
+                                <property name="placeholder_text" translatable="yes">Введите адрес сервера...</property>
+                                <property name="completion">completion_WEB</property>
+                                <signal name="activate" handler="onButtonConnect" swapped="no"/>
+                              </object>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="box9">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">center</property>
+                            <child>
+                              <object class="GtkEntry" id="entry_WEB_name">
+                                <property name="width_request">210</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="placeholder_text" translatable="yes">Пример, MyServer</property>
+                                <signal name="activate" handler="onWCSave" object="entry_serv_WEB" swapped="no"/>
+                                <signal name="changed" handler="inputName" object="button_WEB_save" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="button_WEB_save">
+                                <property name="label" translatable="yes">Сохранить</property>
+                                <property name="width_request">130</property>
+                                <property name="visible">True</property>
+                                <property name="sensitive">False</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <signal name="clicked" handler="onWCSave" object="entry_serv_WEB" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="button_connect_WEB">
+                            <property name="label" translatable="yes">_Подключение</property>
+                            <property name="width_request">230</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="tooltip_text" translatable="yes">Быстрое подключение с настройками по умолчанию</property>
+                            <property name="halign">center</property>
+                            <property name="margin_top">3</property>
+                            <property name="use_underline">True</property>
+                            <signal name="clicked" handler="onButtonConnect" object="entry_serv_WEB" swapped="no"/>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">3</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="position">8</property>
+                      </packing>
+                    </child>
+                    <child type="tab">
+                      <object class="GtkLabel" id="label_WEB">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="xalign">0</property>
+                        <property name="label" translatable="yes">WEB</property>
+                        <property name="width_chars">8</property>
+                      </object>
+                      <packing>
+                        <property name="position">8</property>
                         <property name="tab_fill">False</property>
                       </packing>
                     </child>

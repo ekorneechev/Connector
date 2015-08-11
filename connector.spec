@@ -1,5 +1,5 @@
 Name: connector
-Version: 1.3.15
+Version: 1.3.17
 Release: alt1
 
 Summary: Remote desktop chooser
