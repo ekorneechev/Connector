@@ -149,7 +149,11 @@ class XFreeRdp:
                 command += ' /gp:$GATEPWD'
             if args[12]: command += ' /admin'
             if args[13]: command += ' /smartcard'
-            command += ' /cert-ignore &' #для игнора ввода Y/N при запросе сертификата
+            if args[14]: command += ' /printer'
+            if args[15]: command += ' /sound:sys:alsa'
+            if args[16]: command += ' /microphone:sys:alsa'
+            if args[17]: command += ' /multimon'
+            command += ' /cert-ignore &' #для игнора ввода Y/N при запросе сертификата 
             os.system(command)
 
 class NxRemmina(Remmina):

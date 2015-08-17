@@ -320,6 +320,10 @@ class Gui:
             self.RDP_gpasswd.set_text(args[11])
             if args[12]: self.RDP_admin.set_active(True)
             if args[13]: self.RDP_cards.set_active(True)
+            if args[14]: self.RDP_printers.set_active(True)
+            if args[15]: self.RDP_sound.set_active(True)
+            if args[16]: self.RDP_microphone.set_active(True)
+            if args[17]: self.RDP_multimon.set_active(True)
 
 
     def initPreferences(self, protocol):
@@ -357,7 +361,11 @@ class Gui:
             self.RDP_gserver = self.pref_builder.get_object("entry_RDP1_gserv")
             self.RDP_gpasswd = self.pref_builder.get_object("entry_RDP1_gpwd")
             self.RDP_admin = self.pref_builder.get_object("check_RDP1_adm")
-            self.RDP_cards = self.pref_builder.get_object("check_RDP1_cards")     
+            self.RDP_cards = self.pref_builder.get_object("check_RDP1_cards")
+            self.RDP_printers = self.pref_builder.get_object("check_RDP1_printers")
+            self.RDP_sound = self.pref_builder.get_object("check_RDP1_sound")
+            self.RDP_microphone = self.pref_builder.get_object("check_RDP1_microphone")
+            self.RDP_multimon = self.pref_builder.get_object("check_RDP1_multimon") 
 
         if protocol == 'NX':
             self.NX_user = self.pref_builder.get_object("entry_NX_user")
@@ -470,7 +478,16 @@ class Gui:
             else: admin = 0
             if self.RDP_cards.get_active(): smartcards = 1
             else: smartcards = 0
-            args = [user, domain, fullscreen, clipboard, resolution, color, folder, gserver, guser, gdomain, gpasswd, admin, smartcards]
+            if self.RDP_printers.get_active(): printers = 1
+            else: printers = 0
+            if self.RDP_sound.get_active(): sound = 1
+            else: sound = 0
+            if self.RDP_microphone.get_active(): microphone = 1
+            else: microphone = 0
+            if self.RDP_multimon.get_active(): multimon = 1
+            else: multimon = 0
+            args = [user, domain, fullscreen, clipboard, resolution, color, folder, gserver, guser, gdomain, gpasswd, 
+                    admin, smartcards, printers, sound, microphone, multimon]
 
         if protocol == 'NX':
             user = self.NX_user.get_text()
@@ -731,8 +748,8 @@ class Gui:
             elif self.whatProgram['VNC'] == 0 and len(parameters) > 5: return True
             else: return False
         if parameters[0] == 'RDP':
-            if self.whatProgram['RDP'] == 1 and len(parameters) == 15: return True
-            elif self.whatProgram['RDP'] == 0 and len(parameters) < 15: return True
+            if self.whatProgram['RDP'] == 1 and len(parameters) == 19: return True
+            elif self.whatProgram['RDP'] == 0 and len(parameters) < 19: return True
             else: return False
         return True         
         
