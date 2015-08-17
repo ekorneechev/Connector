@@ -13,7 +13,7 @@ def f_write(f_name, cfg):
     f.close()
 
 def createFolder():
-    """Создание в домашней папке пользователя дитректории для работы программы"""
+    """Создание в домашней папке пользователя директории для работы программы"""
     if not os.path.exists(WORKFOLDER):
         os.mkdir(WORKFOLDER)
 
@@ -25,8 +25,8 @@ class Remmina:
         """Создание файла конфигурации для соединения"""
         if type(args) == list:
             protocol = self.cfg['protocol']
-            self.cfg['server'] = args[0]
-            self.cfg['name'] += args[0]
+            self.cfg['server'] = args[1]
+            self.cfg['name'] += args[1]
             if protocol == 'RDP':
                 #[user, domain, color, quality, resolution, viewmode, folder, printer, clipboard, sound]
                 self.cfg['username'] = args[1]                              
@@ -46,7 +46,7 @@ class Remmina:
                 self.cfg['quality'] = args[2]
                 self.cfg['resolution'] = args[3]
                 self.cfg['viewmode'] = args[4]
-                self.cfg['NX_privatekey'] = args[5]
+                self.cfg['nx_privatekey'] = args[5]
                 self.cfg['disableencryption'] = args[6]
                 self.cfg['disableclipboard'] = args[7]
                 self.cfg['exec'] = args[8] 
@@ -70,21 +70,23 @@ class Remmina:
                 self.cfg['exec'] = args[6]
             if protocol == 'SSH':
                 #[user, SSH_auth, keyfile, charset, _exec] 
-                self.cfg['SSH_username'] = args[1]
-                self.cfg['SSH_auth'] = args[2]
-                self.cfg['SSH_privatekey'] = args[3]
-                self.cfg['SSH_charset'] = args[4]
+                self.cfg['ssh_username'] = args[1]
+                self.cfg['ssh_auth'] = args[2]
+                self.cfg['ssh_privatekey'] = args[3]
+                self.cfg['ssh_charset'] = args[4]
                 self.cfg['exec'] = args[5]
             if protocol == 'SFTP':
                 #[user, SSH_auth, keyfile, charset, execpath]
-                self.cfg['SSH_username'] = args[1]
-                self.cfg['SSH_auth'] = args[2]
-                self.cfg['SSH_privatekey'] = args[3]
-                self.cfg['SSH_charset'] = args[4]
+                self.cfg['ssh_username'] = args[1]
+                self.cfg['ssh_auth'] = args[2]
+                self.cfg['ssh_privatekey'] = args[3]
+                self.cfg['ssh_charset'] = args[4]
                 self.cfg['execpath'] = args[5]
         else:
-            self.cfg['server'] = args
-            self.cfg['name'] += args
+            server, login = properties.searchSshUser(args)
+            if login: self.cfg['ssh_username'] = login
+            self.cfg['server'] = server
+            self.cfg['name'] += server
         f_write(self.f_name, self.cfg)        
 
     def start(self, parameters):
@@ -114,7 +116,6 @@ class VncViewer:
             if args[3]: command += ' ' + args[3]
             command += ' &'          
             os.system(command)
-
 
 class RdpRemmina(Remmina):
     """Класс для настройки RDP-соединения через Remmina"""
@@ -178,8 +179,8 @@ class XdmcpRemmina(Remmina):
 class SftpRemmina(Remmina):
     """Класс для настройки SFTP-соединения через Remmina"""
     def __init__(self):
-        self.cfg = dict(name='SFTP-connection: ', protocol='SFTP', SSH_enabled=1, SSH_auth=0, 
-                        SSH_charset='UTF-8', SSH_privatekey='', SSH_username='',
+        self.cfg = dict(name='SFTP-connection: ', protocol='SFTP', ssh_enabled=1, ssh_auth=0, 
+                        ssh_charset='UTF-8', ssh_privatekey='', username='', ssh_username='',
                         group='', password='', execpath='/', server='', window_maximize=0, 
                         window_height=600, window_width=800, ftp_vpanedpos=360, viewmode=0)
         self.f_name = '.tmp_SFTP.remmina'
@@ -187,8 +188,8 @@ class SftpRemmina(Remmina):
 class SshRemmina(Remmina):
     """Класс для настройки SSH-соединения через Remmina"""
     def __init__(self):
-        self.cfg = dict(name='SSH-connection: ', protocol='SSH', SSH_auth=0, SSH_charset='UTF-8', 
-                        SSH_privatekey='', group='', password='', SSH_username='', SSH_enabled=1,
+        self.cfg = dict(name='SSH-connection: ', protocol='SSH', ssh_auth=0, ssh_charset='UTF-8', 
+                        ssh_privatekey='', group='', password='', username='', ssh_username='', ssh_enabled=1,
                         server='', window_maximize=0, window_width=500, window_height=500, viewmode=0)
         self.cfg['exec'] = ''
         self.f_name = '.tmp_SSH.remmina'
