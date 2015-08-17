@@ -1470,8 +1470,8 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="tooltip_text" translatable="yes">Поддерживается следующий формат:
- - сервер
- - сервер:порт</property>
+ - [имя@]сервер
+ - [имя@]сервер:порт</property>
                                     <property name="primary_icon_pixbuf">SSH.png</property>
                                     <property name="placeholder_text" translatable="yes">Введите адрес сервера...</property>
                                     <property name="completion">completion_SSH</property>
@@ -1591,8 +1591,8 @@
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="tooltip_text" translatable="yes">Поддерживается следующий формат:
- - сервер
- - сервер:порт</property>
+ - [имя@]сервер
+ - [имя@]сервер:порт</property>
                                     <property name="primary_icon_pixbuf">SFTP.png</property>
                                     <property name="placeholder_text" translatable="yes">Введите адрес сервера...</property>
                                     <property name="completion">completion_SFTP</property>

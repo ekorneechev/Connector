@@ -36,8 +36,7 @@ def importFromFile(fileName):
     dbfile = open(fileName, 'rb')
     obj = pickle.load(dbfile)
     dbfile.close()
-    return obj
-	        
+    return obj	        
 
 def saveInFile(fileName, obj):
     """Запись параметров в файл:
@@ -45,6 +44,16 @@ def saveInFile(fileName, obj):
     dbfile = open(WORKFOLDER+fileName, 'wb')
     pickle.dump(obj, dbfile)
     dbfile.close()
+
+def searchSshUser(query):
+    """Определение имени пользователя и сервера 
+    в формате адреса SSH и SFTP - логин@адрес"""
+    try:
+        login, server = query.strip().split('@')
+    except ValueError:
+        login = ''
+        server = query
+    return server, login
 
 class Properties(Gtk.Window):
     def __init__(self):
