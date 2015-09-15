@@ -2,6 +2,12 @@
 <!-- Generated with glade 3.16.1 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="upper">100</property>
+    <property name="value">50</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkBox" id="box_SFTP">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -1474,43 +1480,79 @@
       </row>
     </data>
   </object>
-  <object class="GtkBox" id="box1">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <child>
-      <object class="GtkLabel" id="label1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="halign">end</property>
-        <property name="label" translatable="yes">Глубина цвета: </property>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">0</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkComboBox" id="entry_RDP1_color1">
-        <property name="width_request">190</property>
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="model">list_colordepth_RDP</property>
-        <property name="active">3</property>
-        <property name="id_column">1</property>
-        <child>
-          <object class="GtkCellRendererText" id="cellrenderertext1"/>
-          <attributes>
-            <attribute name="text">0</attribute>
-          </attributes>
-        </child>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">1</property>
-      </packing>
-    </child>
+  <object class="GtkListStore" id="list_colordepth_VNC">
+    <columns>
+      <!-- column-name color -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">256 цветов</col>
+        <col id="1" translatable="yes">8</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">High Color (16 бит)</col>
+        <col id="1" translatable="yes">16</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">True Color (24 бит)</col>
+        <col id="1" translatable="yes">24</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkListStore" id="list_colordepth_XDMCP">
+    <columns>
+      <!-- column-name color -->
+      <column type="gchararray"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">По умолчанию</col>
+        <col id="1" translatable="yes">0</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">Оттенки серого</col>
+        <col id="1" translatable="yes">2</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">256 цветов</col>
+        <col id="1" translatable="yes">8</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">High Color (16 бит)</col>
+        <col id="1" translatable="yes">16</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">True Color (24 бит)</col>
+        <col id="1" translatable="yes">24</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkListStore" id="list_compression_level">
+    <columns>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+      <!-- column-name value -->
+      <column type="gint"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">0</col>
+        <col id="1">0</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1</col>
+        <col id="1">1</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">2</col>
+        <col id="1">2</col>
+      </row>
+    </data>
   </object>
   <object class="GtkBox" id="box_RDP1">
     <property name="width_request">350</property>
@@ -1538,6 +1580,7 @@
                   <object class="GtkImage" id="image9">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="margin_left">2</property>
                     <property name="pixbuf">RDP.png</property>
                     <property name="icon_size">1</property>
                   </object>
@@ -1980,6 +2023,7 @@
                   <object class="GtkImage" id="image10">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="margin_left">2</property>
                     <property name="pixbuf">RDP.png</property>
                     <property name="icon_size">1</property>
                   </object>
@@ -1991,10 +2035,15 @@
                 </child>
                 <child>
                   <object class="GtkLabel" id="label60">
+                    <property name="height_request">32</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
-                    <property name="label" translatable="yes">Gateway hostname: </property>
+                    <property name="margin_right">1</property>
+                    <property name="label" translatable="yes">Параметры сервера шлюза удаленных рабочих столов:</property>
+                    <attributes>
+                      <attribute name="underline" value="True"/>
+                    </attributes>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -2002,25 +2051,47 @@
                     <property name="position">2</property>
                   </packing>
                 </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="box79">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkLabel" id="label17">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="label" translatable="yes">Адрес: </property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
                 <child>
                   <object class="GtkEntry" id="entry_RDP1_gserv">
                     <property name="width_request">235</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="margin_top">1</property>
-                    <property name="margin_bottom">1</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="position">3</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">0</property>
+                <property name="position">1</property>
               </packing>
             </child>
             <child>
@@ -2032,7 +2103,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
-                    <property name="label" translatable="yes">Gateway domain: </property>
+                    <property name="label" translatable="yes">Домен: </property>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -2056,7 +2127,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">1</property>
+                <property name="position">2</property>
               </packing>
             </child>
             <child>
@@ -2068,7 +2139,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
-                    <property name="label" translatable="yes">Gateway username: </property>
+                    <property name="label" translatable="yes">Имя пользователя: </property>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -2092,7 +2163,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">2</property>
+                <property name="position">3</property>
               </packing>
             </child>
             <child>
@@ -2104,7 +2175,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="halign">end</property>
-                    <property name="label" translatable="yes">Gateway password: </property>
+                    <property name="label" translatable="yes">Пароль: </property>
                   </object>
                   <packing>
                     <property name="expand">True</property>
@@ -2130,7 +2201,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">3</property>
+                <property name="position">4</property>
               </packing>
             </child>
             <child>
@@ -2143,7 +2214,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">4</property>
+                <property name="position">5</property>
               </packing>
             </child>
             <child>
@@ -2159,7 +2230,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">5</property>
+                <property name="position">6</property>
               </packing>
             </child>
             <child>
@@ -2175,7 +2246,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">6</property>
+                <property name="position">7</property>
               </packing>
             </child>
             <child>
@@ -2191,7 +2262,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">7</property>
+                <property name="position">8</property>
               </packing>
             </child>
             <child>
@@ -2204,12 +2275,12 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">8</property>
+                <property name="position">9</property>
               </packing>
             </child>
             <child>
               <object class="GtkCheckButton" id="check_RDP1_adm">
-                <property name="label" translatable="yes">Admin (or console) session</property>
+                <property name="label" translatable="yes">Консоль</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
@@ -2220,7 +2291,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
-                <property name="position">9</property>
+                <property name="position">10</property>
               </packing>
             </child>
           </object>
@@ -2235,7 +2306,328 @@
             <property name="label" translatable="yes"> Дополнительно </property>
           </object>
           <packing>
-            <property name="position">1</property>
+            <property name="position">2</property>
+            <property name="tab_fill">False</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox" id="box1">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkBox" id="box80">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkImage" id="image11">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="margin_left">2</property>
+                    <property name="pixbuf">RDP.png</property>
+                    <property name="icon_size">1</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label63">
+                    <property name="height_request">32</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="halign">end</property>
+                    <property name="margin_right">1</property>
+                    <attributes>
+                      <attribute name="underline" value="True"/>
+                    </attributes>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="box83">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkCheckButton" id="check_RDP1_compression">
+                    <property name="label" translatable="yes">Сжатие</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                    <signal name="toggled" handler="onComprSet" object="entry_RDP1_compr_level" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBox" id="entry_RDP1_compr_level">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="tooltip_text" translatable="yes">Уровень сжатия</property>
+                    <property name="model">list_compression_level</property>
+                    <property name="active">0</property>
+                    <property name="button_sensitivity">off</property>
+                    <property name="id_column">0</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                      <attributes>
+                        <attribute name="text">1</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSeparator" id="separator33">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="margin_top">10</property>
+                <property name="margin_bottom">10</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="check_RDP1_fonts">
+                <property name="label" translatable="yes">Сглаживание шрифтов</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="halign">start</property>
+                <property name="xalign">0</property>
+                <property name="draw_indicator">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="check_RDP1_aero">
+                <property name="label" translatable="yes">Композитность</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="halign">start</property>
+                <property name="xalign">0</property>
+                <property name="draw_indicator">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">4</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="check_RDP1_drag">
+                <property name="label" translatable="yes">Перетаскивание окна</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="halign">start</property>
+                <property name="xalign">0</property>
+                <property name="draw_indicator">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">5</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="check_RDP1_animation">
+                <property name="label" translatable="yes">Анимация меню</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="halign">start</property>
+                <property name="xalign">0</property>
+                <property name="draw_indicator">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">6</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="check_RDP1_theme">
+                <property name="label" translatable="yes">Тема</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="halign">start</property>
+                <property name="xalign">0</property>
+                <property name="active">True</property>
+                <property name="draw_indicator">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">7</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="check_RDP1_wallpapers">
+                <property name="label" translatable="yes">Обои рабочего стола</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="halign">start</property>
+                <property name="xalign">0</property>
+                <property name="active">True</property>
+                <property name="draw_indicator">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">8</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSeparator" id="separator34">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="margin_top">10</property>
+                <property name="margin_bottom">10</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">9</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="check_RDP1_nsc">
+                <property name="label" translatable="yes">NSCodec</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">False</property>
+                <property name="halign">start</property>
+                <property name="xalign">0</property>
+                <property name="draw_indicator">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">10</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="box81">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkCheckButton" id="check_RDP1_jpeg">
+                    <property name="label" translatable="yes">JPEG codec</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="halign">start</property>
+                    <property name="xalign">0</property>
+                    <property name="draw_indicator">True</property>
+                    <signal name="toggled" handler="onJpegSet" object="box84" swapped="no"/>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="box84">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="opacity">0</property>
+                    <child>
+                      <object class="GtkLabel" id="label64">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes"> - качество: </property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkScale" id="scale_RDP1_jpeg">
+                        <property name="width_request">150</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="tooltip_text" translatable="yes">Качество</property>
+                        <property name="adjustment">adjustment1</property>
+                        <property name="round_digits">0</property>
+                        <property name="digits">0</property>
+                        <property name="value_pos">right</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">12</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child type="tab">
+          <object class="GtkLabel" id="label1">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">Параметры производительности</property>
+          </object>
+          <packing>
+            <property name="position">2</property>
             <property name="tab_fill">False</property>
           </packing>
         </child>
@@ -2353,58 +2745,6 @@
         <property name="position">4</property>
       </packing>
     </child>
-  </object>
-  <object class="GtkListStore" id="list_colordepth_VNC">
-    <columns>
-      <!-- column-name color -->
-      <column type="gchararray"/>
-      <!-- column-name id -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">256 цветов</col>
-        <col id="1" translatable="yes">8</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">High Color (16 бит)</col>
-        <col id="1" translatable="yes">16</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">True Color (24 бит)</col>
-        <col id="1" translatable="yes">24</col>
-      </row>
-    </data>
-  </object>
-  <object class="GtkListStore" id="list_colordepth_XDMCP">
-    <columns>
-      <!-- column-name color -->
-      <column type="gchararray"/>
-      <!-- column-name id -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">По умолчанию</col>
-        <col id="1" translatable="yes">0</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">Оттенки серого</col>
-        <col id="1" translatable="yes">2</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">256 цветов</col>
-        <col id="1" translatable="yes">8</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">High Color (16 бит)</col>
-        <col id="1" translatable="yes">16</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">True Color (24 бит)</col>
-        <col id="1" translatable="yes">24</col>
-      </row>
-    </data>
   </object>
   <object class="GtkListStore" id="list_quality">
     <columns>

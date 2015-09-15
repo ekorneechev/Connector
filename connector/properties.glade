@@ -2,6 +2,52 @@
 <!-- Generated with glade 3.16.1 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
+  <object class="GtkListStore" id="list_tabs">
+    <columns>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+      <!-- column-name tab -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">0</col>
+        <col id="1" translatable="yes">RDP</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">1</col>
+        <col id="1" translatable="yes">NX</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">2</col>
+        <col id="1" translatable="yes">VNC</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">3</col>
+        <col id="1" translatable="yes">XDMCP</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">4</col>
+        <col id="1" translatable="yes">VMware</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">5</col>
+        <col id="1" translatable="yes">Citrix</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">6</col>
+        <col id="1" translatable="yes">SSH</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">7</col>
+        <col id="1" translatable="yes">SFTP</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">8</col>
+        <col id="1" translatable="yes">WEB</col>
+      </row>
+    </data>
+  </object>
   <object class="GtkBox" id="box_properties">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -230,6 +276,64 @@
       </packing>
     </child>
     <child>
+      <object class="GtkBox" id="box8">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <child>
+          <object class="GtkLabel" id="label6">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">Выберите вкладку подключения по умолчанию:</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkComboBox" id="combo_tabs">
+            <property name="width_request">60</property>
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="margin_left">4</property>
+            <property name="model">list_tabs</property>
+            <property name="active">0</property>
+            <property name="id_column">0</property>
+            <child>
+              <object class="GtkCellRendererText" id="cellrenderertext1"/>
+              <attributes>
+                <attribute name="text">1</attribute>
+              </attributes>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">6</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkSeparator" id="separator5">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="margin_top">5</property>
+        <property name="margin_bottom">5</property>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">7</property>
+      </packing>
+    </child>
+    <child>
       <object class="GtkBox" id="box6">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -268,7 +372,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">False</property>
-        <property name="position">6</property>
+        <property name="position">8</property>
       </packing>
     </child>
     <child>
@@ -310,7 +414,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">7</property>
+        <property name="position">9</property>
       </packing>
     </child>
     <child>
@@ -323,7 +427,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">8</property>
+        <property name="position">10</property>
       </packing>
     </child>
     <child>
@@ -363,7 +467,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">9</property>
+        <property name="position">11</property>
       </packing>
     </child>
     <child>
@@ -378,7 +482,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">10</property>
+        <property name="position">12</property>
       </packing>
     </child>
   </object>

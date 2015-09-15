@@ -25,8 +25,8 @@ class Remmina:
         """Создание файла конфигурации для соединения"""
         if type(args) == list:
             protocol = self.cfg['protocol']
-            self.cfg['server'] = args[1]
-            self.cfg['name'] += args[1]
+            self.cfg['server'] = args[0]
+            self.cfg['name'] += args[0]
             if protocol == 'RDP':
                 #[user, domain, color, quality, resolution, viewmode, folder, printer, clipboard, sound]
                 self.cfg['username'] = args[1]                              
@@ -92,7 +92,7 @@ class Remmina:
     def start(self, parameters):
         """Запуск remmina с необходимыми параметрами"""
         self.create_cfg_file(parameters)
-        os.system('remmina -c "'+WORKFOLDER+self.f_name+'" &')
+        os.system('cd $HOME && remmina -c "' + WORKFOLDER + self.f_name + '" &')
 
 class VncRemmina(Remmina):
     """Класс для настройки VNC-соединения через Remmina"""
@@ -131,10 +131,11 @@ class RdpRemmina(Remmina):
 class XFreeRdp:
     """Класс для настройки RDP-соединения через xfreerdp"""
     def start(self, args):
+        params = ' -sec-nla +auto-reconnect /cert-ignore &'
         if type(args) == str:
-            os.system('xfreerdp -sec-nla /v:' + args + ' /f /cert-ignore &')
+            os.system('xfreerdp /f /v:' + args + params)
         else:
-            command = 'xfreerdp -sec-nla /v:' + args[0]
+            command = 'xfreerdp /v:' + args[0]
             if args[1]: command += ' /u:' + args[1]
             if args[2]: command += ' /d:' + args[2]
             if args[3]: command += ' /f'
@@ -154,7 +155,18 @@ class XFreeRdp:
             if args[15]: command += ' /sound:sys:alsa'
             if args[16]: command += ' /microphone:sys:alsa'
             if args[17]: command += ' /multimon'
-            command += ' /cert-ignore &' #для игнора ввода Y/N при запросе сертификата 
+            if args[18]: command += ' +compression'
+            if args[19]: command += ' /compression-level:' + args[19]
+            if args[20]: command += ' +fonts'
+            if args[21]: command += ' +aero'
+            if args[22]: command += ' +window-drag'
+            if args[23]: command += ' +menu-anims'    
+            if args[24]: command += ' -themes'
+            if args[25]: command += ' -wallpaper'
+            if args[26]: command += ' /nsc'
+            if args[27]: command += ' /jpeg'
+            if args[28]: command += ' /jpeg-quality:' + str(args[28])
+            command += params
             os.system(command)
 
 class NxRemmina(Remmina):

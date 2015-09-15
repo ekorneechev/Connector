@@ -70,6 +70,7 @@ class Properties(Gtk.Window):
         self.changeRdpRem = builder.get_object("radio_RDP_remmina")
         self.changeVncRem = builder.get_object("radio_VNC_remmina")
         self.statusbar = builder.get_object("statusbar")
+        self.combo_tabs = builder.get_object("combo_tabs")
         changeRdpFree = builder.get_object("radio_RDP_freeRDP")
         changeVncView = builder.get_object("radio_VNC_viewer")
         self.program = loadFromFile('default.conf')
@@ -77,6 +78,8 @@ class Properties(Gtk.Window):
             changeRdpFree.set_active(True)
         if self.program['VNC']:
             changeVncView.set_active(True)
+        try: self.combo_tabs.set_active_id(self.program['TAB'])
+        except KeyError: self.combo_tabs.set_active_id('0')
         self.add(box)        
         self.connect("delete-event", self.onClose)
         cancel.connect("clicked", self.onCancel, self)
@@ -96,6 +99,7 @@ class Properties(Gtk.Window):
         if self.changeVncRem.get_active():
             self.program['VNC'] = 0
         else: self.program['VNC'] = 1
+        self.program['TAB'] = self.combo_tabs.get_active_id()
         saveInFile('default.conf',self.program)
         gui.viewStatus(self.statusbar, "Настройки сохранены в файле default.conf...")
 

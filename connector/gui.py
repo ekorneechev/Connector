@@ -54,6 +54,10 @@ class Gui:
         self.getServersFromDb()
         self.citrixEditClick = False
         self.webEditClick = False
+        try: default_tab = properties.loadFromFile('default.conf')['TAB']
+        except KeyError: default_tab = '0'
+        self.conn_note = self.builder.get_object("list_connect")
+        self.conn_note.set_current_page(int(default_tab))
 
     def onDeleteWindow(self, *args):
         """Закрытие программы"""
@@ -324,7 +328,18 @@ class Gui:
             if args[15]: self.RDP_sound.set_active(True)
             if args[16]: self.RDP_microphone.set_active(True)
             if args[17]: self.RDP_multimon.set_active(True)
-
+            if args[18]: self.RDP_compression.set_active(True)
+            if args[19] or args[19] == 0: self.RDP_compr_level.set_active_id(args[19])
+            if args[20]: self.RDP_fonts.set_active(True)
+            if args[21]: self.RDP_aero.set_active(True)
+            if args[22]: self.RDP_drag.set_active(True)
+            if args[23]: self.RDP_animation.set_active(True)
+            if args[24]: self.RDP_theme.set_active(False)
+            if args[25]: self.RDP_wallpapers.set_active(False)
+            if args[26]: self.RDP_nsc.set_active(True)
+            if args[27]: 
+                self.RDP_jpeg.set_active(True)
+                self.RDP_jpeg_quality.set_value(args[28])
 
     def initPreferences(self, protocol):
         """В этой функции определяются различные для протоколов параметры"""
@@ -365,7 +380,18 @@ class Gui:
             self.RDP_printers = self.pref_builder.get_object("check_RDP1_printers")
             self.RDP_sound = self.pref_builder.get_object("check_RDP1_sound")
             self.RDP_microphone = self.pref_builder.get_object("check_RDP1_microphone")
-            self.RDP_multimon = self.pref_builder.get_object("check_RDP1_multimon") 
+            self.RDP_multimon = self.pref_builder.get_object("check_RDP1_multimon")
+            self.RDP_compression = self.pref_builder.get_object("check_RDP1_compression")
+            self.RDP_compr_level = self.pref_builder.get_object("entry_RDP1_compr_level")
+            self.RDP_fonts = self.pref_builder.get_object("check_RDP1_fonts")
+            self.RDP_aero = self.pref_builder.get_object("check_RDP1_aero")
+            self.RDP_drag = self.pref_builder.get_object("check_RDP1_drag")
+            self.RDP_animation = self.pref_builder.get_object("check_RDP1_animation")
+            self.RDP_theme = self.pref_builder.get_object("check_RDP1_theme")
+            self.RDP_wallpapers = self.pref_builder.get_object("check_RDP1_wallpapers")
+            self.RDP_nsc = self.pref_builder.get_object("check_RDP1_nsc")
+            self.RDP_jpeg = self.pref_builder.get_object("check_RDP1_jpeg")
+            self.RDP_jpeg_quality = self.pref_builder.get_object("scale_RDP1_jpeg")
 
         if protocol == 'NX':
             self.NX_user = self.pref_builder.get_object("entry_NX_user")
@@ -486,8 +512,36 @@ class Gui:
             else: microphone = 0
             if self.RDP_multimon.get_active(): multimon = 1
             else: multimon = 0
+            if self.RDP_compression.get_active(): 
+                compression = 1
+                compr_level = self.RDP_compr_level.get_active_id()
+            else:
+                compression = 0
+                compr_level = None
+            if self.RDP_fonts.get_active(): fonts = 1
+            else: fonts = 0
+            if self.RDP_aero.get_active(): aero = 1
+            else: aero = 0
+            if self.RDP_drag.get_active(): drag = 1
+            else: drag = 0
+            if self.RDP_animation.get_active(): animation = 1
+            else: animation = 0
+            if self.RDP_theme.get_active(): theme = 0
+            else: theme = 1
+            if self.RDP_wallpapers.get_active(): wallpapers = 0
+            else: wallpapers = 1
+            if self.RDP_nsc.get_active(): nsc = 1
+            else: nsc = 0
+            if self.RDP_jpeg.get_active(): 
+                jpeg = 1
+                jpeg_quality = int(self.RDP_jpeg_quality.get_value())
+            else:
+                jpeg = 0
+                jpeg_quality = None
+
             args = [user, domain, fullscreen, clipboard, resolution, color, folder, gserver, guser, gdomain, gpasswd, 
-                    admin, smartcards, printers, sound, microphone, multimon]
+                    admin, smartcards, printers, sound, microphone, multimon, compression, compr_level, fonts, 
+                    aero, drag, animation, theme, wallpapers, nsc, jpeg, jpeg_quality]
 
         if protocol == 'NX':
             user = self.NX_user.get_text()
@@ -647,13 +701,23 @@ class Gui:
     def onResolutionSet(self, widget):
         """Отображение списка разрешений"""
         try: widget.set_button_sensitivity(Gtk.SensitivityType.ON)
-        except: widget.set_sensitive(True)
-        
+        except: widget.set_sensitive(True)        
 
     def offResolutionSet(self, widget):
         """Скрытие списка разрешений"""
         try: widget.set_button_sensitivity(Gtk.SensitivityType.OFF)
         except: widget.set_sensitive(False)
+
+    def onComprSet(self, widget):
+        """Настройка чувствительности списка уровней сжатия"""
+        if widget.get_button_sensitivity() == Gtk.SensitivityType.ON:
+            widget.set_button_sensitivity(Gtk.SensitivityType.OFF)
+        else: widget.set_button_sensitivity(Gtk.SensitivityType.ON)
+
+    def onJpegSet(self, widget):
+        """Настройка видимости установки качества кодека JPEG"""
+        if widget.get_opacity(): widget.set_opacity(0)
+        else: widget.set_opacity(1)        
 
     def onProperties(self, *args):
         """Окно параметров приложения"""
@@ -729,8 +793,7 @@ class Gui:
             index_tab = 8 
         main_note = self.builder.get_object("main_note")
         main_note.set_current_page(0)
-        conn_note = self.builder.get_object("list_connect")
-        conn_note.set_current_page(index_tab)       
+        self.conn_note.set_current_page(index_tab)       
         entry_serv = self.builder.get_object("entry_serv_" + protocol)               
         entry_name = self.builder.get_object("entry_" + protocol + "_name")
         entry_serv.set_text(server)
@@ -748,8 +811,8 @@ class Gui:
             elif self.whatProgram['VNC'] == 0 and len(parameters) > 5: return True
             else: return False
         if parameters[0] == 'RDP':
-            if self.whatProgram['RDP'] == 1 and len(parameters) == 19: return True
-            elif self.whatProgram['RDP'] == 0 and len(parameters) < 19: return True
+            if self.whatProgram['RDP'] == 1 and len(parameters) == 30: return True
+            elif self.whatProgram['RDP'] == 0 and len(parameters) < 30: return True
             else: return False
         return True         
         
@@ -857,7 +920,9 @@ class Gui:
             Gtk.FileChooserAction.SAVE, (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
              Gtk.STOCK_SAVE, Gtk.ResponseType.OK))
         dialog.set_current_folder(HOMEFOLDER)
-        dialog.set_current_name('Connect')
+        table, indexRow = treeView.get_selection().get_selected()
+        fileCtor = table[indexRow][3]
+        dialog.set_current_name(table[indexRow][0])
         dialog.set_do_overwrite_confirmation(True) #запрос на перезапись одноименного файла
         response = dialog.run()
         if response == Gtk.ResponseType.OK:
@@ -866,8 +931,6 @@ class Gui:
             filename = name + ".desktop"
             with open(filename,"w") as label:
                 label.write(DESKTOP_INFO)
-            table, indexRow = treeView.get_selection().get_selected()
-            fileCtor = table[indexRow][3]
             f = open(filename,"a")
             f.write("Exec=" + EXEC + fileCtor + "\n")
             f.write("Name=" + os.path.basename(name))
