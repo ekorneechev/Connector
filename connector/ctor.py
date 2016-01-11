@@ -150,7 +150,7 @@ class XFreeRdp:
                 command = "GATEPWD='" + args[11] + "' && " + command 
                 command += ' /gp:$GATEPWD'
             if args[12]: command += ' /admin'
-            if args[13]: command += ' /smartcard'
+            if args[13]: command += ' /smartcard:""'
             if args[14]: command += ' /printer'
             if args[15]: command += ' /sound:sys:alsa'
             if args[16]: command += ' /microphone:sys:alsa'
