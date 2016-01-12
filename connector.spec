@@ -1,5 +1,5 @@
 Name: connector
-Version: 1.3.21
+Version: 1.3.22
 Release: alt1
 
 Summary: Remote desktop chooser
@@ -38,6 +38,9 @@ install -p *.py %buildroot%basedir/
 %basedir/*.py
 
 %changelog
+* Tue Jan 12 2016 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.3.22-alt1
+- Fixed redirect smartcards, added redirect usb-storage and key /workarea. NLA is now optional
+
 * Tue Sep 15 2015 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.3.21-alt1
 - Added performance parameters and choise default tab
 

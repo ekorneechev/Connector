@@ -308,7 +308,8 @@ class Gui:
             else: self.RDP_fullscreen.set_active(False)
             if args[4]: self.RDP_clipboard.set_active(True)
             else: self.RDP_clipboard.set_active(False)
-            if args[5] == '': self.RDP_resol_default.set_active(True)
+            if args[5] == '' and not args[31]: self.RDP_resol_default.set_active(True)
+            elif args[31]: self.RDP_workarea.set_active(True)
             else:
                 RDP_resol_hand = self.pref_builder.get_object("radio_RDP1_resol_hand")
                 RDP_resol_hand.set_active(True)
@@ -340,6 +341,9 @@ class Gui:
             if args[27]: 
                 self.RDP_jpeg.set_active(True)
                 self.RDP_jpeg_quality.set_value(args[28])
+            if args[29]: self.RDP_usb.set_active(True)
+            if args[30]: self.RDP_nla.set_active(False)
+            
 
     def initPreferences(self, protocol):
         """В этой функции определяются различные для протоколов параметры"""
@@ -392,6 +396,9 @@ class Gui:
             self.RDP_nsc = self.pref_builder.get_object("check_RDP1_nsc")
             self.RDP_jpeg = self.pref_builder.get_object("check_RDP1_jpeg")
             self.RDP_jpeg_quality = self.pref_builder.get_object("scale_RDP1_jpeg")
+            self.RDP_usb = self.pref_builder.get_object("check_RDP1_usb")
+            self.RDP_nla = self.pref_builder.get_object("check_RDP1_nla")
+            self.RDP_workarea = self.pref_builder.get_object("radio_RDP1_workarea")
 
         if protocol == 'NX':
             self.NX_user = self.pref_builder.get_object("entry_NX_user")
@@ -492,8 +499,11 @@ class Gui:
             else: fullscreen = 0
             if self.RDP_clipboard.get_active(): clipboard = 1
             else: clipboard = 0
-            if self.RDP_resol_default.get_active(): resolution = ''
-            else: resolution = self.RDP_resolution.get_text()
+            workarea = 0
+            resolution = ''
+            if self.RDP_workarea.get_active(): workarea = 1            
+            elif self.RDP_resol_default.get_active(): pass
+            else: resolution = self.RDP_resolution.get_text()  
             if self.RDP_share_folder.get_active(): folder = self.RDP_name_folder.get_filename()
             else: folder = ''
             gserver = self.RDP_gserver.get_text()
@@ -538,10 +548,13 @@ class Gui:
             else:
                 jpeg = 0
                 jpeg_quality = None
-
+            if self.RDP_usb.get_active(): usb = 1
+            else: usb = 0
+            if self.RDP_nla.get_active(): nla = 0
+            else: nla = 1
             args = [user, domain, fullscreen, clipboard, resolution, color, folder, gserver, guser, gdomain, gpasswd, 
                     admin, smartcards, printers, sound, microphone, multimon, compression, compr_level, fonts, 
-                    aero, drag, animation, theme, wallpapers, nsc, jpeg, jpeg_quality]
+                    aero, drag, animation, theme, wallpapers, nsc, jpeg, jpeg_quality, usb, nla, workarea]
 
         if protocol == 'NX':
             user = self.NX_user.get_text()
@@ -811,8 +824,8 @@ class Gui:
             elif self.whatProgram['VNC'] == 0 and len(parameters) > 5: return True
             else: return False
         if parameters[0] == 'RDP':
-            if self.whatProgram['RDP'] == 1 and len(parameters) == 30: return True
-            elif self.whatProgram['RDP'] == 0 and len(parameters) < 30: return True
+            if self.whatProgram['RDP'] == 1 and len(parameters) == 33: return True
+            elif self.whatProgram['RDP'] == 0 and len(parameters) < 33: return True
             else: return False
         return True         
         

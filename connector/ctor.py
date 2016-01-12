@@ -131,9 +131,9 @@ class RdpRemmina(Remmina):
 class XFreeRdp:
     """Класс для настройки RDP-соединения через xfreerdp"""
     def start(self, args):
-        params = ' -sec-nla +auto-reconnect /cert-ignore &'
+        params = ' +auto-reconnect /cert-ignore &'
         if type(args) == str:
-            os.system('xfreerdp /f /v:' + args + params)
+            os.system('xfreerdp /f -sec-nla /v:' + args + params)
         else:
             command = 'xfreerdp /v:' + args[0]
             if args[1]: command += ' /u:' + args[1]
@@ -166,6 +166,10 @@ class XFreeRdp:
             if args[26]: command += ' /nsc'
             if args[27]: command += ' /jpeg'
             if args[28]: command += ' /jpeg-quality:' + str(args[28])
+            if args[29]: command += ' /drive:Storage,/run/media/$USER'
+            if args[30]: command += ' /p:$(zenity --entry --title="Аутентификация (with NLA)" --text="Введите пароль для пользователя '+ args[1] + ':" --hide-text)'
+            else: command += ' -sec-nla'
+            if args[31]: command += ' /workarea'
             command += params
             os.system(command)
 
