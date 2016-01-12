@@ -6,7 +6,7 @@ Summary: Remote desktop chooser
 License: GPL
 Group: Networking/Remote access
 
-Url: https://github.com/ekorneechev/Connector
+Url: http://www.myconnector.ru
 Source0: %name-%version.tar.gz
 Packager: Korneechev Evgeniy <ekorneechev@altlinux.org>
 
