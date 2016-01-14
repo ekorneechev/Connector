@@ -211,8 +211,6 @@ class Gui:
         if protocol == 'VNC' and self.whatProgram['VNC'] == 1:
             if args[1] != '': self.VNC_viewmode.set_active(True)
             if args[2] != '': self.VNC_viewonly.set_active(True)
-            if args[3] != '': self.VNC_showcursor.set_active(True)
-            else: self.VNC_showcursor.set_active(False) #требуется если по умолчанию галка стоит (относится ко всем протоколам)
 
         if protocol == 'VNC' and self.whatProgram['VNC'] == 0:
             self.VNC_user.set_text(args[1])
@@ -428,7 +426,6 @@ class Gui:
         if protocol == 'VNC' and self.whatProgram['VNC'] == 1:
             self.VNC_viewmode = self.pref_builder.get_object("check_VNC1_fullscreen")
             self.VNC_viewonly = self.pref_builder.get_object("check_VNC1_viewonly")
-            self.VNC_showcursor = self.pref_builder.get_object("check_VNC1_showcursor")
 
         if protocol == 'XDMCP':
             self.XDMCP_color = self.pref_builder.get_object("entry_XDMCP_color")
@@ -591,13 +588,11 @@ class Gui:
             args = [user, quality, color, viewmode, viewonly, crypt, clipboard, showcursor]
 
         if protocol == 'VNC' and self.whatProgram['VNC'] == 1:
-            if self.VNC_viewmode.get_active(): viewmode = "-FullScreen "
+            if self.VNC_viewmode.get_active(): viewmode = "FullScreen=1 "
             else: viewmode = ""
-            if self.VNC_viewonly.get_active(): viewonly = "-ViewOnly "
+            if self.VNC_viewonly.get_active(): viewonly = "ViewOnly=1 "
             else: viewonly = ""
-            if self.VNC_showcursor.get_active(): showcursor = "-UseLocalCursor "
-            else: showcursor = ""
-            args = [viewmode, viewonly, showcursor]
+            args = [viewmode, viewonly]
 
         if protocol == 'XDMCP':
             color = self.XDMCP_color.get_active_id()
@@ -822,8 +817,8 @@ class Gui:
         """Функция проверки корректоности параметров для запускаемой программы"""
         self.whatProgram = properties.loadFromFile('default.conf')
         if parameters[0] == 'VNC':
-            if self.whatProgram['VNC'] == 1 and len(parameters) == 5: return True
-            elif self.whatProgram['VNC'] == 0 and len(parameters) > 5: return True
+            if self.whatProgram['VNC'] == 1 and len(parameters) == 4: return True
+            elif self.whatProgram['VNC'] == 0 and len(parameters) > 4: return True
             else: return False
         if parameters[0] == 'RDP':
             if self.whatProgram['RDP'] == 1 and len(parameters) == 33: return True
