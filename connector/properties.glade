@@ -233,7 +233,7 @@
             </child>
             <child>
               <object class="GtkRadioButton" id="radio_VNC_viewer">
-                <property name="label" translatable="yes">vncviewer - Real VNC</property>
+                <property name="label" translatable="yes">vncviewer - TigerVNC</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
