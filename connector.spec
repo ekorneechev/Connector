@@ -8,7 +8,7 @@ Group: Networking/Remote access
 
 Url: http://www.myconnector.ru
 Source0: %name-%version.tar.gz
-Packager: Korneechev Evgeniy <ek@myconnector.ru>
+Packager: Korneechev Evgeniy <ekorneechev@altlinux.org>
 
 BuildArch: noarch
 Requires: python3 python3-module-pygobject3
@@ -38,38 +38,38 @@ install -p *.py %buildroot%basedir/
 %basedir/*.py
 
 %changelog
-* Thu Jan 14 2016 Evgeniy Korneechev <ek@myconnector.ru> 1.3.22-alt2
+* Thu Jan 14 2016 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.3.22-alt2
 - Fixed vncviewer parameters for TigerVNC
 
-* Tue Jan 12 2016 Evgeniy Korneechev <ek@myconnector.ru> 1.3.22-alt1
+* Tue Jan 12 2016 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.3.22-alt1
 - Fixed redirect smartcards, added redirect usb-storage and key /workarea. NLA is now optional
 
-* Tue Sep 15 2015 Evgeniy Korneechev <ek@myconnector.ru> 1.3.21-alt1
+* Tue Sep 15 2015 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.3.21-alt1
 - Added performance parameters and choise default tab
 
-* Mon Aug 17 2015 Evgeniy Korneechev <ek@myconnector.ru> 1.3.19-alt1
+* Mon Aug 17 2015 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.3.19-alt1
 - Added quick connect -login@server for SSH & SFTP
 
-* Mon Aug 17 2015 Evgeniy Korneechev <ek@myconnector.ru> 1.3.18-alt1
+* Mon Aug 17 2015 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.3.18-alt1
 - Added sound, microphone and printer for FreeRDP
 
-* Tue Aug 11 2015 Evgeniy Korneechev <ek@myconnector.ru> 1.3.17-alt1
+* Tue Aug 11 2015 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.3.17-alt1
 - Added WEB, smartcards
 
-* Thu Jul 02 2015 Evgeniy Korneechev <ek@myconnector.ru> 1.3.15-alt1
+* Thu Jul 02 2015 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.3.15-alt1
 - Added function Copy, update GTK >=3.10
 
-* Thu Jun 25 2015 Evgeniy Korneechev <ek@myconnector.ru> 1.3.14-alt1
+* Thu Jun 25 2015 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.3.14-alt1
 - Update GUI and FreeRDP features
 
-* Tue Jun 23 2015 Evgeniy Korneechev <ek@myconnector.ru> 1.3.12-alt4
+* Tue Jun 23 2015 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.3.12-alt4
 - Update SPEC
 
-* Mon Jun 22 2015 Korneechev Evgeniy <ek@myconnector.ru> 1.3.12-alt3
+* Mon Jun 22 2015 Korneechev Evgeniy <ekorneechev@altlinux.org> 1.3.12-alt3
 - Initial build by GEAR
 
 * Tue Jun 16 2015 Michael Shigorin <mike@altlinux.org> 1.3.12-alt2
 - spec cleanup
 
-* Tue Jun 16 2015 Evgeniy Korneechev <ek@myconnector.ru> 1.3.12-alt1
+* Tue Jun 16 2015 Evgeniy Korneechev <ekorneechev@gmail.com> 1.3.12-alt1
 - Initial build
