@@ -1,6 +1,6 @@
 Name: connector
-Version: 1.3.22
-Release: alt2
+Version: 1.3.23
+Release: alt1
 
 Summary: Remote desktop chooser
 License: GPL
@@ -38,6 +38,9 @@ install -p *.py %buildroot%basedir/
 %basedir/*.py
 
 %changelog
+* Fri Aug 12 2016 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.3.23-alt1
+- Fixed a bug - sometimes doesn't work quick connection
+
 * Thu Jan 14 2016 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.3.22-alt2
 - Fixed vncviewer parameters for TigerVNC
 
