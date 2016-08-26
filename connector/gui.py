@@ -993,7 +993,7 @@ class Gui:
 
     def onWiki(self, *args):
         """Открытие wiki в Интернете"""
-        webbrowser.open ('https://github.com/ekorneechev/Connector/wiki', new = 2)
+        webbrowser.open ('http://wiki.myconnector.ru/', new = 2)
     
     def changePage(self, index = 1):
         note = self.builder.get_object("main_note")
