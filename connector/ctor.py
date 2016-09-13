@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-import time, properties, webbrowser
+import time, properties
 from GLOBAL import *
 
 def f_write(f_name, cfg):
@@ -243,7 +243,7 @@ class Web:
         else: addr = args
         if  not addr.find("://") != -1:
             addr = "http://" + addr
-        webbrowser.open (addr, new = 2)        
+        os.system ('python -m webbrowser -t "' + addr +'" &')
 
 def definition(protocol):
     """Функция определения протокола"""
