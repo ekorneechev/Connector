@@ -1,10 +1,12 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-from ctor import *
+import gi
+gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk, GdkPixbuf
 import random, sys
-from GLOBAL import *
+from ctor import *
+from GLOBAL import 
 
 
 def viewStatus(bar, message):
