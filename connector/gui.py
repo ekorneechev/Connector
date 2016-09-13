@@ -6,8 +6,7 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk, GdkPixbuf
 import random, sys
 from ctor import *
-from GLOBAL import 
-
+from GLOBAL import *
 
 def viewStatus(bar, message):
     """Функция отображения происходящих действий в строке состояния"""
@@ -999,7 +998,15 @@ class Gui:
     
     def changePage(self, index = 1):
         note = self.builder.get_object("main_note")
-        note.set_current_page(index)    
+        note.set_current_page(index)
+
+    def onPopupClipboard(self, treeView):
+        """Копирование имени конфигурационного файла в буфер обмена"""
+        table, indexRow = treeView.get_selection().get_selected()
+        filename = table[indexRow][3]
+        clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+        clipboard.set_text(filename, -1)
+        viewStatus(self.statusbar, filename + " - скопировано в буфер обмена")
 
 def f_main():
     createFolder()

@@ -1,6 +1,6 @@
 Name: connector
-Version: 1.3.23
-Release: alt3
+Version: 1.3.24
+Release: alt1
 
 Summary: Remote desktop chooser
 License: GPL
@@ -38,6 +38,9 @@ install -p *.py %buildroot%basedir/
 %basedir/*.py
 
 %changelog
+* Tue Sep 13 2016 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.3.24-alt1
+- Added function - copy ctor-file's name to clipboard
+
 * Wed Aug 24 2016 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.3.23-alt3
 - Update requires - added remmina-plugins
 
