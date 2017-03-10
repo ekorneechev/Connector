@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-import os
+import os, subprocess
 
 #Определение домашней папки пользователя
 HOMEFOLDER = os.getenv('HOME')
@@ -26,3 +26,11 @@ Icon=/usr/share/connector/data/emblem.png
 
 #Запускаемый файл приложения
 EXEC = "/usr/bin/connector "
+
+#Проверка и установка пути монтирования устройств
+#control udisks2
+udisks2 = subprocess.check_output("/usr/sbin/control udisks2", shell=True, universal_newlines=True).strip()
+if udisks2 == 'default':
+    USBPATH = "/run/media/$USER"
+if udisks2 == 'shared':
+    USBPATH = "/media"
