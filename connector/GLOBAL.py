@@ -14,6 +14,7 @@ DEFAULT = dict(RDP = 1, VNC = 0, TAB = '0')
 
 #Версия приложения
 VERSION = "1.3.24"
+RELEASE = subprocess.check_output("rpm -q connector; exit 0", shell=True, universal_newlines=True).strip().split('-') [2]
 
 #Исходные данные для ярлыка подключения
 DESKTOP_INFO ="""#!/usr/bin/env xdg-open
@@ -29,7 +30,7 @@ EXEC = "/usr/bin/connector "
 
 #Проверка и установка пути монтирования устройств
 #control udisks2
-udisks2 = subprocess.check_output("/usr/sbin/control udisks2", shell=True, universal_newlines=True).strip()
+udisks2 = subprocess.check_output("/usr/sbin/control udisks2; exit 0", shell=True, universal_newlines=True).strip()
 if udisks2 == 'default':
     USBPATH = "/run/media/$USER"
 if udisks2 == 'shared':
