@@ -65,8 +65,8 @@
                     <property name="name">SFTP</property>
                     <property name="can_focus">True</property>
                     <property name="tooltip_text" translatable="yes">Поддерживается следующий формат:
- - сервер
- - сервер:порт</property>
+ - [имя@]сервер
+ - [имя@]сервер:порт</property>
                     <signal name="activate" handler="onButtonConnect" swapped="no"/>
                   </object>
                 </child>
@@ -486,8 +486,8 @@
                 <property name="name">SSH</property>
                 <property name="can_focus">True</property>
                 <property name="tooltip_text" translatable="yes">Поддерживается следующий формат:
- - сервер
- - сервер:порт</property>
+ - [имя@]сервер
+ - [имя@]сервер:порт</property>
                 <signal name="activate" handler="onButtonConnect" swapped="no"/>
               </object>
             </child>

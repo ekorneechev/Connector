@@ -25,8 +25,9 @@ class Remmina:
         """Создание файла конфигурации для соединения"""
         if type(args) == list:
             protocol = self.cfg['protocol']
-            self.cfg['server'] = args[0]
-            self.cfg['name'] += args[0]
+            server, login = properties.searchSshUser(args[0])
+            self.cfg['server'] = server
+            self.cfg['name'] += server
             if protocol == 'RDP':
                 #[user, domain, color, quality, resolution, viewmode, folder, printer, clipboard, sound]
                 self.cfg['username'] = args[1]                              
@@ -70,14 +71,16 @@ class Remmina:
                 self.cfg['exec'] = args[6]
             if protocol == 'SSH':
                 #[user, SSH_auth, keyfile, charset, _exec] 
-                self.cfg['ssh_username'] = args[1]
+                if login: self.cfg['ssh_username'] = login
+                else: self.cfg['ssh_username'] = args[1]
                 self.cfg['ssh_auth'] = args[2]
                 self.cfg['ssh_privatekey'] = args[3]
                 self.cfg['ssh_charset'] = args[4]
                 self.cfg['exec'] = args[5]
             if protocol == 'SFTP':
                 #[user, SSH_auth, keyfile, charset, execpath]
-                self.cfg['ssh_username'] = args[1]
+                if login: self.cfg['ssh_username'] = login
+                else: self.cfg['ssh_username'] = args[1]
                 self.cfg['ssh_auth'] = args[2]
                 self.cfg['ssh_privatekey'] = args[3]
                 self.cfg['ssh_charset'] = args[4]
