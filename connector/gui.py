@@ -3,8 +3,8 @@
 
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, Gdk, GdkPixbuf
-import random, sys
+from gi.repository import Gtk, Gdk, GdkPixbuf, GLib
+import random, sys, signal
 from ctor import *
 from GLOBAL import *
 
@@ -23,6 +23,27 @@ def connectFile(filename):
             connect = definition(protocol)
             connect.start(parameters)
     except (IndexError, KeyError): os.system("zenity --error --text='Проверьте настройки программ по умолчанию' --no-wrap")
+
+def initSignal(gui):
+    """Функция обработки сигналов SIGHUP, SIGINT и SIGTERM
+       SIGINT - KeyboardInterrupt (Ctrl+C)
+       Thanks: http://stackoverflow.com/questions/26388088/python-gtk-signal-handler-not-working/26457317#26457317"""
+    def install_glib_handler(sig):
+        unix_signal_add = None
+
+        if hasattr(GLib, "unix_signal_add"):
+            unix_signal_add = GLib.unix_signal_add
+        elif hasattr(GLib, "unix_signal_add_full"):
+            unix_signal_add = GLib.unix_signal_add_full
+
+        if unix_signal_add:
+            unix_signal_add(GLib.PRIORITY_HIGH, sig, gui.onDeleteWindow, sig)
+        else:
+            print("Can't install GLib signal handler, too old gi.")
+
+    SIGS = [getattr(signal, s, None) for s in "SIGINT SIGTERM SIGHUP".split()]
+    for sig in filter(None, SIGS):
+        GLib.idle_add(install_glib_handler, sig, priority=GLib.PRIORITY_HIGH)
 
 class Gui:
     def __init__(self):
@@ -62,6 +83,7 @@ class Gui:
 
     def onDeleteWindow(self, *args):
         """Закрытие программы"""
+        if args[0] == 2: print ("\nKeyboardInterrupt: the connector is closed!")
         Gtk.main_quit(*args)
     
     def onViewAbout(self, *args):
@@ -1015,6 +1037,7 @@ def f_main():
         connectFile(fileCtor)
     except IndexError:
         gui = Gui()
+        initSignal(gui)
         gui.window.show_all()
         Gtk.main()
 
