@@ -35,3 +35,7 @@ if udisks2 == 'default':
     USBPATH = "/run/media/$USER"
 if udisks2 == 'shared':
     USBPATH = "/media"
+
+#Ведение логов
+LOGFOLDER = WORKFOLDER + "logs/"
+STD_TO_LOG = ' >> ' + LOGFOLDER + "all.log 2>&1 &"

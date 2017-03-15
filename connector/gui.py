@@ -1031,7 +1031,7 @@ class Gui:
         viewStatus(self.statusbar, filename + " - скопировано в буфер обмена")
 
 def f_main():
-    createFolder()
+    os.system("mkdir -p " + LOGFOLDER)
     try:
         fileCtor = sys.argv[1]
         connectFile(fileCtor)

@@ -12,11 +12,6 @@ def f_write(f_name, cfg):
         print(key,cfg[key], sep='=',file=f)
     f.close()
 
-def createFolder():
-    """Создание в домашней папке пользователя директории для работы программы"""
-    if not os.path.exists(WORKFOLDER):
-        os.mkdir(WORKFOLDER)
-
 class Remmina:
     """Класс, обеспечивающий подключение через remmina"""
     cfg = {}
@@ -95,7 +90,7 @@ class Remmina:
     def start(self, parameters):
         """Запуск remmina с необходимыми параметрами"""
         self.create_cfg_file(parameters)
-        os.system('cd $HOME && remmina -c "' + WORKFOLDER + self.f_name + '" &')
+        os.system('cd $HOME && remmina -c "' + WORKFOLDER + self.f_name + '"' + STD_TO_LOG)
 
 class VncRemmina(Remmina):
     """Класс для настройки VNC-соединения через Remmina"""
@@ -111,12 +106,12 @@ class VncViewer:
     """Класс для настройки VNC-соединения через VncViewer"""
     def start(self, args):
         if type(args) == str:        
-            os.system('vncviewer ' + args + ' &')
+            os.system('vncviewer ' + args + STD_TO_LOG)
         else:
             command = 'vncviewer ' + args[0] + ' '
             if args[1]: command += args[1]
             if args[2]: command += args[2]
-            command += '&'   
+            command += STD_TO_LOG
             os.system(command)
 
 class RdpRemmina(Remmina):
@@ -133,9 +128,9 @@ class RdpRemmina(Remmina):
 class XFreeRdp:
     """Класс для настройки RDP-соединения через xfreerdp"""
     def start(self, args):
-        params = ' +auto-reconnect /cert-ignore &'
+        params = ' +auto-reconnect /cert-ignore'
         if type(args) == str:
-            os.system('xfreerdp /f -sec-nla /v:' + args + params)
+            os.system('xfreerdp /f -sec-nla /v:' + args + params + STD_TO_LOG)
         else:
             command = 'xfreerdp /v:' + args[0]
             if args[1]: command += ' /u:' + args[1]
@@ -172,7 +167,7 @@ class XFreeRdp:
             if args[30]: command += ' /p:$(zenity --entry --title="Аутентификация (with NLA)" --text="Введите пароль для пользователя '+ args[1] + ':" --hide-text)'
             else: command += ' -sec-nla'
             if args[31]: command += ' /workarea'
-            command += params
+            command += params + STD_TO_LOG
             os.system(command)
 
 class NxRemmina(Remmina):
@@ -216,14 +211,14 @@ class Vmware:
     """Класс для настройки соединения к VMWare серверу"""
     def start(self, args):
         if type(args) == str:        
-            os.system('vmware-view -q -s ' + args + ' &')
+            os.system('vmware-view -q -s ' + args + STD_TO_LOG)
         else:
             command = 'vmware-view -q -s ' + args[0]
             if args[1]: command += ' -u ' + args[1]
             if args[2]: command += ' -d ' + args[2]
             if args[3]: command += ' -p ' + args[3]
             if args[4]: command += ' --fullscreen'
-            command += ' &'   
+            command += STD_TO_LOG
             os.system(command)
 
 class Citrix:
@@ -232,11 +227,11 @@ class Citrix:
         if type(args) == list:
             addr = args[0]
         else: addr = args
-        os.system('/opt/Citrix/ICAClient/util/storebrowse --addstore ' + addr)
-        os.system('/opt/Citrix/ICAClient/selfservice --icaroot /opt/Citrix/ICAClient &')
+        os.system('/opt/Citrix/ICAClient/util/storebrowse --addstore ' + addr + STD_TO_LOG)
+        os.system('/opt/Citrix/ICAClient/selfservice --icaroot /opt/Citrix/ICAClient' + STD_TO_LOG)
 
     def preferences():
-        os.system('/opt/Citrix/ICAClient/util/configmgr --icaroot /opt/Citrix/ICAClient &')
+        os.system('/opt/Citrix/ICAClient/util/configmgr --icaroot /opt/Citrix/ICAClient' + STD_TO_LOG)
 
 class Web:
     """Класс для настройки подключения к WEB-ресурсу"""
@@ -246,7 +241,7 @@ class Web:
         else: addr = args
         if  not addr.find("://") != -1:
             addr = "http://" + addr
-        os.system ('python -m webbrowser -t "' + addr +'" &')
+        os.system ('python3 -m webbrowser -t "' + addr + '"' + STD_TO_LOG)
 
 def definition(protocol):
     """Функция определения протокола"""
