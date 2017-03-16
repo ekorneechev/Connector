@@ -11,8 +11,8 @@ Source0: %name-%version.tar.gz
 Packager: Korneechev Evgeniy <ekorneechev@altlinux.org>
 
 BuildArch: noarch
-Requires: python3 python3-module-pygobject3 xfreerdp
-Requires: libgtk+3 libgtk+3-gir remmina remmina-plugins tigervnc
+Requires: python3 python3-module-pygobject3 libgtk+3 libgtk+3-gir
+Requires: remmina remmina-plugins tigervnc xfreerdp vmware-view-userinstall
 Requires: control
 
 %define basedir %_datadir/%name
