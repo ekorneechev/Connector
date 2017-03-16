@@ -1,0 +1,23 @@
+.\" -*- mode: troff; coding: UTF-8 -*-
+.TH connector 1  "March 14, 2017" "version 1.3.24" "USER COMMANDS"
+.SH NAME
+connector \- Инструмент системного администратора
+.SH SYNOPSIS
+.B connector
+[<файл подключения>]
+.SH DESCRIPTION
+Программа-агрегатор для осуществления подключения с различным
+компьютерным системам по всем распространенным протоколам (RDP, VNC,
+Citrix, VMware и прочие).
+.PP
+Wiki: http://wiki.myconnector.ru
+.SH OPTIONS
+.TP
+без опций
+запуск программы с GUI
+.TP
+[<файл подключения>]
+быстрое подключение, используя ранее сохраненный конфигурационный
+файл <имя файла>.ctor (должен находиться в папке - ~/.connector/)
+.SH AUTHOR
+Корнеечев Евгений (ek@myconnector.ru)

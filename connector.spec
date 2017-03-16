@@ -31,12 +31,15 @@ install -pDm644 %name.desktop %buildroot%_desktopdir/%name.desktop
 mkdir -p %buildroot%basedir/data/
 install -p *.png *.glade %buildroot%basedir/data/
 install -p *.py %buildroot%basedir/
+install -pDm644 %name.man %buildroot%_man1dir/%name.1
+%find_lang --with-man %name
 
-%files
+%files -f %name.lang
 %_bindir/%name
 %_desktopdir/%name.desktop
 %basedir/data
 %basedir/*.py
+%_man1dir/*
 
 %changelog
 * Mon Oct 17 2016 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.3.24-alt3
