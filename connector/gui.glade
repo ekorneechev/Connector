@@ -798,7 +798,6 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">RDP</property>
                         <property name="width_chars">8</property>
-                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="tab_fill">False</property>
@@ -919,7 +918,6 @@
                         <property name="label" translatable="yes">NX</property>
                         <property name="ellipsize">start</property>
                         <property name="width_chars">8</property>
-                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="position">1</property>
@@ -1044,7 +1042,6 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">VNC</property>
                         <property name="width_chars">8</property>
-                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="position">2</property>
@@ -1165,7 +1162,6 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">XDMCP</property>
                         <property name="width_chars">8</property>
-                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="position">3</property>
@@ -1286,7 +1282,6 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">VMware</property>
                         <property name="width_chars">8</property>
-                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="position">4</property>
@@ -1434,7 +1429,6 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">Citrix</property>
                         <property name="width_chars">8</property>
-                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="position">5</property>
@@ -1555,7 +1549,6 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">SSH</property>
                         <property name="width_chars">8</property>
-                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="position">6</property>
@@ -1676,7 +1669,6 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">SFTP</property>
                         <property name="width_chars">8</property>
-                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="position">7</property>
@@ -1806,7 +1798,6 @@
                         <property name="can_focus">False</property>
                         <property name="label" translatable="yes">WEB</property>
                         <property name="width_chars">8</property>
-                        <property name="xalign">0</property>
                       </object>
                       <packing>
                         <property name="position">8</property>

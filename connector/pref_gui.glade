@@ -147,7 +147,6 @@
             <property name="receives_default">False</property>
             <property name="halign">start</property>
             <property name="margin_left">10</property>
-            <property name="xalign">0</property>
             <property name="active">True</property>
             <property name="draw_indicator">True</property>
           </object>
@@ -165,7 +164,6 @@
             <property name="receives_default">False</property>
             <property name="halign">start</property>
             <property name="margin_left">10</property>
-            <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
             <property name="group">radio_SFTP_pwd</property>
           </object>
@@ -186,7 +184,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="margin_left">10</property>
-                <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
                 <property name="group">radio_SFTP_pwd</property>
               </object>
@@ -568,7 +565,6 @@
         <property name="receives_default">False</property>
         <property name="halign">start</property>
         <property name="margin_left">10</property>
-        <property name="xalign">0</property>
         <property name="active">True</property>
         <property name="draw_indicator">True</property>
       </object>
@@ -586,7 +582,6 @@
         <property name="receives_default">False</property>
         <property name="halign">start</property>
         <property name="margin_left">10</property>
-        <property name="xalign">0</property>
         <property name="active">True</property>
         <property name="draw_indicator">True</property>
         <property name="group">radio_SSH_pwd</property>
@@ -608,7 +603,6 @@
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
             <property name="margin_left">10</property>
-            <property name="xalign">0</property>
             <property name="active">True</property>
             <property name="draw_indicator">True</property>
             <property name="group">radio_SSH_pwd</property>
@@ -1043,7 +1037,6 @@
         <property name="halign">end</property>
         <property name="margin_right">32</property>
         <property name="margin_top">2</property>
-        <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
       </object>
       <packing>
@@ -1275,8 +1268,6 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">start</property>
-        <property name="xpad">5</property>
-        <property name="ypad">5</property>
         <property name="label" translatable="yes">Нажмите F8 после подключения для дополнительных параметров</property>
         <attributes>
           <attribute name="font-desc" value="&lt;Введите значение&gt; 7"/>
@@ -1294,7 +1285,7 @@
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
-        <property name="xalign">0</property>
+        <property name="halign">start</property>
         <property name="draw_indicator">True</property>
       </object>
       <packing>
@@ -1310,7 +1301,6 @@
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
         <property name="halign">start</property>
-        <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
       </object>
       <packing>
@@ -1799,7 +1789,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="xalign">0</property>
+                        <property name="halign">start</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                       </object>
@@ -1815,7 +1805,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="xalign">0</property>
+                        <property name="halign">start</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
                         <signal name="toggled" handler="offResolutionSet" object="entry_RDP1_resolution" swapped="no"/>
@@ -1832,7 +1822,7 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
-                        <property name="xalign">0</property>
+                        <property name="halign">start</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">radio_RDP1_resol_default</property>
                         <signal name="toggled" handler="offResolutionSet" object="entry_RDP1_resolution" swapped="no"/>
@@ -1853,7 +1843,6 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">radio_RDP1_resol_default</property>
                             <signal name="toggled" handler="onResolutionSet" object="entry_RDP1_resolution" swapped="no"/>
@@ -1922,7 +1911,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="xalign">0</property>
+                    <property name="halign">start</property>
                     <property name="draw_indicator">True</property>
                   </object>
                   <packing>
@@ -1959,7 +1948,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="halign">start</property>
-                <property name="xalign">0</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
               </object>
@@ -1976,7 +1964,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="halign">start</property>
-                <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
               </object>
               <packing>
@@ -1992,7 +1979,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="halign">start</property>
-                <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
               </object>
               <packing>
@@ -2008,7 +1994,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="halign">start</property>
-                <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
               </object>
               <packing>
@@ -2243,7 +2228,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="halign">start</property>
-                <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
               </object>
               <packing>
@@ -2259,7 +2243,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="halign">start</property>
-                <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
               </object>
               <packing>
@@ -2275,7 +2258,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="halign">start</property>
-                <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
               </object>
               <packing>
@@ -2304,7 +2286,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="halign">start</property>
-                <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
               </object>
               <packing>
@@ -2320,7 +2301,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="halign">start</property>
-                <property name="xalign">0</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
               </object>
@@ -2462,7 +2442,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="halign">start</property>
-                <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
               </object>
               <packing>
@@ -2478,7 +2457,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="halign">start</property>
-                <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
               </object>
               <packing>
@@ -2494,7 +2472,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="halign">start</property>
-                <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
               </object>
               <packing>
@@ -2510,7 +2487,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="halign">start</property>
-                <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
               </object>
               <packing>
@@ -2526,7 +2502,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="halign">start</property>
-                <property name="xalign">0</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
               </object>
@@ -2543,7 +2518,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="halign">start</property>
-                <property name="xalign">0</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
               </object>
@@ -2573,7 +2547,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
                 <property name="halign">start</property>
-                <property name="xalign">0</property>
                 <property name="draw_indicator">True</property>
               </object>
               <packing>
@@ -3054,11 +3027,9 @@
         <child>
           <object class="GtkCheckButton" id="check_VNC_fullscreen">
             <property name="label" translatable="yes">Развернуть на весь экран</property>
-            <property name="width_request">235</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
-            <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
           </object>
           <packing>
@@ -3081,7 +3052,6 @@
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
         <property name="halign">start</property>
-        <property name="xalign">0</property>
         <property name="active">True</property>
         <property name="draw_indicator">True</property>
       </object>
@@ -3098,7 +3068,6 @@
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
         <property name="halign">start</property>
-        <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
       </object>
       <packing>
@@ -3114,7 +3083,6 @@
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
         <property name="halign">start</property>
-        <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
       </object>
       <packing>
@@ -3130,7 +3098,6 @@
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
         <property name="halign">start</property>
-        <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
       </object>
       <packing>
@@ -3406,7 +3373,6 @@
             <property name="receives_default">False</property>
             <property name="halign">end</property>
             <property name="margin_left">18</property>
-            <property name="xalign">0</property>
             <property name="draw_indicator">True</property>
           </object>
           <packing>
@@ -3527,7 +3493,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="xalign">0</property>
+                <property name="halign">start</property>
                 <property name="draw_indicator">True</property>
               </object>
               <packing>
@@ -3542,7 +3508,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="xalign">0</property>
+                <property name="halign">start</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
                 <signal name="toggled" handler="offResolutionSet" object="entry_NX_resolution" swapped="no"/>
@@ -3563,7 +3529,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="xalign">0</property>
+                    <property name="halign">start</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">radio_NX_resol_window</property>
                     <signal name="toggled" handler="onResolutionSet" object="entry_NX_resolution" swapped="no"/>
@@ -3672,7 +3638,6 @@
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
         <property name="halign">start</property>
-        <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
       </object>
       <packing>
@@ -3688,7 +3653,6 @@
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
         <property name="halign">start</property>
-        <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
       </object>
       <packing>
@@ -3979,7 +3943,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="xalign">0</property>
+                <property name="halign">start</property>
                 <property name="draw_indicator">True</property>
               </object>
               <packing>
@@ -3994,7 +3958,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="xalign">0</property>
+                <property name="halign">start</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
                 <signal name="toggled" handler="offResolutionSet" object="entry_XDMCP_resolution" swapped="no"/>
@@ -4015,7 +3979,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="xalign">0</property>
+                    <property name="halign">start</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">radio_XDMCP_resol_default</property>
                     <signal name="toggled" handler="onResolutionSet" object="entry_XDMCP_resolution" swapped="no"/>
@@ -4124,7 +4088,6 @@
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
         <property name="halign">start</property>
-        <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
       </object>
       <packing>
@@ -4140,7 +4103,6 @@
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
         <property name="halign">start</property>
-        <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
       </object>
       <packing>
@@ -4586,7 +4548,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="xalign">0</property>
+                <property name="halign">start</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
               </object>
@@ -4602,7 +4564,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">False</property>
-                <property name="xalign">0</property>
+                <property name="halign">start</property>
                 <property name="active">True</property>
                 <property name="draw_indicator">True</property>
                 <signal name="toggled" handler="offResolutionSet" object="entry_RDP_resolution" swapped="no"/>
@@ -4623,7 +4585,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
-                    <property name="xalign">0</property>
+                    <property name="halign">start</property>
                     <property name="draw_indicator">True</property>
                     <property name="group">radio_RDP_resol_default</property>
                     <signal name="toggled" handler="onResolutionSet" object="entry_RDP_resolution" swapped="no"/>
@@ -4746,7 +4708,7 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">False</property>
-            <property name="xalign">0</property>
+            <property name="halign">start</property>
             <property name="draw_indicator">True</property>
           </object>
           <packing>
@@ -4783,7 +4745,6 @@
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
         <property name="halign">start</property>
-        <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
       </object>
       <packing>
@@ -4799,7 +4760,6 @@
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
         <property name="halign">start</property>
-        <property name="xalign">0</property>
         <property name="draw_indicator">True</property>
       </object>
       <packing>
@@ -4815,7 +4775,6 @@
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
         <property name="halign">start</property>
-        <property name="xalign">0</property>
         <property name="active">True</property>
         <property name="draw_indicator">True</property>
       </object>
