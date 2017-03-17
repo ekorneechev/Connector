@@ -10,7 +10,7 @@ HOMEFOLDER = os.getenv('HOME')
 WORKFOLDER = HOMEFOLDER + '/.connector/'
 
 #Установки по умолчанию для параметров программы (какие приложения использовать)
-DEFAULT = dict(RDP = 1, VNC = 0, TAB = '0') 
+DEFAULT = dict(RDP = 1, VNC = 1, TAB = '0')
 
 #Версия и релиз приложения
 query = subprocess.check_output("rpm -q connector; exit 0", shell=True, universal_newlines=True).strip().split('-')
