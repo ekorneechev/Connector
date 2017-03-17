@@ -366,6 +366,7 @@ class Gui:
                 self.RDP_jpeg_quality.set_value(args[28])
             if args[29]: self.RDP_usb.set_active(True)
             if args[30]: self.RDP_nla.set_active(False)
+            if args[32]: self.RDP_span.set_active(True)
             
 
     def initPreferences(self, protocol):
@@ -422,6 +423,7 @@ class Gui:
             self.RDP_usb = self.pref_builder.get_object("check_RDP1_usb")
             self.RDP_nla = self.pref_builder.get_object("check_RDP1_nla")
             self.RDP_workarea = self.pref_builder.get_object("radio_RDP1_workarea")
+            self.RDP_span = self.pref_builder.get_object("check_RDP1_span")
 
         if protocol == 'NX':
             self.NX_user = self.pref_builder.get_object("entry_NX_user")
@@ -574,9 +576,11 @@ class Gui:
             else: usb = 0
             if self.RDP_nla.get_active(): nla = 0
             else: nla = 1
+            if self.RDP_span.get_active(): span = 1
+            else: span = 0
             args = [user, domain, fullscreen, clipboard, resolution, color, folder, gserver, guser, gdomain, gpasswd, 
                     admin, smartcards, printers, sound, microphone, multimon, compression, compr_level, fonts, 
-                    aero, drag, animation, theme, wallpapers, nsc, jpeg, jpeg_quality, usb, nla, workarea]
+                    aero, drag, animation, theme, wallpapers, nsc, jpeg, jpeg_quality, usb, nla, workarea, span]
 
         if protocol == 'NX':
             user = self.NX_user.get_text()
@@ -750,7 +754,14 @@ class Gui:
     def onJpegSet(self, widget):
         """Настройка видимости установки качества кодека JPEG"""
         if widget.get_opacity(): widget.set_opacity(0)
-        else: widget.set_opacity(1)        
+        else: widget.set_opacity(1)
+
+    def onSpanOn(self, widget):
+        """Настройка зависимости чувствительности ключа /span от /multimon"""
+        if widget.get_sensitive():
+            widget.set_sensitive(0)
+            widget.set_active(0)
+        else: widget.set_sensitive(1)
 
     def onProperties(self, *args):
         """Окно параметров приложения"""
@@ -838,15 +849,15 @@ class Gui:
         self.onWCEdit('','', protocol, False)
 
     def correctProgramm(self, parameters):
-        """Функция проверки корректоности параметров для запускаемой программы"""
+        """Функция проверки корректности параметров для запускаемой программы"""
         self.whatProgram = properties.loadFromFile('default.conf')
         if parameters[0] == 'VNC':
             if self.whatProgram['VNC'] == 1 and len(parameters) == 4: return True
             elif self.whatProgram['VNC'] == 0 and len(parameters) > 4: return True
             else: return False
         if parameters[0] == 'RDP':
-            if self.whatProgram['RDP'] == 1 and len(parameters) == 33: return True
-            elif self.whatProgram['RDP'] == 0 and len(parameters) < 33: return True
+            if self.whatProgram['RDP'] == 1 and len(parameters) == 34: return True
+            elif self.whatProgram['RDP'] == 0 and len(parameters) < 34: return True
             else: return False
         return True         
         
