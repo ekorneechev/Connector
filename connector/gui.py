@@ -80,6 +80,15 @@ class Gui:
         except KeyError: default_tab = '0'
         self.conn_note = self.builder.get_object("list_connect")
         self.conn_note.set_current_page(int(default_tab))
+        self.labelRDP, self.labelVNC = self.builder.get_object("label_default_RDP"), self.builder.get_object("label_default_VNC")
+        self.initLabel()
+
+    def initLabel(self):
+        whatProgram = properties.loadFromFile('default.conf')
+        if whatProgram['RDP']: self.labelRDP.set_text('(FreeRDP)')
+        else: self.labelRDP.set_text('(Remmina)')
+        if whatProgram['VNC']: self.labelVNC.set_text('(TigerVNC)')
+        else: self.labelVNC.set_text('(Remmina)')
 
     def onDeleteWindow(self, *args):
         """Закрытие программы"""
