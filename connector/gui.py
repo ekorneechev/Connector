@@ -146,12 +146,7 @@ class Gui:
                         viewStatus(self.statusbar, "Импортируемый файл: " + filename)
                     else:
                         self.onCitrixEdit('', parameters[0])
-                else:
-                    dialog = Gtk.MessageDialog(self.window, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.CLOSE,
-                            "Не удается импортировать файл:\nневерный формат " + parameters[0] + "-подключения!")
-                    dialog.format_secondary_text("Попробуйте изменить программу по умолчанию в параметрах приложения")
-                    response = dialog.run()
-                    dialog.destroy()                    
+                else: self.dialogIncorrectProgramm("import",parameters[0])
         else:
             viewStatus(self.statusbar, "Файл не был выбран")
         dialog.destroy()
@@ -859,7 +854,17 @@ class Gui:
             if self.whatProgram['RDP'] == 1 and len(parameters) == 34: return True
             elif self.whatProgram['RDP'] == 0 and len(parameters) < 34: return True
             else: return False
-        return True         
+        return True
+
+    def dialogIncorrectProgramm(self, _type, _protocol):
+        if _type == "open":
+            text = "Не удается подключиться: \nневерный формат " + _protocol + "-подключения!"
+        elif _type == "import":
+            text = "Не удается импортировать файл:\nневерный формат " + _protocol + "-подключения!"
+        dialog = Gtk.MessageDialog(self.window, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.CLOSE, text)
+        dialog.format_secondary_text("Попробуйте изменить программу по умолчанию в параметрах приложения")
+        response = dialog.run()
+        dialog.destroy()
         
     def onSaveConnect(self, treeView, *args):
         """Установка подключения по двойному щелчку на элемение списка"""
@@ -872,12 +877,7 @@ class Gui:
                 viewStatus(self.statusbar, 'Соединение с "' + table[indexRow][0] + '"...')
                 connect = definition(protocol)
                 connect.start(parameters)
-            else:
-                dialog = Gtk.MessageDialog(self.window, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.CLOSE,
-                        "Не удается подключиться: неверный формат подключения!")
-                dialog.format_secondary_text("Попробуйте изменить программу по умолчанию в параметрах приложения")
-                response = dialog.run()
-                dialog.destroy()
+            else: self.dialogIncorrectProgramm("open",parameters[0])
 
     def onPopupMenu(self, widget, event):
         """Контекстное меню списка сохраненных подключений"""
@@ -899,12 +899,7 @@ class Gui:
                     self.editClick = True
                     analogEntry = self.AnalogEntry(protocol, parameters)
                     self.onButtonPref(analogEntry, nameConnect)
-            else:
-                dialog = Gtk.MessageDialog(self.window, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.CLOSE,
-                        "Не удается загрузить параметры: неверный формат подключения!")
-                dialog.format_secondary_text("Попробуйте изменить программу по умолчанию в параметрах приложения")
-                response = dialog.run()
-                dialog.destroy()
+            else: self.dialogIncorrectProgramm("open",parameters[0])
 
     def onPopupCopy(self, treeView):
         """Копирование выбранного подключения"""
@@ -920,12 +915,7 @@ class Gui:
                 else:
                     analogEntry = self.AnalogEntry(protocol, parameters)
                     self.onButtonPref(analogEntry, nameConnect)
-            else:
-                dialog = Gtk.MessageDialog(self.window, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.CLOSE,
-                        "Не удается загрузить параметры: неверный формат подключения!")
-                dialog.format_secondary_text("Попробуйте изменить программу по умолчанию в параметрах приложения")
-                response = dialog.run()
-                dialog.destroy()
+            else: self.dialogIncorrectProgramm("open",parameters[0])
 
     class AnalogEntry:
         """Класс с методами аналогичными методам Gtk.Entry и реализующий 
