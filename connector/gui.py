@@ -138,7 +138,7 @@ class Gui:
             filename = dialog.get_filename()
             parameters = properties.importFromFile(filename)
             if parameters != None:
-                if self.correctProgramm(parameters):
+                if self.correctProgram(parameters):
                     protocol = parameters.pop(0)
                     if protocol != 'CITRIX':
                         analogEntry = self.AnalogEntry(protocol, parameters)
@@ -146,7 +146,7 @@ class Gui:
                         viewStatus(self.statusbar, "Импортируемый файл: " + filename)
                     else:
                         self.onCitrixEdit('', parameters[0])
-                else: self.dialogIncorrectProgramm("import",parameters[0])
+                else: self.dialogIncorrectProgram("import",parameters[0])
         else:
             viewStatus(self.statusbar, "Файл не был выбран")
         dialog.destroy()
@@ -845,7 +845,7 @@ class Gui:
         protocol = item.get_name()
         self.onWCEdit('','', protocol, False)
 
-    def correctProgramm(self, parameters):
+    def correctProgram(self, parameters):
         """Функция проверки корректности параметров для запускаемой программы
            - VNC - в remmina 10 параметров подключения, RDP - 13.
             Так как функционал в Remmina расширять не планируется, за основу при проверке берутся эти числа"""
@@ -860,7 +860,7 @@ class Gui:
             else: return False
         return True
 
-    def dialogIncorrectProgramm(self, _type, _protocol):
+    def dialogIncorrectProgram(self, _type, _protocol):
         """Функция отображения диалогового окна ошибки формата файла подключения"""
         if _type == "open":
             text = "Не удается подключиться: \nневерный формат " + _protocol + "-подключения!"
@@ -877,12 +877,12 @@ class Gui:
         fileCtor = table[indexRow][3]
         parameters = properties.loadFromFile(fileCtor, self.window)
         if parameters is not None: #если файл .ctor имеет верный формат
-            if self.correctProgramm(parameters):
+            if self.correctProgram(parameters):
                 protocol = parameters.pop(0) #извлекаем протокол из файла коннекта
                 viewStatus(self.statusbar, 'Соединение с "' + table[indexRow][0] + '"...')
                 connect = definition(protocol)
                 connect.start(parameters)
-            else: self.dialogIncorrectProgramm("open",parameters[0])
+            else: self.dialogIncorrectProgram("open",parameters[0])
 
     def onPopupMenu(self, widget, event):
         """Контекстное меню списка сохраненных подключений"""
@@ -896,7 +896,7 @@ class Gui:
         nameConnect, self.fileCtor = table[indexRow][0], table[indexRow][3]
         parameters = properties.loadFromFile(self.fileCtor, self.window)
         if parameters is not None: #если файл .ctor имеет верный формат
-            if self.correctProgramm(parameters):
+            if self.correctProgram(parameters):
                 protocol = parameters.pop(0)  #извлекаем протокол из файла коннекта
                 if protocol == 'CITRIX' or protocol == 'WEB':
                     self.onWCEdit(nameConnect, parameters[0], protocol)
@@ -904,7 +904,7 @@ class Gui:
                     self.editClick = True
                     analogEntry = self.AnalogEntry(protocol, parameters)
                     self.onButtonPref(analogEntry, nameConnect)
-            else: self.dialogIncorrectProgramm("open",parameters[0])
+            else: self.dialogIncorrectProgram("open",parameters[0])
 
     def onPopupCopy(self, treeView):
         """Копирование выбранного подключения"""
@@ -913,14 +913,14 @@ class Gui:
         parameters = properties.loadFromFile(self.fileCtor, self.window)
         nameConnect = nameConnect + ' (копия)'
         if parameters is not None: #если файл .ctor имеет верный формат
-            if self.correctProgramm(parameters):
+            if self.correctProgram(parameters):
                 protocol = parameters.pop(0)  #извлекаем протокол из файла коннекта
                 if protocol == 'CITRIX' or protocol == 'WEB':
                     self.onWCEdit(nameConnect, parameters[0], protocol, False)
                 else:
                     analogEntry = self.AnalogEntry(protocol, parameters)
                     self.onButtonPref(analogEntry, nameConnect)
-            else: self.dialogIncorrectProgramm("open",parameters[0])
+            else: self.dialogIncorrectProgram("open",parameters[0])
 
     class AnalogEntry:
         """Класс с методами аналогичными методам Gtk.Entry и реализующий 
