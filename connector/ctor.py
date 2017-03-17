@@ -167,7 +167,9 @@ class XFreeRdp:
             if args[30]: command += ' /p:$(zenity --entry --title="Аутентификация (with NLA)" --text="Введите пароль для пользователя '+ args[1] + ':" --hide-text)'
             else: command += ' -sec-nla'
             if args[31]: command += ' /workarea'
-            if args[32]: command += ' /span'
+            try: #Добавлена совместимость с предыдущей версией =>1.3.24
+                if args[32]: command += ' /span'
+            except IndexError: pass
             command += params + STD_TO_LOG
             os.system(command)
 

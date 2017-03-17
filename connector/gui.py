@@ -361,7 +361,9 @@ class Gui:
                 self.RDP_jpeg_quality.set_value(args[28])
             if args[29]: self.RDP_usb.set_active(True)
             if args[30]: self.RDP_nla.set_active(False)
-            if args[32]: self.RDP_span.set_active(True)
+            try: #Добавлена совместимость с предыдущей версией =>1.3.24
+                if args[32]: self.RDP_span.set_active(True)
+            except IndexError: self.RDP_span.set_active(False)
             
 
     def initPreferences(self, protocol):
@@ -844,19 +846,22 @@ class Gui:
         self.onWCEdit('','', protocol, False)
 
     def correctProgramm(self, parameters):
-        """Функция проверки корректности параметров для запускаемой программы"""
+        """Функция проверки корректности параметров для запускаемой программы
+           - VNC - в remmina 10 параметров подключения, RDP - 13.
+            Так как функционал в Remmina расширять не планируется, за основу при проверке берутся эти числа"""
         self.whatProgram = properties.loadFromFile('default.conf')
         if parameters[0] == 'VNC':
-            if self.whatProgram['VNC'] == 1 and len(parameters) == 4: return True
-            elif self.whatProgram['VNC'] == 0 and len(parameters) > 4: return True
+            if self.whatProgram['VNC'] == 0 and len(parameters) == 10: return True
+            elif self.whatProgram['VNC'] == 1 and len(parameters) != 10: return True
             else: return False
         if parameters[0] == 'RDP':
-            if self.whatProgram['RDP'] == 1 and len(parameters) == 34: return True
-            elif self.whatProgram['RDP'] == 0 and len(parameters) < 34: return True
+            if self.whatProgram['RDP'] == 0 and len(parameters) == 13: return True
+            elif self.whatProgram['RDP'] == 1 and len(parameters) !=13: return True
             else: return False
         return True
 
     def dialogIncorrectProgramm(self, _type, _protocol):
+        """Функция отображения диалогового окна ошибки формата файла подключения"""
         if _type == "open":
             text = "Не удается подключиться: \nневерный формат " + _protocol + "-подключения!"
         elif _type == "import":
