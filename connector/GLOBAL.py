@@ -12,9 +12,10 @@ WORKFOLDER = HOMEFOLDER + '/.connector/'
 #Установки по умолчанию для параметров программы (какие приложения использовать)
 DEFAULT = dict(RDP = 1, VNC = 0, TAB = '0') 
 
-#Версия приложения
-VERSION = "1.3.24"
-RELEASE = subprocess.check_output("rpm -q connector; exit 0", shell=True, universal_newlines=True).strip().split('-') [2]
+#Версия и релиз приложения
+query = subprocess.check_output("rpm -q connector; exit 0", shell=True, universal_newlines=True).strip().split('-')
+VERSION = query[1]
+RELEASE = query[2]
 
 #Исходные данные для ярлыка подключения
 DESKTOP_INFO ="""#!/usr/bin/env xdg-open
