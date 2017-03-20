@@ -230,11 +230,14 @@ class Citrix:
         if type(args) == list:
             addr = args[0]
         else: addr = args
-        os.system('/opt/Citrix/ICAClient/util/storebrowse --addstore ' + addr + STD_TO_LOG)
-        os.system('/opt/Citrix/ICAClient/selfservice --icaroot /opt/Citrix/ICAClient' + STD_TO_LOG)
+        if citrixCheck():
+            os.system('/opt/Citrix/ICAClient/util/storebrowse --addstore ' + addr + STD_TO_LOG)
+            os.system('/opt/Citrix/ICAClient/selfservice --icaroot /opt/Citrix/ICAClient' + STD_TO_LOG)
+        else: os.system("zenity --error --text='Citrix Receiver не установлен!'")
 
     def preferences():
-        os.system('/opt/Citrix/ICAClient/util/configmgr --icaroot /opt/Citrix/ICAClient' + STD_TO_LOG)
+        if citrixCheck(): os.system('/opt/Citrix/ICAClient/util/configmgr --icaroot /opt/Citrix/ICAClient' + STD_TO_LOG)
+        else: os.system("zenity --error --text='Citrix Receiver не установлен!'")
 
 class Web:
     """Класс для настройки подключения к WEB-ресурсу"""
@@ -271,7 +274,13 @@ def definition(protocol):
         connect = Citrix()
     elif protocol == 'WEB':
         connect = Web()
-    return connect  
+    return connect
+
+def citrixCheck():
+    """Фунцкия проверки наличия с системе Citrix Receiver"""
+    check = int(subprocess.check_output("rpm -q ICAClient > /dev/null 2>&1; echo $?", shell=True, universal_newlines=True).strip())
+    check = not bool(check)
+    return check
 
 def __main():
     """Функция для самотестирования модуля, просто запустите данный скрипт"""
