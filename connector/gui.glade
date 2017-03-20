@@ -681,6 +681,7 @@
                 </child>
                 <child>
                   <object class="GtkNotebook" id="list_connect">
+                    <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="margin_left">5</property>
                     <property name="margin_right">5</property>
@@ -695,13 +696,40 @@
                         <property name="valign">center</property>
                         <property name="orientation">vertical</property>
                         <child>
-                          <object class="GtkLabel" id="label_RDP">
+                          <object class="GtkBox" id="box_labels_RDP">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Удаленный рабочий стол Windows</property>
-                            <attributes>
-                              <attribute name="underline" value="True"/>
-                            </attributes>
+                            <property name="halign">center</property>
+                            <property name="spacing">3</property>
+                            <child>
+                              <object class="GtkLabel" id="label_RDP">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">Удаленный рабочий стол Windows</property>
+                                <attributes>
+                                  <attribute name="underline" value="True"/>
+                                </attributes>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label_default_RDP">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <attributes>
+                                  <attribute name="foreground" value="#88878a898585"/>
+                                </attributes>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -932,13 +960,40 @@
                         <property name="valign">center</property>
                         <property name="orientation">vertical</property>
                         <child>
-                          <object class="GtkLabel" id="label_VNC">
+                          <object class="GtkBox" id="box_labels_VNC">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="yes">Подключение к рабочему столу ПК</property>
-                            <attributes>
-                              <attribute name="underline" value="True"/>
-                            </attributes>
+                            <property name="halign">center</property>
+                            <property name="spacing">3</property>
+                            <child>
+                              <object class="GtkLabel" id="label_VNC">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="label" translatable="yes">Подключение к рабочему столу ПК</property>
+                                <attributes>
+                                  <attribute name="underline" value="True"/>
+                                </attributes>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel" id="label_default_VNC">
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <attributes>
+                                  <attribute name="foreground" value="#88878a898585"/>
+                                </attributes>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
                           </object>
                           <packing>
                             <property name="expand">False</property>
