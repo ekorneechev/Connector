@@ -58,9 +58,10 @@ def searchSshUser(query):
     return server, login
 
 class Properties(Gtk.Window):
-    def __init__(self):
+    def __init__(self, rdp, vnc):
         Gtk.Window.__init__(self, title = "Параметры программы")
-        builder = Gtk.Builder()        
+        builder = Gtk.Builder()
+        self.labelRDP, self.labelVNC = rdp, vnc
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_resizable(False)
         self.set_modal(True)
@@ -104,6 +105,7 @@ class Properties(Gtk.Window):
         self.program['TAB'] = self.combo_tabs.get_active_id()
         saveInFile('default.conf',self.program)
         gui.viewStatus(self.statusbar, "Настройки сохранены в файле default.conf...")
+        gui.Gui.initLabels(True, self.labelRDP, self.labelVNC)
 
     def clearFile(self, filename, title, message):
         """Функция для очисти БД серверов или списка подключений"""
