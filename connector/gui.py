@@ -801,38 +801,43 @@ class Gui:
         protocol = entry.get_name()
         parameters = self.applyPreferences(protocol)
         name = self.pref_builder.get_object("entry_" + self.changeProgram(protocol) + "_name" ).get_text()
-        parameters.insert(0, server)
-        parameters.insert(0, protocol) #протокол подключения также заносится в файл        
-        if self.editClick:#если нажата кнопка Изменить, то пересохранить
-            fileName = self.resaveFileCtor(name, protocol, server)
-        else: 
-            fileName = self.saveFileCtor(name, protocol, server)
-        properties.saveInFile(fileName, parameters)
-        self.getSavesFromDb()#добавление в листсторе
-        self.pref_window.destroy()
-        self.editClick = False
-        self.prefClick = False
-        self.changePage()
-        viewStatus(self.statusbar, "Подключение \"" + name + "\" сохранено...")
+        if properties.searchName(name):
+            os.system("zenity --error --text='Подключение с именем \"" + name + "\" уже существует!' --no-wrap")
+        else:
+            parameters.insert(0, server)
+            parameters.insert(0, protocol) #протокол подключения также заносится в файл        
+            if self.editClick:#если нажата кнопка Изменить, то пересохранить
+                fileName = self.resaveFileCtor(name, protocol, server)
+            else:
+                fileName = self.saveFileCtor(name, protocol, server)
+            properties.saveInFile(fileName, parameters)
+            self.getSavesFromDb()#добавление в листсторе
+            self.pref_window.destroy()
+            self.editClick = False
+            self.prefClick = False
+            self.changePage()
+            viewStatus(self.statusbar, "Подключение \"" + name + "\" сохранено...")
 
     def onWCSave(self, entry):
         """Сохранение подключения к Citrix или WEB"""
         server = entry.get_text()
         protocol = entry.get_name()
         name = self.builder.get_object("entry_" + protocol + "_name").get_text()
-        parameters = []
-        parameters.append(protocol)
-        parameters.append(server)
-        if self.citrixEditClick or self.webEditClick:
-            fileName = self.resaveFileCtor(name, protocol, server)
-        else:
-            fileName = self.saveFileCtor(name, protocol, server)
-        properties.saveInFile(fileName, parameters)
-        self.getSavesFromDb()
-        self.citrixEditClick = False
-        self.webEditClick = False 
-        self.changePage()
-        viewStatus(self.statusbar, "Подключение \"" + name + "\" сохранено...")
+        if properties.searchName(name):
+            os.system("zenity --error --text='Подключение с именем \"" + name + "\" уже существует!' --no-wrap")
+            parameters = []
+            parameters.append(protocol)
+            parameters.append(server)
+            if self.citrixEditClick or self.webEditClick:
+                fileName = self.resaveFileCtor(name, protocol, server)
+            else:
+                fileName = self.saveFileCtor(name, protocol, server)
+            properties.saveInFile(fileName, parameters)
+            self.getSavesFromDb()
+            self.citrixEditClick = False
+            self.webEditClick = False
+            self.changePage()
+            viewStatus(self.statusbar, "Подключение \"" + name + "\" сохранено...")
 
     def onWCEdit(self, name, server, protocol, edit = True):
         """Функция изменения Citrix или WEB-подключения """
@@ -1037,19 +1042,12 @@ class Gui:
         note = self.builder.get_object("main_note")
         note.set_current_page(index)
 
-    def onPopupClipboard(self, treeView):
-        """Копирование имени конфигурационного файла в буфер обмена"""
-        table, indexRow = treeView.get_selection().get_selected()
-        filename = table[indexRow][3]
-        clipboard = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-        clipboard.set_text(filename, -1)
-        viewStatus(self.statusbar, filename + " - скопировано в буфер обмена")
-
 def f_main():
     os.system("mkdir -p " + LOGFOLDER)
     try:
-        fileCtor = sys.argv[1]
-        connectFile(fileCtor)
+        fileCtor = properties.filenameFromName(sys.argv[1])
+        if fileCtor: connectFile(fileCtor)
+        else: os.system("zenity --error --text='\""+ sys.argv[1] + "\" - подключение с таким именем не найдено!' --no-wrap")
     except IndexError:
         gui = Gui()
         initSignal(gui)

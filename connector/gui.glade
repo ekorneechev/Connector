@@ -52,21 +52,6 @@
     <property name="can_focus">False</property>
     <property name="icon_name">emblem-shared</property>
   </object>
-  <object class="GtkImage" id="image3">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="icon_name">document-revert</property>
-  </object>
-  <object class="GtkImage" id="image4">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="pixbuf">WEB.png</property>
-  </object>
-  <object class="GtkImage" id="image5">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-paste</property>
-  </object>
   <object class="GtkMenu" id="menu_popup">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -130,23 +115,16 @@
         <signal name="activate" handler="onPopupRemove" object="treeview_connections" swapped="no"/>
       </object>
     </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="separatormenuitem4">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkImageMenuItem" id="menu_popup_clipboard">
-        <property name="label" translatable="yes">Копировать в буфер</property>
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="tooltip_text" translatable="yes">Копировать имя файла с параметрами в буфер обмена</property>
-        <property name="image">image5</property>
-        <property name="use_stock">False</property>
-        <signal name="activate" handler="onPopupClipboard" object="treeview_connections" swapped="no"/>
-      </object>
-    </child>
+  </object>
+  <object class="GtkImage" id="image3">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="icon_name">document-revert</property>
+  </object>
+  <object class="GtkImage" id="image4">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">WEB.png</property>
   </object>
   <object class="GtkListStore" id="liststore_CITRIX">
     <columns>

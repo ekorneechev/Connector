@@ -1,5 +1,5 @@
 .\" -*- mode: troff; coding: UTF-8 -*-
-.TH connector 1  "March 14, 2017" "version 1.3.24" "USER COMMANDS"
+.TH connector 1  "March 31, 2017" "version 1.4.0" "USER COMMANDS"
 .SH NAME
 connector \- Инструмент системного администратора
 .SH SYNOPSIS
@@ -16,8 +16,7 @@ Wiki: http://wiki.myconnector.ru
 без опций
 запуск программы с GUI
 .TP
-[<файл подключения>]
-быстрое подключение, используя ранее сохраненный конфигурационный
-файл <имя файла>.ctor (должен находиться в папке - ~/.connector/)
+[<имя подключения>]
+быстрое соединение c указанным сохраненным подключением
 .SH AUTHOR
 Корнеечев Евгений (ek@myconnector.ru)

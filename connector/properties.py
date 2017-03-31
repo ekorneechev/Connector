@@ -57,6 +57,26 @@ def searchSshUser(query):
         server = query
     return server, login
 
+def filenameFromName(name):
+    """Определение имени конфигурационного файла подключения по имени подключения"""
+    try:
+        for connect in open(WORKFOLDER + "connections.db"):
+            record = connect.strip().split(':::')
+            if record[0] == name:
+                return record[3]
+    except FileNotFoundError: pass
+    return False
+
+def searchName(name):
+    """Существует ли подключение подключение с таким именем"""
+    try:
+        for connect in open(WORKFOLDER + "connections.db"):
+            record = connect.strip().split(':::')
+            if record[0] == name:
+                return True
+    except FileNotFoundError: pass
+    return False
+
 class Properties(Gtk.Window):
     def __init__(self, rdp, vnc):
         Gtk.Window.__init__(self, title = "Параметры программы")
