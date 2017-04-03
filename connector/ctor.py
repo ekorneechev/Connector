@@ -90,6 +90,7 @@ class Remmina:
     def start(self, parameters):
         """Запуск remmina с необходимыми параметрами"""
         self.create_cfg_file(parameters)
+        properties.log.info ("Remmina: подключение по протоколу %s к серверу: %s", self.cfg['protocol'], self.cfg['server'])
         os.system('cd $HOME && remmina -c "' + WORKFOLDER + self.f_name + '"' + STD_TO_LOG)
 
 class VncRemmina(Remmina):
@@ -105,13 +106,15 @@ class VncRemmina(Remmina):
 class VncViewer:
     """Класс для настройки VNC-соединения через VncViewer"""
     def start(self, args):
-        if type(args) == str:        
+        if type(args) == str:
+            properties.log.info ("TigerVNC: подключение к серверу %s", args)
             os.system('vncviewer ' + args + STD_TO_LOG)
         else:
             command = 'vncviewer ' + args[0] + ' '
             if args[1]: command += args[1]
             if args[2]: command += args[2]
             command += STD_TO_LOG
+            properties.log.info ("TigerVNC: подключение к серверу %s", args[0])
             os.system(command)
 
 class RdpRemmina(Remmina):
@@ -130,6 +133,7 @@ class XFreeRdp:
     def start(self, args):
         params = ' +auto-reconnect /cert-ignore'
         if type(args) == str:
+            properties.log.info ("FreeRDP: подключение к серверу %s", args)
             os.system('xfreerdp /f -sec-nla /v:' + args + params + STD_TO_LOG)
         else:
             command = 'xfreerdp /v:' + args[0]
@@ -171,6 +175,7 @@ class XFreeRdp:
                 if args[32]: command += ' /span'
             except IndexError: pass
             command += params + STD_TO_LOG
+            properties.log.info ("FreeRDP: подключение к серверу %s", args[0])
             os.system(command)
 
 class NxRemmina(Remmina):
@@ -213,7 +218,8 @@ class SshRemmina(Remmina):
 class Vmware:
     """Класс для настройки соединения к VMWare серверу"""
     def start(self, args):
-        if type(args) == str:        
+        if type(args) == str:
+            properties.log.info ("VMware: подключение к серверу %s", args)
             os.system('vmware-view -q -s ' + args + STD_TO_LOG)
         else:
             command = 'vmware-view -q -s ' + args[0]
@@ -222,6 +228,7 @@ class Vmware:
             if args[3]: command += ' -p ' + args[3]
             if args[4]: command += ' --fullscreen'
             command += STD_TO_LOG
+            properties.log.info ("VMware: подключение к серверу %s", args[0])
             os.system(command)
 
 class Citrix:
@@ -231,13 +238,20 @@ class Citrix:
             addr = args[0]
         else: addr = args
         if citrixCheck():
+            properties.log.info ("Citrix: подключение к серверу %s", addr)
             os.system('/opt/Citrix/ICAClient/util/storebrowse --addstore ' + addr + STD_TO_LOG)
             os.system('/opt/Citrix/ICAClient/selfservice --icaroot /opt/Citrix/ICAClient' + STD_TO_LOG)
-        else: os.system("zenity --error --text='Citrix Receiver не установлен!'")
+        else:
+            properties.log.warning ("Citrix Receiver не установлен!")
+            os.system("zenity --error --text='Citrix Receiver не установлен!'")
 
     def preferences():
-        if citrixCheck(): os.system('/opt/Citrix/ICAClient/util/configmgr --icaroot /opt/Citrix/ICAClient' + STD_TO_LOG)
-        else: os.system("zenity --error --text='Citrix Receiver не установлен!'")
+        if citrixCheck():
+            properties.log.info ("Citrix: открытие настроек программы")
+            os.system('/opt/Citrix/ICAClient/util/configmgr --icaroot /opt/Citrix/ICAClient' + STD_TO_LOG)
+        else:
+            properties.log.warning ("Citrix Receiver не установлен!")
+            os.system("zenity --error --text='Citrix Receiver не установлен!'")
 
 class Web:
     """Класс для настройки подключения к WEB-ресурсу"""
@@ -247,6 +261,7 @@ class Web:
         else: addr = args
         if  not addr.find("://") != -1:
             addr = "http://" + addr
+        properties.log.info ("WWW: открытие web-ресурса %s", addr)
         os.system ('python3 -m webbrowser -t "' + addr + '"' + STD_TO_LOG)
 
 def definition(protocol):

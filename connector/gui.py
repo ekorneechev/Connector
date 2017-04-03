@@ -22,7 +22,9 @@ def connectFile(filename):
             protocol = parameters.pop(0)
             connect = definition(protocol)
             connect.start(parameters)
-    except (IndexError, KeyError): os.system("zenity --error --text='Проверьте настройки программ по умолчанию' --no-wrap")
+    except (IndexError, KeyError):
+        properties.log.exception ("""Ошибка в файле %s: либо он создан в старой версии connector, либо программа по умолчанию выбрана отличная от сохраненного файла""", filename)
+        os.system("zenity --error --text='Проверьте настройки программ по умолчанию' --no-wrap")
 
 def initSignal(gui):
     """Функция обработки сигналов SIGHUP, SIGINT и SIGTERM
@@ -92,7 +94,10 @@ class Gui:
 
     def onDeleteWindow(self, *args):
         """Закрытие программы"""
-        if args[0] == 2: print ("\nKeyboardInterrupt: the connector is closed!")
+        if args[0] == 2:
+            msg = "KeyboardInterrupt: the connector is closed!"
+            properties.log.info (msg)
+            print ('\n' + msg)
         Gtk.main_quit(*args)
     
     def onViewAbout(self, *args):
@@ -134,7 +139,9 @@ class Gui:
             os.rename(basename, filename)            
             connectFile(filename)
             os.remove(filename)
-            viewStatus(self.statusbar, "Открывается файл " + dialog.get_filename())
+            msg = "Открывается файл " + dialog.get_filename()
+            properties.log.info (msg)
+            viewStatus(self.statusbar, msg)
         else:
             viewStatus(self.statusbar, "Файл не был выбран")
         dialog.destroy()
@@ -152,7 +159,9 @@ class Gui:
                     if protocol != 'CITRIX':
                         analogEntry = self.AnalogEntry(protocol, parameters)
                         self.onButtonPref(analogEntry)
-                        viewStatus(self.statusbar, "Импортируемый файл: " + filename)
+                        msg = "Импортируемый файл: " + filename
+                        properties.log.info (msg)
+                        viewStatus(self.statusbar, msg)
                     else:
                         self.onCitrixEdit('', parameters[0])
                 else: self.dialogIncorrectProgram("import",parameters[0])
@@ -229,7 +238,8 @@ class Gui:
         try: 
             args = entry_server.loadParameters()
             self.setPreferences(tmp, args)
-        except AttributeError: pass
+        except AttributeError:
+            properties.log.exception ("Ошибка обработки параметров:")
         self.pref_window.add(box)
         self.pref_window.show_all()
 
@@ -372,7 +382,9 @@ class Gui:
             if args[30]: self.RDP_nla.set_active(False)
             try: #Добавлена совместимость с предыдущей версией =>1.3.24
                 if args[32]: self.RDP_span.set_active(True)
-            except IndexError: self.RDP_span.set_active(False)
+            except IndexError:
+                properties.log.info("Подключение создано в версии приложения 1.3.x; реализована совместимость")
+                self.RDP_span.set_active(False)
             
 
     def initPreferences(self, protocol):
@@ -663,11 +675,11 @@ class Gui:
             if self.SFTP_publickey.get_active(): 
                 SSH_auth = 2
             elif self.SFTP_keyfile.get_active(): 
-                SSH_auth = 1                
+                SSH_auth = 1
             else: SSH_auth = 0
             if SSH_auth == 1: 
                 keyfile = self.SFTP_path_keyfile.get_filename()
-            else: keyfile = ''         
+            else: keyfile = ''
             args = [user, SSH_auth, keyfile, charset, execpath]    
 
         return args
@@ -712,8 +724,10 @@ class Gui:
                 try: #попытка прочитать протокол/сервер
                     protocol, address = server.strip().split(':::')        
                     self.liststore[protocol].append([address])
-                except ValueError: pass #если неверный формат строки - ее пропуск
+                except ValueError:
+                    properties.log.warning("Неверный формат строки в файле servers.db; skiped")
         except FileNotFoundError:
+            properties.log.warning("Список серверов (servers.db) не найден, создан новый.")
             self.createDb("servers.db")            
 
     def getSavesFromDb(self):

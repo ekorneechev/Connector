@@ -7,6 +7,14 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from GLOBAL import *
+import logging
+logging.basicConfig (
+    filename = LOGFOLDER + "connector.log",
+    format = "--- %(levelname)-10s %(asctime)s --- %(message)s",
+    level = logging.INFO
+)
+
+log = logging.getLogger("connector")
 
 def loadFromFile(fileName, window = None):
     """Загрузка сохраненных параметров из файла"""
@@ -18,6 +26,7 @@ def loadFromFile(fileName, window = None):
     except FileNotFoundError:
         if fileName.find('default.conf') != -1: #если загружаем параметры программы
             #при неудаче - создает файл со значениями по умолчанию
+            log.warning ("Файл с настройками по умолчанию (default.conf) не найден, сгенерирован новый!")
             saveInFile(fileName, DEFAULT)
             return DEFAULT
         else: #если загружаем параметры одного из сохраненных подключений
@@ -25,20 +34,30 @@ def loadFromFile(fileName, window = None):
                     "Файл " + fileName + "\nc сохраненными настройками не найден")
             response = dialog.run()
             dialog.destroy()
+            log.exception("Файл %s c сохраненными настройками не найден! Подробнее:", fileName)
             return None
     except pickle.UnpicklingError:
         dialog = Gtk.MessageDialog(window, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK,
                  "Файл " + fileName + "\nимеет неверный формат")
         response = dialog.run()
         dialog.destroy()
+        log.exception("Файл %s имеет неверный формат! Подробнее:", fileName)
         return None
 
-def importFromFile(fileName):
+def importFromFile(fileName, window = None):
     """Импорт параметров из файла .ctor"""
-    dbfile = open(fileName, 'rb')
-    obj = pickle.load(dbfile)
-    dbfile.close()
-    return obj	        
+    try:
+        dbfile = open(fileName, 'rb')
+        obj = pickle.load(dbfile)
+        dbfile.close()
+        return obj
+    except pickle.UnpicklingError:
+        dialog = Gtk.MessageDialog(window, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK,
+                 "Файл " + fileName + "\nимеет неверный формат")
+        response = dialog.run()
+        dialog.destroy()
+        log.exception("Файл %s имеет неверный формат! Подробнее:", fileName)
+        return None
 
 def saveInFile(fileName, obj):
     """Запись параметров в файл:
@@ -64,18 +83,21 @@ def filenameFromName(name):
             record = connect.strip().split(':::')
             if record[0] == name:
                 return record[3]
-    except FileNotFoundError: pass
+    except FileNotFoundError:
+        log.warning("Файл сохраненных подключений (connections.db) не найден!")
     return False
 
 def searchName(name):
-    """Существует ли подключение подключение с таким именем"""
+    """Существует ли подключение с указанным именем"""
     try:
         for connect in open(WORKFOLDER + "connections.db"):
             record = connect.strip().split(':::')
             if record[0] == name:
                 return True
-    except FileNotFoundError: pass
+    except FileNotFoundError:
+        log.warning("Файл сохраненных подключений (connections.db) не найден!")
     return False
+
 
 class Properties(Gtk.Window):
     def __init__(self, rdp, vnc):
@@ -125,6 +147,7 @@ class Properties(Gtk.Window):
         self.program['TAB'] = self.combo_tabs.get_active_id()
         saveInFile('default.conf',self.program)
         gui.viewStatus(self.statusbar, "Настройки сохранены в файле default.conf...")
+        log.info("Новые настройки для программы сохранены в файле default.conf.")
         gui.Gui.initLabels(True, self.labelRDP, self.labelVNC)
 
     def clearFile(self, filename, title, message):
@@ -136,6 +159,7 @@ class Properties(Gtk.Window):
             f = open(WORKFOLDER + filename,"w")
             f.close()
             gui.viewStatus(self.statusbar, "Выполнено, изменения вступят в силу после перезапуска...")
+            log.info("Очищен файл %s", filename)
         dialog.destroy()    
 
     def onClearServers(self, widget):
