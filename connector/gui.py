@@ -801,7 +801,7 @@ class Gui:
         protocol = entry.get_name()
         parameters = self.applyPreferences(protocol)
         name = self.pref_builder.get_object("entry_" + self.changeProgram(protocol) + "_name" ).get_text()
-        if properties.searchName(name):
+        if properties.searchName(name) and not self.editClick:
             os.system("zenity --error --text='Подключение с именем \"" + name + "\" уже существует!' --no-wrap")
         else:
             parameters.insert(0, server)
@@ -823,8 +823,9 @@ class Gui:
         server = entry.get_text()
         protocol = entry.get_name()
         name = self.builder.get_object("entry_" + protocol + "_name").get_text()
-        if properties.searchName(name):
+        if properties.searchName(name) and not self.citrixEditClick and not self.webEditClick:
             os.system("zenity --error --text='Подключение с именем \"" + name + "\" уже существует!' --no-wrap")
+        else:
             parameters = []
             parameters.append(protocol)
             parameters.append(server)
