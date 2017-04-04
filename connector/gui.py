@@ -132,6 +132,7 @@ class Gui:
         response = dialog.run()
         if response == Gtk.ResponseType.OK:
             filename = dialog.get_filename()
+            msg = "Открыт файл " + filename
             basename = os.path.basename(filename)
             os.system('cp "' + filename + '" ' + WORKFOLDER)
             os.chdir(WORKFOLDER)
@@ -139,11 +140,10 @@ class Gui:
             os.rename(basename, filename)            
             connectFile(filename)
             os.remove(filename)
-            msg = "Открывается файл " + dialog.get_filename()
             properties.log.info (msg)
             viewStatus(self.statusbar, msg)
         else:
-            viewStatus(self.statusbar, "Файл не был выбран")
+            viewStatus(self.statusbar, "Файл не был выбран!")
         dialog.destroy()
 
     def onImportFile(self, *args):
@@ -159,14 +159,14 @@ class Gui:
                     if protocol != 'CITRIX':
                         analogEntry = self.AnalogEntry(protocol, parameters)
                         self.onButtonPref(analogEntry)
-                        msg = "Импортируемый файл: " + filename
+                        msg = "Импорт файла " + filename
                         properties.log.info (msg)
                         viewStatus(self.statusbar, msg)
                     else:
                         self.onCitrixEdit('', parameters[0])
-                else: self.dialogIncorrectProgram("import",parameters[0])
+                else: self.dialogIncorrectProgram("import", parameters[0], filename)
         else:
-            viewStatus(self.statusbar, "Файл не был выбран")
+            viewStatus(self.statusbar, "Файл не был выбран!")
         dialog.destroy()
 
     def addFilters(self, dialog):
@@ -182,7 +182,7 @@ class Gui:
     def onButtonConnect(self, entry):
         """Сигнал кнопке для быстрого подключения к указанному в entry серверу"""
         server = entry.get_text()
-        protocol = entry.get_name()        
+        protocol = entry.get_name()
         if server:
             connect = definition(protocol) #по имени виджета (указан в glade) определить протокол
             if self.prefClick: #если нажата кнопка Доп. Параметры
@@ -191,7 +191,7 @@ class Gui:
                 connect.start(parameters)
             else: connect.start(server)
             viewStatus(self.statusbar, "Подключение к серверу " + server + "...")
-            self.writeServerInDb(entry)                  
+            self.writeServerInDb(entry)
         else:
             viewStatus(self.statusbar, "Введите адрес сервера")
 
@@ -200,11 +200,11 @@ class Gui:
 
     def changeProgram(self, protocol):
         #Функция, возвращающая RDP1 или VNC1 при параметрах, отличных от Реммины
-        try: 
+        try:
             if self.whatProgram[protocol]: protocol += "1"
-        except KeyError: 
+        except KeyError:
             pass #если нет возможности выбора программ для протокола
-        return protocol              
+        return protocol
 
     def onButtonPref(self, entry_server, nameConnect = ''):
         """Дополнительные параметры подключения к серверу. 
@@ -239,7 +239,7 @@ class Gui:
             args = entry_server.loadParameters()
             self.setPreferences(tmp, args)
         except AttributeError:
-            properties.log.exception ("Ошибка обработки параметров:")
+            properties.log.exception ("Ошибка обработки параметров (WARNING):")
         self.pref_window.add(box)
         self.pref_window.show_all()
 
@@ -725,9 +725,9 @@ class Gui:
                     protocol, address = server.strip().split(':::')        
                     self.liststore[protocol].append([address])
                 except ValueError:
-                    properties.log.warning("Неверный формат строки в файле servers.db; skiped")
+                    properties.log.warning("Неверный формат строки в файле servers.db; skipped")
         except FileNotFoundError:
-            properties.log.warning("Список серверов (servers.db) не найден, создан новый.")
+            properties.log.warning("Список серверов (servers.db) не найден, создан пустой.")
             self.createDb("servers.db")            
 
     def getSavesFromDb(self):
@@ -738,8 +738,10 @@ class Gui:
                 try: #попытка прочитать строку с параметрами подключений
                     record = list(connect.strip().split(':::'))
                     self.liststore_connect.append(record)
-                except ValueError: pass #если неверный формат строки - ее пропуск
+                except ValueError:
+                    properties.log.warning("Неверный формат строки в файле connections.db; skipped")
         except FileNotFoundError:
+            properties.log.warning("Список подключений (connections.db) не найден, создан пустой.")
             self.createDb("connections.db") 
 
     def writeServerInDb(self, entry):
@@ -795,6 +797,7 @@ class Gui:
         fileName = "".join(fileName) + '.ctor'
         print (name + ':::' + protocol + ':::' + server + ':::' + fileName, 
                file = open(WORKFOLDER + "connections.db", "a"))
+        properties.log.info("Добавлено новое %s-подключение '%s' (host: %s)", protocol, name, server)
         return fileName
 
     def resaveFileCtor(self, name, protocol, server):
@@ -807,6 +810,7 @@ class Gui:
                 line = name + ':::' + protocol + ':::' + server + ':::' + fileName  + '\n'
             dbFile.write(line)
         dbFile.close()
+        properties.log.info("Внесены изменения в подключение '%s'", name)
         return fileName    
 
     def onButtonSave(self, entry):
@@ -889,29 +893,31 @@ class Gui:
             else: return False
         return True
 
-    def dialogIncorrectProgram(self, _type, _protocol):
+    def dialogIncorrectProgram(self, _type, _protocol, _name):
         """Функция отображения диалогового окна ошибки формата файла подключения"""
         if _type == "open":
             text = "Не удается подключиться: \nневерный формат " + _protocol + "-подключения!"
+            properties.log.error("Программа по умолчанию для %s выбрана отличная от файла: %s", _protocol, _name)
         elif _type == "import":
             text = "Не удается импортировать файл:\nневерный формат " + _protocol + "-подключения!"
+            properties.log.error("Импорт файла %s не удался!", _name)
         dialog = Gtk.MessageDialog(self.window, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.CLOSE, text)
         dialog.format_secondary_text("Попробуйте изменить программу по умолчанию в параметрах приложения")
         response = dialog.run()
         dialog.destroy()
-        
+
     def onSaveConnect(self, treeView, *args):
-        """Установка подключения по двойному щелчку на элемение списка"""
+        """Установка подключения по двойному щелчку на элементе списка"""
         table, indexRow = treeView.get_selection().get_selected()
-        fileCtor = table[indexRow][3]
+        nameConnect, fileCtor = table[indexRow][0], table[indexRow][3]
         parameters = properties.loadFromFile(fileCtor, self.window)
         if parameters is not None: #если файл .ctor имеет верный формат
             if self.correctProgram(parameters):
                 protocol = parameters.pop(0) #извлекаем протокол из файла коннекта
-                viewStatus(self.statusbar, 'Соединение с "' + table[indexRow][0] + '"...')
+                viewStatus(self.statusbar, 'Соединение с "' + nameConnect + '"...')
                 connect = definition(protocol)
                 connect.start(parameters)
-            else: self.dialogIncorrectProgram("open",parameters[0])
+            else: self.dialogIncorrectProgram("open", parameters[0], nameConnect)
 
     def onPopupMenu(self, widget, event):
         """Контекстное меню списка сохраненных подключений"""
@@ -933,23 +939,23 @@ class Gui:
                     self.editClick = True
                     analogEntry = self.AnalogEntry(protocol, parameters)
                     self.onButtonPref(analogEntry, nameConnect)
-            else: self.dialogIncorrectProgram("open",parameters[0])
+            else: self.dialogIncorrectProgram("open", parameters[0], nameConnect)
 
     def onPopupCopy(self, treeView):
         """Копирование выбранного подключения"""
         table, indexRow = treeView.get_selection().get_selected()
         nameConnect, self.fileCtor = table[indexRow][0], table[indexRow][3]
         parameters = properties.loadFromFile(self.fileCtor, self.window)
-        nameConnect = nameConnect + ' (копия)'
         if parameters is not None: #если файл .ctor имеет верный формат
             if self.correctProgram(parameters):
+                nameConnect = nameConnect + ' (копия)'
                 protocol = parameters.pop(0)  #извлекаем протокол из файла коннекта
                 if protocol == 'CITRIX' or protocol == 'WEB':
                     self.onWCEdit(nameConnect, parameters[0], protocol, False)
                 else:
                     analogEntry = self.AnalogEntry(protocol, parameters)
                     self.onButtonPref(analogEntry, nameConnect)
-            else: self.dialogIncorrectProgram("open",parameters[0])
+            else: self.dialogIncorrectProgram("open", parameters[0], nameConnect)
 
     class AnalogEntry:
         """Класс с методами аналогичными методам Gtk.Entry и реализующий 
@@ -964,9 +970,10 @@ class Gui:
     def onPopupRemove(self, treeView):
         """Удаление выбранного подключения из списка, БД и файла с его настройками"""
         table, indexRow = treeView.get_selection().get_selected()
+        name = table[indexRow][0]
         dialog = Gtk.MessageDialog(self.window, 0, Gtk.MessageType.QUESTION,
             Gtk.ButtonsType.YES_NO, "Удалить данное подключение:")
-        dialog.format_secondary_text(table[indexRow][0])
+        dialog.format_secondary_text(name)
         response = dialog.run()
         if response == Gtk.ResponseType.YES:
             fileCtor = table[indexRow][3]
@@ -980,7 +987,8 @@ class Gui:
             endFile.close()
             self.getSavesFromDb() #удаление из liststore
             try: os.remove(WORKFOLDER + fileCtor) #удаление файла с настройками
-            except: pass            
+            except: pass
+            properties.log.info("Подключение '%s' удалено!", name)
         dialog.destroy() 
 
     def onPopupSave(self, treeView):
@@ -991,7 +999,8 @@ class Gui:
         dialog.set_current_folder(HOMEFOLDER)
         table, indexRow = treeView.get_selection().get_selected()
         fileCtor = table[indexRow][3]
-        dialog.set_current_name(table[indexRow][0])
+        nameConnect = table[indexRow][0]
+        dialog.set_current_name(nameConnect)
         dialog.set_do_overwrite_confirmation(True) #запрос на перезапись одноименного файла
         response = dialog.run()
         if response == Gtk.ResponseType.OK:
@@ -1005,7 +1014,8 @@ class Gui:
             f.write("Name=" + os.path.basename(name))
             f.close()
             os.system('chmod 777 \"' + filename + '"')
-            viewStatus(self.statusbar, 'Сохранено в "' + filename + '"...')                    
+            viewStatus(self.statusbar, 'Сохранено в "' + filename + '"...')
+            properties.log.info("Для подключения '%s' сохранен ярлык быстрого запуска: '%s'", nameConnect, filename)
         dialog.destroy()
 
     def onChangePage(self, notepad, box, page):
@@ -1051,7 +1061,7 @@ class Gui:
 
     def onWiki(self, *args):
         """Открытие wiki в Интернете"""
-        os.system ('python -m webbrowser -t "http://wiki.myconnector.ru/" &')
+        os.system ('python3 -m webbrowser -t "http://wiki.myconnector.ru/" &')
     
     def changePage(self, index = 1):
         note = self.builder.get_object("main_note")
@@ -1064,6 +1074,7 @@ def f_main():
         if fileCtor: connectFile(fileCtor)
         else: os.system("zenity --error --text='\""+ sys.argv[1] + "\" - подключение с таким именем не найдено!' --no-wrap")
     except IndexError:
+        properties.log.info("Запуск программы ---")
         gui = Gui()
         initSignal(gui)
         gui.window.show_all()
