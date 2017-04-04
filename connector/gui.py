@@ -156,14 +156,14 @@ class Gui:
             if parameters != None:
                 if self.correctProgram(parameters):
                     protocol = parameters.pop(0)
-                    if protocol != 'CITRIX':
+                    if protocol == 'CITRIX' or protocol == 'WEB':
+                        self.onWCEdit('', parameters[0], protocol)
+                    else:
                         analogEntry = self.AnalogEntry(protocol, parameters)
                         self.onButtonPref(analogEntry)
-                        msg = "Импорт файла " + filename
-                        properties.log.info (msg)
-                        viewStatus(self.statusbar, msg)
-                    else:
-                        self.onCitrixEdit('', parameters[0])
+                    msg = "Импортирован файл " + filename
+                    properties.log.info (msg)
+                    viewStatus(self.statusbar, msg)
                 else: self.dialogIncorrectProgram("import", parameters[0], filename)
         else:
             viewStatus(self.statusbar, "Файл не был выбран!")
