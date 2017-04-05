@@ -7,9 +7,9 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from GLOBAL import *
-import logging
+import logging, tarfile
 logging.basicConfig (
-    filename = LOGFOLDER + "connector.log",
+    filename = LOGFILE,
     format = "--- %(levelname)-10s %(asctime)s --- %(message)s",
     level = logging.INFO
 )
@@ -98,6 +98,30 @@ def searchName(name):
         log.warning("Файл сохраненных подключений (connections.db) не найден!")
     return False
 
+def checkLogFile(filePath):
+    """Функция проверки размера лог-файла и его архивация, если он больше 10Мб"""
+    exists = not bool(int(subprocess.check_output("stat " + filePath + " > /dev/null 2>&1; echo $?; exit 0", 
+                                                  shell=True, universal_newlines=True).strip()))
+    if exists:
+        sizeLog = int(subprocess.check_output("stat -c%s " + filePath + "; exit 0",
+                                              shell=True, universal_newlines=True).strip())
+        if sizeLog > 10000000:
+            import tarfile; from datetime import datetime
+            defaultPath = os.getcwd()
+            os.chdir(LOGFOLDER)
+            fileName = os.path.basename(filePath)
+            #'2017-04-05 15:09:52.981053' -> 20170405:
+            dt = datetime.today()
+            today = str(dt).split(' ')[0].split('-'); today = ''.join(today)
+            tarName = filePath + '.' + today + '.tgz'
+            tar = tarfile.open (tarName, "w:gz")
+            tar.add(fileName); os.remove(fileName)
+            os.chdir(defaultPath)
+            tar.close()
+            msg = "Логфайл %s превысил допустимый размер (10Мб), упакован в архив %s" % (fileName, os.path.basename(tarName))
+            if filePath == LOGFILE:
+                os.system('echo "--- INFO       ' + str(dt) + ' ' + msg + '" > ' + LOGFILE)
+            else: log.info(msg)
 
 class Properties(Gtk.Window):
     def __init__(self, rdp, vnc):

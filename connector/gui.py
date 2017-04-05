@@ -1079,6 +1079,7 @@ def f_main():
         initSignal(gui)
         gui.window.show_all()
         Gtk.main()
+        properties.checkLogFile(LOGFILE); properties.checkLogFile(STDLOGFILE)
 
 if __name__ == '__main__':
     f_main()

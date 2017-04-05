@@ -13,7 +13,8 @@ WORKFOLDER = HOMEFOLDER + '/.connector/'
 DEFAULT = dict(RDP = 1, VNC = 1, TAB = '0')
 
 #Версия и релиз приложения
-query = subprocess.check_output("rpm -q connector; exit 0", shell=True, universal_newlines=True).strip().split('-')
+query = subprocess.check_output("rpm -q connector; exit 0",
+                                shell=True, universal_newlines=True).strip().split('-')
 VERSION = query[1]
 RELEASE = query[2]
 
@@ -31,7 +32,8 @@ EXEC = "/usr/bin/connector "
 
 #Проверка и установка пути монтирования устройств
 #control udisks2
-udisks2 = subprocess.check_output("/usr/sbin/control udisks2; exit 0", shell=True, universal_newlines=True).strip()
+udisks2 = subprocess.check_output("/usr/sbin/control udisks2; exit 0",
+                                  shell=True, universal_newlines=True).strip()
 if udisks2 == 'default':
     USBPATH = "/run/media/$USER"
 if udisks2 == 'shared':
@@ -39,4 +41,6 @@ if udisks2 == 'shared':
 
 #Ведение логов
 LOGFOLDER = WORKFOLDER + "logs/"
-STD_TO_LOG = ' >> ' + LOGFOLDER + "all.log 2>&1 &"
+LOGFILE = LOGFOLDER + "connector.log"
+STDLOGFILE = LOGFOLDER + "all.log"
+STD_TO_LOG = ' >> ' + STDLOGFILE + " 2>&1 &"
