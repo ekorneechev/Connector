@@ -1068,7 +1068,6 @@ class Gui:
         note.set_current_page(index)
 
 def f_main():
-    os.system("mkdir -p " + LOGFOLDER)
     try:
         fileCtor = properties.filenameFromName(sys.argv[1])
         if fileCtor: connectFile(fileCtor)

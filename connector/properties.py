@@ -8,6 +8,8 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from GLOBAL import *
 import logging, tarfile
+
+os.system("mkdir -p " + LOGFOLDER)
 logging.basicConfig (
     filename = LOGFILE,
     format = "--- %(levelname)-10s %(asctime)s --- %(message)s",
