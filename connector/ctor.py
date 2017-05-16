@@ -171,8 +171,13 @@ class XFreeRdp:
             if args[30]: command += ' /p:$(zenity --entry --title="Аутентификация (with NLA)" --text="Введите пароль для пользователя '+ args[1] + ':" --hide-text)'
             else: command += ' -sec-nla'
             if args[31]: command += ' /workarea'
-            try: #Добавлена совместимость с предыдущей версией =>1.3.24
+            try: #Добавлена совместимость с предыдущей версией; < 1.4.0
                 if args[32]: command += ' /span'
+            except IndexError: pass
+            try: #Добавлена совместимость с предыдущей версией; < 1.4.1
+                if args[33]: command += ' /drive:Desktop,' + DESKFOLDER
+                if args[34]: command += ' /drive:Downloads,' + DOWNFOLDER
+                if args[35]: command += ' /drive:Documents,' + DOCSFOLDER
             except IndexError: pass
             command += params + STD_TO_LOG
             properties.log.info ("FreeRDP: подключение к серверу %s", args[0])

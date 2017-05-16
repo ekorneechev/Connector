@@ -44,3 +44,18 @@ LOGFOLDER = WORKFOLDER + "logs/"
 LOGFILE = LOGFOLDER + "connector.log"
 STDLOGFILE = LOGFOLDER + "all.log"
 STD_TO_LOG = ' >> ' + STDLOGFILE + " 2>&1 &"
+
+#Определение путей до папок пользователя
+dirs = {}
+try:
+    for string in open(HOMEFOLDER + "/.config/user-dirs.dirs"):
+        if string[0] != "#":
+            name, value = string.strip().split('=')
+            dirs[name] = value
+    DESKFOLDER = dirs["XDG_DESKTOP_DIR"]
+    DOWNFOLDER = dirs["XDG_DOWNLOAD_DIR"]
+    DOCSFOLDER = dirs["XDG_DOCUMENTS_DIR"]
+except FileNotFoundError:
+    DESKFOLDER = HOMEFOLDER + "Desktop"
+    DOWNFOLDER = HOMEFOLDER + "Downloads"
+    DOCSFOLDER = HOMEFOLDER + "Documents"

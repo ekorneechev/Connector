@@ -383,9 +383,17 @@ class Gui:
             try: #Добавлена совместимость с предыдущей версией =>1.3.24
                 if args[32]: self.RDP_span.set_active(True)
             except IndexError:
-                properties.log.info("Подключение создано в версии приложения 1.3.x; реализована совместимость")
+                properties.log.info("Подключение создано в версии приложения < 1.4.0; реализована совместимость")
                 self.RDP_span.set_active(False)
-            
+            try:
+                if args[33]: self.RDP_desktop.set_active(True)
+                if args[34]: self.RDP_down.set_active(True)
+                if args[35]: self.RDP_docs.set_active(True)
+            except IndexError:
+                properties.log.info("Подключение создано в версии приложения < 1.4.1; реализована совместимость")
+                self.RDP_desktop.set_active(False)
+                self.RDP_down.set_active(False)
+                self.RDP_docs.set_active(False)
 
     def initPreferences(self, protocol):
         """В этой функции определяются различные для протоколов параметры"""
@@ -442,6 +450,9 @@ class Gui:
             self.RDP_nla = self.pref_builder.get_object("check_RDP1_nla")
             self.RDP_workarea = self.pref_builder.get_object("radio_RDP1_workarea")
             self.RDP_span = self.pref_builder.get_object("check_RDP1_span")
+            self.RDP_desktop = self.pref_builder.get_object("check_RDP1_desktop")
+            self.RDP_down = self.pref_builder.get_object("check_RDP1_down")
+            self.RDP_docs = self.pref_builder.get_object("check_RDP1_docs")
 
         if protocol == 'NX':
             self.NX_user = self.pref_builder.get_object("entry_NX_user")
@@ -596,9 +607,16 @@ class Gui:
             else: nla = 1
             if self.RDP_span.get_active(): span = 1
             else: span = 0
+            if self.RDP_desktop.get_active(): desktop = 1
+            else: desktop = 0
+            if self.RDP_down.get_active(): down = 1
+            else: down = 0
+            if self.RDP_docs.get_active(): docs = 1
+            else: docs = 0
             args = [user, domain, fullscreen, clipboard, resolution, color, folder, gserver, guser, gdomain, gpasswd, 
                     admin, smartcards, printers, sound, microphone, multimon, compression, compr_level, fonts, 
-                    aero, drag, animation, theme, wallpapers, nsc, jpeg, jpeg_quality, usb, nla, workarea, span]
+                    aero, drag, animation, theme, wallpapers, nsc, jpeg, jpeg_quality, usb, nla, workarea, span,
+                    desktop, down, docs]
 
         if protocol == 'NX':
             user = self.NX_user.get_text()
