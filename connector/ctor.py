@@ -307,32 +307,5 @@ def vmwareCheck():
     check = not bool(check)
     return check
 
-def __main():
-    """Функция для самотестирования модуля, просто запустите данный скрипт"""
-    while True:
-        protocol = input("Введите протокол: ").upper()    
-        if protocol == 'VNC':
-            connect = VncRemmina()
-        elif protocol == 'RDP':
-            connect = RdpRemmina()
-        elif protocol == 'NX':
-            connect = NxRemmina()
-        elif protocol == 'XDMCP':
-            connect = XdmcpRemmina()
-        elif protocol == 'SSH':
-            connect = SshRemmina()
-        elif protocol == 'SFTP':
-            connect = SftpRemmina()
-        elif protocol == 'VMWARE':
-            connect = Vmware() #demo.vm-it.com | login: Demo | pass Qwerty123
-        elif protocol == 'CITRIX':
-            connect = Citrix() #demo.CITRIXcloud.net | login: John.Smith6 | pass demo | domain CITRIXcloud
-        else:
-            print('Неизвестный протокол!')
-            continue
-        addr = input("Введите адрес сервера: ")
-        connect.start(addr)
-        time.sleep(2)
-
 if __name__ == "__main__":
-    __main()
+    pass
