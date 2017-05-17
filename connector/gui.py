@@ -1016,7 +1016,6 @@ class Gui:
              Gtk.STOCK_SAVE, Gtk.ResponseType.OK))
         dialog.set_current_folder(HOMEFOLDER)
         table, indexRow = treeView.get_selection().get_selected()
-        fileCtor = table[indexRow][3]
         nameConnect = table[indexRow][0]
         dialog.set_current_name(nameConnect)
         dialog.set_do_overwrite_confirmation(True) #запрос на перезапись одноименного файла
@@ -1028,7 +1027,7 @@ class Gui:
             with open(filename,"w") as label:
                 label.write(DESKTOP_INFO)
             f = open(filename,"a")
-            f.write("Exec=" + EXEC + fileCtor + "\n")
+            f.write("Exec=" + EXEC + '"' + nameConnect + "\"\n")
             f.write("Name=" + os.path.basename(name))
             f.close()
             os.system('chmod 777 \"' + filename + '"')
