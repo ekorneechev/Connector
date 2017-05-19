@@ -46,10 +46,9 @@ except FileNotFoundError:
     DOCSFOLDER = HOMEFOLDER + "Documents"
 
 #Ниже указаны параметры, зависящие от ОС
+OS = subprocess.check_output("grep '^ID=' /etc/os-release; exit 0",shell=True, universal_newlines=True).strip().split('=')[1]
 
-OS = "ALT"
-
-if OS == "ALT":
+if OS == "altlinux":
     #Версия и релиз приложения
     package_info = subprocess.check_output("rpm -q connector; exit 0",shell=True, universal_newlines=True).strip().split('-')
     VERSION = package_info[1]

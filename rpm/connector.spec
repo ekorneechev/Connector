@@ -1,6 +1,6 @@
 Name: connector
-Version: 1.4.1
-Release: alt2
+Version: 1.4.2
+Release: alt1
 
 Summary: Remote desktop chooser
 License: GPL
