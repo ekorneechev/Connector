@@ -18,7 +18,7 @@ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 
 `git clone https://github.com/ekorneechev/Connector`
 
-`cd Connector; git checkout master; cd deb_package; chmod 755 buildDeb.sh; ./buildDeb.sh`
+`cd Connector/deb; chmod 755 buildDeb.sh; ./buildDeb.sh`
 
 * Установка пакета:
 
