@@ -235,11 +235,13 @@ class Gui:
         cancel.connect("clicked", self.onCancel, self.pref_window)
         self.pref_window.connect("delete-event", self.onClose)
         self.initPreferences(tmp)
-        try: 
+        try:
+            #если изменяется или копируется соединение, то загружаем параметры
             args = entry_server.loadParameters()
             self.setPreferences(tmp, args)
-        except AttributeError:
-            properties.log.exception ("Ошибка обработки параметров (WARNING):")
+        except:
+            #иначе (новое подключение), пропускаем эту загрузку
+            pass
         self.pref_window.add(box)
         self.pref_window.show_all()
 
