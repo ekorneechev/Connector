@@ -80,7 +80,7 @@ install -pDm644 %name.man %buildroot%_man1dir/%name.1
 * Wed Aug 24 2016 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.3.23-alt3
 - Update requires - added remmina-plugins
 
-* Fri Aug 22 2016 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.3.23-alt2
+* Mon Aug 22 2016 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.3.23-alt2
 - Update requires - added xfreerdp
 
 * Fri Aug 12 2016 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.3.23-alt1
