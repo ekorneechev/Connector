@@ -89,7 +89,7 @@ class Gui:
         whatProgram = properties.loadFromFile('default.conf')
         if whatProgram['RDP']: rdp.set_text('(FreeRDP)')
         else: rdp.set_text('(Remmina)')
-        if whatProgram['VNC']: vnc.set_text('(TigerVNC)')
+        if whatProgram['VNC']: vnc.set_text('(vncviewer)')
         else: vnc.set_text('(Remmina)')
 
     def onDeleteWindow(self, *args):
