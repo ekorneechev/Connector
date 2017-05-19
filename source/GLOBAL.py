@@ -12,12 +12,6 @@ WORKFOLDER = HOMEFOLDER + '/.connector/'
 #Установки по умолчанию для параметров программы (какие приложения использовать)
 DEFAULT = dict(RDP = 1, VNC = 1, TAB = '0')
 
-#Версия и релиз приложения
-query = subprocess.check_output("rpm -q connector; exit 0",
-                                shell=True, universal_newlines=True).strip().split('-')
-VERSION = query[1]
-RELEASE = query[2]
-
 #Исходные данные для ярлыка подключения
 DESKTOP_INFO ="""#!/usr/bin/env xdg-open
 [Desktop Entry]
@@ -29,15 +23,6 @@ Icon=/usr/share/connector/data/emblem.png
 
 #Запускаемый файл приложения
 EXEC = "/usr/bin/connector "
-
-#Проверка и установка пути монтирования устройств
-#control udisks2
-udisks2 = subprocess.check_output("/usr/sbin/control udisks2; exit 0",
-                                  shell=True, universal_newlines=True).strip()
-if udisks2 == 'default':
-    USBPATH = "/run/media/$USER"
-if udisks2 == 'shared':
-    USBPATH = "/media"
 
 #Ведение логов
 LOGFOLDER = WORKFOLDER + "logs/"
@@ -59,3 +44,28 @@ except FileNotFoundError:
     DESKFOLDER = HOMEFOLDER + "Desktop"
     DOWNFOLDER = HOMEFOLDER + "Downloads"
     DOCSFOLDER = HOMEFOLDER + "Documents"
+
+#Ниже указаны параметры, зависящие от ОС
+
+OS = "ALT"
+
+if OS == "ALT":
+    #Версия и релиз приложения
+    package_info = subprocess.check_output("rpm -q connector; exit 0",shell=True, universal_newlines=True).strip().split('-')
+    VERSION = package_info[1]
+    RELEASE = package_info[2]
+
+    #Папка монтирования устройств
+    udisks2 = subprocess.check_output("/usr/sbin/control udisks2; exit 0",shell=True, universal_newlines=True).strip()
+    if udisks2 == 'default':
+        USBPATH = "/run/media/$USER"
+    if udisks2 == 'shared':
+        USBPATH = "/media"
+
+else:
+    package_info = subprocess.check_output("dpkg-query -W connector; exit 0",shell=True, universal_newlines=True).strip().split('\t')
+    package_info = package_info[1].split("-")
+    VERSION = package_info[0]
+    RELEASE = package_info[1]
+
+    USBPATH = "/media/$USER"
