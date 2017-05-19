@@ -13,7 +13,7 @@ Packager: Korneechev Evgeniy <ekorneechev@altlinux.org>
 BuildArch: noarch
 Requires: python3 python3-module-pygobject3 libgtk+3 libgtk+3-gir
 Requires: remmina remmina-plugins tigervnc xfreerdp
-Requires: control
+Requires: control xdg-utils
 
 %define basedir %_datadir/%name
 

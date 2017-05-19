@@ -8,6 +8,6 @@ Description: Инструмент системного администрато�
  Программа-агрегатор для осуществления подключения с различным.
  компьютерным системам по всем распространенным протоколам (RDP, VNC,.
  Citrix, VMware и прочие).
-Depends: libgtk-3-0 (>=3.10), remmina (>=1.0), python3 (>=3.2), python3-gi (>=3.2), freerdp-x11 (>=1.2), vncviewer
+Depends: libgtk-3-0 (>=3.10), remmina (>=1.0), python3 (>=3.2), python3-gi (>=3.2), freerdp-x11 (>=1.2), vncviewer, xdg-utils
 Priority: optional
 Homepage: http://www.myconnector.ru

@@ -277,8 +277,10 @@ class Web:
         else: addr = args
         if  not addr.find("://") != -1:
             addr = "http://" + addr
+        command = 'xdg-open "' + addr + '"'
         properties.log.info ("WWW: открытие web-ресурса %s", addr)
-        os.system ('python3 -m webbrowser -t "' + addr + '"' + STD_TO_LOG)
+        properties.log.info (command)
+        os.system ( command + STD_TO_LOG)
 
 def definition(protocol):
     """Функция определения протокола"""
