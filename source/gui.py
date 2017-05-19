@@ -653,9 +653,9 @@ class Gui:
             args = [user, quality, color, viewmode, viewonly, crypt, clipboard, showcursor]
 
         if protocol == 'VNC' and self.whatProgram['VNC'] == 1:
-            if self.VNC_viewmode.get_active(): viewmode = "FullScreen=1 "
+            if self.VNC_viewmode.get_active(): viewmode = "-fullscreen "
             else: viewmode = ""
-            if self.VNC_viewonly.get_active(): viewonly = "ViewOnly=1 "
+            if self.VNC_viewonly.get_active(): viewonly = "-viewonly "
             else: viewonly = ""
             args = [viewmode, viewonly]
 
