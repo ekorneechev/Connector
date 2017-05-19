@@ -62,6 +62,12 @@ if OS == "ALT":
     if udisks2 == 'shared':
         USBPATH = "/media"
 
+    #Команда проверки наличия в системе Citrix Receiver
+    CITRIX_CHECK = "rpm -q ICAClient > "
+
+    #FreeRDP: ключ проброса смарткарт
+    SCARD = ' /smartcard:""'
+
 else:
     package_info = subprocess.check_output("dpkg-query -W connector; exit 0",shell=True, universal_newlines=True).strip().split('\t')
     package_info = package_info[1].split("-")
@@ -69,3 +75,7 @@ else:
     RELEASE = package_info[1]
 
     USBPATH = "/media/$USER"
+
+    CITRIX_CHECK = "dpkg -s icaclient > "
+
+    SCARD = ' /smartcard'

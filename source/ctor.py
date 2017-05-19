@@ -107,14 +107,14 @@ class VncViewer:
     """Класс для настройки VNC-соединения через VncViewer"""
     def start(self, args):
         if type(args) == str:
-            properties.log.info ("TigerVNC: подключение к серверу %s", args)
+            properties.log.info ("VNC: подключение к серверу %s", args)
             os.system('vncviewer ' + args + STD_TO_LOG)
         else:
             command = 'vncviewer ' + args[0] + ' '
             if args[1]: command += args[1]
             if args[2]: command += args[2]
             command += STD_TO_LOG
-            properties.log.info ("TigerVNC: подключение к серверу %s", args[0])
+            properties.log.info ("VNC: подключение к серверу %s", args[0])
             os.system(command)
 
 class RdpRemmina(Remmina):
@@ -151,7 +151,7 @@ class XFreeRdp:
                 command = "GATEPWD='" + args[11] + "' && " + command 
                 command += ' /gp:$GATEPWD'
             if args[12]: command += ' /admin'
-            if args[13]: command += ' /smartcard:""'
+            if args[13]: command += SCARD
             if args[14]: command += ' /printer'
             if args[15]: command += ' /sound:sys:alsa'
             if args[16]: command += ' /microphone:sys:alsa'
@@ -238,7 +238,7 @@ class Vmware:
                 os.system(command)
         else:
             properties.log.warning ("VMware Horizon Client не установлен!")
-            os.system("zenity --error --text='VMware Horizon Client не установлен!'")            
+            os.system("zenity --error --text='VMware Horizon Client не установлен!'")
 
 class Citrix:
     """Класс для настройки ICA-соединения к Citrix-серверу"""
@@ -302,12 +302,12 @@ def definition(protocol):
 
 def citrixCheck():
     """Фунцкия проверки наличия в системе Citrix Receiver"""
-    check = int(subprocess.check_output("rpm -q ICAClient > /dev/null 2>&1; echo $?", shell=True, universal_newlines=True).strip())
+    check = int(subprocess.check_output(CITRIX_CHECK + "/dev/null 2>&1; echo $?", shell=True, universal_newlines=True).strip())
     check = not bool(check)
     return check
 
 def vmwareCheck():
-    """Фунцкия проверки наличия в системе VMware Horizon Client (либо пакета *-userinstall)"""
+    """Фунцкия проверки наличия в системе VMware Horizon Client"""
     check = int(subprocess.check_output("which vmware-view > /dev/null 2>&1; echo $?", shell=True, universal_newlines=True).strip())
     check = not bool(check)
     return check
