@@ -1197,7 +1197,7 @@
           <object class="GtkLabel" id="label58">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="label" translatable="yes">"TigerVNC"</property>
+            <property name="label" translatable="yes">VNC</property>
           </object>
           <packing>
             <property name="expand">True</property>
@@ -1889,7 +1889,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkFrame">
+              <object class="GtkFrame" id="Frame1">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="margin_left">4</property>
@@ -1898,17 +1898,17 @@
                 <property name="label_xalign">0</property>
                 <property name="shadow_type">none</property>
                 <child>
-                  <object class="GtkAlignment">
+                  <object class="GtkAlignment" id="Alignment1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="left_padding">12</property>
                     <child>
-                      <object class="GtkBox">
+                      <object class="GtkBox" id="box068">
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
                         <child>
-                          <object class="GtkGrid">
+                          <object class="GtkGrid" id="Grid1">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="column_homogeneous">True</property>
@@ -1977,7 +1977,7 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkLabel">
+                          <object class="GtkLabel" id="label051">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
@@ -2081,7 +2081,7 @@
                   </object>
                 </child>
                 <child type="label">
-                  <object class="GtkLabel">
+                  <object class="GtkLabel" id="label050">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes">Общие ресурсы</property>
