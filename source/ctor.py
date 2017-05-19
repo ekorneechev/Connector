@@ -91,7 +91,9 @@ class Remmina:
         """Запуск remmina с необходимыми параметрами"""
         self.create_cfg_file(parameters)
         properties.log.info ("Remmina: подключение по протоколу %s к серверу: %s", self.cfg['protocol'], self.cfg['server'])
-        os.system('cd $HOME && remmina -c "' + WORKFOLDER + self.f_name + '"' + STD_TO_LOG)
+        command = 'remmina -c "' + WORKFOLDER + self.f_name + '"'
+        properties.log.info (command)
+        os.system('cd $HOME && ' + command + STD_TO_LOG)
 
 class VncRemmina(Remmina):
     """Класс для настройки VNC-соединения через Remmina"""
@@ -108,14 +110,16 @@ class VncViewer:
     def start(self, args):
         if type(args) == str:
             properties.log.info ("VNC: подключение к серверу %s", args)
-            os.system('vncviewer ' + args + STD_TO_LOG)
+            command = 'vncviewer ' + args
+            server = args
         else:
             command = 'vncviewer ' + args[0] + ' '
             if args[1]: command += args[1]
             if args[2]: command += args[2]
-            command += STD_TO_LOG
-            properties.log.info ("VNC: подключение к серверу %s", args[0])
-            os.system(command)
+            server = args[0]
+        properties.log.info ("VNC: подключение к серверу %s. Команда запуска:", server)
+        properties.log.info (command)
+        os.system(command + STD_TO_LOG)
 
 class RdpRemmina(Remmina):
     """Класс для настройки RDP-соединения через Remmina"""
@@ -133,8 +137,8 @@ class XFreeRdp:
     def start(self, args):
         params = ' +auto-reconnect /cert-ignore'
         if type(args) == str:
-            properties.log.info ("FreeRDP: подключение к серверу %s", args)
-            os.system('xfreerdp /f -sec-nla /v:' + args + params + STD_TO_LOG)
+            server = args
+            command = 'xfreerdp /f -sec-nla /v:' + args + params
         else:
             command = 'xfreerdp /v:' + args[0]
             if args[1]: command += ' /u:' + args[1]
@@ -179,9 +183,11 @@ class XFreeRdp:
                 if args[34]: command += ' /drive:Downloads,' + DOWNFOLDER
                 if args[35]: command += ' /drive:Documents,' + DOCSFOLDER
             except IndexError: pass
-            command += params + STD_TO_LOG
-            properties.log.info ("FreeRDP: подключение к серверу %s", args[0])
-            os.system(command)
+            command += params
+            server = args[0]
+        properties.log.info ("FreeRDP: подключение к серверу %s. Команда запуска:", server)
+        properties.log.info (command)
+        os.system(command + STD_TO_LOG)
 
 class NxRemmina(Remmina):
     """Класс для настройки NX-соединения через Remmina"""
@@ -225,17 +231,18 @@ class Vmware:
     def start(self, args):
         if vmwareCheck():
             if type(args) == str:
+                command = 'vmware-view -q -s ' + args
                 properties.log.info ("VMware: подключение к серверу %s", args)
-                os.system('vmware-view -q -s ' + args + STD_TO_LOG)
+                properties.log.info (command)
             else:
                 command = 'vmware-view -q -s ' + args[0]
                 if args[1]: command += ' -u ' + args[1]
                 if args[2]: command += ' -d ' + args[2]
-                if args[3]: command += ' -p ' + args[3]
                 if args[4]: command += ' --fullscreen'
-                command += STD_TO_LOG
                 properties.log.info ("VMware: подключение к серверу %s", args[0])
-                os.system(command)
+                properties.log.info (command)
+                if args[3]: command += ' -p ' + args[3]
+            os.system(command + STD_TO_LOG)
         else:
             properties.log.warning ("VMware Horizon Client не установлен!")
             os.system("zenity --error --text='VMware Horizon Client не установлен!'")
