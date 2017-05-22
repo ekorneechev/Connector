@@ -538,9 +538,6 @@
                         <property name="visible">True</property>
                         <property name="sensitive">False</property>
                         <property name="can_focus">True</property>
-                        <property name="tooltip_markup" translatable="yes">Введите имя файла сохраненного подключения.
-&lt;i&gt;Скопировать его можно, щелкнув правой кнопкой
-мыши на подключении и выбрав "Копировать в буфер"&lt;/i&gt;</property>
                         <property name="valign">center</property>
                         <property name="margin_left">5</property>
                         <property name="placeholder_text" translatable="yes">Введите имя подключения...</property>
