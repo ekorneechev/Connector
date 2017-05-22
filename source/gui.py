@@ -1080,7 +1080,7 @@ class Gui:
 
     def onWiki(self, *args):
         """Открытие wiki в Интернете"""
-        os.system ('python3 -m webbrowser -t "http://wiki.myconnector.ru/" &')
+        os.system ('xdg-open "http://wiki.myconnector.ru/"')
     
     def changePage(self, index = 1):
         note = self.builder.get_object("main_note")
