@@ -1087,7 +1087,7 @@ class Gui:
         note.set_current_page(index)
 
     def onLogout(self, *args):
-        os.system("mate-session-save --logout-dialog")
+        os.system("mate-session-save --logout")
 
     def onShutdown(self, *args):
         os.system("mate-session-save --shutdown-dialog")

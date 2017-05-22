@@ -409,11 +409,11 @@
                     </child>
                     <child>
                       <object class="GtkImageMenuItem" id="menu_file_logout">
-                        <property name="label" translatable="yes">Завершение сеанса</property>
+                        <property name="label" translatable="yes">Завершить сеанс</property>
                         <property name="visible">True</property>
-                        <property name="tooltip_text" translatable="yes">Открыть диалог завершения сеанса</property>
-                        <property name="image">image5</property>
                         <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Мгновенное завершение сеанса пользователя</property>
+                        <property name="image">image5</property>
                         <property name="use_stock">False</property>
                         <signal name="activate" handler="onLogout" swapped="no"/>
                       </object>
@@ -422,9 +422,9 @@
                       <object class="GtkImageMenuItem" id="menu_file_shutdown">
                         <property name="label" translatable="yes">Выключение ПК</property>
                         <property name="visible">True</property>
+                        <property name="can_focus">False</property>
                         <property name="tooltip_text" translatable="yes">Открыть диалог выключения компьютера</property>
                         <property name="image">image6</property>
-                        <property name="can_focus">False</property>
                         <property name="use_stock">False</property>
                         <signal name="activate" handler="onShutdown" swapped="no"/>
                       </object>
