@@ -1086,6 +1086,12 @@ class Gui:
         note = self.builder.get_object("main_note")
         note.set_current_page(index)
 
+    def onLogout(self, *args):
+        os.system("mate-session-save --logout-dialog")
+
+    def onShutdown(self, *args):
+        os.system("mate-session-save --shutdown-dialog")
+
 def f_main():
     try:
         fileCtor = properties.filenameFromName(sys.argv[1])

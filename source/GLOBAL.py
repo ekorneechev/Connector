@@ -13,7 +13,7 @@ WORKFOLDER = HOMEFOLDER + '/.connector/'
 DEFAULT = dict(RDP = 1, VNC = 1, TAB = '0')
 
 #Исходные данные для ярлыка подключения
-DESKTOP_INFO ="""#!/usr/bin/env xdg-open
+DESKTOP_INFO = """#!/usr/bin/env xdg-open
 [Desktop Entry]
 Version=1.0
 Type=Application
@@ -78,3 +78,33 @@ else:
     CITRIX_CHECK = "dpkg -s icaclient > "
 
     SCARD = ' /smartcard'
+
+#Режим киоска:
+DEFAULT['KIOSK'] = 0; DEFAULT['KIOSK_CONN'] = ""
+
+KIOSK= """ &
+while true
+do
+connector
+done
+"""
+
+KIOSK_X = """#!/usr/bin/env xdg-open
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Icon[ru_RU]=start
+Name[ru_RU]=Ctor_kiosk
+Exec=startx
+Name=Ctor_kiosk
+Icon=start
+"""
+
+KIOSK_ONE=""" &
+while true
+do
+echo > /dev/null
+done
+"""
+
