@@ -264,6 +264,7 @@ class Properties(Gtk.Window):
             try: os.chmod(HOMEFOLDER+"/.xsession", 0o766) #chmod +x
             except FileNotFoundError: pass
             autostartFile = HOMEFOLDER + "/.config/autostart/Ctor_kiosk.desktop"
+            os.system("mkdir -p ~/.config/autostart")
             autostart = open (autostartFile, "w")
             autostart.write(KIOSK_X)
             autostart.close()
