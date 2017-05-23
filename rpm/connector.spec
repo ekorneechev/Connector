@@ -1,6 +1,6 @@
 Name: connector
 Version: 1.4.3
-Release: alt1
+Release: alt2
 
 Summary: Remote desktop chooser
 License: GPL
@@ -42,6 +42,15 @@ install -pDm644 %name.man %buildroot%_man1dir/%name.1
 %_man1dir/*
 
 %changelog
+* Tue May 23 2017 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.4.3-alt2
+- Changed the command to open the wiki
+
+* Fri May 19 2017 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.4.3-alt1
+- The code is optimized: now the program works equally in both AltLinux and Linux Mint
+- Startup command of connection added to the log
+- Update vncviewer's keys
+- Changed command of web-connection
+
 * Wed May 17 2017 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.4.1-alt2
 - Fixed save shortcut of connections
 - Minor fixes in changelog
