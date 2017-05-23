@@ -45,6 +45,9 @@ install -pDm644 %name.man %buildroot%_man1dir/%name.1
 * Tue May 23 2017 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.5.0-alt1
 - Added mode 'kiosk'
 
+* Tue May 23 2017 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.4.3-alt3
+- Added switching to the default tab after save properties
+
 * Tue May 23 2017 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.4.3-alt2
 - Changed the command to open the wiki
 

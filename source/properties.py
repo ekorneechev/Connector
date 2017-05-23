@@ -126,10 +126,10 @@ def checkLogFile(filePath):
             else: log.info(msg)
 
 class Properties(Gtk.Window):
-    def __init__(self, rdp, vnc):
+    def __init__(self, rdp, vnc, conn):
         Gtk.Window.__init__(self, title = "Параметры программы")
         builder = Gtk.Builder()
-        self.labelRDP, self.labelVNC = rdp, vnc
+        self.labelRDP, self.labelVNC, self.conn_note = rdp, vnc, conn
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_resizable(False)
         self.set_modal(True)
@@ -213,6 +213,7 @@ class Properties(Gtk.Window):
             gui.viewStatus(self.statusbar, "Настройки сохранены в файле default.conf...")
             log.info("Новые настройки для программы сохранены в файле default.conf.")
             gui.Gui.initLabels(True, self.labelRDP, self.labelVNC)
+            self.conn_note.set_current_page(int(self.defaultConf['TAB']))
 
     def clearFile(self, filename, title, message):
         """Функция для очисти БД серверов или списка подключений"""
