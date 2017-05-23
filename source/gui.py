@@ -807,7 +807,7 @@ class Gui:
 
     def onProperties(self, *args):
         """Окно параметров приложения"""
-        window = properties.Properties(self.labelRDP,self.labelVNC)
+        window = properties.Properties(self.labelRDP,self.labelVNC, self.conn_note)
 
     def saveFileCtor(self, name, protocol, server):
         """Создание ассоциации файла подключения с подключением в списке"""

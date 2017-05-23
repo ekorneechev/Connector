@@ -1,6 +1,6 @@
 Name: connector
 Version: 1.4.3
-Release: alt2
+Release: alt3
 
 Summary: Remote desktop chooser
 License: GPL
@@ -42,6 +42,9 @@ install -pDm644 %name.man %buildroot%_man1dir/%name.1
 %_man1dir/*
 
 %changelog
+* Tue May 23 2017 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.4.3-alt3
+- Added switching to the default tab after save properties
+
 * Tue May 23 2017 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.4.3-alt2
 - Changed the command to open the wiki
 
