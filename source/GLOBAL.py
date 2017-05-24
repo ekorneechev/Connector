@@ -108,3 +108,15 @@ echo > /dev/null
 done
 """
 
+try:
+    for string in open("/etc/connector/kiosk.access"):
+        string = string.upper()
+        if string.find("ACCESS") != -1:
+            name, value = string.strip().split('=')
+            value = value.upper().strip()
+            if value == "1" or value == "ON" or value == "YES":
+                KIOSK_OFF = False
+            else: KIOSK_OFF = True
+            break
+except FileNotFoundError:
+    KIOSK_OFF = True

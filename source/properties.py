@@ -148,6 +148,8 @@ class Properties(Gtk.Window):
         self.changeKioskAll = builder.get_object("radio_kiosk_all")
         self.changeKioskCtor = builder.get_object("radio_kiosk_ctor")
         self.entryKioskConn = builder.get_object("entry_kiosk_ctor")
+        self.boxKiosk = builder.get_object("frame_kiosk")
+        if KIOSK_OFF: self.boxKiosk.set_sensitive(0)
         self.defaultConf = loadFromFile('default.conf')
         if self.defaultConf['RDP']:
             changeRdpFree.set_active(True)

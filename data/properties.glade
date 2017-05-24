@@ -483,7 +483,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkFrame" id="frame1">
+              <object class="GtkFrame" id="frame_kiosk">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="label_xalign">0</property>
@@ -506,10 +506,11 @@
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
                             <property name="label" translatable="yes">* Данный режим находится на стадии тестирования, подробности на wiki.
-  В официальных релизах его нет, используйте на свой страх и риск.</property>
+  В официальных релизах его нет, используйте на свой страх и риск.
+  Для его включения отредактируйте файл /etc/connector/kiosk.access</property>
                             <attributes>
                               <attribute name="font-desc" value="Sans 8"/>
-                              <attribute name="foreground" value="#555557575353"/>
+                              <attribute name="foreground" value="#88888a8a8585"/>
                             </attributes>
                           </object>
                           <packing>
