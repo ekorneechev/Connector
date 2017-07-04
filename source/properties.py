@@ -175,7 +175,7 @@ class Properties(Gtk.Window):
         gui.viewStatus(self.statusbar, "Настройки сохранены в файле default.conf...")
         log.info("Новые настройки для программы сохранены в файле default.conf.")
         gui.Gui.initLabels(True, self.labelRDP, self.labelVNC)
-        self.conn_note.set_current_page(int(self.defaultConf['TAB']))
+        self.conn_note.set_current_page(int(self.program['TAB']))
 
     def clearFile(self, filename, title, message):
         """Функция для очисти БД серверов или списка подключений"""
