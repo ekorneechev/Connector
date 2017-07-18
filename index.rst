@@ -1,4 +1,4 @@
 ===============
-wiki-страничка программы Connector
+WIKI-страничка программы Connector
 ===============
 Пока размещена здесь - http://wiki.myconnector.ru
