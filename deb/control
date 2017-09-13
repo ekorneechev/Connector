@@ -1,13 +1,14 @@
 Package: connector
-Version: 1.4.3-3
+Version: 1.4.4-1
 Provides: connector
 Maintainer: Korneechev E. <ek@myconnector.ru>
 Architecture: all
 Section: net
 Description: Инструмент системного администратора.
- Программа-агрегатор для осуществления подключения с различным.
- компьютерным системам по всем распространенным протоколам (RDP, VNC,.
+ Программа-агрегатор для осуществления подключения к различным
+ компьютерным системам по всем распространенным протоколам (RDP, VNC,
  Citrix, VMware и прочие).
-Depends: libgtk-3-0 (>=3.10), remmina (>=1.0), python3 (>=3.2), python3-gi (>=3.2), freerdp-x11 (>=1.2), vncviewer, xdg-utils
+Depends: libgtk-3-0 (>=3.10), remmina (>=1.0), python3 (>=3.2), python3-gi (>=3.2), vncviewer, xdg-utils
+Recommends: freerdp-x11 (>=1.2)
 Priority: optional
 Homepage: http://www.myconnector.ru
