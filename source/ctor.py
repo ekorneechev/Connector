@@ -135,59 +135,63 @@ class RdpRemmina(Remmina):
 class XFreeRdp:
     """Класс для настройки RDP-соединения через xfreerdp"""
     def start(self, args):
-        params = ' +auto-reconnect /cert-ignore'
-        if type(args) == str:
-            server = args
-            command = 'xfreerdp /f -sec-nla /v:' + args + params
+        if freerdpCheck():
+            params = ' +auto-reconnect /cert-ignore'
+            if type(args) == str:
+                server = args
+                command = 'xfreerdp /f -sec-nla /v:' + args + params
+            else:
+                command = 'xfreerdp /v:' + args[0]
+                if args[1]: command += ' /u:' + args[1]
+                if args[2]: command += ' /d:' + args[2]
+                if args[3]: command += ' /f'
+                if args[4]: command += ' +clipboard'
+                if args[5]: command += ' /size:' + args[5]
+                if args[6]: command += ' /bpp:' + args[6]
+                if args[7]: command += ' /drive:LocalFolder,"' + args[7] + '"'
+                if args[8]: command += ' /g:' + args[8]
+                if args[9]: command += ' /gu:' + args[9]
+                if args[10]: command += ' /gd:' + args[10]
+                if args[11]:
+                    command = "GATEPWD='" + args[11] + "' && " + command
+                    command += ' /gp:$GATEPWD'
+                if args[12]: command += ' /admin'
+                if args[13]: command += SCARD
+                if args[14]: command += ' /printer'
+                if args[15]: command += ' /sound:sys:alsa'
+                if args[16]: command += ' /microphone:sys:alsa'
+                if args[17]: command += ' /multimon'
+                if args[18]: command += ' +compression'
+                if args[19]: command += ' /compression-level:' + args[19]
+                if args[20]: command += ' +fonts'
+                if args[21]: command += ' +aero'
+                if args[22]: command += ' +window-drag'
+                if args[23]: command += ' +menu-anims'
+                if args[24]: command += ' -themes'
+                if args[25]: command += ' -wallpaper'
+                if args[26]: command += ' /nsc'
+                if args[27]: command += ' /jpeg'
+                if args[28]: command += ' /jpeg-quality:' + str(args[28])
+                if args[29]: command += ' /drive:MEDIA,' + USBPATH
+                if args[30]: command += ' /p:$(zenity --entry --title="Аутентификация (with NLA)" --text="Введите пароль для пользователя '+ args[1] + ':" --hide-text)'
+                else: command += ' -sec-nla'
+                if args[31]: command += ' /workarea'
+                try: #Добавлена совместимость с предыдущей версией; < 1.4.0
+                    if args[32]: command += ' /span'
+                except IndexError: pass
+                try: #Добавлена совместимость с предыдущей версией; < 1.4.1
+                    if args[33]: command += ' /drive:Desktop,' + DESKFOLDER
+                    if args[34]: command += ' /drive:Downloads,' + DOWNFOLDER
+                    if args[35]: command += ' /drive:Documents,' + DOCSFOLDER
+                except IndexError: pass
+                command += params
+                server = args[0]
+            properties.log.info ("FreeRDP: подключение к серверу %s. Команда запуска:", server)
+            properties.log.info (command)
+            os.system(command + STD_TO_LOG)
         else:
-            command = 'xfreerdp /v:' + args[0]
-            if args[1]: command += ' /u:' + args[1]
-            if args[2]: command += ' /d:' + args[2]
-            if args[3]: command += ' /f'
-            if args[4]: command += ' +clipboard'
-            if args[5]: command += ' /size:' + args[5]
-            if args[6]: command += ' /bpp:' + args[6]
-            if args[7]: command += ' /drive:LocalFolder,"' + args[7] + '"'
-            if args[8]: command += ' /g:' + args[8]
-            if args[9]: command += ' /gu:' + args[9]
-            if args[10]: command += ' /gd:' + args[10]
-            if args[11]:
-                command = "GATEPWD='" + args[11] + "' && " + command 
-                command += ' /gp:$GATEPWD'
-            if args[12]: command += ' /admin'
-            if args[13]: command += SCARD
-            if args[14]: command += ' /printer'
-            if args[15]: command += ' /sound:sys:alsa'
-            if args[16]: command += ' /microphone:sys:alsa'
-            if args[17]: command += ' /multimon'
-            if args[18]: command += ' +compression'
-            if args[19]: command += ' /compression-level:' + args[19]
-            if args[20]: command += ' +fonts'
-            if args[21]: command += ' +aero'
-            if args[22]: command += ' +window-drag'
-            if args[23]: command += ' +menu-anims'    
-            if args[24]: command += ' -themes'
-            if args[25]: command += ' -wallpaper'
-            if args[26]: command += ' /nsc'
-            if args[27]: command += ' /jpeg'
-            if args[28]: command += ' /jpeg-quality:' + str(args[28])
-            if args[29]: command += ' /drive:MEDIA,' + USBPATH
-            if args[30]: command += ' /p:$(zenity --entry --title="Аутентификация (with NLA)" --text="Введите пароль для пользователя '+ args[1] + ':" --hide-text)'
-            else: command += ' -sec-nla'
-            if args[31]: command += ' /workarea'
-            try: #Добавлена совместимость с предыдущей версией; < 1.4.0
-                if args[32]: command += ' /span'
-            except IndexError: pass
-            try: #Добавлена совместимость с предыдущей версией; < 1.4.1
-                if args[33]: command += ' /drive:Desktop,' + DESKFOLDER
-                if args[34]: command += ' /drive:Downloads,' + DOWNFOLDER
-                if args[35]: command += ' /drive:Documents,' + DOCSFOLDER
-            except IndexError: pass
-            command += params
-            server = args[0]
-        properties.log.info ("FreeRDP: подключение к серверу %s. Команда запуска:", server)
-        properties.log.info (command)
-        os.system(command + STD_TO_LOG)
+            properties.log.warning ("FreeRDP не установлен!")
+            os.system("zenity --error --text='FreeRDP не установлен, подробности здесь:\nhttp://wiki.myconnector.ru/install#freerdp'")
 
 class NxRemmina(Remmina):
     """Класс для настройки NX-соединения через Remmina"""
@@ -318,6 +322,12 @@ def citrixCheck():
 def vmwareCheck():
     """Фунцкия проверки наличия в системе VMware Horizon Client"""
     check = int(subprocess.check_output("which vmware-view > /dev/null 2>&1; echo $?", shell=True, universal_newlines=True).strip())
+    check = not bool(check)
+    return check
+
+def freerdpCheck():
+    """Фунцкия проверки наличия в системе FreeRDP"""
+    check = int(subprocess.check_output("which xfreerdp > /dev/null 2>&1; echo $?", shell=True, universal_newlines=True).strip())
     check = not bool(check)
     return check
 
