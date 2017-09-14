@@ -81,4 +81,4 @@ elif OS == "linuxmint" or OS == "ubuntu":
 
 else:
     VERSION = RELEASE = USBPATH = CITRIX_CHECK = SCARD = ""
-    os.system("zenity --error --text='Ваша операционная система не поддерживается.\nНекоторые функции программы могут не работать!\nПодробнее о поддерживаемых ОС здесь:\nhttp://wiki.myconnector.ru#oc'")
+    os.system("zenity --error --text='Ваша операционная система не поддерживается.\nНекоторые функции программы могут не работать!\nПодробнее о поддерживаемых ОС здесь:\nhttp://wiki.myconnector.ru'")
