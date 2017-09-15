@@ -4,6 +4,9 @@
 import os, subprocess
 
 #Определение домашней папки пользователя
+VERSION = "1.4.4"
+
+#Определение домашней папки пользователя
 HOMEFOLDER = os.getenv('HOME')
 
 #Директория в домашней папке пользователя для хранения настроек и подключений
@@ -51,8 +54,8 @@ OS = subprocess.check_output("grep '^ID=' /etc/os-release; exit 0",shell=True, u
 if OS == "altlinux":
     #Версия и релиз приложения
     package_info = subprocess.check_output("rpm -q connector; exit 0",shell=True, universal_newlines=True).strip().split('-')
-    VERSION = package_info[1]
-    RELEASE = package_info[2]
+    try: RELEASE = package_info[2]
+    except: RELEASE = "git"
 
     #Папка монтирования устройств
     udisks2 = subprocess.check_output("/usr/sbin/control udisks2; exit 0",shell=True, universal_newlines=True).strip()
@@ -67,17 +70,21 @@ if OS == "altlinux":
     #FreeRDP: ключ проброса смарткарт
     SCARD = ' /smartcard:""'
 
-else:
+elif OS == "linuxmint" or OS == "ubuntu":
     package_info = subprocess.check_output("dpkg-query -W connector; exit 0",shell=True, universal_newlines=True).strip().split('\t')
     package_info = package_info[1].split("-")
-    VERSION = package_info[0]
-    RELEASE = package_info[1]
+    try: RELEASE = package_info[1]
+    except: RELEASE = "git"
 
     USBPATH = "/media/$USER"
 
     CITRIX_CHECK = "dpkg -s icaclient > "
 
     SCARD = ' /smartcard'
+
+else:
+    VERSION = RELEASE = USBPATH = CITRIX_CHECK = SCARD = ""
+    os.system("zenity --error --text='Ваша операционная система не поддерживается.\nНекоторые функции программы могут не работать!\nПодробнее о поддерживаемых ОС здесь:\nhttp://wiki.myconnector.ru'")
 
 #Режим киоска:
 DEFAULT['KIOSK'] = 0; DEFAULT['KIOSK_CONN'] = ""
