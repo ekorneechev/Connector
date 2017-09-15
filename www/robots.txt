@@ -1,0 +1,11 @@
+User-agent: Yandex 
+Disallow: /javascripts
+Disallow: /stylesheets
+Host: www.myconnector.ru
+Sitemap: http://www.myconnector.ru/sitemap.xml
+
+User-agent: Googlebot
+Disallow: /javascripts
+Disallow: /stylesheets
+Sitemap: http://www.myconnector.ru/sitemap.xml
+

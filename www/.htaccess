@@ -1,0 +1,10 @@
+php_value display_errors Off
+php_flag magic_quotes 1
+php_flag magic_quotes_gpc 1
+php_value mbstring.http_input auto
+php_value date.timezone Europe/Moscow
+Options +FollowSymLinks
+RewriteEngine On
+RewriteCond %{HTTP_HOST} ^([^www].*)$
+RewriteRule ^(.*)$ http://www.%1/$1 [L,R=301]
+ErrorDocument 404 "/404.html"
