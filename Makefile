@@ -3,6 +3,7 @@ PREFIX_BIN = /usr/local/bin
 PREFIX = /usr/local/share
 BASE = $(PREFIX)/$(TARGET)
 MAN = $(PREFIX)/man/man1
+ETC = /etc/$(TARGET)
 
 .PHONY: help install uninstall clean
 
@@ -23,12 +24,15 @@ install:
 	install source/*.py $(BASE)
 	mkdir -p $(MAN)
 	install data/$(TARGET).man $(MAN)/$(TARGET).1
+	mkdir -p $(ETC)
+	install data/kiosk.access $(ETC)
 
 uninstall:
 	rm -f $(PREFIX_BIN)/$(TARGET)
 	rm -rf $(BASE)
 	rm -f $(MAN)/$(TARGET).1
 	rm -f $(PREFIX)/applications/$(TARGET).desktop
+	rm -rf $(ETC)
 
 clean:
 	sed -i s#$(PREFIX)#/usr/share#g source/*
