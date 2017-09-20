@@ -1,6 +1,6 @@
 Name: connector
-Version: 1.4.3
-Release: alt3
+Version: 1.4.4
+Release: alt0.M80P.1
 
 Summary: Remote desktop chooser
 License: GPL
@@ -42,6 +42,15 @@ install -pDm644 %name.man %buildroot%_man1dir/%name.1
 %_man1dir/*
 
 %changelog
+* Wed Sep 20 2017 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.4.4-alt0.M80P.1
+- OS check updated
+
+* Wed Jul 05 2017 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.4.3-alt3.M80P.4
+- build for M80P
+
+* Tue Jul 04 2017 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.4.3-alt4
+- Fixed switching to the default tab after save properties
+
 * Tue May 23 2017 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.4.3-alt3
 - Added switching to the default tab after save properties
 
