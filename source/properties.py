@@ -181,7 +181,7 @@ class Properties(Gtk.Window):
         window.destroy()
     
     def onSave (self, *args):
-        """Сохранение настроек программ по умолчанию"""
+        """Сохранение настроек программы"""
         if self.changeRdpRem.get_active():
             self.defaultConf['RDP'] = 0
         else: self.defaultConf['RDP'] = 1
@@ -304,12 +304,12 @@ Ctrl+Alt+F1 - вернуться на "Рабочий стол" """)
             dialog.destroy()
 
     def onKioskEntry(self, widget):
-        """Отображение поля ввода имения файла"""
+        """Отображение поля ввода имени файла"""
         try: widget.set_button_sensitivity(Gtk.SensitivityType.ON)
         except: widget.set_sensitive(True)
 
     def offKioskEntry(self, widget):
-        """Скрытие поля ввода имения файла"""
+        """Скрытие поля ввода имени файла"""
         try: widget.set_button_sensitivity(Gtk.SensitivityType.OFF)
         except: widget.set_sensitive(False)
 

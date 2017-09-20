@@ -4,7 +4,7 @@
 import os, subprocess
 
 #Определение домашней папки пользователя
-VERSION = "1.4.4"
+VERSION = "1.5.2"
 
 #Определение домашней папки пользователя
 HOMEFOLDER = os.getenv('HOME')
@@ -123,12 +123,12 @@ done
 try:
     for string in open("/etc/connector/kiosk.access"):
         string = string.upper()
-        if string.find("ACCESS") != -1:
+        if string.find("ACCESS") == 0:
             name, value = string.strip().split('=')
             value = value.upper().strip()
             if value == "1" or value == "ON" or value == "YES":
                 KIOSK_OFF = False
             else: KIOSK_OFF = True
-            break
+        else: KIOSK_OFF = True
 except FileNotFoundError:
     KIOSK_OFF = True
