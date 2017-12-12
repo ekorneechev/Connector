@@ -138,7 +138,7 @@ class XFreeRdp:
         if freerdpCheck():
             freerdpVersion = freerdpCheckVersion()
             if freerdpVersion > "1.2":
-                params = ' +auto-reconnect /cert-ignore'
+                params = ' +auto-reconnect /cert-ignore /gdi:sw'
                 if type(args) == str:
                     server = args
                     command = 'xfreerdp /f -sec-nla /v:' + args + params
