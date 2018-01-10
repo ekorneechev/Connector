@@ -111,7 +111,7 @@ class Gui:
         about.set_version(VERSION + " (release: " + RELEASE + ')')
         about.set_website("http://www.myconnector.ru")
         about.set_website_label("Сайт проекта") 
-        about.set_copyright("© Корнеечев Е.А., 2014-2017\ne-mail(PayPal): ekorneechev@gmail.com\nWMR: R305760666573, WMZ: Z841082507423, QIWI: +79208771688")
+        about.set_copyright("© Корнеечев Е.А., 2014-2018\ne-mail(PayPal): ekorneechev@gmail.com\nWMR: R305760666573, WMZ: Z841082507423, QIWI: +79208771688")
         logo = GdkPixbuf.Pixbuf.new_from_file("data/emblem.png")
         about.set_logo(logo)
         about.run()
