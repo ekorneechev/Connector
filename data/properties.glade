@@ -506,7 +506,7 @@
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
                             <property name="label" translatable="yes">* Данный режим находится на стадии тестирования, подробности на wiki.
-  В официальных релизах его нет, используйте на свой страх и риск.
+  Доступен только для ОС ALT Linux.
   Для его включения отредактируйте файл /etc/connector/kiosk.access</property>
                             <attributes>
                               <attribute name="font-desc" value="Sans 8"/>
