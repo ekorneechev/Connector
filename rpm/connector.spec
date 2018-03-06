@@ -1,5 +1,5 @@
 Name: connector
-Version: 1.5.2
+Version: 1.5.4
 Release: alt1
 
 Summary: Remote desktop chooser
@@ -38,12 +38,23 @@ install -pDm644 kiosk.access %buildroot%_sysconfdir/%name/kiosk.access
 %files -f %name.lang
 %_bindir/%name
 %_desktopdir/%name.desktop
+%dir %basedir
 %basedir/data
 %basedir/*.py
 %_man1dir/*
+%dir %_sysconfdir/%name
 %config(noreplace) %_sysconfdir/%name/kiosk.access
 
 %changelog
+* Tue Dec 12 2017 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.5.3-alt2
+- Fixed version
+
+* Tue Dec 12 2017 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.5.3-alt1
+- Added key '/gdi:sw' as default for FreeRDP
+
+* Thu Sep 21 2017 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.5.2-alt3
+- Fixed unowned files
+
 * Wed Sep 20 2017 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.5.2-alt1
 - OS check updated (ALT #33906)
 - Added notifications for mode 'kiosk'
