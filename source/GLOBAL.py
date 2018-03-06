@@ -77,8 +77,9 @@ if OS == "altlinux":
 
 elif OS == "linuxmint" or OS == "ubuntu":
     package_info = subprocess.check_output("dpkg-query -W connector; exit 0",shell=True, universal_newlines=True).strip().split('\t')
-    package_info = package_info[1].split("-")
-    try: RELEASE = package_info[1]
+    try:
+        package_info = package_info[1].split("-")
+        RELEASE = package_info[1]
     except: RELEASE = "git"
 
     USBPATH = "/media/$USER"
