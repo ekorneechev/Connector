@@ -284,6 +284,7 @@ class Properties(Gtk.Window):
 
     def onKiosk(self, widget, all_prog):
         """Вывод информационных сообщений при вкл/отк режима киоска"""
+        if not self.boxKiosk.get_sensitive(): return 0 #сообщения не выводятся, если доступ к настройкам киоска отключен
         if widget.get_active() == False:
             dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, 'Программа настроена на режим "Киоск"')
             if all_prog:
