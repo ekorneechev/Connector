@@ -133,3 +133,6 @@ try:
         else: KIOSK_OFF = True
 except FileNotFoundError:
     KIOSK_OFF = True
+
+# Если не ALT - режим "киоска" недоступен
+if OS != "altlinux": KIOSK_OFF = True
