@@ -1016,7 +1016,8 @@ class Gui:
         dialog = Gtk.FileChooserDialog("Сохранить ярлык подключения в ...", self.window,
             Gtk.FileChooserAction.SAVE, (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
              Gtk.STOCK_SAVE, Gtk.ResponseType.OK))
-        dialog.set_current_folder(HOMEFOLDER)
+        current_folder = (HOMEFOLDER + DESKFOLDER.replace('$HOME','')).replace('"','')
+        dialog.set_current_folder(current_folder)
         table, indexRow = treeView.get_selection().get_selected()
         nameConnect = table[indexRow][0]
         dialog.set_current_name(nameConnect)
