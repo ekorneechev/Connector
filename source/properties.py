@@ -142,6 +142,7 @@ class Properties(Gtk.Window):
         self.changeVncRem = builder.get_object("radio_VNC_remmina")
         self.statusbar = builder.get_object("statusbar")
         self.combo_tabs = builder.get_object("combo_tabs")
+        self.combo_main = builder.get_object("combo_main")
         changeRdpFree = builder.get_object("radio_RDP_freeRDP")
         changeVncView = builder.get_object("radio_VNC_viewer")
         self.changeKioskOff = builder.get_object("radio_kiosk_off")
@@ -169,6 +170,8 @@ class Properties(Gtk.Window):
             saveInFile('default.conf', DEFAULT)
         try: self.combo_tabs.set_active_id(self.defaultConf['TAB'])
         except KeyError: self.combo_tabs.set_active_id('0')
+        try: self.combo_main.set_active_id(self.defaultConf['MAIN'])
+        except KeyError: self.combo_tabs.set_active_id('0')
         self.add(box)        
         self.connect("delete-event", self.onClose)
         cancel.connect("clicked", self.onCancel, self)
@@ -189,6 +192,7 @@ class Properties(Gtk.Window):
             self.defaultConf['VNC'] = 0
         else: self.defaultConf['VNC'] = 1
         self.defaultConf['TAB'] = self.combo_tabs.get_active_id()
+        self.defaultConf['MAIN'] = self.combo_main.get_active_id()
         save = False
         nameConn = self.entryKioskConn.get_text()
         if self.changeKioskAll.get_active():

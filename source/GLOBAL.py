@@ -13,7 +13,7 @@ HOMEFOLDER = os.getenv('HOME')
 WORKFOLDER = HOMEFOLDER + '/.connector/'
 
 #Установки по умолчанию для параметров программы (какие приложения использовать)
-DEFAULT = dict(RDP = 1, VNC = 1, TAB = '0')
+DEFAULT = dict(RDP = 1, VNC = 1, TAB = '0', MAIN = '0')
 
 #Исходные данные для ярлыка подключения
 DESKTOP_INFO = """#!/usr/bin/env xdg-open

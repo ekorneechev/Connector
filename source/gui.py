@@ -80,6 +80,10 @@ class Gui:
         self.webEditClick = False
         try: default_tab = properties.loadFromFile('default.conf')['TAB']
         except KeyError: default_tab = '0'
+        try: default_main = properties.loadFromFile('default.conf')['MAIN']
+        except KeyError: default_main = '0'
+        self.main_note = self.builder.get_object("main_note")
+        self.main_note.set_current_page(int(default_main))
         self.conn_note = self.builder.get_object("list_connect")
         self.conn_note.set_current_page(int(default_tab))
         self.labelRDP, self.labelVNC = self.builder.get_object("label_default_RDP"), self.builder.get_object("label_default_VNC")
@@ -886,8 +890,7 @@ class Gui:
         if protocol == "WEB": 
             self.webEditClick = edit
             index_tab = 8 
-        main_note = self.builder.get_object("main_note")
-        main_note.set_current_page(0)
+        self.main_note.set_current_page(0)
         self.conn_note.set_current_page(index_tab)       
         entry_serv = self.builder.get_object("entry_serv_" + protocol)               
         entry_name = self.builder.get_object("entry_" + protocol + "_name")
@@ -1084,8 +1087,7 @@ class Gui:
         os.system ('xdg-open "http://wiki.myconnector.ru/"')
     
     def changePage(self, index = 1):
-        note = self.builder.get_object("main_note")
-        note.set_current_page(index)
+        self.main_note.set_current_page(index)
 
     def onLogout(self, *args):
         os.system("mate-session-save --logout")
