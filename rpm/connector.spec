@@ -46,6 +46,11 @@ install -pDm644 kiosk.access %buildroot%_sysconfdir/%name/kiosk.access
 %config(noreplace) %_sysconfdir/%name/kiosk.access
 
 %changelog
+* Wed Mar 07 2018 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.5.4-alt1
+- Added choise of the default tab on main window
+- Changed label's default folder to 'Desktop'
+- [kiosk] Notifications disabled, when ACCESS=OFF
+
 * Tue Dec 12 2017 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.5.3-alt2
 - Fixed version
 
