@@ -55,7 +55,7 @@ class Gui:
         self.builder.add_from_file("data/gui.glade")
         self.builder.connect_signals(self)
         self.window = self.builder.get_object("main_window")
-        self.window.set_title("Connector v." + VERSION)
+        self.window.set_title("Connector")
         self.statusbar = self.builder.get_object("statusbar")
         self.liststore = {'RDP' : self.builder.get_object("liststore_RDP"),
                           'VNC' : self.builder.get_object("liststore_VNC"),
@@ -110,7 +110,7 @@ class Gui:
         about.set_program_name("Connector")
         comments = """Программа-фронтэнд для удаленного администрирования 
                       компьютеров с различными операционными системами. 
-                      Поддерживаются все распространненные типы подключения.""".replace('  ','')
+                      Поддерживается большинство распространенных типов подключения.""".replace('  ','')
         about.set_comments(comments)
         about.set_version(VERSION + " (release: " + RELEASE + ')')
         about.set_website("http://www.myconnector.ru")
