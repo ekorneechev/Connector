@@ -903,16 +903,16 @@ class Gui:
 
     def correctProgram(self, parameters):
         """Функция проверки корректности параметров для запускаемой программы
-           - VNC - в remmina 10 параметров подключения, RDP - 13.
+           - VNC - в remmina 11 параметров подключения, RDP - 14.
             Так как функционал в Remmina расширять не планируется, за основу при проверке берутся эти числа"""
         self.whatProgram = properties.loadFromFile('default.conf')
         if parameters[0] == 'VNC':
-            if self.whatProgram['VNC'] == 0 and len(parameters) == 10: return True
-            elif self.whatProgram['VNC'] == 1 and len(parameters) != 10: return True
+            if self.whatProgram['VNC'] == 0 and len(parameters) == 11: return True
+            elif self.whatProgram['VNC'] == 1 and len(parameters) != 11: return True
             else: return False
         if parameters[0] == 'RDP':
-            if self.whatProgram['RDP'] == 0 and len(parameters) == 13: return True
-            elif self.whatProgram['RDP'] == 1 and len(parameters) !=13: return True
+            if self.whatProgram['RDP'] == 0 and len(parameters) == 14: return True
+            elif self.whatProgram['RDP'] == 1 and len(parameters) !=14: return True
             else: return False
         return True
 
@@ -934,6 +934,7 @@ class Gui:
         table, indexRow = treeView.get_selection().get_selected()
         nameConnect, fileCtor = table[indexRow][0], table[indexRow][3]
         parameters = properties.loadFromFile(fileCtor, self.window)
+        parameters.append(nameConnect)
         if parameters is not None: #если файл .ctor имеет верный формат
             if self.correctProgram(parameters):
                 protocol = parameters.pop(0) #извлекаем протокол из файла коннекта

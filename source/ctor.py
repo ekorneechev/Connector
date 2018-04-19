@@ -22,7 +22,7 @@ class Remmina:
             protocol = self.cfg['protocol']
             server, login = properties.searchSshUser(args[0])
             self.cfg['server'] = server
-            self.cfg['name'] += server
+            self.cfg['name'] = args.pop()
             if protocol == 'RDP':
                 #[user, domain, color, quality, resolution, viewmode, folder, printer, clipboard, sound]
                 self.cfg['username'] = args[1]                              
@@ -143,7 +143,8 @@ class XFreeRdp:
                     server = args
                     command = 'xfreerdp /f -sec-nla /v:' + args + params
                 else:
-                    command = 'xfreerdp /v:' + args[0]
+                    nameConnect = args.pop()
+                    command = 'xfreerdp /v:' + args[0] + " /t:" + nameConnect
                     if args[1]: command += ' /u:' + args[1]
                     if args[2]: command += ' /d:' + args[2]
                     if args[3]: command += ' /f'
