@@ -59,7 +59,7 @@ except FileNotFoundError:
 if OS == "altlinux":
     #Версия и релиз приложения
     package_info = subprocess.check_output("rpm -q connector; exit 0",shell=True, universal_newlines=True).strip().split('-')
-    try: RELEASE = package_info[2]
+    try: RELEASE = package_info[2].split('.')[0]
     except: RELEASE = "git"
 
     #Папка монтирования устройств
