@@ -20,6 +20,7 @@ def connectFile(filename):
         parameters = properties.loadFromFile(filename)
         if parameters != None:
             protocol = parameters.pop(0)
+            parameters.append(properties.nameFromFilename(filename))
             connect = definition(protocol)
             connect.start(parameters)
     except (IndexError, KeyError):

@@ -89,6 +89,17 @@ def filenameFromName(name):
         log.warning("Файл сохраненных подключений (connections.db) не найден!")
     return False
 
+def nameFromFilename(filename):
+    """Определение имени подключения по имени конфигурационного файла"""
+    try:
+        for connect in open(WORKFOLDER + "connections.db"):
+            record = connect.strip().split(':::')
+            if record[3] == filename:
+                return record[0]
+    except FileNotFoundError:
+        log.warning("Файл сохраненных подключений (connections.db) не найден!")
+    return False
+
 def searchName(name):
     """Существует ли подключение с указанным именем"""
     try:
