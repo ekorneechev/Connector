@@ -12,7 +12,7 @@ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 Для самостоятельной сборки deb-пакета Вам потребуется выполнить несколько команд: 
 * Установка необходимых для сборки пакетов:
 
-`sudo apt-get install dpkg debconf debhelper lintian`
+`sudo apt-get install dpkg debconf debhelper lintian md5deep`
 
 * Выполнение скрипта сборки DEB-пакета:
 

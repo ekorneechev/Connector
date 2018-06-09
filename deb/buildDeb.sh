@@ -13,6 +13,10 @@ mv connector/usr/share/connector/data/connector.man connector/usr/share/man/man1
 mv connector/usr/share/connector/data/kiosk.access connector/etc/connector
 chmod 755 connector/usr/bin/connector
 mkdir -p connector/DEBIAN
+cd connector
+md5deep -rl usr > DEBIAN/md5sums
+md5deep -rl etc >> DEBIAN/md5sums
+cd ..
 cp control conffiles connector/DEBIAN/
 fakeroot dpkg-deb --build connector
 mv connector.deb connector_`grep Version control | sed s/Version:\ //g`_all.deb
