@@ -12,12 +12,14 @@ mv connector/usr/share/connector/data/connector.desktop connector/usr/share/appl
 mv connector/usr/share/connector/data/connector.man connector/usr/share/man/man1/connector.1
 mv connector/usr/share/connector/data/kiosk.access connector/etc/connector
 chmod 755 connector/usr/bin/connector
+INST_SIZE=`du -s connector | cut -f 1`
 mkdir -p connector/DEBIAN
 cd connector
 md5deep -rl usr > DEBIAN/md5sums
 md5deep -rl etc >> DEBIAN/md5sums
 cd ..
 cp control conffiles connector/DEBIAN/
+sed -i "s\Installed-Size:\Installed-Size: $INST_SIZE\g" connector/DEBIAN/control
 fakeroot dpkg-deb --build connector
 mv connector.deb connector_`grep Version control | sed s/Version:\ //g`_all.deb
 rm -r connector/
