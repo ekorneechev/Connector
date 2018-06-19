@@ -402,6 +402,9 @@ class Gui:
                 self.RDP_down.set_active(False)
                 self.RDP_docs.set_active(False)
 
+        if protocol == 'SPICE':
+            pass
+
     def initPreferences(self, protocol):
         """В этой функции определяются различные для протоколов параметры"""
         if protocol == 'RDP' and self.whatProgram['RDP'] == 0:
@@ -520,6 +523,9 @@ class Gui:
             self.VMWARE_domain = self.pref_builder.get_object("entry_VMWARE_dom")
             self.VMWARE_password = self.pref_builder.get_object("entry_VMWARE_pwd")
             self.VMWARE_fullscreen = self.pref_builder.get_object("check_VMWARE_fullscreen")
+
+        if protocol == 'SPICE':
+            pass
 
     def applyPreferences(self, protocol):
         """В этой функции параметры для подключения собираются из окна Доп. параметры в список"""
@@ -706,6 +712,9 @@ class Gui:
                 keyfile = self.SFTP_path_keyfile.get_filename()
             else: keyfile = ''
             args = [user, SSH_auth, keyfile, charset, execpath]    
+
+        if protocol == 'SPICE':
+            pass
 
         return args
 

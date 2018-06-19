@@ -80,6 +80,8 @@ class Remmina:
                 self.cfg['ssh_privatekey'] = args[3]
                 self.cfg['ssh_charset'] = args[4]
                 self.cfg['execpath'] = args[5]
+            if protocol == 'SPICE':
+                pass
         else:
             server, login = properties.searchSshUser(args)
             if login: self.cfg['ssh_username'] = login
@@ -236,6 +238,10 @@ class SshRemmina(Remmina):
         self.cfg['exec'] = ''
         self.f_name = '.tmp_SSH.remmina'
 
+class SpiceRemmina(Remmina):
+    """Класс для настройки SPICE-соединения через Remmina"""
+    pass
+
 class Vmware:
     """Класс для настройки соединения к VMWare серверу"""
     def start(self, args):
@@ -317,6 +323,8 @@ def definition(protocol):
         connect = Citrix()
     elif protocol == 'WEB':
         connect = Web()
+    elif protocol == 'SPICE':
+        connect = SpiceRemmina()
     return connect
 
 def citrixCheck():
