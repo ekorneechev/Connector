@@ -5,6 +5,8 @@ php_value mbstring.http_input auto
 php_value date.timezone Europe/Moscow
 Options +FollowSymLinks
 RewriteEngine On
-RewriteCond %{HTTP_HOST} ^([^www].*)$
-RewriteRule ^(.*)$ http://www.%1/$1 [L,R=301]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^([^.]+)$ $1.html [NC,L]
+RewriteCond %{HTTP_HOST} ^www\.(.*) [NC]
+RewriteRule ^(.*)$ http://%1/$1 [R=301,L]
 ErrorDocument 404 "/404.html"
