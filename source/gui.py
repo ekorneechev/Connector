@@ -193,7 +193,11 @@ class Gui:
             if self.prefClick: #если нажата кнопка Доп. Параметры
                 parameters = self.applyPreferences(protocol)
                 parameters.insert(0, server)
-                connect.start(parameters)
+                try:
+                    connect.start(parameters)
+                except TypeError:
+                    parameters.append(server)
+                    connect.start(parameters)
             else: connect.start(server)
             viewStatus(self.statusbar, "Подключение к серверу " + server + "...")
             self.writeServerInDb(entry)
