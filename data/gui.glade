@@ -763,7 +763,7 @@
                             <property name="spacing">5</property>
                             <child>
                               <object class="GtkComboBox" id="combo_serv_RDP">
-                                <property name="width_request">210</property>
+                                <property name="width_request">250</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="model">liststore_RDP</property>
@@ -879,7 +879,7 @@
                             <property name="spacing">5</property>
                             <child>
                               <object class="GtkComboBox" id="combo_serv_NX">
-                                <property name="width_request">210</property>
+                                <property name="width_request">250</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="model">liststore_NX</property>
@@ -1027,7 +1027,7 @@
                             <property name="spacing">5</property>
                             <child>
                               <object class="GtkComboBox" id="combo_serv_VNC">
-                                <property name="width_request">210</property>
+                                <property name="width_request">250</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="model">liststore_VNC</property>
@@ -1151,7 +1151,7 @@
                             <property name="spacing">5</property>
                             <child>
                               <object class="GtkComboBox" id="combo_serv_XDMCP">
-                                <property name="width_request">210</property>
+                                <property name="width_request">250</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="model">liststore_XDMCP</property>
@@ -1271,7 +1271,7 @@
                             <property name="spacing">5</property>
                             <child>
                               <object class="GtkComboBox" id="combo_serv_VMWARE">
-                                <property name="width_request">210</property>
+                                <property name="width_request">250</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="model">liststore_VMWARE</property>
@@ -1390,7 +1390,7 @@
                             <property name="halign">center</property>
                             <child>
                               <object class="GtkComboBox" id="combo_serv_CITRIX">
-                                <property name="width_request">210</property>
+                                <property name="width_request">250</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="model">liststore_CITRIX</property>
@@ -1435,10 +1435,11 @@
                             </child>
                             <child>
                               <object class="GtkEntry" id="entry_CITRIX_name">
-                                <property name="width_request">210</property>
+                                <property name="width_request">250</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="placeholder_text" translatable="yes">Пример, MyServer</property>
+                                <property name="tooltip_text" translatable="yes">Введите имя для сохраняемого подключения</property>
                                 <signal name="activate" handler="onWCSave" object="entry_serv_CITRIX" swapped="no"/>
                                 <signal name="changed" handler="inputName" object="button_CITRIX_save" swapped="no"/>
                               </object>
@@ -1538,7 +1539,7 @@
                             <property name="spacing">5</property>
                             <child>
                               <object class="GtkComboBox" id="combo_serv_SSH">
-                                <property name="width_request">210</property>
+                                <property name="width_request">250</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="model">liststore_SSH</property>
@@ -1658,7 +1659,7 @@
                             <property name="spacing">5</property>
                             <child>
                               <object class="GtkComboBox" id="combo_serv_SFTP">
-                                <property name="width_request">210</property>
+                                <property name="width_request">250</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="model">liststore_SFTP</property>
@@ -1807,6 +1808,7 @@
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="placeholder_text" translatable="yes">Пример, MyServer</property>
+                                <property name="tooltip_text" translatable="yes">Введите имя для сохраняемого подключения</property>
                                 <signal name="activate" handler="onWCSave" object="entry_serv_WEB" swapped="no"/>
                                 <signal name="changed" handler="inputName" object="button_WEB_save" swapped="no"/>
                               </object>
