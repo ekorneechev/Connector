@@ -66,7 +66,8 @@ class Gui:
                           'CITRIX' : self.builder.get_object("liststore_CITRIX"),
                           'XDMCP' : self.builder.get_object("liststore_XDMCP"),
                           'NX' : self.builder.get_object("liststore_NX"),
-                          'WEB' : self.builder.get_object("liststore_WEB")}
+                          'WEB' : self.builder.get_object("liststore_WEB"),
+                          'SPICE' : self.builder.get_object("liststore_SPICE")}
 
         self.liststore_connect = Gtk.ListStore(str, str, str, str)
         self.getSavesFromDb()#запись из файла в ListStore
@@ -403,7 +404,16 @@ class Gui:
                 self.RDP_docs.set_active(False)
 
         if protocol == 'SPICE':
-            pass
+            if args[1]: self.SPICE_tls.set_active(True)
+            if args[2]: self.SPICE_viewonly.set_active(True)
+            if args[3]: self.SPICE_resize.set_active(True)
+            if args[4]: self.SPICE_clipboard.set_active(False)
+            if args[5]: self.SPICE_cards.set_active(True)
+            if args[6]: self.SPICE_sound.set_active(True)
+            if args[7] == '': self.SPICE_CA.set_active(False)
+            else:
+                self.SPICE_CA.set_active(True)
+                self.SPICE_cacert.set_filename(args[7])
 
     def initPreferences(self, protocol):
         """В этой функции определяются различные для протоколов параметры"""
@@ -525,7 +535,14 @@ class Gui:
             self.VMWARE_fullscreen = self.pref_builder.get_object("check_VMWARE_fullscreen")
 
         if protocol == 'SPICE':
-            pass
+            self.SPICE_tls = self.pref_builder.get_object("check_SPICE_tls")
+            self.SPICE_viewonly = self.pref_builder.get_object("check_SPICE_viewonly")
+            self.SPICE_resize = self.pref_builder.get_object("check_SPICE_resize")
+            self.SPICE_clipboard = self.pref_builder.get_object("check_SPICE_clipboard")
+            self.SPICE_cards = self.pref_builder.get_object("check_SPICE_cards")
+            self.SPICE_sound = self.pref_builder.get_object("check_SPICE_sound")
+            self.SPICE_CA = self.pref_builder.get_object("check_SPICE_CA")
+            self.SPICE_cacert = self.pref_builder.get_object("SPICE_CA")
 
     def applyPreferences(self, protocol):
         """В этой функции параметры для подключения собираются из окна Доп. параметры в список"""
@@ -714,7 +731,21 @@ class Gui:
             args = [user, SSH_auth, keyfile, charset, execpath]    
 
         if protocol == 'SPICE':
-            pass
+            if self.SPICE_tls.get_active(): tls = 1
+            else: tls = 0
+            if self.SPICE_viewonly.get_active(): viewonly = 1
+            else: viewonly = 0
+            if self.SPICE_resize.get_active(): resize = 1
+            else: resize = 0
+            if self.SPICE_clipboard.get_active(): clipboard = 0
+            else: clipboard = 1
+            if self.SPICE_cards.get_active(): cards = 1
+            else: cards = 0
+            if self.SPICE_sound.get_active(): sound = 1
+            else: sound = 0
+            if self.SPICE_CA.get_active(): cacert = self.SPICE_cacert.get_filename()
+            else: cacert = ''
+            args = [tls, viewonly, resize, clipboard, cards, sound, cacert]
 
         return args
 

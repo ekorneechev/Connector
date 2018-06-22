@@ -81,7 +81,14 @@ class Remmina:
                 self.cfg['ssh_charset'] = args[4]
                 self.cfg['execpath'] = args[5]
             if protocol == 'SPICE':
-                pass
+                #[tls, viewonly, resize, clipboard, cards, sound, cacert]
+                self.cfg['usetls'] = args[1]
+                self.cfg['viewonly'] = args[2]
+                self.cfg['resizeguest'] = args[3]
+                self.cfg['disableclipboard'] = args[4]
+                self.cfg['sharesmartcard'] = args[5]
+                self.cfg['enableaudio'] = args[6]
+                self.cfg['cacert'] = args[7]
         else:
             server, login = properties.searchSshUser(args)
             if login: self.cfg['ssh_username'] = login
@@ -240,7 +247,12 @@ class SshRemmina(Remmina):
 
 class SpiceRemmina(Remmina):
     """Класс для настройки SPICE-соединения через Remmina"""
-    pass
+    def __init__(self):
+        self.cfg = dict(name='SPICE-connection: ', protocol='SPICE', ssh_enabled=0, ssh_auth=0,
+                        disableclipboard=0, ssh_privatekey='', usertls=0, ssh_username='',
+                        enableaudio=0, password='', cacert='', server='', ssh_loopback=0,
+                        resizeguest=0, sharesmartcard=0, ssh_server='', viewonly=0)
+        self.f_name = '.tmp_SPICE.remmina'
 
 class Vmware:
     """Класс для настройки соединения к VMWare серверу"""

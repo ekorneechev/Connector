@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.0 -->
+<!-- Generated with glade 3.20.1 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkImage" id="CITRIX_image">
@@ -21,6 +21,11 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="pixbuf">SFTP.png</property>
+  </object>
+  <object class="GtkImage" id="SPICE_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">SPICE.png</property>
   </object>
   <object class="GtkImage" id="SSH_image">
     <property name="visible">True</property>
@@ -204,6 +209,23 @@
       </attributes>
     </child>
   </object>
+  <object class="GtkListStore" id="liststore_SPICE">
+    <columns>
+      <!-- column-name server -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkEntryCompletion" id="completion_SPICE">
+    <property name="model">liststore_SPICE</property>
+    <property name="text_column">0</property>
+    <property name="inline_completion">True</property>
+    <child>
+      <object class="GtkCellRendererText" id="cellrenderertext_spice"/>
+      <attributes>
+        <attribute name="text">0</attribute>
+      </attributes>
+    </child>
+  </object>
   <object class="GtkListStore" id="liststore_SSH">
     <columns>
       <!-- column-name server -->
@@ -344,6 +366,12 @@
     <property name="icon_size">1</property>
   </object>
   <object class="GtkImage" id="preferences_image7">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-preferences</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="preferences_image8">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="stock">gtk-preferences</property>
@@ -560,6 +588,16 @@
                       </object>
                     </child>
                     <child>
+                      <object class="GtkImageMenuItem" id="menu_connect_SPICE">
+                        <property name="label" translatable="yes">SPICE - Простой протокол для независимых вычислительных сред</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="image">SPICE_image</property>
+                        <property name="use_stock">False</property>
+                        <signal name="activate" handler="onButtonPref" object="entry_serv_SPICE" swapped="no"/>
+                      </object>
+                    </child>
+                    <child>
                       <object class="GtkImageMenuItem" id="menu_connect_VMWARE">
                         <property name="label" translatable="yes">VMware - Подключение к виртуальной машине VMware</property>
                         <property name="name">VMWARE</property>
@@ -763,7 +801,7 @@
                             <property name="spacing">5</property>
                             <child>
                               <object class="GtkComboBox" id="combo_serv_RDP">
-                                <property name="width_request">210</property>
+                                <property name="width_request">250</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="model">liststore_RDP</property>
@@ -879,7 +917,7 @@
                             <property name="spacing">5</property>
                             <child>
                               <object class="GtkComboBox" id="combo_serv_NX">
-                                <property name="width_request">210</property>
+                                <property name="width_request">250</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="model">liststore_NX</property>
@@ -1027,7 +1065,7 @@
                             <property name="spacing">5</property>
                             <child>
                               <object class="GtkComboBox" id="combo_serv_VNC">
-                                <property name="width_request">210</property>
+                                <property name="width_request">250</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="model">liststore_VNC</property>
@@ -1151,7 +1189,7 @@
                             <property name="spacing">5</property>
                             <child>
                               <object class="GtkComboBox" id="combo_serv_XDMCP">
-                                <property name="width_request">210</property>
+                                <property name="width_request">250</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="model">liststore_XDMCP</property>
@@ -1240,6 +1278,126 @@
                       </packing>
                     </child>
                     <child>
+                      <object class="GtkBox" id="box_SPICE">
+                        <property name="width_request">300</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="valign">center</property>
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="GtkLabel" id="label_SPICE">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">Простой протокол для независимых вычислительных сред</property>
+                            <attributes>
+                              <attribute name="underline" value="True"/>
+                            </attributes>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="boxspice">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">center</property>
+                            <property name="margin_top">20</property>
+                            <property name="margin_bottom">20</property>
+                            <property name="spacing">5</property>
+                            <child>
+                              <object class="GtkComboBox" id="combo_serv_SPICE">
+                                <property name="width_request">250</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="model">liststore_SPICE</property>
+                                <property name="has_entry">True</property>
+                                <property name="entry_text_column">0</property>
+                                <child internal-child="entry">
+                                  <object class="GtkEntry" id="entry_serv_SPICE">
+                                    <property name="name">SPICE</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="tooltip_text" translatable="yes">Поддерживается следующий формат:
+ - сервер
+ - сервер:порт</property>
+                                    <property name="primary_icon_pixbuf">SPICE.png</property>
+                                    <property name="placeholder_text" translatable="yes">Введите адрес сервера...</property>
+                                    <property name="completion">completion_SPICE</property>
+                                    <signal name="activate" handler="onButtonConnect" swapped="no"/>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="button_connect_SPICE">
+                                <property name="label" translatable="yes">_Подключение</property>
+                                <property name="width_request">130</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <property name="tooltip_text" translatable="yes">Быстрое подключение с настройками по умолчанию</property>
+                                <property name="halign">start</property>
+                                <property name="use_underline">True</property>
+                                <signal name="clicked" handler="onButtonConnect" object="entry_serv_SPICE" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="button_pref_SPICE">
+                            <property name="label" translatable="yes">Дополнительные параметры</property>
+                            <property name="width_request">230</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="tooltip_text" translatable="yes">Открыть окно дополнительных параметров подключения</property>
+                            <property name="halign">center</property>
+                            <property name="image">preferences_image8</property>
+                            <property name="always_show_image">True</property>
+                            <signal name="clicked" handler="onButtonPref" object="entry_serv_SPICE" swapped="no"/>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">2</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="position">4</property>
+                      </packing>
+                    </child>
+                    <child type="tab">
+                      <object class="GtkLabel" id="list_SPICE">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">SPICE</property>
+                        <property name="width_chars">8</property>
+                      </object>
+                      <packing>
+                        <property name="position">4</property>
+                        <property name="tab_fill">False</property>
+                      </packing>
+                    </child>
+                    <child>
                       <object class="GtkBox" id="box_VMWARE">
                         <property name="width_request">300</property>
                         <property name="visible">True</property>
@@ -1271,7 +1429,7 @@
                             <property name="spacing">5</property>
                             <child>
                               <object class="GtkComboBox" id="combo_serv_VMWARE">
-                                <property name="width_request">210</property>
+                                <property name="width_request">250</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="model">liststore_VMWARE</property>
@@ -1344,7 +1502,7 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="position">4</property>
+                        <property name="position">5</property>
                       </packing>
                     </child>
                     <child type="tab">
@@ -1355,7 +1513,7 @@
                         <property name="width_chars">8</property>
                       </object>
                       <packing>
-                        <property name="position">4</property>
+                        <property name="position">5</property>
                         <property name="tab_fill">False</property>
                       </packing>
                     </child>
@@ -1390,7 +1548,7 @@
                             <property name="halign">center</property>
                             <child>
                               <object class="GtkComboBox" id="combo_serv_CITRIX">
-                                <property name="width_request">210</property>
+                                <property name="width_request">250</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="model">liststore_CITRIX</property>
@@ -1435,9 +1593,10 @@
                             </child>
                             <child>
                               <object class="GtkEntry" id="entry_CITRIX_name">
-                                <property name="width_request">210</property>
+                                <property name="width_request">250</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="tooltip_text" translatable="yes">Введите имя для сохраняемого подключения</property>
                                 <property name="placeholder_text" translatable="yes">Пример, MyServer</property>
                                 <signal name="activate" handler="onWCSave" object="entry_serv_CITRIX" swapped="no"/>
                                 <signal name="changed" handler="inputName" object="button_CITRIX_save" swapped="no"/>
@@ -1491,7 +1650,7 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="position">5</property>
+                        <property name="position">6</property>
                       </packing>
                     </child>
                     <child type="tab">
@@ -1502,7 +1661,7 @@
                         <property name="width_chars">8</property>
                       </object>
                       <packing>
-                        <property name="position">5</property>
+                        <property name="position">6</property>
                         <property name="tab_fill">False</property>
                       </packing>
                     </child>
@@ -1538,7 +1697,7 @@
                             <property name="spacing">5</property>
                             <child>
                               <object class="GtkComboBox" id="combo_serv_SSH">
-                                <property name="width_request">210</property>
+                                <property name="width_request">250</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="model">liststore_SSH</property>
@@ -1611,7 +1770,7 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="position">6</property>
+                        <property name="position">7</property>
                       </packing>
                     </child>
                     <child type="tab">
@@ -1622,7 +1781,7 @@
                         <property name="width_chars">8</property>
                       </object>
                       <packing>
-                        <property name="position">6</property>
+                        <property name="position">7</property>
                         <property name="tab_fill">False</property>
                       </packing>
                     </child>
@@ -1658,7 +1817,7 @@
                             <property name="spacing">5</property>
                             <child>
                               <object class="GtkComboBox" id="combo_serv_SFTP">
-                                <property name="width_request">210</property>
+                                <property name="width_request">250</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="model">liststore_SFTP</property>
@@ -1731,7 +1890,7 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="position">7</property>
+                        <property name="position">8</property>
                       </packing>
                     </child>
                     <child type="tab">
@@ -1742,7 +1901,7 @@
                         <property name="width_chars">8</property>
                       </object>
                       <packing>
-                        <property name="position">7</property>
+                        <property name="position">8</property>
                         <property name="tab_fill">False</property>
                       </packing>
                     </child>
@@ -1806,6 +1965,7 @@
                                 <property name="width_request">210</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
+                                <property name="tooltip_text" translatable="yes">Введите имя для сохраняемого подключения</property>
                                 <property name="placeholder_text" translatable="yes">Пример, MyServer</property>
                                 <signal name="activate" handler="onWCSave" object="entry_serv_WEB" swapped="no"/>
                                 <signal name="changed" handler="inputName" object="button_WEB_save" swapped="no"/>
@@ -1860,7 +2020,7 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="position">8</property>
+                        <property name="position">9</property>
                       </packing>
                     </child>
                     <child type="tab">
@@ -1871,7 +2031,7 @@
                         <property name="width_chars">8</property>
                       </object>
                       <packing>
-                        <property name="position">8</property>
+                        <property name="position">9</property>
                         <property name="tab_fill">False</property>
                       </packing>
                     </child>
@@ -2052,6 +2212,9 @@
           </packing>
         </child>
       </object>
+    </child>
+    <child type="titlebar">
+      <placeholder/>
     </child>
   </object>
 </interface>
