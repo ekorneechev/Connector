@@ -144,7 +144,7 @@ class XFreeRdp:
                     command = 'xfreerdp /f -sec-nla /v:' + args + params
                 else:
                     nameConnect = args.pop()
-                    command = 'xfreerdp /v:' + args[0] + " /t:" + nameConnect
+                    command = 'xfreerdp /v:' + args[0] + " /t:'" + nameConnect + "'"
                     if args[1]: command += ' /u:' + args[1]
                     if args[2]: command += ' /d:' + args[2]
                     if args[3]: command += ' /f'
