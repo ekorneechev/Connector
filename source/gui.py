@@ -67,7 +67,8 @@ class Gui:
                           'XDMCP' : self.builder.get_object("liststore_XDMCP"),
                           'NX' : self.builder.get_object("liststore_NX"),
                           'WEB' : self.builder.get_object("liststore_WEB"),
-                          'SPICE' : self.builder.get_object("liststore_SPICE")}
+                          'SPICE' : self.builder.get_object("liststore_SPICE"),
+                          'FS' : self.builder.get_object("liststore_FS")}
 
         self.liststore_connect = Gtk.ListStore(str, str, str, str)
         self.getSavesFromDb()#запись из файла в ListStore
@@ -416,6 +417,9 @@ class Gui:
                 self.SPICE_CA.set_active(True)
                 self.SPICE_cacert.set_filename(args[7])
 
+        if protocol == 'FS':
+            pass
+
     def initPreferences(self, protocol):
         """В этой функции определяются различные для протоколов параметры"""
         if protocol == 'RDP' and self.whatProgram['RDP'] == 0:
@@ -544,6 +548,9 @@ class Gui:
             self.SPICE_sound = self.pref_builder.get_object("check_SPICE_sound")
             self.SPICE_CA = self.pref_builder.get_object("check_SPICE_CA")
             self.SPICE_cacert = self.pref_builder.get_object("SPICE_CA")
+
+        if protocol == 'FS':
+            pass
 
     def applyPreferences(self, protocol):
         """В этой функции параметры для подключения собираются из окна Доп. параметры в список"""
@@ -747,6 +754,9 @@ class Gui:
             if self.SPICE_CA.get_active(): cacert = self.SPICE_cacert.get_filename()
             else: cacert = ''
             args = [tls, viewonly, resize, clipboard, cards, sound, cacert]
+
+        if protocol == 'FS':
+            pass
 
         return args
 

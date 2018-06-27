@@ -310,6 +310,25 @@ class Web:
         properties.log.info (command)
         os.system ( command + STD_TO_LOG)
 
+class FileServer:
+    """Класс для настройки подключения к файловому серверу"""
+    def start(self, args):
+        if type(args) == str:
+            if  not args.find("://") != -1:
+                os.system("zenity --warning --text='Введите протокол подключения!'")
+            else:
+                command = 'xdg-open ' + args
+                server = args
+        else:
+            #нужно собрать полученные параметры в формат "протокол://[имя_пользователя@]сервер[:порт]/[папка]"
+            command = 'xdg-open '#
+            #if args[1]: command += args[1]
+            #if args[2]: command += args[2]
+            server = args[0]
+        properties.log.info ("Открытие файлового сервера %s. Команда запуска:", server)
+        properties.log.info (command)
+        os.system (command + STD_TO_LOG)
+
 def definition(protocol):
     """Функция определения протокола"""
     whatProgram = properties.loadFromFile('default.conf') #загрузка параметров с выбором программ для подключения
@@ -337,6 +356,8 @@ def definition(protocol):
         connect = Web()
     elif protocol == 'SPICE':
         connect = SpiceRemmina()
+    elif protocol == 'FS':
+        connect = FileServer()
     return connect
 
 def citrixCheck():
