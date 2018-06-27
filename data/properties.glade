@@ -722,7 +722,7 @@
         </child>
         <child>
           <object class="GtkButton" id="button_cancel">
-            <property name="label" translatable="yes">Закрыть</property>
+            <property name="label" translatable="yes">Отмена</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>

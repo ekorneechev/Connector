@@ -194,6 +194,7 @@ class Gui:
             if self.prefClick: #если нажата кнопка Доп. Параметры
                 parameters = self.applyPreferences(protocol)
                 parameters.insert(0, server)
+                parameters.append(server) #для заголовка окна
                 connect.start(parameters)
             else: connect.start(server)
             viewStatus(self.statusbar, "Подключение к серверу " + server + "...")

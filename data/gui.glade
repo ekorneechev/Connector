@@ -1598,6 +1598,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="tooltip_text" translatable="yes">Введите имя для сохраняемого подключения</property>
                                 <property name="placeholder_text" translatable="yes">Пример, MyServer</property>
+                                <property name="tooltip_text" translatable="yes">Введите имя для сохраняемого подключения</property>
                                 <signal name="activate" handler="onWCSave" object="entry_serv_CITRIX" swapped="no"/>
                                 <signal name="changed" handler="inputName" object="button_CITRIX_save" swapped="no"/>
                               </object>
@@ -1967,6 +1968,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="tooltip_text" translatable="yes">Введите имя для сохраняемого подключения</property>
                                 <property name="placeholder_text" translatable="yes">Пример, MyServer</property>
+                                <property name="tooltip_text" translatable="yes">Введите имя для сохраняемого подключения</property>
                                 <signal name="activate" handler="onWCSave" object="entry_serv_WEB" swapped="no"/>
                                 <signal name="changed" handler="inputName" object="button_WEB_save" swapped="no"/>
                               </object>
