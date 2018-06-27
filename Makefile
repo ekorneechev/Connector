@@ -29,6 +29,7 @@ install:
 	install -m644 data/$(TARGET).man $(MAN)/$(TARGET).1
 	mkdir -p $(ETC)
 	install -m644 data/$(KIOSK) $(ETC)
+	make clean
 
 uninstall:
 	rm -f $(PREFIX_BIN)/$(TARGET)
