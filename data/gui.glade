@@ -7,6 +7,11 @@
     <property name="can_focus">False</property>
     <property name="pixbuf">CITRIX.png</property>
   </object>
+  <object class="GtkImage" id="FS_image">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="pixbuf">FS.png</property>
+  </object>
   <object class="GtkImage" id="NX_image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -153,6 +158,23 @@
     <property name="inline_completion">True</property>
     <child>
       <object class="GtkCellRendererText" id="cellrenderertext8"/>
+      <attributes>
+        <attribute name="text">0</attribute>
+      </attributes>
+    </child>
+  </object>
+  <object class="GtkListStore" id="liststore_FS">
+    <columns>
+      <!-- column-name server -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkEntryCompletion" id="completion_FS">
+    <property name="model">liststore_FS</property>
+    <property name="text_column">0</property>
+    <property name="inline_completion">True</property>
+    <child>
+      <object class="GtkCellRendererText" id="cellrenderertext_fs"/>
       <attributes>
         <attribute name="text">0</attribute>
       </attributes>
@@ -372,6 +394,12 @@
     <property name="icon_size">1</property>
   </object>
   <object class="GtkImage" id="preferences_image8">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-preferences</property>
+    <property name="icon_size">1</property>
+  </object>
+  <object class="GtkImage" id="preferences_image9">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="stock">gtk-preferences</property>
@@ -662,6 +690,17 @@
                         <property name="image">image4</property>
                         <property name="use_stock">False</property>
                         <signal name="activate" handler="onWCMenu" swapped="no"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImageMenuItem" id="menu_connect_FS">
+                        <property name="label" translatable="yes">Подключение к файловому серверу</property>
+                        <property name="name">FS</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="image">FS_image</property>
+                        <property name="use_stock">False</property>
+                        <signal name="activate" handler="onButtonPref" object="entry_serv_FS" swapped="no"/>
                       </object>
                     </child>
                   </object>
@@ -1598,7 +1637,6 @@
                                 <property name="can_focus">True</property>
                                 <property name="tooltip_text" translatable="yes">Введите имя для сохраняемого подключения</property>
                                 <property name="placeholder_text" translatable="yes">Пример, MyServer</property>
-                                <property name="tooltip_text" translatable="yes">Введите имя для сохраняемого подключения</property>
                                 <signal name="activate" handler="onWCSave" object="entry_serv_CITRIX" swapped="no"/>
                                 <signal name="changed" handler="inputName" object="button_CITRIX_save" swapped="no"/>
                               </object>
@@ -1968,7 +2006,6 @@
                                 <property name="can_focus">True</property>
                                 <property name="tooltip_text" translatable="yes">Введите имя для сохраняемого подключения</property>
                                 <property name="placeholder_text" translatable="yes">Пример, MyServer</property>
-                                <property name="tooltip_text" translatable="yes">Введите имя для сохраняемого подключения</property>
                                 <signal name="activate" handler="onWCSave" object="entry_serv_WEB" swapped="no"/>
                                 <signal name="changed" handler="inputName" object="button_WEB_save" swapped="no"/>
                               </object>
@@ -2034,6 +2071,125 @@
                       </object>
                       <packing>
                         <property name="position">9</property>
+                        <property name="tab_fill">False</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="box_FS">
+                        <property name="width_request">300</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="valign">center</property>
+                        <property name="orientation">vertical</property>
+                        <child>
+                          <object class="GtkLabel" id="label_FS">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="label" translatable="yes">Подключение к файловому серверу</property>
+                            <attributes>
+                              <attribute name="underline" value="True"/>
+                            </attributes>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="boxfs">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="halign">center</property>
+                            <property name="margin_top">20</property>
+                            <property name="margin_bottom">20</property>
+                            <property name="spacing">5</property>
+                            <child>
+                              <object class="GtkComboBox" id="combo_serv_FS">
+                                <property name="width_request">250</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">False</property>
+                                <property name="model">liststore_FS</property>
+                                <property name="has_entry">True</property>
+                                <property name="entry_text_column">0</property>
+                                <child internal-child="entry">
+                                  <object class="GtkEntry" id="entry_serv_FS">
+                                    <property name="name">FS</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="tooltip_text" translatable="yes">Поддерживается следующий формат:
+ - протокол://[имя_пользователя@]сервер[:порт]/[папка]</property>
+                                    <property name="primary_icon_pixbuf">FS.png</property>
+                                    <property name="placeholder_text" translatable="yes">Введите адрес сервера...</property>
+                                    <property name="completion">completion_FS</property>
+                                    <signal name="activate" handler="onButtonConnect" swapped="no"/>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">True</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="button_connect_FS">
+                                <property name="label" translatable="yes">_Подключение</property>
+                                <property name="width_request">130</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <property name="tooltip_text" translatable="yes">Быстрое подключение с настройками по умолчанию</property>
+                                <property name="halign">start</property>
+                                <property name="use_underline">True</property>
+                                <signal name="clicked" handler="onButtonConnect" object="entry_serv_FS" swapped="no"/>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="button_pref_FS">
+                            <property name="label" translatable="yes">Дополнительные параметры</property>
+                            <property name="width_request">230</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="tooltip_text" translatable="yes">Открыть окно дополнительных параметров подключения</property>
+                            <property name="halign">center</property>
+                            <property name="image">preferences_image9</property>
+                            <property name="always_show_image">True</property>
+                            <signal name="clicked" handler="onButtonPref" object="entry_serv_FS" swapped="no"/>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">2</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="position">10</property>
+                      </packing>
+                    </child>
+                    <child type="tab">
+                      <object class="GtkLabel" id="list_FS">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">FS</property>
+                        <property name="width_chars">8</property>
+                      </object>
+                      <packing>
+                        <property name="position">10</property>
                         <property name="tab_fill">False</property>
                       </packing>
                     </child>
