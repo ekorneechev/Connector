@@ -46,23 +46,31 @@
       </row>
       <row>
         <col id="0" translatable="yes">4</col>
-        <col id="1" translatable="yes">VMware</col>
+        <col id="1" translatable="yes">SPICE</col>
       </row>
       <row>
         <col id="0" translatable="yes">5</col>
-        <col id="1" translatable="yes">Citrix</col>
+        <col id="1" translatable="yes">VMware</col>
       </row>
       <row>
         <col id="0" translatable="yes">6</col>
-        <col id="1" translatable="yes">SSH</col>
+        <col id="1" translatable="yes">Citrix</col>
       </row>
       <row>
         <col id="0" translatable="yes">7</col>
-        <col id="1" translatable="yes">SFTP</col>
+        <col id="1" translatable="yes">SSH</col>
       </row>
       <row>
         <col id="0" translatable="yes">8</col>
+        <col id="1" translatable="yes">SFTP</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">9</col>
         <col id="1" translatable="yes">WEB</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">10</col>
+        <col id="1" translatable="yes">FS</col>
       </row>
     </data>
   </object>
