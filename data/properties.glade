@@ -338,7 +338,8 @@
                     <property name="width_request">185</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="tooltip_text" translatable="yes">Введите команду для подключения файловых ресурсов</property>
+                    <property name="tooltip_text" translatable="yes">Введите команду для подключения файловых ресурсов
+(по умолчанию берется из списка MIME-типов пользователя)</property>
                     <signal name="activate" handler="onSave" swapped="no"/>
                   </object>
                   <packing>
