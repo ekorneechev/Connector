@@ -161,6 +161,7 @@ class Properties(Gtk.Window):
         self.changeKioskCtor = builder.get_object("radio_kiosk_ctor")
         self.entryKioskConn = builder.get_object("entry_kiosk_ctor")
         self.boxKiosk = builder.get_object("frame_kiosk")
+        self.entryFS = builder.get_object("entry_FS")
         if KIOSK_OFF: self.boxKiosk.set_sensitive(0)
         self.defaultConf = loadFromFile('default.conf')
         if self.defaultConf['RDP']:
@@ -183,6 +184,8 @@ class Properties(Gtk.Window):
         except KeyError: self.combo_tabs.set_active_id('0')
         try: self.combo_main.set_active_id(self.defaultConf['MAIN'])
         except KeyError: self.combo_tabs.set_active_id('0')
+        try: self.entryFS.set_text(self.defaultConf['FILEMAN'])
+        except KeyError: self.entryFS.set_text('xdg-open')
         self.add(box)        
         self.connect("delete-event", self.onClose)
         cancel.connect("clicked", self.onCancel, self)
@@ -204,6 +207,7 @@ class Properties(Gtk.Window):
         else: self.defaultConf['VNC'] = 1
         self.defaultConf['TAB'] = self.combo_tabs.get_active_id()
         self.defaultConf['MAIN'] = self.combo_main.get_active_id()
+        self.defaultConf['FILEMAN'] = self.entryFS.get_text()
         save = False
         nameConn = self.entryKioskConn.get_text()
         if self.changeKioskAll.get_active():
