@@ -19,6 +19,7 @@ help:
 install:
 	sed -i s#/usr/share#$(PREFIX)#g {source/*,data/$(TARGET).desktop}
 	sed -i s#/usr/bin/$(TARGET)#$(PREFIX_BIN)/$(TARGET)#g {source/*,data/$(TARGET).desktop}
+	sed -i s#$(PREFIX)/applications#/usr/share/applications#g source/GLOBAL.py
 	install -m755 source/$(TARGET) $(PREFIX_BIN)
 	mkdir -p $(APS)
 	install -m644 data/$(TARGET).desktop $(APS)
