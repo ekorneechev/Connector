@@ -313,11 +313,13 @@ class Web:
 class FileServer:
     """Класс для настройки подключения к файловому серверу"""
     def start(self, args):
+        _exec = DEFAULT['FILEMAN'] + ' "'
         if type(args) == str:
             if  not args.find("://") != -1:
                 os.system("zenity --warning --text='Введите протокол подключения!'")
+                return 1
             else:
-                command = 'xdg-open ' + args
+                command = _exec + args + '"'
                 server = args
         else:
             #нужно собрать полученные параметры в формат "протокол://[имя_пользователя@]сервер[:порт]/[папка]"
