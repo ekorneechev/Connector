@@ -34,15 +34,15 @@ STDLOGFILE = LOGFOLDER + "all.log"
 STD_TO_LOG = ' >> ' + STDLOGFILE + " 2>&1 &"
 
 #Определение путей до папок пользователя
-dirs = {}
+_dirs = {}
 try:
-    for string in open(HOMEFOLDER + "/.config/user-dirs.dirs"):
-        if string[0] != "#":
-            name, value = string.strip().split('=')
-            dirs[name] = value
-    DESKFOLDER = dirs["XDG_DESKTOP_DIR"]
-    DOWNFOLDER = dirs["XDG_DOWNLOAD_DIR"]
-    DOCSFOLDER = dirs["XDG_DOCUMENTS_DIR"]
+    for _string in open(HOMEFOLDER + "/.config/user-dirs.dirs"):
+        if _string[0] != "#":
+            _name, _value = _string.strip().split('=')
+            _dirs[_name] = _value
+    DESKFOLDER = _dirs["XDG_DESKTOP_DIR"]
+    DOWNFOLDER = _dirs["XDG_DOWNLOAD_DIR"]
+    DOCSFOLDER = _dirs["XDG_DOCUMENTS_DIR"]
 except FileNotFoundError:
     DESKFOLDER = HOMEFOLDER + "Desktop"
     DOWNFOLDER = HOMEFOLDER + "Downloads"
@@ -50,23 +50,23 @@ except FileNotFoundError:
 
 #Ниже указаны параметры, зависящие от ОС
 try:
-    tmp = open("/etc/altlinux-release")
+    _tmp = open("/etc/altlinux-release")
     OS = "altlinux"
-    tmp.close()
+    _tmp.close()
 except FileNotFoundError:
     OS = subprocess.check_output("grep '^ID=' /etc/os-release; exit 0",shell=True, universal_newlines=True).strip().split('=')[1]
 
 if OS == "altlinux":
     #Версия и релиз приложения
-    package_info = subprocess.check_output("rpm -q connector; exit 0",shell=True, universal_newlines=True).strip().split('-')
-    try: RELEASE = package_info[2].split('.')[0]
+    _package_info = subprocess.check_output("rpm -q connector 2>/dev/null; exit 0",shell=True, universal_newlines=True).strip().split('-')
+    try: RELEASE = _package_info[2].split('.')[0]
     except: RELEASE = "git"
 
     #Папка монтирования устройств
-    udisks2 = subprocess.check_output("/usr/sbin/control udisks2; exit 0",shell=True, universal_newlines=True).strip()
-    if udisks2 == 'default':
+    _udisks2 = subprocess.check_output("/usr/sbin/control udisks2; exit 0",shell=True, universal_newlines=True).strip()
+    if _udisks2 == 'default':
         USBPATH = "/run/media/$USER"
-    if udisks2 == 'shared':
+    if _udisks2 == 'shared':
         USBPATH = "/media"
 
     #Команда проверки наличия в системе Citrix Receiver
@@ -79,10 +79,10 @@ if OS == "altlinux":
     MIMEAPPS = '$HOME/.config/mimeapps.list'
 
 elif OS == "linuxmint" or OS == "ubuntu":
-    package_info = subprocess.check_output("dpkg-query -W connector; exit 0",shell=True, universal_newlines=True).strip().split('\t')
+    _package_info = subprocess.check_output("dpkg-query -W connector 2>/dev/null; exit 0",shell=True, universal_newlines=True).strip().split('\t')
     try:
-        package_info = package_info[1].split("-")
-        RELEASE = package_info[1]
+        _package_info = _package_info[1].split("-")
+        RELEASE = _package_info[1]
     except: RELEASE = "git"
 
     USBPATH = "/media/$USER"
@@ -127,12 +127,12 @@ done
 """
 
 try:
-    for string in open("/etc/connector/kiosk.access"):
-        string = string.upper()
-        if string.find("ACCESS") == 0:
-            name, value = string.strip().split('=')
-            value = value.upper().strip()
-            if value == "1" or value == "ON" or value == "YES":
+    for _string in open("/etc/connector/kiosk.access"):
+        _string = _string.upper()
+        if _string.find("ACCESS") == 0:
+            _name, _value = _string.strip().split('=')
+            _value = _value.upper().strip()
+            if _value == "1" or _value == "ON" or _value == "YES":
                 KIOSK_OFF = False
             else: KIOSK_OFF = True
         else: KIOSK_OFF = True
@@ -144,8 +144,8 @@ if OS != "altlinux": KIOSK_OFF = True
 
 #Определение файлового менеджера с помощью файла mimeapps.list
 if OS == "altlinux" or OS == "linuxmint" or OS == "ubuntu":
-    desktopFile = subprocess.check_output("grep '^inode/directory' "+ MIMEAPPS + "; exit 0",shell=True, universal_newlines=True).strip().split('=')[1]
-    execCmd = subprocess.check_output("grep '^Exec=' /usr/share/applications/" + desktopFile + "; exit 0",shell=True, universal_newlines=True).strip().split('=')[1]
-    DEFAULT['FILEMAN'] = execCmd.split(' ')[0]
+    _desktopFile = subprocess.check_output("grep '^inode/directory' "+ MIMEAPPS + "; exit 0",shell=True, universal_newlines=True).strip().split('=')[1]
+    _execCmd = subprocess.check_output("grep '^Exec=' /usr/share/applications/" + _desktopFile + "; exit 0",shell=True, universal_newlines=True).strip().split('=')[1]
+    DEFAULT['FILEMAN'] = _execCmd.split(' ')[0]
 else:
     DEFAULT['FILEMAN'] = 'xdg-open'
