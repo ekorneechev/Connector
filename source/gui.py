@@ -418,7 +418,9 @@ class Gui:
                 self.SPICE_cacert.set_filename(args[7])
 
         if protocol == 'FS':
-            pass
+            self.FS_user.set_text(args[1])
+            self.FS_domain.set_text(args[2])
+            self.FS_folder.set_text(args[3])
 
     def initPreferences(self, protocol):
         """В этой функции определяются различные для протоколов параметры"""
@@ -550,7 +552,9 @@ class Gui:
             self.SPICE_cacert = self.pref_builder.get_object("SPICE_CA")
 
         if protocol == 'FS':
-            pass
+            self.FS_user = self.pref_builder.get_object("entry_FS_user")
+            self.FS_domain = self.pref_builder.get_object("entry_FS_dom")
+            self.FS_folder = self.pref_builder.get_object("entry_FS_folder")
 
     def applyPreferences(self, protocol):
         """В этой функции параметры для подключения собираются из окна Доп. параметры в список"""
@@ -756,7 +760,10 @@ class Gui:
             args = [tls, viewonly, resize, clipboard, cards, sound, cacert]
 
         if protocol == 'FS':
-            pass
+            user = self.FS_user.get_text()
+            domain = self.FS_domain.get_text()
+            folder = self.FS_folder.get_text()
+            args = [user, domain, folder]
 
         return args
 

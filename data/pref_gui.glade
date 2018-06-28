@@ -57,7 +57,7 @@
             <property name="entry_text_column">0</property>
             <child internal-child="entry">
               <object class="GtkEntry" id="entry_FS_serv">
-                <property name="name">RDP</property>
+                <property name="name">FS</property>
                 <property name="can_focus">True</property>
                 <property name="tooltip_text" translatable="yes">Поддерживается следующий формат:
  - протокол://сервер
@@ -227,6 +227,7 @@
             <property name="can_focus">True</property>
             <property name="placeholder_text" translatable="yes">Пример, MyServer</property>
             <signal name="activate" handler="onButtonSave" object="entry_FS_serv" swapped="no"/>
+            <signal name="changed" handler="inputName" object="button_FS_save" swapped="no"/>
           </object>
           <packing>
             <property name="expand">False</property>

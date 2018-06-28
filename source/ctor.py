@@ -322,12 +322,18 @@ class FileServer:
                 command = _exec + args + '"'
                 server = args
         else:
-            #нужно собрать полученные параметры в формат "протокол://[имя_пользователя@]сервер[:порт]/[папка]"
-            command = 'xdg-open '#
-            #if args[1]: command += args[1]
-            #if args[2]: command += args[2]
-            server = args[0]
-        properties.log.info ("Открытие файлового сервера %s. Команда запуска:", server)
+            if  not args[0].find("://") != -1:
+                os.system("zenity --warning --text='Введите протокол подключения!'")
+                return 1
+            else:
+                _protocol, _server = args[0].split("://")
+                command = _exec + _protocol + "://"
+                if args[2]: command += args[2] + ";"
+                if args[1]: command += args[1] + "@"
+                command += _server
+                if args[3]: command += '/' + args[3]
+                command += '"'
+        properties.log.info ("Открытие файлового сервера %s. Команда запуска:", args[0])
         properties.log.info (command)
         os.system (command + STD_TO_LOG)
 
