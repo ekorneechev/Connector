@@ -17,8 +17,10 @@ help:
 	@echo "... clean (сброс изменений в исходниках)"
 
 install:
-	sed -i s#/usr/share#$(PREFIX)#g {source/*,data/$(TARGET).desktop}
-	sed -i s#/usr/bin/$(TARGET)#$(PREFIX_BIN)/$(TARGET)#g {source/*,data/$(TARGET).desktop}
+	sed -i s#/usr/share#$(PREFIX)#g source/*
+	sed -i s#/usr/share#$(PREFIX)#g data/$(TARGET).desktop
+	sed -i s#/usr/bin/$(TARGET)#$(PREFIX_BIN)/$(TARGET)#g source/*
+	sed -i s#/usr/bin/$(TARGET)#$(PREFIX_BIN)/$(TARGET)#g data/$(TARGET).desktop
 	sed -i s#$(PREFIX)/applications#/usr/share/applications#g source/GLOBAL.py
 	install -m755 source/$(TARGET) $(PREFIX_BIN)
 	mkdir -p $(APS)
@@ -40,5 +42,7 @@ uninstall:
 	mv -f $(ETC)/$(KIOSK) $(ETC)/$(KIOSK).makesave
 
 clean:
-	sed -i s#$(PREFIX)#/usr/share#g {source/*,data/$(TARGET).desktop}
-	sed -i s#$(PREFIX_BIN)/$(TARGET)#/usr/bin/$(TARGET)#g {source/*,data/$(TARGET).desktop}
+	sed -i s#$(PREFIX)#/usr/share#g source/*
+	sed -i s#$(PREFIX)#/usr/share#g data/$(TARGET).desktop
+	sed -i s#$(PREFIX_BIN)/$(TARGET)#/usr/bin/$(TARGET)#g source/*
+	sed -i s#$(PREFIX_BIN)/$(TARGET)#/usr/bin/$(TARGET)#g data/$(TARGET).desktop
