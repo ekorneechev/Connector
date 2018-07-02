@@ -109,7 +109,7 @@ class VncRemmina(Remmina):
     def __init__(self):
         self.cfg = dict(keymap='', quality=9, disableencryption=0, colordepth=24, 
                        hscale=0, group='', password='', name='VNC-connection: ', viewonly=0, 
-                       disableclipboard=0, protocol='VNC', vscale=0, username='', 
+                       disableclipboard=0, protocol='VNC', vscale=0, username='', disablepasswordstoring=1,
                        showcursor=0, disableserverinput=0, server='',aspectscale=0,
                        window_maximize=1, window_width=800, window_height=600, viewmode=1)
         self.f_name = '.tmp_VNC.remmina' 
@@ -135,7 +135,7 @@ class RdpRemmina(Remmina):
     def __init__(self):
         self.cfg = dict(disableclipboard=0, clientname='', quality=0, console=0, sharesmartcard=0, 
                        resolution='', group='', password='', name='RDP-connection: ',
-                       shareprinter=0, security='', protocol='RDP', execpath='', 
+                       shareprinter=0, security='', protocol='RDP', execpath='', disablepasswordstoring=1,
                        sound='off', username='', sharefolder='', domain='', viewmode=3,
                        server='', colordepth=32, window_maximize=1, window_width=800, window_height=600)
         self.cfg['exec'] = ''
@@ -214,7 +214,7 @@ class NxRemmina(Remmina):
         self.cfg = dict(name='NX-connection: ', protocol='NX', quality=0, disableencryption=0,
                         resolution='',group='',password='',username='',NX_privatekey='',
                         showcursor=0, server='', disableclipboard=0, window_maximize=1,
-                        window_width=800, window_height=600, viewmode=4)
+                        window_width=800, window_height=600, viewmode=4, disablepasswordstoring=1)
         self.cfg['exec'] = ''
         self.f_name = '.tmp_NX.remmina'
 
@@ -223,7 +223,7 @@ class XdmcpRemmina(Remmina):
     def __init__(self):
         self.cfg = dict(resolution='', group='', password='', name='XDMCP-connection: ',
                         protocol='XDMCP', once=0, showcursor=0, server='',colordepth=0,
-                        window_maximize=1, viewmode=1, window_width=800, window_height=600)
+                        window_maximize=1, viewmode=1, window_width=800, window_height=600, disablepasswordstoring=1)
         self.cfg['exec'] = ''
         self.f_name = '.tmp_XDMCP.remmina'
 
@@ -233,7 +233,7 @@ class SftpRemmina(Remmina):
         self.cfg = dict(name='SFTP-connection: ', protocol='SFTP', ssh_enabled=1, ssh_auth=0, 
                         ssh_charset='UTF-8', ssh_privatekey='', username='', ssh_username='',
                         group='', password='', execpath='/', server='', window_maximize=0, 
-                        window_height=600, window_width=800, ftp_vpanedpos=360, viewmode=0)
+                        window_height=600, window_width=800, ftp_vpanedpos=360, viewmode=0, disablepasswordstoring=1)
         self.f_name = '.tmp_SFTP.remmina'
 
 class SshRemmina(Remmina):
@@ -241,7 +241,7 @@ class SshRemmina(Remmina):
     def __init__(self):
         self.cfg = dict(name='SSH-connection: ', protocol='SSH', ssh_auth=0, ssh_charset='UTF-8', 
                         ssh_privatekey='', group='', password='', username='', ssh_username='', ssh_enabled=1,
-                        server='', window_maximize=0, window_width=500, window_height=500, viewmode=0)
+                        server='', window_maximize=0, window_width=500, window_height=500, viewmode=0, disablepasswordstoring=1)
         self.cfg['exec'] = ''
         self.f_name = '.tmp_SSH.remmina'
 
@@ -251,7 +251,7 @@ class SpiceRemmina(Remmina):
         self.cfg = dict(name='SPICE-connection: ', protocol='SPICE', ssh_enabled=0, ssh_auth=0,
                         disableclipboard=0, ssh_privatekey='', usertls=0, ssh_username='',
                         enableaudio=0, password='', cacert='', server='', ssh_loopback=0,
-                        resizeguest=0, sharesmartcard=0, ssh_server='', viewonly=0)
+                        resizeguest=0, sharesmartcard=0, ssh_server='', viewonly=0, disablepasswordstoring=1)
         self.f_name = '.tmp_SPICE.remmina'
 
 class Vmware:
