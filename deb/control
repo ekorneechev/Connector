@@ -1,5 +1,5 @@
 Package: connector
-Version: 1.5.7-rc0
+Version: 1.6.3-1
 Provides: connector
 Maintainer: Korneechev E. <ek@myconnector.ru>
 Architecture: all
@@ -12,4 +12,4 @@ Depends: libgtk-3-0 (>=3.10), remmina (>=1.0), python3 (>=3.2), python3-gi (>=3.
 Recommends: freerdp-x11 (>=1.2), remmina (>=1.2), remmina-plugin-rdp, remmina-plugin-vnc, remmina-plugin-nx, remmina-plugin-xdmcp, remmina-plugin-spice
 Priority: optional
 Installed-Size:
-Homepage: http://www.myconnector.ru
+Homepage: http://myconnector.ru
