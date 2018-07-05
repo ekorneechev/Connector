@@ -313,7 +313,8 @@ class Web:
 class FileServer:
     """Класс для настройки подключения к файловому серверу"""
     def start(self, args):
-        _exec = DEFAULT['FILEMAN'] + ' "'
+        _conf = properties.loadFromFile('default.conf')
+        _exec = _conf['FILEMAN'] + ' "'
         if type(args) == str:
             if  not args.find("://") != -1:
                 os.system("zenity --warning --text='Введите протокол подключения!'")
@@ -326,6 +327,7 @@ class FileServer:
                 os.system("zenity --warning --text='Введите протокол подключения!'")
                 return 1
             else:
+                server = args[0]
                 _protocol, _server = args[0].split("://")
                 command = _exec + _protocol + "://"
                 if args[2]: command += args[2] + ";"
@@ -333,7 +335,7 @@ class FileServer:
                 command += _server
                 if args[3]: command += '/' + args[3]
                 command += '"'
-        properties.log.info ("Открытие файлового сервера %s. Команда запуска:", args[0])
+        properties.log.info ("Открытие файлового сервера %s. Команда запуска:", server)
         properties.log.info (command)
         os.system (command + STD_TO_LOG)
 

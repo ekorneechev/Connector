@@ -75,9 +75,6 @@ if OS == "altlinux":
     #FreeRDP: ключ проброса смарткарт
     SCARD = ' /smartcard:""'
 
-    #Файл соответсвий MIME-типов
-    MIMEAPPS = '$HOME/.config/mimeapps.list'
-
 elif OS == "linuxmint" or OS == "ubuntu":
     _package_info = subprocess.check_output("dpkg-query -W connector 2>/dev/null; exit 0",shell=True, universal_newlines=True).strip().split('\t')
     try:
@@ -90,8 +87,6 @@ elif OS == "linuxmint" or OS == "ubuntu":
     CITRIX_CHECK = "dpkg -s icaclient > "
 
     SCARD = ' /smartcard'
-
-    MIMEAPPS = '$HOME/.local/share/applications/mimeapps.list'
 
 else:
     VERSION = RELEASE = USBPATH = CITRIX_CHECK = SCARD = ""
@@ -142,10 +137,5 @@ except FileNotFoundError:
 # Если не ALT - режим "киоска" недоступен
 if OS != "altlinux": KIOSK_OFF = True
 
-#Определение файлового менеджера с помощью файла mimeapps.list
-if OS == "altlinux" or OS == "linuxmint" or OS == "ubuntu":
-    _desktopFile = subprocess.check_output("grep '^inode/directory' "+ MIMEAPPS + "; exit 0",shell=True, universal_newlines=True).strip().split('=')[1]
-    _execCmd = subprocess.check_output("grep '^Exec=' /usr/share/applications/" + _desktopFile + "; exit 0",shell=True, universal_newlines=True).strip().split('=')[1]
-    DEFAULT['FILEMAN'] = _execCmd.split(' ')[0]
-else:
-    DEFAULT['FILEMAN'] = 'xdg-open'
+#Команда подключения сетевых файловых ресурсов
+DEFAULT['FILEMAN'] = 'xdg-open'
