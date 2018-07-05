@@ -138,4 +138,4 @@ except FileNotFoundError:
 if OS != "altlinux": KIOSK_OFF = True
 
 #Команда подключения сетевых файловых ресурсов
-DEFAULT['FILEMAN'] = 'xdg-open'
+DEFAULT['FS'] = 'xdg-open'

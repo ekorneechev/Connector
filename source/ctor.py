@@ -314,7 +314,7 @@ class FileServer:
     """Класс для настройки подключения к файловому серверу"""
     def start(self, args):
         _conf = properties.loadFromFile('default.conf')
-        _exec = _conf['FILEMAN'] + ' "'
+        _exec = _conf['FS'] + ' "'
         if type(args) == str:
             if  not args.find("://") != -1:
                 os.system("zenity --warning --text='Введите протокол подключения!'")

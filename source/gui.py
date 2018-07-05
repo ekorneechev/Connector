@@ -90,14 +90,16 @@ class Gui:
         self.conn_note = self.builder.get_object("list_connect")
         self.conn_note.set_current_page(int(default_tab))
         self.labelRDP, self.labelVNC = self.builder.get_object("label_default_RDP"), self.builder.get_object("label_default_VNC")
-        self.initLabels(self.labelRDP, self.labelVNC)
+        self.labelFS = self.builder.get_object("label_default_FS")
+        self.initLabels(self.labelRDP, self.labelVNC, self.labelFS)
 
-    def initLabels(self, rdp, vnc):
+    def initLabels(self, rdp, vnc, fs):
         whatProgram = properties.loadFromFile('default.conf')
         if whatProgram['RDP']: rdp.set_text('(FreeRDP)')
         else: rdp.set_text('(Remmina)')
         if whatProgram['VNC']: vnc.set_text('(vncviewer)')
         else: vnc.set_text('(Remmina)')
+        fs.set_text('(' + whatProgram['FS'] + ')')
 
     def onDeleteWindow(self, *args):
         """Закрытие программы"""
@@ -870,7 +872,7 @@ class Gui:
 
     def onProperties(self, *args):
         """Окно параметров приложения"""
-        window = properties.Properties(self.labelRDP,self.labelVNC, self.conn_note)
+        window = properties.Properties(self.labelRDP,self.labelVNC, self.labelFS, self.conn_note)
 
     def saveFileCtor(self, name, protocol, server):
         """Создание ассоциации файла подключения с подключением в списке"""

@@ -137,10 +137,11 @@ def checkLogFile(filePath):
             else: log.info(msg)
 
 class Properties(Gtk.Window):
-    def __init__(self, rdp, vnc, conn):
+    def __init__(self, rdp, vnc, fs, conn):
         Gtk.Window.__init__(self, title = "Параметры программы")
         builder = Gtk.Builder()
         self.labelRDP, self.labelVNC, self.conn_note = rdp, vnc, conn
+        self.labelFS = fs
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_resizable(False)
         self.set_modal(True)
@@ -184,7 +185,7 @@ class Properties(Gtk.Window):
         except KeyError: self.combo_tabs.set_active_id('0')
         try: self.combo_main.set_active_id(self.defaultConf['MAIN'])
         except KeyError: self.combo_tabs.set_active_id('0')
-        try: self.entryFS.set_text(self.defaultConf['FILEMAN'])
+        try: self.entryFS.set_text(self.defaultConf['FS'])
         except KeyError: self.entryFS.set_text('xdg-open')
         self.add(box)        
         self.connect("delete-event", self.onClose)
@@ -207,7 +208,7 @@ class Properties(Gtk.Window):
         else: self.defaultConf['VNC'] = 1
         self.defaultConf['TAB'] = self.combo_tabs.get_active_id()
         self.defaultConf['MAIN'] = self.combo_main.get_active_id()
-        self.defaultConf['FILEMAN'] = self.entryFS.get_text()
+        self.defaultConf['FS'] = self.entryFS.get_text()
         save = False
         nameConn = self.entryKioskConn.get_text()
         if self.changeKioskAll.get_active():
@@ -233,7 +234,7 @@ class Properties(Gtk.Window):
             saveInFile('default.conf',self.defaultConf)
             gui.viewStatus(self.statusbar, "Настройки сохранены в файле default.conf...")
             log.info("Новые настройки для программы сохранены в файле default.conf.")
-            gui.Gui.initLabels(True, self.labelRDP, self.labelVNC)
+            gui.Gui.initLabels(True, self.labelRDP, self.labelVNC, self.labelFS)
             self.conn_note.set_current_page(int(self.defaultConf['TAB']))
 
     def clearFile(self, filename, title, message):
