@@ -211,7 +211,7 @@ class Gui:
     def changeProgram(self, protocol):
         #Функция, возвращающая RDP1 или VNC1 при параметрах, отличных от Реммины
         try:
-            if self.whatProgram[protocol]: protocol += "1"
+            if self.whatProgram[protocol] and protocol != "FS": protocol += "1"
         except KeyError:
             pass #если нет возможности выбора программ для протокола
         return protocol
@@ -237,7 +237,7 @@ class Gui:
         entryName = self.pref_builder.get_object("entry_" + name + "_name")
         if nameConnect: entryName.set_text(nameConnect)
         box = self.pref_builder.get_object("box_" + name)
-        combo = self.pref_builder.get_object("combo_" + name)   
+        combo = self.pref_builder.get_object("combo_" + name)
         combo.set_model(self.liststore[tmp])
         serv = self.pref_builder.get_object("entry_" + name + "_serv")
         serv.set_text(server)
