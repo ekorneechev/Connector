@@ -48,6 +48,33 @@ def initSignal(gui):
     for sig in filter(None, SIGS):
         GLib.idle_add(install_glib_handler, sig, priority=GLib.PRIORITY_HIGH)
 
+class TrayIcon:
+    """Класс, описывающий индикатор и меню в трее
+       Thanks: https://eax.me/python-gtk/"""
+    def __init__(self, icon, menu):
+        self.menu = menu
+
+        APPIND_SUPPORT = 1
+        try:
+            from gi.repository import AppIndicator3
+        except:
+            APPIND_SUPPORT = 0
+
+        if APPIND_SUPPORT == 1:
+            self.ind = AppIndicator3.Indicator.new(
+                appid, icon,
+                AppIndicator3.IndicatorCategory.APPLICATION_STATUS)
+            self.ind.set_status(AppIndicator3.IndicatorStatus.ACTIVE)
+            self.ind.set_menu(self.menu)
+        else:
+            self.ind = Gtk.StatusIcon()
+            self.ind.set_from_file(icon)
+            self.ind.connect('popup-menu', self.onPopupMenu)
+
+    def onPopupMenu(self, icon, button, time):
+        self.menu.popup(None, None, Gtk.StatusIcon.position_menu, icon,
+                        button, time)
+
 class Gui:
     def __init__(self):
         self.prefClick = False
@@ -92,6 +119,8 @@ class Gui:
         self.labelRDP, self.labelVNC = self.builder.get_object("label_default_RDP"), self.builder.get_object("label_default_VNC")
         self.labelFS = self.builder.get_object("label_default_FS")
         self.initLabels(self.labelRDP, self.labelVNC, self.labelFS)
+        self.menu_tray = self.builder.get_object("menu_tray")
+        self.iconTray = TrayIcon("data/emblem.png", self.menu_tray)
 
     def initLabels(self, rdp, vnc, fs):
         whatProgram = properties.loadFromFile('default.conf')
