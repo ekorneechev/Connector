@@ -1085,7 +1085,7 @@ class Gui:
         dialog.set_current_folder(current_folder)
         table, indexRow = treeView.get_selection().get_selected()
         nameConnect = table[indexRow][0]
-        dialog.set_current_name(nameConnect)
+        dialog.set_current_name(nameConnect + '.desktop')
         dialog.set_do_overwrite_confirmation(True) #запрос на перезапись одноименного файла
         response = dialog.run()
         if response == Gtk.ResponseType.OK:
