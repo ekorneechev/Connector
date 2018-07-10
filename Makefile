@@ -17,6 +17,7 @@ help:
 	@echo "... clean (сброс изменений в исходниках)"
 
 install:
+	apt-get remove connector -y
 	sed -i s#/usr/share#$(PREFIX)#g source/*
 	sed -i s#/usr/share#$(PREFIX)#g data/$(TARGET).desktop
 	sed -i s#/usr/bin/$(TARGET)#$(PREFIX_BIN)/$(TARGET)#g source/*
