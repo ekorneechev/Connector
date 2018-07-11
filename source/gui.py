@@ -61,6 +61,10 @@ class TrayIcon:
     def onTrayMenu(self, icon, button, time):
         self.menu.popup(None, None, Gtk.StatusIcon.position_menu, icon,
                         button, time)
+
+    def connect(self, callback):
+        self.ind.connect('activate', callback)
+
 class Gui:
     def __init__(self):
         self.prefClick = False
@@ -107,6 +111,7 @@ class Gui:
         self.initLabels(self.labelRDP, self.labelVNC, self.labelFS)
         self.menu_tray = self.builder.get_object("menu_tray")
         self.iconTray = TrayIcon("data/emblem.png", self.menu_tray)
+        self.iconTray.connect(self.onShowWindow)
 
     def initLabels(self, rdp, vnc, fs):
         whatProgram = properties.loadFromFile('default.conf')
@@ -1174,6 +1179,7 @@ class Gui:
 
     def onShowWindow(self, *args):
         self.window.show_all()
+        self.window.present()
 
     def onHideWindow(self, *args):
         self.window.hide()
