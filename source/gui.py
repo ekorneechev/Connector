@@ -1178,8 +1178,11 @@ class Gui:
         os.system("mate-session-save --shutdown-dialog")
 
     def onShowWindow(self, *args):
-        self.window.show_all()
-        self.window.present()
+        if self.window.is_active():
+            self.onHideWindow(self)
+        else:
+            self.window.show_all()
+            self.window.present()
 
     def onHideWindow(self, *args):
         self.window.hide()
