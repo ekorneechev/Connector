@@ -345,20 +345,6 @@
       <column type="gchararray"/>
     </columns>
   </object>
-  <object class="GtkMenu" id="menu_tray">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <child>
-      <object class="GtkImageMenuItem" id="tray_close">
-        <property name="label">gtk-quit</property>
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="use_underline">True</property>
-        <property name="use_stock">True</property>
-        <signal name="activate" handler="onDeleteWindow" swapped="no"/>
-      </object>
-    </child>
-  </object>
   <object class="GtkImage" id="preferences_image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -426,7 +412,7 @@
     <property name="resizable">False</property>
     <property name="window_position">center</property>
     <property name="icon">emblem.png</property>
-    <signal name="delete-event" handler="onDeleteWindow" swapped="no"/>
+    <signal name="delete-event" handler="onHideWindow" swapped="no"/>
     <child>
       <object class="GtkBox" id="box1">
         <property name="visible">True</property>
@@ -2417,6 +2403,43 @@
     </child>
     <child type="titlebar">
       <placeholder/>
+    </child>
+  </object>
+  <object class="GtkImage" id="tray_image1">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="halign">start</property>
+    <property name="valign">start</property>
+    <property name="stock">gtk-leave-fullscreen</property>
+  </object>
+  <object class="GtkMenu" id="menu_tray">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkImageMenuItem" id="tray_open">
+        <property name="label" translatable="yes">Главное окно программы</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="image">tray_image1</property>
+        <property name="use_stock">False</property>
+        <signal name="activate" handler="onShowWindow" swapped="no"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkSeparatorMenuItem" id="tray_separator1">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+      </object>
+    </child>
+    <child>
+      <object class="GtkImageMenuItem" id="tray_close">
+        <property name="label">gtk-quit</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="use_underline">True</property>
+        <property name="use_stock">True</property>
+        <signal name="activate" handler="onDeleteWindow" swapped="no"/>
+      </object>
     </child>
   </object>
 </interface>
