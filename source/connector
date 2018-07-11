@@ -8,5 +8,6 @@ PIDs = subprocess.check_output("pgrep connector",shell=True, universal_newlines=
 if len(PIDs) == 1 or len(sys.argv) > 1:
     gui.f_main()
 else:
-    window = subprocess.check_output("xdotool search --pid " + PIDs[0] + " 2> /dev/null | tail -n1",shell=True, universal_newlines=True).strip()
-    os.system("xdotool windowactivate " + window)
+    window = subprocess.check_output("xdotool search --pid " + PIDs[0] + " 2> /dev/null | tail -n2 | head -n1",shell=True, universal_newlines=True).strip()
+    error = subprocess.check_output("xdotool windowactivate " + window, shell=True, universal_newlines=True, stderr=subprocess.STDOUT).strip()
+    if error: subprocess.call("zenity --warning --text='Программа Connector уже запущена. Проверьте область уведомлений (трэй)!' --no-wrap", shell=True)
