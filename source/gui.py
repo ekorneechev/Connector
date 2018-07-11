@@ -112,8 +112,35 @@ class Gui:
         self.menu_tray = self.builder.get_object("menu_tray")
         self.iconTray = TrayIcon("data/emblem.png", self.menu_tray)
         self.iconTray.connect(self.onShowWindow)
+        self.initSubmenuTray()
+        #tray_submenu = self.builder.get_object("tray_submenu")
+        #item1 = Gtk.MenuItem("test")
+        #tray_submenu.append(item1)
+        #tray_submenu.show_all()
+
+    def initSubmenuTray(self):
+        """Инициализация списка сохраненных подключений в меню из трея"""
+        tray_submenu = self.builder.get_object("tray_submenu")
+        exist = False
+        for connect in open(WORKFOLDER + "connections.db"):
+            exist = True
+            record = connect.strip().split(':::')
+            item = Gtk.MenuItem(record[0])
+            item.connect("activate",self.onTrayConnect, record[0])
+            tray_submenu.append(item)
+        if not exist:
+            tray_noexist = Gtk.MenuItem("<нет сохраненных подключений>")
+            tray_noexist.set_sensitive(False)
+            tray_submenu.append(tray_noexist)
+        tray_submenu.show_all()
+
+    def onTrayConnect(self, menuitem, name):
+        """Функция запуска сохраненного подключения из трея"""
+        fileCtor = properties.filenameFromName(name)
+        if fileCtor: connectFile(fileCtor)
 
     def initLabels(self, rdp, vnc, fs):
+        """Отбражает на главном окне выбранную программу для подключения RDP, VNC и FS"""
         whatProgram = properties.loadFromFile('default.conf')
         if whatProgram['RDP']: rdp.set_text('(FreeRDP)')
         else: rdp.set_text('(Remmina)')

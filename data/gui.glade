@@ -2426,6 +2426,20 @@
       </object>
     </child>
     <child>
+      <object class="GtkMenuItem" id="tray_select">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label" translatable="yes">Соединиться с</property>
+        <property name="use_underline">True</property>
+        <child type="submenu">
+          <object class="GtkMenu" id="tray_submenu">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
       <object class="GtkSeparatorMenuItem" id="tray_separator1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
