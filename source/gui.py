@@ -947,10 +947,10 @@ class Gui:
         """Функция изменения Citrix или WEB-подключения """
         if protocol == "CITRIX": 
             self.citrixEditClick = edit
-            index_tab = 5
+            index_tab = 6
         if protocol == "WEB": 
             self.webEditClick = edit
-            index_tab = 8 
+            index_tab = 9
         self.main_note.set_current_page(0)
         self.conn_note.set_current_page(index_tab)       
         entry_serv = self.builder.get_object("entry_serv_" + protocol)               
