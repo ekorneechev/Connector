@@ -113,10 +113,6 @@ class Gui:
         self.iconTray = TrayIcon("data/emblem.png", self.menu_tray)
         self.iconTray.connect(self.onShowWindow)
         self.initSubmenuTray()
-        #tray_submenu = self.builder.get_object("tray_submenu")
-        #item1 = Gtk.MenuItem("test")
-        #tray_submenu.append(item1)
-        #tray_submenu.show_all()
 
     def initSubmenuTray(self):
         """Инициализация списка сохраненных подключений в меню из трея"""
@@ -125,8 +121,12 @@ class Gui:
         for connect in open(WORKFOLDER + "connections.db"):
             exist = True
             record = connect.strip().split(':::')
-            item = Gtk.MenuItem(record[0])
-            item.connect("activate",self.onTrayConnect, record[0])
+            name, protocol = record[0], record[1]
+            item = Gtk.ImageMenuItem(name)
+            image = Gtk.Image()
+            image.set_from_pixbuf(GdkPixbuf.Pixbuf.new_from_file("data/" + protocol + ".png"))
+            item.set_image(image)
+            item.connect("activate",self.onTrayConnect, name)
             tray_submenu.append(item)
         if not exist:
             tray_noexist = Gtk.MenuItem("<нет сохраненных подключений>")
