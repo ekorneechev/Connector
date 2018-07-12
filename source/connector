@@ -10,4 +10,6 @@ if len(PIDs) == 1 or len(sys.argv) > 1:
 else:
     window = subprocess.check_output("xdotool search --pid " + PIDs[0] + " 2> /dev/null | tail -n2 | head -n1",shell=True, universal_newlines=True).strip()
     error = subprocess.check_output("xdotool windowactivate " + window, shell=True, universal_newlines=True, stderr=subprocess.STDOUT).strip()
-    if error: subprocess.call("zenity --warning --text='Программа Connector уже запущена. Проверьте область уведомлений (трэй)!' --no-wrap", shell=True)
+    if error:
+        subprocess.call("kill " + PIDs[0], shell=True)
+        gui.f_main()
