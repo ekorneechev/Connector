@@ -109,10 +109,16 @@ class Gui:
         self.labelRDP, self.labelVNC = self.builder.get_object("label_default_RDP"), self.builder.get_object("label_default_VNC")
         self.labelFS = self.builder.get_object("label_default_FS")
         self.initLabels(self.labelRDP, self.labelVNC, self.labelFS)
-        self.menu_tray = self.builder.get_object("menu_tray")
-        self.iconTray = TrayIcon("data/emblem.png", self.menu_tray)
-        self.iconTray.connect(self.onShowWindow)
-        self.initSubmenuTray()
+        try:
+            tray = properties.loadFromFile('default.conf')['TRAY']
+        except KeyError:
+            tray = DEFAULT['TRAY']
+        if tray:
+            print(tray)
+            self.menu_tray = self.builder.get_object("menu_tray")
+            self.iconTray = TrayIcon("data/emblem.png", self.menu_tray)
+            self.iconTray.connect(self.onShowWindow)
+            self.initSubmenuTray()
 
     def initSubmenuTray(self):
         """Инициализация списка сохраненных подключений в меню из трея"""
