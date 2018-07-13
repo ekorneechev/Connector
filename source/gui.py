@@ -99,7 +99,11 @@ class Gui:
         else: rdp.set_text('(Remmina)')
         if whatProgram['VNC']: vnc.set_text('(vncviewer)')
         else: vnc.set_text('(Remmina)')
-        fs.set_text('(' + whatProgram['FS'] + ')')
+        try:
+            fs_prog = whatProgram['FS']
+        except KeyError:
+            fs_prog = DEFAULT['FS']
+        fs.set_text('(' + fs_prog + ')')
 
     def onDeleteWindow(self, *args):
         """Закрытие программы"""
