@@ -250,7 +250,7 @@ class Properties(Gtk.Window):
         dialog.destroy()    
 
     def onClearServers(self, widget):
-        self.clearFile("servers.db", "Подтвердите очистку БД",
+        self.clearFile("servers.db", "Подтвердите очистку данных автозаполнения",
                       "Вы потеряете всю историю посещений!!!")
 
     def onClearConnects(self, widget):
