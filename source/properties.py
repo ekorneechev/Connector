@@ -186,7 +186,7 @@ class Properties(Gtk.Window):
         try: self.combo_main.set_active_id(self.defaultConf['MAIN'])
         except KeyError: self.combo_tabs.set_active_id('0')
         try: self.entryFS.set_text(self.defaultConf['FS'])
-        except KeyError: self.entryFS.set_text('xdg-open')
+        except KeyError: self.entryFS.set_text(DEFAULT['FS'])
         self.add(box)        
         self.connect("delete-event", self.onClose)
         cancel.connect("clicked", self.onCancel, self)
