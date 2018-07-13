@@ -146,6 +146,11 @@
     <property name="can_focus">False</property>
     <property name="stock">gtk-disconnect</property>
   </object>
+  <object class="GtkImage" id="image_param_tray">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-preferences</property>
+  </object>
   <object class="GtkListStore" id="liststore_CITRIX">
     <columns>
       <!-- column-name server -->
@@ -2437,6 +2442,16 @@
             <property name="can_focus">False</property>
           </object>
         </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkImageMenuItem" id="tray_param">
+        <property name="label" translatable="yes">Параметры</property>
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="image">image_param_tray</property>
+        <property name="use_stock">False</property>
+        <signal name="activate" handler="onProperties" swapped="no"/>
       </object>
     </child>
     <child>
