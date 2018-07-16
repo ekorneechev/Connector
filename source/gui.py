@@ -109,16 +109,17 @@ class Gui:
         self.labelRDP, self.labelVNC = self.builder.get_object("label_default_RDP"), self.builder.get_object("label_default_VNC")
         self.labelFS = self.builder.get_object("label_default_FS")
         self.initLabels(self.labelRDP, self.labelVNC, self.labelFS)
-        try:
-            tray = properties.loadFromFile('default.conf')['TRAY']
-        except KeyError:
-            tray = DEFAULT['TRAY']
-        if tray:
-            print(tray)
-            self.menu_tray = self.builder.get_object("menu_tray")
-            self.iconTray = TrayIcon("data/emblem.png", self.menu_tray)
-            self.iconTray.connect(self.onShowWindow)
-            self.initSubmenuTray()
+        self.trayDisplayed = False
+        if self.trayEnabled(): self.trayDisplayed = self.initTray()
+
+    def initTray(self):
+        """Инициализация индикатора в системном лотке"""
+        self.menu_tray = self.builder.get_object("menu_tray")
+        self.iconTray = TrayIcon("data/emblem.png", self.menu_tray)
+        self.iconTray.connect(self.onShowWindow)
+        self.initSubmenuTray()
+        self.menu_tray.show_all()
+        return True
 
     def initSubmenuTray(self):
         """Инициализация списка сохраненных подключений в меню из трея"""
@@ -144,6 +145,13 @@ class Gui:
         """Функция запуска сохраненного подключения из трея"""
         fileCtor = properties.filenameFromName(name)
         if fileCtor: connectFile(fileCtor)
+
+    def trayEnabled(self):
+        try:
+            check = properties.loadFromFile('default.conf')['TRAY']
+        except KeyError:
+            check = DEFAULT['TRAY']
+        return check
 
     def initLabels(self, rdp, vnc, fs):
         """Отбражает на главном окне выбранную программу для подключения RDP, VNC и FS"""
@@ -1218,8 +1226,12 @@ class Gui:
             self.window.present()
 
     def onHideWindow(self, *args):
-        self.window.hide()
-        return True
+        if self.trayEnabled():
+            self.window.hide()
+            if not self.trayDisplayed: self.trayDisplayed = self.initTray()
+            return True
+        else:
+            Gtk.main_quit(*args)
 
 
 def f_main():
