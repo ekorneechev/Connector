@@ -205,6 +205,7 @@ class Properties(Gtk.Window):
 
     def onClose (self, window, *args):
         window.destroy()
+        self.main_window.onShowWindow()
     
     def onSave (self, *args):
         """Сохранение настроек программы"""
@@ -245,9 +246,13 @@ class Properties(Gtk.Window):
             log.info("Новые настройки для программы сохранены в файле default.conf.")
             gui.Gui.initLabels(True, self.labelRDP, self.labelVNC, self.labelFS)
             self.conn_note.set_current_page(int(self.defaultConf['TAB']))
-            if self.defaultConf['TRAY'] and not self.main_window.trayDisplayed:
-                self.main_window.trayDisplayed = gui.Gui.initTray(self.main_window)
-            else: self.main_window.menu_tray.set_visible(False)
+            if self.defaultConf['TRAY']:
+                if self.main_window.trayDisplayed:
+                    self.main_window.iconTray.show()
+                else: self.main_window.trayDisplayed = gui.Gui.initTray(self.main_window)
+            else:
+                try: self.main_window.iconTray.hide()
+                except: pass
 
     def clearFile(self, filename, title, message):
         """Функция для очисти БД серверов или списка подключений"""

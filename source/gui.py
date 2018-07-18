@@ -65,6 +65,12 @@ class TrayIcon:
     def connect(self, callback):
         self.ind.connect('activate', callback)
 
+    def hide(self):
+        self.ind.set_visible(False)
+
+    def show(self):
+        self.ind.set_visible(True)
+
 class Gui:
     def __init__(self):
         self.prefClick = False
