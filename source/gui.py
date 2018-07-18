@@ -933,7 +933,7 @@ class Gui:
 
     def onProperties(self, *args):
         """Окно параметров приложения"""
-        window = properties.Properties(self.labelRDP,self.labelVNC, self.labelFS, self.conn_note)
+        window = properties.Properties(self)
 
     def saveFileCtor(self, name, protocol, server):
         """Создание ассоциации файла подключения с подключением в списке"""
@@ -1232,7 +1232,6 @@ class Gui:
             return True
         else:
             Gtk.main_quit(*args)
-
 
 def f_main():
     try:
