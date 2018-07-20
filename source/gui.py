@@ -1076,8 +1076,8 @@ class Gui(Gtk.Application):
         table, indexRow = treeView.get_selection().get_selected()
         nameConnect, fileCtor = table[indexRow][0], table[indexRow][3]
         parameters = properties.loadFromFile(fileCtor, self.window)
-        parameters.append(nameConnect)
         if parameters is not None: #если файл .ctor имеет верный формат
+            parameters.append(nameConnect)
             if self.correctProgram(parameters):
                 protocol = parameters.pop(0) #извлекаем протокол из файла коннекта
                 viewStatus(self.statusbar, 'Соединение с "' + nameConnect + '"...')
