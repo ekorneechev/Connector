@@ -120,7 +120,6 @@ def checkLogFile(filePath):
                                               shell=True, universal_newlines=True).strip())
         if sizeLog > 10000000:
             import tarfile; from datetime import datetime
-            defaultPath = os.getcwd()
             os.chdir(LOGFOLDER)
             fileName = os.path.basename(filePath)
             #'2017-04-05 15:09:52.981053' -> 20170405:
@@ -129,7 +128,7 @@ def checkLogFile(filePath):
             tarName = filePath + '.' + today + '.tgz'
             tar = tarfile.open (tarName, "w:gz")
             tar.add(fileName); os.remove(fileName)
-            os.chdir(defaultPath)
+            os.chdir(MAINFOLDER)
             tar.close()
             msg = "Логфайл %s превысил допустимый размер (10Мб), упакован в архив %s" % (fileName, os.path.basename(tarName))
             if filePath == LOGFILE:

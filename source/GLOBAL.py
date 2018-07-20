@@ -12,6 +12,9 @@ HOMEFOLDER = os.getenv('HOME')
 #Директория в домашней папке пользователя для хранения настроек и подключений
 WORKFOLDER = HOMEFOLDER + '/.connector/'
 
+#Папка программы
+MAINFOLDER = "/usr/share/connector"
+
 #Установки по умолчанию для параметров программы (какие приложения использовать)
 DEFAULT = dict(RDP = 1, VNC = 1, TAB = '0', MAIN = '0')
 

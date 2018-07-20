@@ -1,8 +1,9 @@
 #!/usr/bin/python3
 
 import os, sys, subprocess
-sys.path.append('/usr/share/connector')
-os.chdir('/usr/share/connector')
+MAINFOLDER = "/usr/share/connector"
+sys.path.append(MAINFOLDER)
+os.chdir(MAINFOLDER)
 import gui
 if __name__ == '__main__':
     gui.f_main()

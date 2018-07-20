@@ -231,6 +231,7 @@ class Gui(Gtk.Application):
             os.rename(basename, filename)            
             connectFile(filename, True)
             os.remove(filename)
+            os.chdir(MAINFOLDER)
             properties.log.info (msg)
             viewStatus(self.statusbar, msg)
         else:
