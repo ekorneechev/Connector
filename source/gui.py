@@ -176,7 +176,11 @@ class Gui(Gtk.Application):
         else: rdp.set_text('(Remmina)')
         if whatProgram['VNC']: vnc.set_text('(vncviewer)')
         else: vnc.set_text('(Remmina)')
-        fs.set_text('(' + whatProgram['FS'] + ')')
+        try:
+            fs_prog = whatProgram['FS']
+        except KeyError:
+            fs_prog = DEFAULT['FS']
+        fs.set_text('(' + fs_prog + ')')
 
     def onDeleteWindow(self, *args):
         """Закрытие программы"""
@@ -1024,10 +1028,10 @@ class Gui(Gtk.Application):
         """Функция изменения Citrix или WEB-подключения """
         if protocol == "CITRIX": 
             self.citrixEditClick = edit
-            index_tab = 5
+            index_tab = 6
         if protocol == "WEB": 
             self.webEditClick = edit
-            index_tab = 8 
+            index_tab = 9
         self.main_note.set_current_page(0)
         self.conn_note.set_current_page(index_tab)       
         entry_serv = self.builder.get_object("entry_serv_" + protocol)               
