@@ -13,14 +13,15 @@ def viewStatus(bar, message):
     message = message[:65] + '...' if len(message) > 65 else message #для обреза длинных сообщений
     bar.push(bar.get_context_id ("statusbar"), message)    
 
-def connectFile(filename):
+def connectFile(filename, openFile = False):
     """Функция запуска программы с аргументом - именем файла, или с ярлыка
        или из командной строки: connector <filename>"""
     try:
         parameters = properties.loadFromFile(filename)
         if parameters != None:
             protocol = parameters.pop(0)
-            parameters.append(properties.nameFromFilename(filename))
+            if openFile: parameters.append(parameters[0]) #если открывается файл .ctor, то заголовок окна - адрес сервера
+            else: parameters.append(properties.nameFromFilename(filename))
             connect = definition(protocol)
             connect.start(parameters)
     except (IndexError, KeyError):
@@ -228,7 +229,7 @@ class Gui(Gtk.Application):
             os.chdir(WORKFOLDER)
             filename = 'tmp_' + basename
             os.rename(basename, filename)            
-            connectFile(filename)
+            connectFile(filename, True)
             os.remove(filename)
             properties.log.info (msg)
             viewStatus(self.statusbar, msg)
