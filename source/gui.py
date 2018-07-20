@@ -3,7 +3,7 @@
 
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, Gdk, GdkPixbuf, GLib
+from gi.repository import Gtk, Gdk, GdkPixbuf, GLib, Gio
 import random, sys, signal
 from ctor import *
 from GLOBAL import *
@@ -71,8 +71,9 @@ class TrayIcon:
     def show(self):
         self.ind.set_visible(True)
 
-class Gui:
+class Gui(Gtk.Application):
     def __init__(self):
+        Gtk.Application.__init__(self, application_id="ru.myconnector.Connector", flags=Gio.ApplicationFlags.FLAGS_NONE)
         self.prefClick = False
         self.editClick = False
         self.builder = Gtk.Builder()
@@ -117,6 +118,15 @@ class Gui:
         self.initLabels(self.labelRDP, self.labelVNC, self.labelFS)
         self.trayDisplayed = False
         if self.trayEnabled(): self.trayDisplayed = self.initTray()
+
+    def do_activate(self):
+        """Обязательный обработчик для Gtk.Application"""
+        self.add_window(self.window)
+        self.showWin()
+
+    def showWin(self):
+        self.window.show_all()
+        self.window.present()
 
     def initTray(self):
         """Инициализация индикатора в системном лотке"""
@@ -174,7 +184,7 @@ class Gui:
             msg = "KeyboardInterrupt: the connector is closed!"
             properties.log.info (msg)
             print ('\n' + msg)
-        Gtk.main_quit(*args)
+        self.quit()
     
     def onViewAbout(self, *args):
         """Создает диалоговое окно 'О программе'"""
@@ -1227,9 +1237,7 @@ class Gui:
     def onShowWindow(self, *args):
         if self.window.is_active():
             self.onHideWindow(self)
-        else:
-            self.window.show_all()
-            self.window.present()
+        else: self.showWin()
 
     def onHideWindow(self, *args):
         if self.trayEnabled():
@@ -1237,7 +1245,7 @@ class Gui:
             if not self.trayDisplayed: self.trayDisplayed = self.initTray()
             return True
         else:
-            Gtk.main_quit(*args)
+            self.quit()
 
 def f_main():
     try:
@@ -1248,8 +1256,7 @@ def f_main():
         properties.log.info("Запуск программы ---")
         gui = Gui()
         initSignal(gui)
-        gui.window.show_all()
-        Gtk.main()
+        gui.run(None)
         properties.checkLogFile(LOGFILE); properties.checkLogFile(STDLOGFILE)
 
 if __name__ == '__main__':
