@@ -224,13 +224,11 @@ class Gui(Gtk.Application):
         if response == Gtk.ResponseType.OK:
             filename = dialog.get_filename()
             msg = "Открыт файл " + filename
-            basename = os.path.basename(filename)
-            os.system('cp "' + filename + '" ' + WORKFOLDER)
+            tmpname = 'tmp_' + os.path.basename(filename)
+            os.system('cp "' + filename + '" ' + WORKFOLDER + tmpname)
             os.chdir(WORKFOLDER)
-            filename = 'tmp_' + basename
-            os.rename(basename, filename)            
-            connectFile(filename, True)
-            os.remove(filename)
+            connectFile(tmpname, True)
+            os.remove(tmpname)
             os.chdir(MAINFOLDER)
             properties.log.info (msg)
             viewStatus(self.statusbar, msg)
