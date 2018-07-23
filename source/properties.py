@@ -38,7 +38,7 @@ def loadFromFile(fileName, window = None):
             dialog.destroy()
             log.exception("Файл %s c сохраненными настройками не найден! Подробнее:", fileName)
             return None
-    except pickle.UnpicklingError:
+    except (pickle.UnpicklingError, EOFError):
         dialog = Gtk.MessageDialog(window, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK,
                  "Файл " + fileName + "\nимеет неверный формат")
         response = dialog.run()
@@ -53,7 +53,7 @@ def importFromFile(fileName, window = None):
         obj = pickle.load(dbfile)
         dbfile.close()
         return obj
-    except pickle.UnpicklingError:
+    except (pickle.UnpicklingError, EOFError):
         dialog = Gtk.MessageDialog(window, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK,
                  "Файл " + fileName + "\nимеет неверный формат")
         response = dialog.run()
