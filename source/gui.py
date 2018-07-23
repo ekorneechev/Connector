@@ -14,8 +14,7 @@ def viewStatus(bar, message):
     bar.push(bar.get_context_id ("statusbar"), message)    
 
 def connectFile(filename, openFile = False):
-    """Функция запуска программы с аргументом - именем файла, или с ярлыка
-       или из командной строки: connector <filename>"""
+    """Функция подключения с помощью указанного файла .ctor"""
     try:
         parameters = properties.loadFromFile(filename)
         if parameters != None:
@@ -27,6 +26,16 @@ def connectFile(filename, openFile = False):
     except (IndexError, KeyError):
         properties.log.exception ("""Ошибка в файле %s: либо он создан в старой версии connector, либо программа по умолчанию выбрана отличная от сохраненного файла""", filename)
         os.system("zenity --error --text='Проверьте настройки программ по умолчанию' --no-wrap")
+
+def openFile(filename):
+    """Функция открытия файла .ctor (из меню или в командной строке)"""
+    tmpname = 'tmp_' + os.path.basename(filename)
+    os.system('cp "' + filename + '" "' + WORKFOLDER + tmpname + '"')
+    os.chdir(WORKFOLDER)
+    properties.log.info ("Открыт файл " + filename)
+    connectFile(tmpname, True)
+    os.remove(tmpname)
+    os.chdir(MAINFOLDER)
 
 def initSignal(gui):
     """Функция обработки сигналов SIGHUP, SIGINT и SIGTERM
@@ -223,15 +232,8 @@ class Gui(Gtk.Application):
         response = dialog.run()
         if response == Gtk.ResponseType.OK:
             filename = dialog.get_filename()
-            msg = "Открыт файл " + filename
-            tmpname = 'tmp_' + os.path.basename(filename)
-            os.system('cp "' + filename + '" ' + WORKFOLDER + tmpname)
-            os.chdir(WORKFOLDER)
-            connectFile(tmpname, True)
-            os.remove(tmpname)
-            os.chdir(MAINFOLDER)
-            properties.log.info (msg)
-            viewStatus(self.statusbar, msg)
+            openFile(filename)
+            viewStatus(self.statusbar, "Открыт файл " + filename)
         else:
             viewStatus(self.statusbar, "Файл не был выбран!")
         dialog.destroy()
@@ -1251,11 +1253,17 @@ class Gui(Gtk.Application):
         else:
             self.quit()
 
-def f_main():
+def f_main(pwd="/tmp/"):
     try:
-        fileCtor = properties.filenameFromName(sys.argv[1])
-        if fileCtor: connectFile(fileCtor)
-        else: os.system("zenity --error --text='\""+ sys.argv[1] + "\" - подключение с таким именем не найдено!' --no-wrap")
+        name = sys.argv[1]
+        fileCtor = properties.filenameFromName(name)
+        if fileCtor:
+            properties.log.info ("Запуск сохраненного подключения: " + name)
+            connectFile(fileCtor)
+        else:
+            if not os.path.isfile(name): name = pwd + name
+            if os.path.isfile(name): openFile(name)
+            else: os.system("zenity --error --text='Проверьте правильность ввода имени сохраненного\nподключения или файла с параметрами!' --no-wrap")
     except IndexError:
         properties.log.info("Запуск программы ---")
         gui = Gui()

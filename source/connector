@@ -3,7 +3,8 @@
 import os, sys, subprocess
 MAINFOLDER = "/usr/share/connector"
 sys.path.append(MAINFOLDER)
+pwd = os.getcwd() + '/'
 os.chdir(MAINFOLDER)
 import gui
 if __name__ == '__main__':
-    gui.f_main()
+    gui.f_main(pwd)
