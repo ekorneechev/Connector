@@ -34,6 +34,8 @@ install -p *.py %buildroot%basedir/
 install -pDm644 %name.man %buildroot%_man1dir/%name.1
 %find_lang --with-man %name
 install -pDm644 kiosk.access %buildroot%_sysconfdir/%name/kiosk.access
+install -pDm644 %name.xml %buildroot%_datadir/mime/packages/%name.xml
+install -pDm644 emblem %buildroot%_iconsdir/hicolor/64x64/apps/%name.png
 
 %files -f %name.lang
 %_bindir/%name
@@ -44,8 +46,13 @@ install -pDm644 kiosk.access %buildroot%_sysconfdir/%name/kiosk.access
 %_man1dir/*
 %dir %_sysconfdir/%name
 %config(noreplace) %_sysconfdir/%name/kiosk.access
+%_datadir/mime/packages/%name.xml
+%_iconsdir/hicolor/64x64/apps/%name.png
 
 %changelog
+* Fri Jul 13 2018 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.6.4-alt2
+- Fixed start programm if FS - new function (after update e.g)
+
 * Thu Jul 12 2018 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.6.4-alt1
 - Disabled start of multiple copies
 - Fixed creating label if exist of the same name
