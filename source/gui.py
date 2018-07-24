@@ -1254,6 +1254,7 @@ class Gui(Gtk.Application):
             self.quit()
 
 def f_main(pwd="/tmp/"):
+    os.system("xdg-mime default connector.desktop application/x-connector")
     try:
         name = sys.argv[1]
         fileCtor = properties.filenameFromName(name)
