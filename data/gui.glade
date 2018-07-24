@@ -416,7 +416,7 @@
     <property name="can_focus">False</property>
     <property name="resizable">False</property>
     <property name="window_position">center</property>
-    <property name="icon">emblem.png</property>
+    <property name="icon_name">connector</property>
     <signal name="delete-event" handler="onHideWindow" swapped="no"/>
     <child>
       <object class="GtkBox" id="box1">

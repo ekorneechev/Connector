@@ -24,7 +24,7 @@ DESKTOP_INFO = """#!/usr/bin/env xdg-open
 Version=1.0
 Type=Application
 Terminal=false
-Icon=/usr/share/connector/data/emblem.png
+Icon=connector
 """
 
 #Запускаемый файл приложения

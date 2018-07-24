@@ -64,7 +64,7 @@ class TrayIcon:
     def __init__(self, icon, menu):
         self.menu = menu
         self.ind = Gtk.StatusIcon()
-        self.ind.set_from_file(icon)
+        self.ind.set_from_icon_name(icon)
         self.ind.connect('popup-menu', self.onTrayMenu)
         self.ind.set_tooltip_text("Программа Connector")
 
@@ -141,7 +141,7 @@ class Gui(Gtk.Application):
     def initTray(self):
         """Инициализация индикатора в системном лотке"""
         self.menu_tray = self.builder.get_object("menu_tray")
-        self.iconTray = TrayIcon("data/emblem.png", self.menu_tray)
+        self.iconTray = TrayIcon("connector", self.menu_tray)
         self.iconTray.connect(self.onShowWindow)
         self.initSubmenuTray()
         self.menu_tray.show_all()
@@ -212,8 +212,7 @@ class Gui(Gtk.Application):
         about.set_website("http://www.myconnector.ru")
         about.set_website_label("Сайт проекта") 
         about.set_copyright("© Корнеечев Е.А., 2014-2018\ne-mail(PayPal): ekorneechev@gmail.com\nWMR: R305760666573, WMZ: Z841082507423, QIWI: +79208771688")
-        logo = GdkPixbuf.Pixbuf.new_from_file("data/emblem.png")
-        about.set_logo(logo)
+        about.set_logo_icon_name("connector")
         about.run()
         about.destroy()
 

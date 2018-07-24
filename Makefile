@@ -38,7 +38,7 @@ install:
 	mkdir -p $(MIME)/packages
 	install -m644 data/$(TARGET).xml $(MIME)/packages
 	mkdir -p $(ICON)
-	install -m644 data/emblem.png $(ICON)/$(TARGET).png
+	install -m644 data/emblem $(ICON)/$(TARGET).png
 	update-mime-database $(MIME)
 	make clean
 
