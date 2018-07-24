@@ -1,10 +1,11 @@
 #!/usr/bin/python3
 
-import os, sys, subprocess
+from sys import path
+from os import getcwd, chdir
 MAINFOLDER = "/usr/share/connector"
-sys.path.append(MAINFOLDER)
-pwd = os.getcwd() + '/'
-os.chdir(MAINFOLDER)
+path.append(MAINFOLDER)
+pwd = getcwd() + '/'
+chdir(MAINFOLDER)
 import gui
 if __name__ == '__main__':
     gui.f_main(pwd)
