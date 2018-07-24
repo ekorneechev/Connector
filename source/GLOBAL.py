@@ -143,4 +143,5 @@ if OS != "altlinux": KIOSK_OFF = True
 #Команда подключения сетевых файловых ресурсов
 DEFAULT['FS'] = 'xdg-open'
 
+#По умолчанию индикатор в системном лотке включен
 DEFAULT['TRAY'] = True
