@@ -6,6 +6,10 @@ MAN = $(PREFIX)/man/man1
 ETC = /etc/$(TARGET)
 APS = $(PREFIX)/applications
 KIOSK = kiosk.access
+MIME = $(PREFIX)/mime
+ICON = $(PREFIX)/icons/hicolor/64x64/apps
+MIME_LIST = $(APS)/mimeapps.list
+MIME_CMD = echo "application/x-connector=connector.desktop" >> $(MIME_LIST)
 
 .PHONY: help install uninstall clean
 
@@ -33,6 +37,12 @@ install:
 	install -m644 data/$(TARGET).man $(MAN)/$(TARGET).1
 	mkdir -p $(ETC)
 	install -m644 data/$(KIOSK) $(ETC)
+	mkdir -p $(MIME)/packages
+	install -m644 data/$(TARGET).xml $(MIME)/packages
+	mkdir -p $(ICON)
+	install -m644 data/emblem.png $(ICON)/$(TARGET).png
+	update-mime-database $(MIME)
+	@if [ -f $(MIME_LIST) ]; then $(MIME_CMD); else echo "[Default Applications]" > $(MIME_LIST); $(MIME_CMD); fi
 	make clean
 
 uninstall:
@@ -41,6 +51,8 @@ uninstall:
 	rm -f $(MAN)/$(TARGET).1
 	rm -f $(PREFIX)/applications/$(TARGET).desktop
 	mv -f $(ETC)/$(KIOSK) $(ETC)/$(KIOSK).makesave
+	rm -f $(MIME)/packages/$(TARGET).xml
+	rm -f $(ICON)/$(TARGET).png
 
 clean:
 	sed -i s#$(PREFIX)#/usr/share#g source/*
