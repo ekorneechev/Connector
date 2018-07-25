@@ -4,7 +4,7 @@
 import os, subprocess, signal
 
 #Определение домашней папки пользователя
-VERSION = "1.7.0-rc1"
+VERSION = "1.7.1"
 
 #Определение домашней папки пользователя
 HOMEFOLDER = os.getenv('HOME')

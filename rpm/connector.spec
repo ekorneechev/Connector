@@ -1,5 +1,5 @@
 Name: connector
-Version: 1.6.4
+Version: 1.7.1
 Release: alt1
 
 Summary: Remote desktop chooser
@@ -44,6 +44,7 @@ install -pDm644 emblem %buildroot%_iconsdir/hicolor/64x64/apps/%name.png
 %dir %basedir
 %basedir/data
 %basedir/*.py
+%basedir/%name-check-version
 %_man1dir/*
 %dir %_sysconfdir/%name
 %config(noreplace) %_sysconfdir/%name/kiosk.access
@@ -51,6 +52,12 @@ install -pDm644 emblem %buildroot%_iconsdir/hicolor/64x64/apps/%name.png
 %_iconsdir/hicolor/64x64/apps/%name.png
 
 %changelog
+* Wed Jul 25 2018 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.7.1-alt1
+- Added tray icon
+- Disabled start of multiple copies via GTK
+- Added mymetype and association for .ctor files
+- Added version checking
+
 * Fri Jul 13 2018 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.6.4-alt2
 - Fixed start programm if FS - new function (after update e.g)
 
