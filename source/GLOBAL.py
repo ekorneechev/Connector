@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-import os, subprocess
+import os, subprocess, signal
 
 #Определение домашней папки пользователя
 VERSION = "1.7.0-rc1"
@@ -145,3 +145,7 @@ DEFAULT['FS'] = 'xdg-open'
 
 #По умолчанию индикатор в системном лотке включен
 DEFAULT['TRAY'] = True
+
+#Проверка обновлений программы
+signal.signal(signal.SIGCHLD,signal.SIG_IGN) #чтобы исключить появление процесса-зомби
+subprocess.Popen([MAINFOLDER + "/connector-check-version", VERSION])

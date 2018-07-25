@@ -4,7 +4,7 @@
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk, GdkPixbuf, GLib, Gio
-import random, sys, signal
+import random, sys
 from ctor import *
 from GLOBAL import *
 
