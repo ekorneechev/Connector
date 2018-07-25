@@ -48,7 +48,7 @@ uninstall:
 	rm -rf $(BASE)
 	rm -f $(MAN)/$(TARGET).1
 	rm -f $(PREFIX)/applications/$(TARGET).desktop
-	mv -f $(ETC)/$(KIOSK) $(ETC)/$(KIOSK).makesave
+	@if [ -f $(ETC)/$(KIOSK) ]; then mv -f $(ETC)/$(KIOSK) $(ETC)/$(KIOSK).makesave; fi
 	rm -f $(MIME)/packages/$(TARGET).xml
 	rm -f $(ICON)/$(TARGET).png
 	update-mime-database $(MIME)
