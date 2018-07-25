@@ -13,6 +13,7 @@ ICONS=$SHARE/icons/hicolor/64x64/apps
 rm -rf $TARGET*
 mkdir -p $BIN $APPS $PREFIX $MAN $ETC $MIME $ICONS
 cp ../source/*.py $PREFIX/
+cp ../source/$TARGET-check-version $PREFIX/
 cp ../source/$TARGET $BIN/
 cp -r ../data/ $PREFIX/
 mv $DATA/$TARGET.desktop $APPS
@@ -20,7 +21,7 @@ mv $DATA/$TARGET.man $MAN/$TARGET.1
 mv $DATA/kiosk.access $ETC
 mv $DATA/emblem $ICONS/$TARGET.png
 mv $DATA/$TARGET.xml $MIME
-chmod 755 $BIN/$TARGET
+chmod 755 $BIN/$TARGET $PREFIX/$TARGET-check-version
 INST_SIZE=`du -s connector | cut -f 1`
 mkdir -p $TARGET/DEBIAN
 cd $TARGET
