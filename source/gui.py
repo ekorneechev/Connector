@@ -867,18 +867,6 @@ class Gui(Gtk.Application):
         """При нажатии на выбор папки в окне доп. параметров"""
         widget.set_active(True)       
 
-    def onNextPage(self, widget):
-        """Переход на следующую вкладку"""
-        if widget.get_current_page() < widget.get_n_pages() - 1:
-            widget.next_page()
-        else: widget.set_current_page(0)
-
-    def onPrevPage(self, widget):
-        """Переход на предыдущую вкладку"""
-        if widget.get_current_page() == 0:
-            widget.set_current_page(widget.get_n_pages() - 1)
-        else: widget.prev_page()
-
     def createDb(self, filename):
         """Создает пустой файл БД (или любой другой)"""
         f = open(WORKFOLDER + filename,"w")
@@ -1235,9 +1223,6 @@ class Gui(Gtk.Application):
 
     def onLogout(self, *args):
         os.system("mate-session-save --logout")
-
-    def onShutdown(self, *args):
-        os.system("mate-session-save --shutdown-dialog")
 
     def onShowWindow(self, *args):
         if self.window.is_active():
