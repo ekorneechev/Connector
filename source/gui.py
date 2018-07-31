@@ -1174,18 +1174,8 @@ class Gui(Gtk.Application):
         dialog.destroy()
 
     def onChangePage(self, notepad, box, page):
-        """Действия при переключении вкладок коннектов и списка
-           - очистка строки состояния;
-           - активация/деактивация пунктов меню перелистывания вкладок подключений"""
+        """Очистка строки состояния при переключении вкладок"""
         viewStatus(self.statusbar, '')
-        prev_menu = self.builder.get_object("menu_edit_prev")
-        next_menu = self.builder.get_object("menu_edit_next")
-        if page:#если на странице списка
-            prev_menu.set_sensitive(False)
-            next_menu.set_sensitive(False)
-        else:
-            prev_menu.set_sensitive(True)
-            next_menu.set_sensitive(True)
 
     def listFilter(self, model, iter, data):
         """Функция для фильтра подключений в списке"""
