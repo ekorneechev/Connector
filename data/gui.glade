@@ -645,7 +645,7 @@
                     </child>
                     <child>
                       <object class="GtkImageMenuItem" id="menu_connect_FS">
-                        <property name="label" translatable="yes">Подключение к файловому серверу</property>
+                        <property name="label" translatable="yes">FS - Подключение к файловому серверу</property>
                         <property name="name">FS</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
