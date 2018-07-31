@@ -127,7 +127,9 @@ class Gui(Gtk.Application):
         self.labelFS = self.builder.get_object("label_default_FS")
         self.initLabels(self.labelRDP, self.labelVNC, self.labelFS)
         self.trayDisplayed = False
-        if self.trayEnabled(): self.trayDisplayed = self.initTray()
+        if self.trayEnabled():
+            self.tray_submenu = self.builder.get_object("tray_submenu")
+            self.trayDisplayed = self.initTray()
 
     def do_activate(self):
         """Обязательный обработчик для Gtk.Application"""
@@ -149,7 +151,6 @@ class Gui(Gtk.Application):
 
     def initSubmenuTray(self):
         """Инициализация списка сохраненных подключений в меню из трея"""
-        tray_submenu = self.builder.get_object("tray_submenu")
         exist = False
         for connect in open(WORKFOLDER + "connections.db"):
             exist = True
@@ -160,12 +161,12 @@ class Gui(Gtk.Application):
             image.set_from_pixbuf(GdkPixbuf.Pixbuf.new_from_file("data/" + protocol + ".png"))
             item.set_image(image)
             item.connect("activate",self.onTrayConnect, name)
-            tray_submenu.append(item)
+            self.tray_submenu.append(item)
         if not exist:
             tray_noexist = Gtk.MenuItem("<нет сохраненных подключений>")
             tray_noexist.set_sensitive(False)
-            tray_submenu.append(tray_noexist)
-        tray_submenu.show_all()
+            self.tray_submenu.append(tray_noexist)
+        self.tray_submenu.show_all()
 
     def onTrayConnect(self, menuitem, name):
         """Функция запуска сохраненного подключения из трея"""
@@ -178,6 +179,15 @@ class Gui(Gtk.Application):
         except KeyError:
             check = DEFAULT['TRAY']
         return check
+
+    def initItemTray(self, name, protocol):
+        item = Gtk.ImageMenuItem(name)
+        image = Gtk.Image()
+        image.set_from_pixbuf(GdkPixbuf.Pixbuf.new_from_file("data/" + protocol + ".png"))
+        item.set_image(image)
+        item.connect("activate",self.onTrayConnect, name)
+        self.tray_submenu.append(item)
+        self.tray_submenu.show_all()
 
     def initLabels(self, rdp, vnc, fs):
         """Отбражает на главном окне выбранную программу для подключения RDP, VNC и FS"""
@@ -983,6 +993,7 @@ class Gui(Gtk.Application):
                 fileName = self.resaveFileCtor(name, protocol, server)
             else:
                 fileName = self.saveFileCtor(name, protocol, server)
+                self.initItemTray(name, protocol)
             properties.saveInFile(fileName, parameters)
             self.getSavesFromDb()#добавление в листсторе
             self.pref_window.destroy()
@@ -1006,6 +1017,7 @@ class Gui(Gtk.Application):
                 fileName = self.resaveFileCtor(name, protocol, server)
             else:
                 fileName = self.saveFileCtor(name, protocol, server)
+                self.initItemTray(name, protocol)
             properties.saveInFile(fileName, parameters)
             self.getSavesFromDb()
             self.citrixEditClick = False
@@ -1144,6 +1156,8 @@ class Gui(Gtk.Application):
             try: os.remove(WORKFOLDER + fileCtor) #удаление файла с настройками
             except: pass
             properties.log.info("Подключение '%s' удалено!", name)
+            for item in self.tray_submenu.get_children():
+                if item.get_label() == name: item.destroy()
         dialog.destroy() 
 
     def onPopupSave(self, treeView):
