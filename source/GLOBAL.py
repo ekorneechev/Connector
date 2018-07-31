@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-import os, subprocess, signal
+import os, subprocess
 
 #Определение домашней папки пользователя
 VERSION = "1.7.1"
@@ -147,5 +147,4 @@ DEFAULT['FS'] = 'xdg-open'
 DEFAULT['TRAY'] = True
 
 #Проверка обновлений программы
-signal.signal(signal.SIGCHLD,signal.SIG_IGN) #чтобы исключить появление процесса-зомби
-subprocess.Popen([MAINFOLDER + "/connector-check-version", VERSION])
+DEFAULT['CHECK_VERSION'] = True

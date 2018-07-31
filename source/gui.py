@@ -4,7 +4,7 @@
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk, GdkPixbuf, GLib, Gio
-import random, sys
+import random, sys, signal
 from ctor import *
 from GLOBAL import *
 
@@ -130,6 +130,9 @@ class Gui(Gtk.Application):
         if self.trayEnabled():
             self.tray_submenu = self.builder.get_object("tray_submenu")
             self.trayDisplayed = self.initTray()
+        if properties.loadFromFile('default.conf')['CHECK_VERSION']:
+            signal.signal(signal.SIGCHLD,signal.SIG_IGN) #чтобы исключить появление процесса-зомби
+            subprocess.Popen([MAINFOLDER + "/connector-check-version", VERSION])
 
     def do_activate(self):
         """Обязательный обработчик для Gtk.Application"""

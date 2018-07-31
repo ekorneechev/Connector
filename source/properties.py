@@ -166,6 +166,7 @@ class Properties(Gtk.Window):
         self.boxKiosk = builder.get_object("frame_kiosk")
         self.entryFS = builder.get_object("entry_FS")
         self.checkTray = builder.get_object("check_TRAY")
+        self.checkVersion = builder.get_object("check_VERSION")
         if KIOSK_OFF: self.boxKiosk.set_sensitive(0)
         self.defaultConf = loadFromFile('default.conf')
         if self.defaultConf['RDP']:
@@ -194,6 +195,10 @@ class Properties(Gtk.Window):
             if self.defaultConf['TRAY']: self.checkTray.set_active(True)
             else: self.checkTray.set_active(False)
         except KeyError: self.checkTray.set_active(DEFAULT['TRAY'])
+        try:
+            if self.defaultConf['CHECK_VERSION']: self.checkVersion.set_active(True)
+            else: self.checkVersion.set_active(False)
+        except KeyError: self.checkVersion.set_active(DEFAULT['CHECK_VERSION'])
         self.add(box)        
         self.connect("delete-event", self.onClose)
         cancel.connect("clicked", self.onCancel, self)
@@ -218,6 +223,7 @@ class Properties(Gtk.Window):
         self.defaultConf['MAIN'] = self.combo_main.get_active_id()
         self.defaultConf['FS'] = self.entryFS.get_text()
         self.defaultConf['TRAY'] = self.checkTray.get_active()
+        self.defaultConf['CHECK_VERSION'] = self.checkVersion.get_active()
         save = False
         nameConn = self.entryKioskConn.get_text()
         if self.changeKioskAll.get_active():
