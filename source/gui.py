@@ -127,9 +127,8 @@ class Gui(Gtk.Application):
         self.labelFS = self.builder.get_object("label_default_FS")
         self.initLabels(self.labelRDP, self.labelVNC, self.labelFS)
         self.trayDisplayed = False
-        if self.optionEnabled('TRAY'):
-            self.tray_submenu = self.builder.get_object("tray_submenu")
-            self.trayDisplayed = self.initTray()
+        self.tray_submenu = self.builder.get_object("tray_submenu")
+        if self.optionEnabled('TRAY'): self.trayDisplayed = self.initTray()
         if self.optionEnabled('CHECK_VERSION'):
             signal.signal(signal.SIGCHLD,signal.SIG_IGN) #чтобы исключить появление процесса-зомби
             subprocess.Popen([MAINFOLDER + "/connector-check-version", VERSION])
