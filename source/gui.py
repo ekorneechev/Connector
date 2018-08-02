@@ -127,10 +127,10 @@ class Gui(Gtk.Application):
         self.labelFS = self.builder.get_object("label_default_FS")
         self.initLabels(self.labelRDP, self.labelVNC, self.labelFS)
         self.trayDisplayed = False
-        if self.trayEnabled():
+        if self.optionEnabled('TRAY'):
             self.tray_submenu = self.builder.get_object("tray_submenu")
             self.trayDisplayed = self.initTray()
-        if properties.loadFromFile('default.conf')['CHECK_VERSION']:
+        if self.optionEnabled('CHECK_VERSION'):
             signal.signal(signal.SIGCHLD,signal.SIG_IGN) #чтобы исключить появление процесса-зомби
             subprocess.Popen([MAINFOLDER + "/connector-check-version", VERSION])
 
@@ -176,11 +176,11 @@ class Gui(Gtk.Application):
         fileCtor = properties.filenameFromName(name)
         if fileCtor: connectFile(fileCtor)
 
-    def trayEnabled(self):
+    def optionEnabled(self, option):
         try:
-            check = properties.loadFromFile('default.conf')['TRAY']
+            check = properties.loadFromFile('default.conf')[option]
         except KeyError:
-            check = DEFAULT['TRAY']
+            check = DEFAULT[option]
         return check
 
     def initItemTray(self, name, protocol):
@@ -1237,7 +1237,7 @@ class Gui(Gtk.Application):
         else: self.showWin()
 
     def onHideWindow(self, *args):
-        if self.trayEnabled():
+        if self.optionEnabled('TRAY'):
             self.window.hide()
             if not self.trayDisplayed: self.trayDisplayed = self.initTray()
             return True
