@@ -79,11 +79,18 @@ if OS == "altlinux":
     SCARD = ' /smartcard:""'
 
 elif OS == "linuxmint" or OS == "ubuntu":
-    _package_info = subprocess.check_output("dpkg-query -W connector 2>/dev/null; exit 0",shell=True, universal_newlines=True).strip().split('\t')
     try:
-        _package_info = _package_info[1].split("-")
-        RELEASE = _package_info[1]
-    except: RELEASE = "git"
+        _package_install = subprocess.check_output("dpkg-query -s connector | head -2 | tail -1 2>/dev/null;\
+                                                    exit 0",shell=True, universal_newlines=True).strip().split(' ')[1]
+    except IndexError: _package_install = 'deinstall'
+    if _package_install == 'deinstall': RELEASE = "git"
+    else:
+        _package_info = subprocess.check_output("dpkg-query -W connector 2>/dev/null;\
+                                                exit 0",shell=True, universal_newlines=True).strip().split('\t')
+        try:
+            _package_info = _package_info[1].split("-")
+            RELEASE = _package_info[1]
+        except IndexError: RELEASE = "git"
 
     USBPATH = "/media/$USER"
 
