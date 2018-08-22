@@ -221,7 +221,7 @@ class Gui(Gtk.Application):
                       Поддерживается большинство распространенных типов подключения.""".replace('  ','')
         about.set_comments(comments)
         about.set_version(VERSION + " (release: " + RELEASE + ')')
-        about.set_website("http://www.myconnector.ru")
+        about.set_website("http://myconnector.ru")
         about.set_website_label("Сайт проекта") 
         about.set_copyright("© Корнеечев Е.А., 2014-2018\ne-mail(PayPal): ekorneechev@gmail.com\nWMR: R305760666573, WMZ: Z841082507423, QIWI: +79208771688")
         about.set_logo_icon_name("connector")
