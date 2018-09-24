@@ -9,14 +9,23 @@ from gi.repository import Gtk
 from GLOBAL import *
 import logging, tarfile
 
-os.system("mkdir -p " + LOGFOLDER)
-logging.basicConfig (
-    filename = LOGFILE,
-    format = "--- %(levelname)-10s %(asctime)s --- %(message)s",
-    level = logging.INFO
-)
+class FakeLog():
+    def info (self, *args, **kwargs): pass
+    def error (self, *args, **kwargs): pass
+    def warning (self, *args, **kwargs): pass
+    def exception (self, *args, **kwargs): pass
 
-log = logging.getLogger("connector")
+if DEFAULT['LOG']:
+    log = logging.getLogger("connector")
+    os.system("mkdir -p " + LOGFOLDER)
+    logging.basicConfig (
+        filename = LOGFILE,
+        format = "--- %(levelname)-10s %(asctime)s --- %(message)s",
+        level = logging.INFO
+    )
+else:
+    os.system("mkdir -p " + WORKFOLDER)
+    log = FakeLog()
 
 def loadFromFile(fileName, window = None):
     """Загрузка сохраненных параметров из файла"""

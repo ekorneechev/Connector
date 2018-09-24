@@ -31,10 +31,12 @@ Icon=connector
 EXEC = "/usr/bin/connector "
 
 #Ведение логов
+DEFAULT['LOG'] = True
 LOGFOLDER = WORKFOLDER + "logs/"
 LOGFILE = LOGFOLDER + "connector.log"
 STDLOGFILE = LOGFOLDER + "all.log"
-STD_TO_LOG = ' >> ' + STDLOGFILE + " 2>&1 &"
+if DEFAULT['LOG']: STD_TO_LOG = ' >> ' + STDLOGFILE + " 2>&1 &"
+else: STD_TO_LOG = ' &'
 
 #Определение путей до папок пользователя
 _dirs = {}
