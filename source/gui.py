@@ -154,6 +154,7 @@ class Gui(Gtk.Application):
     def initSubmenuTray(self):
         """Инициализация списка сохраненных подключений в меню из трея"""
         exist = False
+        for item in self.tray_submenu.get_children(): item.destroy() #очищение меню перед его заполнением
         for connect in open(WORKFOLDER + "connections.db"):
             exist = True
             record = connect.strip().split(':::')
@@ -1149,8 +1150,7 @@ class Gui(Gtk.Application):
             try: os.remove(WORKFOLDER + fileCtor) #удаление файла с настройками
             except: pass
             properties.log.info("Подключение '%s' удалено!", name)
-            for item in self.tray_submenu.get_children():
-                if item.get_label() == name: item.destroy()
+            self.initSubmenuTray()
         dialog.destroy() 
 
     def onPopupSave(self, treeView):
