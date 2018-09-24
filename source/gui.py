@@ -182,15 +182,6 @@ class Gui(Gtk.Application):
             check = DEFAULT[option]
         return check
 
-    def initItemTray(self, name, protocol):
-        item = Gtk.ImageMenuItem(name)
-        image = Gtk.Image()
-        image.set_from_pixbuf(GdkPixbuf.Pixbuf.new_from_file("data/" + protocol + ".png"))
-        item.set_image(image)
-        item.connect("activate",self.onTrayConnect, name)
-        self.tray_submenu.append(item)
-        self.tray_submenu.show_all()
-
     def initLabels(self, rdp, vnc, fs):
         """Отбражает на главном окне выбранную программу для подключения RDP, VNC и FS"""
         whatProgram = properties.loadFromFile('default.conf')
@@ -995,7 +986,7 @@ class Gui(Gtk.Application):
                 fileName = self.resaveFileCtor(name, protocol, server)
             else:
                 fileName = self.saveFileCtor(name, protocol, server)
-                self.initItemTray(name, protocol)
+                self.initSubmenuTray()
             properties.saveInFile(fileName, parameters)
             self.getSavesFromDb()#добавление в листсторе
             self.pref_window.destroy()
@@ -1019,7 +1010,7 @@ class Gui(Gtk.Application):
                 fileName = self.resaveFileCtor(name, protocol, server)
             else:
                 fileName = self.saveFileCtor(name, protocol, server)
-                self.initItemTray(name, protocol)
+                self.initSubmenuTray()
             properties.saveInFile(fileName, parameters)
             self.getSavesFromDb()
             self.citrixEditClick = False
