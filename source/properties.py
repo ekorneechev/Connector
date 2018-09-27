@@ -203,13 +203,9 @@ class Properties(Gtk.Window):
         except KeyError: self.combo_tabs.set_active_id('0')
         try: self.entryFS.set_text(self.defaultConf['FS'])
         except KeyError: self.entryFS.set_text(DEFAULT['FS'])
-        try:
-            if self.defaultConf['TRAY']: self.checkTray.set_active(True)
-            else: self.checkTray.set_active(False)
+        try: self.checkTray.set_active(self.defaultConf['TRAY'])
         except KeyError: self.checkTray.set_active(DEFAULT['TRAY'])
-        try:
-            if self.defaultConf['CHECK_VERSION']: self.checkVersion.set_active(True)
-            else: self.checkVersion.set_active(False)
+        try: self.checkVersion.set_active(self.defaultConf['CHECK_VERSION'])
         except KeyError: self.checkVersion.set_active(DEFAULT['CHECK_VERSION'])
         try: self.checkLog.set_active(self.defaultConf['LOG'])
         except KeyError: self.checkLog.set_active(DEFAULT['LOG'])
