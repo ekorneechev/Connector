@@ -15,18 +15,6 @@ class FakeLog():
     def warning (self, *args, **kwargs): pass
     def exception (self, *args, **kwargs): pass
 
-if DEFAULT['LOG']:
-    log = logging.getLogger("connector")
-    os.system("mkdir -p " + LOGFOLDER)
-    logging.basicConfig (
-        filename = LOGFILE,
-        format = "--- %(levelname)-10s %(asctime)s --- %(message)s",
-        level = logging.INFO
-    )
-else:
-    os.system("mkdir -p " + WORKFOLDER)
-    log = FakeLog()
-
 def loadFromFile(fileName, window = None):
     """Загрузка сохраненных параметров из файла"""
     try: 
@@ -54,6 +42,20 @@ def loadFromFile(fileName, window = None):
         dialog.destroy()
         log.exception("Файл %s имеет неверный формат! Подробнее:", fileName)
         return None
+
+try: enableLog = loadFromFile('default.conf')['LOG']
+except KeyError: enableLog = DEFAULT['LOG']
+if enableLog:
+    log = logging.getLogger("connector")
+    os.system("mkdir -p " + LOGFOLDER)
+    logging.basicConfig (
+        filename = LOGFILE,
+        format = "--- %(levelname)-10s %(asctime)s --- %(message)s",
+        level = logging.INFO
+    )
+else:
+    os.system("mkdir -p " + WORKFOLDER)
+    log = FakeLog()
 
 def importFromFile(fileName, window = None):
     """Импорт параметров из файла .ctor"""
@@ -176,6 +178,7 @@ class Properties(Gtk.Window):
         self.entryFS = builder.get_object("entry_FS")
         self.checkTray = builder.get_object("check_TRAY")
         self.checkVersion = builder.get_object("check_VERSION")
+        self.checkLog = builder.get_object("check_LOG")
         if KIOSK_OFF: self.boxKiosk.set_sensitive(0)
         self.defaultConf = loadFromFile('default.conf')
         if self.defaultConf['RDP']:
@@ -208,6 +211,8 @@ class Properties(Gtk.Window):
             if self.defaultConf['CHECK_VERSION']: self.checkVersion.set_active(True)
             else: self.checkVersion.set_active(False)
         except KeyError: self.checkVersion.set_active(DEFAULT['CHECK_VERSION'])
+        try: self.checkLog.set_active(self.defaultConf['LOG'])
+        except KeyError: self.checkLog.set_active(DEFAULT['LOG'])
         self.add(box)        
         self.connect("delete-event", self.onClose)
         cancel.connect("clicked", self.onCancel, self)
@@ -233,6 +238,7 @@ class Properties(Gtk.Window):
         self.defaultConf['FS'] = self.entryFS.get_text()
         self.defaultConf['TRAY'] = self.checkTray.get_active()
         self.defaultConf['CHECK_VERSION'] = self.checkVersion.get_active()
+        self.defaultConf['LOG'] = self.checkLog.get_active()
         save = False
         nameConn = self.entryKioskConn.get_text()
         if self.changeKioskAll.get_active():
@@ -258,6 +264,7 @@ class Properties(Gtk.Window):
             saveInFile('default.conf',self.defaultConf)
             gui.viewStatus(self.statusbar, "Настройки сохранены в файле default.conf...")
             log.info("Новые настройки для программы сохранены в файле default.conf.")
+            if not self.checkLog.get_active(): log.warning("ВЕДЕНИЕ ЖУРНАЛА ПОСЛЕ ПЕРЕЗАПУСКА ПРОГРАММЫ БУДЕТ ОТКЛЮЧЕНО!")
             gui.Gui.initLabels(True, self.labelRDP, self.labelVNC, self.labelFS)
             self.conn_note.set_current_page(int(self.defaultConf['TAB']))
             if self.defaultConf['TRAY']:

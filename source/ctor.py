@@ -4,6 +4,11 @@
 import time, properties
 from GLOBAL import *
 
+try: enableLog = properties.loadFromFile('default.conf')['LOG']
+except KeyError: enableLog = DEFAULT['LOG']
+if enableLog: STD_TO_LOG = ' >> ' + STDLOGFILE + " 2>&1 &"
+else: STD_TO_LOG = ' &'
+
 def f_write(f_name, cfg):
     """Создание файла с конфигурацией для remmina"""
     f = open(WORKFOLDER+f_name,"w")
