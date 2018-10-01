@@ -4,7 +4,7 @@
 import os, subprocess
 
 #Определение домашней папки пользователя
-VERSION = "1.7.2"
+VERSION = "1.8.0-rc0"
 
 #Определение домашней папки пользователя
 HOMEFOLDER = os.getenv('HOME')
