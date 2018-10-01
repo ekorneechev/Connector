@@ -189,7 +189,7 @@ class XFreeRdp:
                     if args[26]: command += ' /nsc'
                     if args[27]: command += ' /jpeg'
                     if args[28]: command += ' /jpeg-quality:' + str(args[28])
-                    if args[29]: command += ' /drive:MEDIA,' + USBPATH
+                    if args[29] and properties.checkPath(USBPATH): command += ' /drive:MEDIA,' + USBPATH
                     if args[30]: command += ' /p:$(zenity --entry --title="Аутентификация (with NLA)" --text="Введите пароль для пользователя '+ args[1] + ':" --hide-text)'
                     else: command += ' -sec-nla'
                     if args[31]: command += ' /workarea'

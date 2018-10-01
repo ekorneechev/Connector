@@ -122,10 +122,13 @@ def searchName(name):
         log.warning("Файл сохраненных подключений (connections.db) не найден!")
     return False
 
+def checkPath(path):
+    """Функция проверки существования файла/папки"""
+    return not bool(int(subprocess.check_output("stat " + path + " > /dev/null 2>&1; echo $?; exit 0",
+                                                  shell=True, universal_newlines=True).strip()))
 def checkLogFile(filePath):
     """Функция проверки размера лог-файла и его архивация, если он больше 10Мб"""
-    exists = not bool(int(subprocess.check_output("stat " + filePath + " > /dev/null 2>&1; echo $?; exit 0", 
-                                                  shell=True, universal_newlines=True).strip()))
+    exists = checkPath(filePath)
     if exists:
         sizeLog = int(subprocess.check_output("stat -c%s " + filePath + "; exit 0",
                                               shell=True, universal_newlines=True).strip())
