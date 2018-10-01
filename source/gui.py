@@ -492,6 +492,11 @@ class Gui(Gtk.Application):
                 self.RDP_desktop.set_active(False)
                 self.RDP_down.set_active(False)
                 self.RDP_docs.set_active(False)
+            try:
+                if args[36]: self.RDP_gdi.set_active(True)
+            except IndexError:
+                properties.log.info("Подключение создано в версии приложения < 1.8.0; реализована совместимость")
+                self.RDP_gdi.set_active(False)
 
         if protocol == 'SPICE':
             if args[1]: self.SPICE_tls.set_active(True)
@@ -568,6 +573,7 @@ class Gui(Gtk.Application):
             self.RDP_desktop = self.pref_builder.get_object("check_RDP1_desktop")
             self.RDP_down = self.pref_builder.get_object("check_RDP1_down")
             self.RDP_docs = self.pref_builder.get_object("check_RDP1_docs")
+            self.RDP_gdi = self.pref_builder.get_object("check_RDP1_gdi")
 
         if protocol == 'NX':
             self.NX_user = self.pref_builder.get_object("entry_NX_user")
@@ -743,10 +749,12 @@ class Gui(Gtk.Application):
             else: down = 0
             if self.RDP_docs.get_active(): docs = 1
             else: docs = 0
+            if self.RDP_gdi.get_active(): gdi = 1
+            else: gdi = 0
             args = [user, domain, fullscreen, clipboard, resolution, color, folder, gserver, guser, gdomain, gpasswd, 
                     admin, smartcards, printers, sound, microphone, multimon, compression, compr_level, fonts, 
                     aero, drag, animation, theme, wallpapers, nsc, jpeg, jpeg_quality, usb, nla, workarea, span,
-                    desktop, down, docs]
+                    desktop, down, docs, gdi]
 
         if protocol == 'NX':
             user = self.NX_user.get_text()
