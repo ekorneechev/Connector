@@ -5,7 +5,7 @@ from sys import argv, exit
 
 def main():
     currentVersion = check_output("curl https://raw.githubusercontent.com/ekorneechev/Connector/master/VERSION 2>/dev/null; exit 0",shell=True, universal_newlines=True).strip()
-    if currentVersion and currentVersion != argv[1] and len(currentVersion) <= 8:
+    if currentVersion and currentVersion != argv[1] and len(currentVersion) <= 8: #8 - чтобы не оповещало о RC
         system("zenity --notification --window-icon='info' --text='Программа Connector\nВаша версия программы устарела!\nТекущая: " + argv[1] + "\nАктуальная: " +  currentVersion + "'")
     exit(0)
 
