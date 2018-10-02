@@ -9,8 +9,9 @@ MAN=$SHARE/man/man1
 ETC=$TARGET/etc/$TARGET
 MIME=$SHARE/mime/packages
 ICONS=$SHARE/icons/hicolor/64x64/apps
+OS=$1
 
-rm -rf $TARGET*
+rm -rf $TARGET
 mkdir -p $BIN $APPS $PREFIX $MAN $ETC $MIME $ICONS
 cp ../source/*.py $PREFIX/
 cp ../source/$TARGET-check-version $PREFIX/
@@ -28,8 +29,11 @@ cd $TARGET
 md5deep -rl usr > DEBIAN/md5sums
 md5deep -rl etc >> DEBIAN/md5sums
 cd ..
-cp control conffiles $TARGET/DEBIAN/
+if [ "$OS" == "mint17" -o "$OS" == "ubuntu14" ];
+then cp control.old $TARGET/DEBIAN/control;
+else cp control $TARGET/DEBIAN/; fi;
+cp conffiles $TARGET/DEBIAN/
 sed -i "s\Installed-Size:\Installed-Size: $INST_SIZE\g" $TARGET/DEBIAN/control
 fakeroot dpkg-deb --build $TARGET
-mv $TARGET.deb ${TARGET}_`grep Version control | sed s/Version:\ //g`_all.deb
+mv $TARGET.deb ${TARGET}_`grep Version $TARGET/DEBIAN/control | sed s/Version:\ //g`_all.deb
 rm -r $TARGET/

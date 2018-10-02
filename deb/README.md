@@ -14,7 +14,9 @@ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 * Выполнение скрипта сборки DEB-пакета:
 
       git clone https://github.com/ekorneechev/Connector
-      cd Connector/deb; chmod 755 buildDeb.sh; ./buildDeb.sh
+      cd Connector/deb; chmod 755 buildDeb.sh;
+      ./buildDeb.sh #для Ubuntu 18.04 и Mint 19
+      ./buildDeb.sh mint17/ubuntu14 #для Ubuntu 14.04 и Mint 17
 
 * Установка пакета:
     
