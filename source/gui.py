@@ -1260,6 +1260,9 @@ class Gui(Gtk.Application):
         parameters[program] = self.applyPreferences(name)
         self.fixDefArgs(parameters[program], name)
         properties.saveInFile('default.conf', parameters)
+        dialog = Gtk.MessageDialog(self.pref_window, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK,"Настройки по умолчанию сохранены.")
+        response = dialog.run()
+        dialog.destroy()
 
 def f_main(pwd="/tmp/"):
     os.system("xdg-mime default connector.desktop application/x-connector")
