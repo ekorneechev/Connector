@@ -334,14 +334,17 @@ class Gui(Gtk.Application):
         if 'loadParameters' in dir(entry_server): #если изменяется или копируется соединение, то загружаем параметры (фэйковый класс Entry)
             parameters = entry_server.loadParameters()
         else: #иначе (новое подключение), пытаемся загрузить дефолтные настройки
-            try: parameters = properties.loadFromFile('default.conf')['FREERDP']
-            except KeyError: parameters = DEFAULT['FREERDP']
+            try: parameters = properties.loadFromFile('default.conf')[name + '_ARGS']
+            except KeyError:
+                try: parameters = DEFAULT[name + '_ARGS'];
+                except KeyError: parameters = None
         self.setPreferences(protocol, parameters)
         self.pref_window.add(box)
         self.pref_window.show_all()
 
     def setPreferences(self, protocol, args):
         """В этой функции параметры загружаются из сохраненного файла"""
+        if not args: return False
         if protocol == 'VNC' and self.whatProgram['VNC'] == 1:
             if args[1] != '': self.VNC_viewmode.set_active(True)
             if args[2] != '': self.VNC_viewonly.set_active(True)
@@ -1249,11 +1252,13 @@ class Gui(Gtk.Application):
         spisok.insert(0,'') #значение поля "Сервер"
         return spisok
 
-    def onButtonDefaultFreerdp(self, *args):
+    def onButtonDefault(self, entry):
         """Сохранение параметров подключений по умолчанию"""
+        name = entry.get_name()
+        program = self.changeProgram(name) + "_ARGS"
         parameters = properties.loadFromFile('default.conf')
-        parameters['FREERDP'] = self.applyPreferences('RDP')
-        self.fixDefArgs(parameters['FREERDP'], 'RDP')
+        parameters[program] = self.applyPreferences(name)
+        self.fixDefArgs(parameters[program], name)
         properties.saveInFile('default.conf', parameters)
 
 def f_main(pwd="/tmp/"):
