@@ -15,6 +15,16 @@ class FakeLog():
     def warning (self, *args, **kwargs): pass
     def exception (self, *args, **kwargs): pass
 
+log = FakeLog()
+os.system("mkdir -p " + LOGFOLDER)
+
+def saveInFile(fileName, obj):
+    """Запись параметров в файл:
+    saveInFile(<имя файла>, <имя объекта для записи>)"""
+    dbfile = open(WORKFOLDER+fileName, 'wb')
+    pickle.dump(obj, dbfile)
+    dbfile.close()
+
 def loadFromFile(fileName, window = None):
     """Загрузка сохраненных параметров из файла"""
     try: 
@@ -41,21 +51,17 @@ def loadFromFile(fileName, window = None):
         response = dialog.run()
         dialog.destroy()
         log.exception("Файл %s имеет неверный формат! Подробнее:", fileName)
+        if fileName.find('default.conf') != -1: saveInFile(fileName, DEFAULT); return DEFAULT
         return None
 
 try: enableLog = loadFromFile('default.conf')['LOG']
 except KeyError: enableLog = DEFAULT['LOG']
 if enableLog:
     log = logging.getLogger("connector")
-    os.system("mkdir -p " + LOGFOLDER)
     logging.basicConfig (
         filename = LOGFILE,
         format = "--- %(levelname)-10s %(asctime)s --- %(message)s",
-        level = logging.INFO
-    )
-else:
-    os.system("mkdir -p " + WORKFOLDER)
-    log = FakeLog()
+        level = logging.INFO)
 
 def importFromFile(fileName, window = None):
     """Импорт параметров из файла .ctor"""
@@ -71,13 +77,6 @@ def importFromFile(fileName, window = None):
         dialog.destroy()
         log.exception("Файл %s имеет неверный формат! Подробнее:", fileName)
         return None
-
-def saveInFile(fileName, obj):
-    """Запись параметров в файл:
-    saveInFile(<имя файла>, <имя объекта для записи>)"""
-    dbfile = open(WORKFOLDER+fileName, 'wb')
-    pickle.dump(obj, dbfile)
-    dbfile.close()
 
 def searchSshUser(query):
     """Определение имени пользователя и сервера 
