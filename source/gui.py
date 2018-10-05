@@ -284,8 +284,15 @@ class Gui(Gtk.Application):
                 parameters = self.applyPreferences(protocol)
                 parameters.insert(0, server)
                 parameters.append(server) #для заголовка окна
-                connect.start(parameters)
-            else: connect.start(server)
+            else:
+                self.whatProgram = properties.loadFromFile('default.conf')
+                program = self.changeProgram(protocol) + "_ARGS"
+                try:
+                    parameters = self.whatProgram[program]
+                    parameters[0] = server
+                    parameters.append(server) #для заголовка окна
+                except KeyError: parameters = server
+            connect.start(parameters)
             viewStatus(self.statusbar, "Подключение к серверу " + server + "...")
             self.writeServerInDb(entry)
         else:
