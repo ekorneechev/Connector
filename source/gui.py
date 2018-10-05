@@ -307,7 +307,7 @@ class Gui(Gtk.Application):
         Доступно как с кнопки, так и из пункта меню 'Подключение'"""
         self.pref_window = Gtk.Window()
         self.prefClick = True #для определения нажатия на кнопку Доп. параметры
-        name = entry_server.get_name() ; tmp = name
+        name = entry_server.get_name() ; protocol = name
         server = entry_server.get_text()
         self.pref_window.set_title("Параметры " + name + "-подключения")
         self.pref_window.set_icon_from_file("data/" + name + ".png")
@@ -324,20 +324,19 @@ class Gui(Gtk.Application):
         if nameConnect: entryName.set_text(nameConnect)
         box = self.pref_builder.get_object("box_" + name)
         combo = self.pref_builder.get_object("combo_" + name)
-        combo.set_model(self.liststore[tmp])
+        combo.set_model(self.liststore[protocol])
         serv = self.pref_builder.get_object("entry_" + name + "_serv")
         serv.set_text(server)
         cancel = self.pref_builder.get_object("button_" +name+"_cancel")
         cancel.connect("clicked", self.onCancel, self.pref_window)
         self.pref_window.connect("delete-event", self.onClose)
-        self.initPreferences(tmp)
-        try:
-            #если изменяется или копируется соединение, то загружаем параметры
-            args = entry_server.loadParameters()
-            self.setPreferences(tmp, args)
-        except:
-            #иначе (новое подключение), пропускаем эту загрузку
-            pass
+        self.initPreferences(protocol)
+        if 'loadParameters' in dir(entry_server): #если изменяется или копируется соединение, то загружаем параметры (фэйковый класс Entry)
+            parameters = entry_server.loadParameters()
+        else: #иначе (новое подключение), пытаемся загрузить дефолтные настройки
+            try: parameters = properties.loadFromFile('default.conf')['FREERDP']
+            except KeyError: parameters = DEFAULT['FREERDP']
+        self.setPreferences(protocol, parameters)
         self.pref_window.add(box)
         self.pref_window.show_all()
 
@@ -1242,11 +1241,19 @@ class Gui(Gtk.Application):
         else:
             self.quit()
 
+    def fixDefArgs(self, spisok, protocol):
+        """Функция приводит в необходимый вид параметры подключений по умолчанию"""
+        count = 0
+        if protocol == 'RDP': count = 2 #для RDP это имя пользователя и домен
+        for i in range(count): spisok[i] = ''
+        spisok.insert(0,'') #значение поля "Сервер"
+        return spisok
+
     def onButtonDefaultFreerdp(self, *args):
         """Сохранение параметров подключений по умолчанию"""
         parameters = properties.loadFromFile('default.conf')
         parameters['FREERDP'] = self.applyPreferences('RDP')
-        parameters['FREERDP'].pop(0); parameters['FREERDP'].pop(0) #удаляем имя пользователя и домен
+        self.fixDefArgs(parameters['FREERDP'], 'RDP')
         properties.saveInFile('default.conf', parameters)
 
 def f_main(pwd="/tmp/"):
