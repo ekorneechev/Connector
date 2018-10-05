@@ -1242,6 +1242,13 @@ class Gui(Gtk.Application):
         else:
             self.quit()
 
+    def onButtonDefaultFreerdp(self, *args):
+        """Сохранение параметров подключений по умолчанию"""
+        parameters = properties.loadFromFile('default.conf')
+        parameters['FREERDP'] = self.applyPreferences('RDP')
+        parameters['FREERDP'].pop(0); parameters['FREERDP'].pop(0) #удаляем имя пользователя и домен
+        properties.saveInFile('default.conf', parameters)
+
 def f_main(pwd="/tmp/"):
     os.system("xdg-mime default connector.desktop application/x-connector")
     try:
