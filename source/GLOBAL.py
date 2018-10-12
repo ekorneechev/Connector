@@ -159,3 +159,11 @@ DEFAULT['CHECK_VERSION'] = True
 #Параметры подключений по умолчанию
 #FreeRDP:
 DEFAULT['RDP1_ARGS'] = ['','', 1, 1, '', '32', '', '', '', '', '', 0, 0, 0, 0, 0, 0, 0, None, 0, 0, 0, 0, 0, 0, 0, 0, None, 0, 0, 0, 0, 0, 0, 0, 0]
+#Remmina
+DEFAULT['RDP_ARGS'] = ['', '', 32', '0', '', 3, '', 0, 0, 'off', 0]
+DEFAULT['VNC_ARGS'] = ['', '9', '24', 1, 0, 0, 0, 1]
+DEFAULT['NX_ARGS'] = ['', '0', '', 1, '', 0, 0, '']
+DEFAULT['XDMCP_ARGS'] = ['0', 1, '', 0, 0, '']
+DEFAULT['SPICE_ARGS'] = [0, 0, 0, 0, 0, 0, '']
+DEFAULT['SSH_ARGS'] = ['', 0, '', 'UTF-8', '']
+DEFAULT['SFTP_ARGS'] = ['', 0, '', 'UTF-8', '/']

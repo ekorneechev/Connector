@@ -23,82 +23,76 @@ class Remmina:
     f_name = ".tmp.remmina"
     def create_cfg_file(self, args):
         """Создание файла конфигурации для соединения"""
-        if type(args) == list:
-            protocol = self.cfg['protocol']
-            server, login = properties.searchSshUser(args[0])
-            self.cfg['server'] = server
-            self.cfg['name'] = args.pop()
-            if protocol == 'RDP':
-                #[user, domain, color, quality, resolution, viewmode, folder, printer, clipboard, sound]
-                self.cfg['username'] = args[1]                              
-                self.cfg['domain'] = args[2]
-                self.cfg['colordepth'] = args[3]
-                self.cfg['quality'] = args[4]
-                self.cfg['resolution'] = args[5]
-                self.cfg['viewmode'] = args[6]
-                self.cfg['sharefolder'] = args[7]
-                self.cfg['shareprinter'] = args[8]
-                self.cfg['disableclipboard'] = args[9]
-                self.cfg['sound'] = args[10]
-                self.cfg['sharesmartcard'] = args[11]                                
-            if protocol == 'NX':
-                #[user, quality, resolution, viewmode, keyfile, crypt, clipboard, _exec]
-                self.cfg['username'] = args[1]
-                self.cfg['quality'] = args[2]
-                self.cfg['resolution'] = args[3]
-                self.cfg['viewmode'] = args[4]
-                self.cfg['nx_privatekey'] = args[5]
-                self.cfg['disableencryption'] = args[6]
-                self.cfg['disableclipboard'] = args[7]
-                self.cfg['exec'] = args[8] 
-            if protocol == 'VNC': 
-                #[user, quality, color, viewmode, viewonly, crypt, clipboard, showcursor]
-                self.cfg['username'] = args[1]
-                self.cfg['quality'] = args[2]
-                self.cfg['colordepth'] = args[3]
-                self.cfg['viewmode'] = args[4]
-                self.cfg['viewonly'] = args[5]
-                self.cfg['disableencryption'] = args[6]
-                self.cfg['disableclipboard'] = args[7]
-                self.cfg['showcursor'] = args[8] 
-            if protocol == 'XDMCP':
-                #[color, viewmode, resolution, once, showcursor, _exec]
-                self.cfg['colordepth'] = args[1]
-                self.cfg['viewmode'] = args[2]
-                self.cfg['resolution'] = args[3]
-                self.cfg['once'] = args[4]
-                self.cfg['showcursor'] = args[5]
-                self.cfg['exec'] = args[6]
-            if protocol == 'SSH':
-                #[user, SSH_auth, keyfile, charset, _exec] 
-                if login: self.cfg['ssh_username'] = login
-                else: self.cfg['ssh_username'] = args[1]
-                self.cfg['ssh_auth'] = args[2]
-                self.cfg['ssh_privatekey'] = args[3]
-                self.cfg['ssh_charset'] = args[4]
-                self.cfg['exec'] = args[5]
-            if protocol == 'SFTP':
-                #[user, SSH_auth, keyfile, charset, execpath]
-                if login: self.cfg['ssh_username'] = login
-                else: self.cfg['ssh_username'] = args[1]
-                self.cfg['ssh_auth'] = args[2]
-                self.cfg['ssh_privatekey'] = args[3]
-                self.cfg['ssh_charset'] = args[4]
-                self.cfg['execpath'] = args[5]
-            if protocol == 'SPICE':
-                #[tls, viewonly, resize, clipboard, cards, sound, cacert]
-                self.cfg['usetls'] = args[1]
-                self.cfg['viewonly'] = args[2]
-                self.cfg['resizeguest'] = args[3]
-                self.cfg['disableclipboard'] = args[4]
-                self.cfg['sharesmartcard'] = args[5]
-                self.cfg['enableaudio'] = args[6]
-                self.cfg['cacert'] = args[7]
-        else:
-            server, login = properties.searchSshUser(args)
+        protocol = self.cfg['protocol']
+        server, login = properties.searchSshUser(args[0])
+        self.cfg['server'] = server
+        self.cfg['name'] = args.pop()
+        if protocol == 'RDP':
+            #[user, domain, color, quality, resolution, viewmode, folder, printer, clipboard, sound]
+            self.cfg['username'] = args[1]
+            self.cfg['domain'] = args[2]
+            self.cfg['colordepth'] = args[3]
+            self.cfg['quality'] = args[4]
+            self.cfg['resolution'] = args[5]
+            self.cfg['viewmode'] = args[6]
+            self.cfg['sharefolder'] = args[7]
+            self.cfg['shareprinter'] = args[8]
+            self.cfg['disableclipboard'] = args[9]
+            self.cfg['sound'] = args[10]
+            self.cfg['sharesmartcard'] = args[11]
+        if protocol == 'NX':
+            #[user, quality, resolution, viewmode, keyfile, crypt, clipboard, _exec]
+            self.cfg['username'] = args[1]
+            self.cfg['quality'] = args[2]
+            self.cfg['resolution'] = args[3]
+            self.cfg['viewmode'] = args[4]
+            self.cfg['nx_privatekey'] = args[5]
+            self.cfg['disableencryption'] = args[6]
+            self.cfg['disableclipboard'] = args[7]
+            self.cfg['exec'] = args[8]
+        if protocol == 'VNC':
+            #[user, quality, color, viewmode, viewonly, crypt, clipboard, showcursor]
+            self.cfg['username'] = args[1]
+            self.cfg['quality'] = args[2]
+            self.cfg['colordepth'] = args[3]
+            self.cfg['viewmode'] = args[4]
+            self.cfg['viewonly'] = args[5]
+            self.cfg['disableencryption'] = args[6]
+            self.cfg['disableclipboard'] = args[7]
+            self.cfg['showcursor'] = args[8]
+        if protocol == 'XDMCP':
+            #[color, viewmode, resolution, once, showcursor, _exec]
+            self.cfg['colordepth'] = args[1]
+            self.cfg['viewmode'] = args[2]
+            self.cfg['resolution'] = args[3]
+            self.cfg['once'] = args[4]
+            self.cfg['showcursor'] = args[5]
+            self.cfg['exec'] = args[6]
+        if protocol == 'SSH':
+            #[user, SSH_auth, keyfile, charset, _exec]
             if login: self.cfg['ssh_username'] = login
-            self.cfg['server'] = server
-            self.cfg['name'] += server
+            else: self.cfg['ssh_username'] = args[1]
+            self.cfg['ssh_auth'] = args[2]
+            self.cfg['ssh_privatekey'] = args[3]
+            self.cfg['ssh_charset'] = args[4]
+            self.cfg['exec'] = args[5]
+        if protocol == 'SFTP':
+            #[user, SSH_auth, keyfile, charset, execpath]
+            if login: self.cfg['ssh_username'] = login
+            else: self.cfg['ssh_username'] = args[1]
+            self.cfg['ssh_auth'] = args[2]
+            self.cfg['ssh_privatekey'] = args[3]
+            self.cfg['ssh_charset'] = args[4]
+            self.cfg['execpath'] = args[5]
+        if protocol == 'SPICE':
+            #[tls, viewonly, resize, clipboard, cards, sound, cacert]
+            self.cfg['usetls'] = args[1]
+            self.cfg['viewonly'] = args[2]
+            self.cfg['resizeguest'] = args[3]
+            self.cfg['disableclipboard'] = args[4]
+            self.cfg['sharesmartcard'] = args[5]
+            self.cfg['enableaudio'] = args[6]
+            self.cfg['cacert'] = args[7]
         f_write(self.f_name, self.cfg)        
 
     def start(self, parameters):
