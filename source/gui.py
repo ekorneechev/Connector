@@ -289,7 +289,7 @@ class Gui(Gtk.Application):
                 program = self.changeProgram(protocol) + "_ARGS"
                 try: parameters = self.whatProgram[program]
                 except KeyError:
-                    try: parameters = DEFAULT[program]
+                    try: parameters = DEFAULT[program].copy()
                     except KeyError: parameters = server
                 if type(parameters) == list:
                     parameters.insert(0,server)
@@ -345,7 +345,7 @@ class Gui(Gtk.Application):
         else: #иначе (новое подключение), пытаемся загрузить дефолтные настройки
             try: parameters = properties.loadFromFile('default.conf')[name + '_ARGS']
             except KeyError:
-                try: parameters = DEFAULT[name + '_ARGS'];
+                try: parameters = DEFAULT[name + '_ARGS'].copy()
                 except KeyError: parameters = None
             if type(parameters) == list: parameters.insert(0,server)
         self.setPreferences(protocol, parameters)
