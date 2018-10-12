@@ -287,11 +287,13 @@ class Gui(Gtk.Application):
             else:
                 self.whatProgram = properties.loadFromFile('default.conf')
                 program = self.changeProgram(protocol) + "_ARGS"
-                try:
-                    parameters = self.whatProgram[program]
-                    parameters[0] = server
+                try: parameters = self.whatProgram[program]
+                except KeyError:
+                    try: parameters = DEFAULT[program]
+                    except KeyError: parameters = server
+                if type(parameters) == list:
+                    parameters.insert(0,server)
                     parameters.append(server) #для заголовка окна
-                except KeyError: parameters = server
             connect.start(parameters)
             viewStatus(self.statusbar, "Подключение к серверу " + server + "...")
             self.writeServerInDb(entry)
@@ -345,6 +347,7 @@ class Gui(Gtk.Application):
             except KeyError:
                 try: parameters = DEFAULT[name + '_ARGS'];
                 except KeyError: parameters = None
+            if type(parameters) == list: parameters.insert(0,server)
         self.setPreferences(protocol, parameters)
         self.pref_window.add(box)
         self.pref_window.show_all()
@@ -1251,21 +1254,12 @@ class Gui(Gtk.Application):
         else:
             self.quit()
 
-    def fixDefArgs(self, spisok, protocol):
-        """Функция приводит в необходимый вид параметры подключений по умолчанию"""
-        count = 0
-        if protocol == 'RDP': count = 2 #для RDP это имя пользователя и домен
-        for i in range(count): spisok[i] = ''
-        spisok.insert(0,'') #значение поля "Сервер"
-        return spisok
-
     def onButtonDefault(self, entry):
         """Сохранение параметров подключений по умолчанию"""
         name = entry.get_name()
         program = self.changeProgram(name) + "_ARGS"
         parameters = properties.loadFromFile('default.conf')
         parameters[program] = self.applyPreferences(name)
-        self.fixDefArgs(parameters[program], name)
         properties.saveInFile('default.conf', parameters)
         dialog = Gtk.MessageDialog(self.pref_window, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK,"Настройки по умолчанию сохранены.")
         response = dialog.run()
