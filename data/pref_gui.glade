@@ -620,6 +620,21 @@
           </packing>
         </child>
         <child>
+          <object class="GtkButton" id="button_SFTP_default">
+            <property name="label" translatable="yes">Сохранить параметры по умолчанию</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="margin_bottom">3</property>
+            <signal name="clicked" handler="onButtonDefault" object="entry_SFTP_serv" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">10</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkBox" id="box55">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
@@ -655,7 +670,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">10</property>
+            <property name="position">11</property>
           </packing>
         </child>
         <child>
@@ -668,7 +683,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">11</property>
+            <property name="position">12</property>
           </packing>
         </child>
         <child>
@@ -723,7 +738,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">12</property>
+            <property name="position">13</property>
           </packing>
         </child>
       </object>
@@ -975,6 +990,21 @@
       </packing>
     </child>
     <child>
+      <object class="GtkButton" id="button_SPICE_default">
+        <property name="label" translatable="yes">Сохранить параметры по умолчанию</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="margin_bottom">3</property>
+        <signal name="clicked" handler="onButtonDefault" object="entry_SPICE_serv" swapped="no"/>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">10</property>
+      </packing>
+    </child>
+    <child>
       <object class="GtkBox" id="box60spice">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -1010,7 +1040,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">10</property>
+        <property name="position">11</property>
       </packing>
     </child>
     <child>
@@ -1023,7 +1053,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">11</property>
+        <property name="position">12</property>
       </packing>
     </child>
     <child>
@@ -1078,7 +1108,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">12</property>
+        <property name="position">13</property>
       </packing>
     </child>
   </object>
@@ -1387,6 +1417,21 @@
       </packing>
     </child>
     <child>
+      <object class="GtkButton" id="button_SSH_default">
+        <property name="label" translatable="yes">Сохранить параметры по умолчанию</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="margin_bottom">3</property>
+        <signal name="clicked" handler="onButtonDefault" object="entry_SSH_serv" swapped="no"/>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">10</property>
+      </packing>
+    </child>
+    <child>
       <object class="GtkBox" id="box56">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -1422,7 +1467,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">10</property>
+        <property name="position">11</property>
       </packing>
     </child>
     <child>
@@ -1435,7 +1480,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">11</property>
+        <property name="position">12</property>
       </packing>
     </child>
     <child>
@@ -1490,7 +1535,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">12</property>
+        <property name="position">13</property>
       </packing>
     </child>
   </object>
@@ -3922,6 +3967,21 @@
       </packing>
     </child>
     <child>
+      <object class="GtkButton" id="button_VNC_default">
+        <property name="label" translatable="yes">Сохранить параметры по умолчанию</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="margin_bottom">3</property>
+        <signal name="clicked" handler="onButtonDefault" object="entry_VNC_serv" swapped="no"/>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">12</property>
+      </packing>
+    </child>
+    <child>
       <object class="GtkBox" id="box54">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -3957,7 +4017,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">12</property>
+        <property name="position">13</property>
       </packing>
     </child>
     <child>
@@ -3970,7 +4030,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">13</property>
+        <property name="position">14</property>
       </packing>
     </child>
     <child>
@@ -4025,7 +4085,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">14</property>
+        <property name="position">15</property>
       </packing>
     </child>
   </object>
@@ -4477,6 +4537,21 @@
       </packing>
     </child>
     <child>
+      <object class="GtkButton" id="button_NX_default">
+        <property name="label" translatable="yes">Сохранить параметры по умолчанию</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="margin_bottom">3</property>
+        <signal name="clicked" handler="onButtonDefault" object="entry_NX_serv" swapped="no"/>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">11</property>
+      </packing>
+    </child>
+    <child>
       <object class="GtkBox" id="box59">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -4512,7 +4587,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">11</property>
+        <property name="position">12</property>
       </packing>
     </child>
     <child>
@@ -4525,7 +4600,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">12</property>
+        <property name="position">13</property>
       </packing>
     </child>
     <child>
@@ -4580,7 +4655,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">13</property>
+        <property name="position">14</property>
       </packing>
     </child>
   </object>
@@ -4927,6 +5002,21 @@
       </packing>
     </child>
     <child>
+      <object class="GtkButton" id="button_XDMCP_default">
+        <property name="label" translatable="yes">Сохранить параметры по умолчанию</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="margin_bottom">3</property>
+        <signal name="clicked" handler="onButtonDefault" object="entry_XDMCP_serv" swapped="no"/>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">9</property>
+      </packing>
+    </child>
+    <child>
       <object class="GtkBox" id="box60">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -4962,7 +5052,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">9</property>
+        <property name="position">10</property>
       </packing>
     </child>
     <child>
@@ -4975,7 +5065,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">10</property>
+        <property name="position">11</property>
       </packing>
     </child>
     <child>
@@ -5030,7 +5120,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">11</property>
+        <property name="position">12</property>
       </packing>
     </child>
   </object>
@@ -5600,6 +5690,21 @@
       </packing>
     </child>
     <child>
+      <object class="GtkButton" id="button_RDP_default">
+        <property name="label" translatable="yes">Сохранить параметры по умолчанию</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="margin_bottom">3</property>
+        <signal name="clicked" handler="onButtonDefault" object="entry_RDP_serv" swapped="no"/>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">14</property>
+      </packing>
+    </child>
+    <child>
       <object class="GtkBox" id="box61">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
@@ -5635,7 +5740,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">14</property>
+        <property name="position">15</property>
       </packing>
     </child>
     <child>
@@ -5648,7 +5753,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">15</property>
+        <property name="position">16</property>
       </packing>
     </child>
     <child>
@@ -5703,7 +5808,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">16</property>
+        <property name="position">17</property>
       </packing>
     </child>
   </object>
