@@ -146,7 +146,6 @@ class XFreeRdp:
         if freerdpCheck():
             freerdpVersion = freerdpCheckVersion()
             if freerdpVersion > "1.2":
-                params = ' +auto-reconnect /cert-ignore'
                 nameConnect = args[len(args)-1]
                 command = 'xfreerdp /v:' + args[0] + " /t:'" + nameConnect + "'"
                 if args[1]: command += ' /u:' + args[1]
@@ -186,16 +185,19 @@ class XFreeRdp:
                 try: #Добавлена совместимость с предыдущей версией; < 1.4.0
                     if args[32]: command += ' /span'
                 except IndexError: pass
-                try: #Добавлена совместимость с предыдущей версией; < 1.4.1
+                try: #< 1.4.1
                     if args[33]: command += ' /drive:Desktop,' + DESKFOLDER
                     if args[34]: command += ' /drive:Downloads,' + DOWNFOLDER
                     if args[35]: command += ' /drive:Documents,' + DOCSFOLDER
                 except IndexError: pass
-                try: #Добавлена совместимость с предыдущей версией; < 1.8.0
+                try: #< 1.8.0
                     if args[36]: command += ' /gdi:hw'
                     else: command += ' /gdi:sw'
                 except IndexError: command += ' /gdi:sw'
-                command += params
+                try: #< 1.8.2
+                    if args[38]: command += ' /cert-ignore'
+                    if args[37]: command += ' +auto-reconnect'
+                except IndexError: command += ' +auto-reconnect /cert-ignore'
                 server = args[0]
                 properties.log.info ("FreeRDP: подключение к серверу %s. Команда запуска:", server)
                 properties.log.info (command)

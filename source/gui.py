@@ -493,22 +493,25 @@ class Gui(Gtk.Application):
             try: #Добавлена совместимость с предыдущей версией =>1.3.24
                 if args[32]: self.RDP_span.set_active(True)
             except IndexError:
-                properties.log.info("Подключение создано в версии приложения < 1.4.0; реализована совместимость")
                 self.RDP_span.set_active(False)
             try:
                 if args[33]: self.RDP_desktop.set_active(True)
                 if args[34]: self.RDP_down.set_active(True)
                 if args[35]: self.RDP_docs.set_active(True)
             except IndexError:
-                properties.log.info("Подключение создано в версии приложения < 1.4.1; реализована совместимость")
                 self.RDP_desktop.set_active(False)
                 self.RDP_down.set_active(False)
                 self.RDP_docs.set_active(False)
             try:
                 if args[36]: self.RDP_gdi.set_active(True)
             except IndexError:
-                properties.log.info("Подключение создано в версии приложения < 1.8.0; реализована совместимость")
                 self.RDP_gdi.set_active(False)
+            try:# <1.8.2
+                if args[37]: self.RDP_reconnect.set_active(False)
+                if args[38]: self.RDP_certignore.set_active(True)
+            except IndexError:
+                self.RDP_reconnect.set_active(False)
+                self.RDP_certignore.set_active(True)
 
         if protocol == 'SPICE':
             if args[1]: self.SPICE_tls.set_active(True)
@@ -586,6 +589,8 @@ class Gui(Gtk.Application):
             self.RDP_down = self.pref_builder.get_object("check_RDP1_down")
             self.RDP_docs = self.pref_builder.get_object("check_RDP1_docs")
             self.RDP_gdi = self.pref_builder.get_object("check_RDP1_gdi")
+            self.RDP_reconnect = self.pref_builder.get_object("check_RDP1_reconnect")
+            self.RDP_certignore = self.pref_builder.get_object("check_RDP1_certignore")
 
         if protocol == 'NX':
             self.NX_user = self.pref_builder.get_object("entry_NX_user")
@@ -763,10 +768,14 @@ class Gui(Gtk.Application):
             else: docs = 0
             if self.RDP_gdi.get_active(): gdi = 1
             else: gdi = 0
+            if self.RDP_reconnect.get_active(): reconnect = 0
+            else: reconnect = 1
+            if self.RDP_certignore.get_active(): certignore = 1
+            else: certignore = 0
             args = [user, domain, fullscreen, clipboard, resolution, color, folder, gserver, guser, gdomain, gpasswd, 
                     admin, smartcards, printers, sound, microphone, multimon, compression, compr_level, fonts, 
                     aero, drag, animation, theme, wallpapers, nsc, jpeg, jpeg_quality, usb, nla, workarea, span,
-                    desktop, down, docs, gdi]
+                    desktop, down, docs, gdi, reconnect, certignore]
 
         if protocol == 'NX':
             user = self.NX_user.get_text()
