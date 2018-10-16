@@ -621,7 +621,7 @@
         </child>
         <child>
           <object class="GtkButton" id="button_SFTP_default">
-            <property name="label" translatable="yes">Сохранить параметры по умолчанию</property>
+            <property name="label" translatable="yes">Сохранить как параметры по умолчанию</property>
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
@@ -991,7 +991,7 @@
     </child>
     <child>
       <object class="GtkButton" id="button_SPICE_default">
-        <property name="label" translatable="yes">Сохранить параметры по умолчанию</property>
+        <property name="label" translatable="yes">Сохранить как параметры по умолчанию</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
@@ -1418,7 +1418,7 @@
     </child>
     <child>
       <object class="GtkButton" id="button_SSH_default">
-        <property name="label" translatable="yes">Сохранить параметры по умолчанию</property>
+        <property name="label" translatable="yes">Сохранить как параметры по умолчанию</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
@@ -3510,7 +3510,7 @@
     </child>
     <child>
       <object class="GtkButton" id="button_RDP1_default">
-        <property name="label" translatable="yes">Сохранить параметры по умолчанию</property>
+        <property name="label" translatable="yes">Сохранить как параметры по умолчанию</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
@@ -3998,7 +3998,7 @@
     </child>
     <child>
       <object class="GtkButton" id="button_VNC_default">
-        <property name="label" translatable="yes">Сохранить параметры по умолчанию</property>
+        <property name="label" translatable="yes">Сохранить как параметры по умолчанию</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
@@ -4568,7 +4568,7 @@
     </child>
     <child>
       <object class="GtkButton" id="button_NX_default">
-        <property name="label" translatable="yes">Сохранить параметры по умолчанию</property>
+        <property name="label" translatable="yes">Сохранить как параметры по умолчанию</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
@@ -5033,7 +5033,7 @@
     </child>
     <child>
       <object class="GtkButton" id="button_XDMCP_default">
-        <property name="label" translatable="yes">Сохранить параметры по умолчанию</property>
+        <property name="label" translatable="yes">Сохранить как параметры по умолчанию</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
@@ -5721,7 +5721,7 @@
     </child>
     <child>
       <object class="GtkButton" id="button_RDP_default">
-        <property name="label" translatable="yes">Сохранить параметры по умолчанию</property>
+        <property name="label" translatable="yes">Сохранить как параметры по умолчанию</property>
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">True</property>
