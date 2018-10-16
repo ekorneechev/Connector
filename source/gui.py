@@ -419,7 +419,7 @@ class Gui(Gtk.Application):
                 NX_resol_hand.set_active(True)
                 self.NX_resolution.set_active_id(args[3])
             if args[4] == 4: self.NX_viewmode.set_active(True)
-            if args[5] == '': self.NX_keyfile.set_active(False)
+            if not args[5]: self.NX_keyfile.set_active(False)
             else:
                 self.NX_keyfile.set_active(True)
                 self.NX_path_keyfile.set_filename(args[5])
@@ -517,7 +517,7 @@ class Gui(Gtk.Application):
             if args[4]: self.SPICE_clipboard.set_active(False)
             if args[5]: self.SPICE_cards.set_active(True)
             if args[6]: self.SPICE_sound.set_active(True)
-            if args[7] == '': self.SPICE_CA.set_active(False)
+            if not args[7]: self.SPICE_CA.set_active(False)
             else:
                 self.SPICE_CA.set_active(True)
                 self.SPICE_cacert.set_filename(args[7])
