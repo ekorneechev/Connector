@@ -8,7 +8,7 @@ APS = $(PREFIX)/applications
 KIOSK = kiosk.access
 MIME = $(PREFIX)/mime
 ICON = $(PREFIX)/icons/hicolor/64x64/apps
-COMMIT = `git log --pretty="%h" -1`
+COMMIT = `git log --pretty="%h" -1 2>/dev/null`
 
 .PHONY: help install uninstall clean
 
