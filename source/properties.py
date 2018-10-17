@@ -369,6 +369,18 @@ Ctrl+Alt+F1 - вернуться на "Рабочий стол" """)
         try: widget.set_button_sensitivity(Gtk.SensitivityType.OFF)
         except: widget.set_sensitive(False)
 
+    def onButtonReset(self,*args):
+        """Сброс параметров программы"""
+        filename = "default.conf"
+        dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.WARNING, Gtk.ButtonsType.OK_CANCEL, "Сброс параметров")
+        dialog.format_secondary_text("Подтвердите сброс параметров программы к значениям по умолчанию")
+        response = dialog.run()
+        if response == Gtk.ResponseType.OK:
+            os.remove(WORKFOLDER + filename)
+            saveInFile(filename, DEFAULT)
+            log.info("Выполнен сброс программы к значения по умолчанию.")
+        dialog.destroy()
+        self.onClose(self)
 
 if __name__ == '__main__':
     pass
