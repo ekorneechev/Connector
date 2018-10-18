@@ -314,28 +314,23 @@ class Web:
 class FileServer:
     """Класс для настройки подключения к файловому серверу"""
     def start(self, args):
-        _conf = properties.loadFromFile('default.conf')
-        _exec = _conf['FS'] + ' "'
+        _exec = properties.loadFromFile('default.conf')['FS'] + ' "'
         if type(args) == str:
             if  not args.find("://") != -1:
-                os.system("zenity --warning --text='Введите протокол подключения!'")
+                os.system("zenity --warning --text='Введите протокол подключения!\nИли выберите из списка в дополнительных параметрах'")
                 return 1
             else:
                 command = _exec + args + '"'
                 server = args
         else:
-            if  not args[0].find("://") != -1:
-                os.system("zenity --warning --text='Введите протокол подключения!'")
-                return 1
-            else:
-                server = args[0]
-                _protocol, _server = args[0].split("://")
-                command = _exec + _protocol + "://"
-                if args[2]: command += args[2] + ";"
-                if args[1]: command += args[1] + "@"
-                command += _server
-                if args[3]: command += '/' + args[3]
-                command += '"'
+            try: protocol, server = args[0].split("://")
+            except: server = args[0]; protocol = args[4]
+            command = _exec + protocol + "://"
+            if args[2]: command += args[2] + ";"
+            if args[1]: command += args[1] + "@"
+            command += server
+            if args[3]: command += '/' + args[3]
+            command += '"'
         properties.log.info ("Открытие файлового сервера %s. Команда запуска:", server)
         properties.log.info (command)
         os.system (command + STD_TO_LOG)

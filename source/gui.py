@@ -529,6 +529,11 @@ class Gui(Gtk.Application):
             self.FS_user.set_text(args[1])
             self.FS_domain.set_text(args[2])
             self.FS_folder.set_text(args[3])
+            try: self.FS_type.set_active_id(args[4])
+            except: #совместимость с версиями ниже 1.8.2
+                protocol, server = args[0].split("://")
+                self.FS_type.set_active_id(protocol)
+                self.FS_server.set_text(server)
 
     def initPreferences(self, protocol):
         """В этой функции определяются различные для протоколов параметры"""
@@ -666,6 +671,8 @@ class Gui(Gtk.Application):
             self.FS_user = self.pref_builder.get_object("entry_FS_user")
             self.FS_domain = self.pref_builder.get_object("entry_FS_dom")
             self.FS_folder = self.pref_builder.get_object("entry_FS_folder")
+            self.FS_type = self.pref_builder.get_object("entry_FS_type")
+            self.FS_server = self.pref_builder.get_object("entry_FS_serv")
 
     def applyPreferences(self, protocol):
         """В этой функции параметры для подключения собираются из окна Доп. параметры в список"""
@@ -880,7 +887,8 @@ class Gui(Gtk.Application):
             user = self.FS_user.get_text()
             domain = self.FS_domain.get_text()
             folder = self.FS_folder.get_text()
-            args = [user, domain, folder]
+            _type = self.FS_type.get_active_id()
+            args = [user, domain, folder, _type]
 
         return args
 
