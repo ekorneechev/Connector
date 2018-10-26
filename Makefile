@@ -8,7 +8,7 @@ APS = $(PREFIX)/applications
 KIOSK = kiosk.access
 MIME = $(PREFIX)/mime
 ICON = $(PREFIX)/icons/hicolor/64x64/apps
-COMMIT = `git log --pretty="%h" -1 2>/dev/null`
+DATESTAMP = `git log --pretty="%cd" --date=short -1 | sed s/-//g 2>/dev/null`
 
 .PHONY: help install uninstall clean
 
@@ -26,7 +26,7 @@ install:
 	sed -i s#/usr/bin/$(TARGET)#$(PREFIX_BIN)/$(TARGET)#g source/*
 	sed -i s#/usr/bin/$(TARGET)#$(PREFIX_BIN)/$(TARGET)#g data/$(TARGET).desktop
 	sed -i s#$(PREFIX)/applications#/usr/share/applications#g source/GLOBAL.py
-	@if [ -n "$(COMMIT)" ]; then sed -i s#git#git.$(COMMIT)#g source/GLOBAL.py; fi
+	@if [ -n "$(DATESTAMP)" ]; then sed -i s#git#git.$(DATESTAMP)#g source/GLOBAL.py; fi
 	install -m755 source/$(TARGET) $(PREFIX_BIN)
 	mkdir -p $(APS)
 	install -m644 data/$(TARGET).desktop $(APS)
@@ -60,4 +60,4 @@ clean:
 	sed -i s#$(PREFIX)#/usr/share#g data/$(TARGET).desktop
 	sed -i s#$(PREFIX_BIN)/$(TARGET)#/usr/bin/$(TARGET)#g source/*
 	sed -i s#$(PREFIX_BIN)/$(TARGET)#/usr/bin/$(TARGET)#g data/$(TARGET).desktop
-	@if [ -n "$(COMMIT)" ]; then sed -i s#.$(COMMIT)##g source/GLOBAL.py; fi
+	@if [ -n "$(DATESTAMP)" ]; then sed -i s#.$(DATESTAMP)##g source/GLOBAL.py; fi
