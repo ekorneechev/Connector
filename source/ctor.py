@@ -231,7 +231,7 @@ class XdmcpRemmina(Remmina):
 class SftpRemmina(Remmina):
     """Класс для настройки SFTP-соединения через Remmina"""
     def __init__(self):
-        self.cfg = dict(name='SFTP-connection: ', protocol='SFTP', ssh_enabled=1, ssh_auth=0, 
+        self.cfg = dict(name='SFTP-connection: ', protocol='SFTP', ssh_enabled=0, ssh_auth=0, 
                         ssh_charset='UTF-8', ssh_privatekey='', username='', ssh_username='',
                         group='', password='', execpath='/', server='', window_maximize=0, 
                         window_height=600, window_width=800, ftp_vpanedpos=360, viewmode=0, disablepasswordstoring=1)
@@ -241,7 +241,7 @@ class SshRemmina(Remmina):
     """Класс для настройки SSH-соединения через Remmina"""
     def __init__(self):
         self.cfg = dict(name='SSH-connection: ', protocol='SSH', ssh_auth=0, ssh_charset='UTF-8', 
-                        ssh_privatekey='', group='', password='', username='', ssh_username='', ssh_enabled=1,
+                        ssh_privatekey='', group='', password='', username='', ssh_username='', ssh_enabled=0,
                         server='', window_maximize=0, window_width=500, window_height=500, viewmode=0, disablepasswordstoring=1)
         self.cfg['exec'] = ''
         self.f_name = '.tmp_SSH.remmina'
