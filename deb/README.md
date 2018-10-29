@@ -4,12 +4,12 @@ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 
 Для успешной установки пакета необходимо разрешить зависимости, указаны в [этом файле](https://github.com/ekorneechev/Connector/blob/master/deb_package/connector/DEBIAN/control), также рекомендуется обновить в системе все пакеты до актуальных версий:
 
-    sudo apt-get update && sudo apt-get upgrade
+    sudo apt update && sudo apt upgrade
 
 Для самостоятельной сборки deb-пакета Вам потребуется выполнить несколько команд: 
 * Установка необходимых для сборки пакетов:
 
-      sudo apt-get install dpkg debconf debhelper lintian md5deep
+      sudo apt install dpkg debconf debhelper lintian md5deep
 
 * Выполнение скрипта сборки DEB-пакета:
 
