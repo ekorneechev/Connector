@@ -512,6 +512,13 @@ class Gui(Gtk.Application):
             except IndexError:
                 self.RDP_reconnect.set_active(False)
                 self.RDP_certignore.set_active(True)
+            try:
+                if args[39]:
+                    self.RDP_pwdsave.set_active(True)
+                    self.RDP_pwd.set_text(args[40])
+            except IndexError:
+                self.RDP_pwdsave.set_active(False)
+                self.RDP_pwd.set_text('')
 
         if protocol == 'SPICE':
             if args[1]: self.SPICE_tls.set_active(True)
@@ -596,6 +603,8 @@ class Gui(Gtk.Application):
             self.RDP_gdi = self.pref_builder.get_object("check_RDP1_gdi")
             self.RDP_reconnect = self.pref_builder.get_object("check_RDP1_reconnect")
             self.RDP_certignore = self.pref_builder.get_object("check_RDP1_certignore")
+            self.RDP_pwd = self.pref_builder.get_object("entry_RDP1_pwd")
+            self.RDP_pwdsave = self.pref_builder.get_object("check_RDP1_pwd")
 
         if protocol == 'NX':
             self.NX_user = self.pref_builder.get_object("entry_NX_user")
@@ -779,10 +788,13 @@ class Gui(Gtk.Application):
             else: reconnect = 1
             if self.RDP_certignore.get_active(): certignore = 1
             else: certignore = 0
+            pwd = self.RDP_pwd.get_text()
+            if self.RDP_pwdsave.get_active(): pwdsave = 1
+            else: pwdsave = 0
             args = [user, domain, fullscreen, clipboard, resolution, color, folder, gserver, guser, gdomain, gpasswd, 
                     admin, smartcards, printers, sound, microphone, multimon, compression, compr_level, fonts, 
                     aero, drag, animation, theme, wallpapers, nsc, jpeg, jpeg_quality, usb, nla, workarea, span,
-                    desktop, down, docs, gdi, reconnect, certignore]
+                    desktop, down, docs, gdi, reconnect, certignore, pwdsave, pwd]
 
         if protocol == 'NX':
             user = self.NX_user.get_text()

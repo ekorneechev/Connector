@@ -198,6 +198,9 @@ class XFreeRdp:
                     if args[38]: command += ' /cert-ignore'
                     if args[37]: command += ' +auto-reconnect'
                 except IndexError: command += ' +auto-reconnect /cert-ignore'
+                try:
+                    if args[40]: command += ' /p:' + args[40]
+                except: pass
                 server = args[0]
                 properties.log.info ("FreeRDP: подключение к серверу %s. Команда запуска:", server)
                 properties.log.info (command)
