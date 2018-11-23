@@ -203,7 +203,9 @@ class XFreeRdp:
                 except: pass
                 server = args[0]
                 properties.log.info ("FreeRDP: подключение к серверу %s. Команда запуска:", server)
-                properties.log.info (command)
+                try: cmd2log = command.replace("/p:" + command.split("/p:")[1].split(' ')[0],"/p:<hidden>")
+                except: cmd2log = command
+                properties.log.info (cmd2log)
                 os.system(command + STD_TO_LOG)
             else:
                 properties.log.warning ("FreeRDP - версия ниже 1.2!")
