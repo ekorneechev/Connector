@@ -544,7 +544,7 @@ class Gui(Gtk.Application):
 
     def initPreferences(self, protocol):
         """В этой функции определяются различные для протоколов параметры"""
-        if protocol == 'RDP' and self.whatProgram['RDP'] == 0:
+        if self.changeProgram(protocol) == "RDP": #remmina
             self.RDP_user = self.pref_builder.get_object("entry_RDP_user")
             self.RDP_domain = self.pref_builder.get_object("entry_RDP_dom")            
             self.RDP_color = self.pref_builder.get_object("entry_RDP_color")
@@ -560,7 +560,7 @@ class Gui(Gtk.Application):
             self.RDP_sound = self.pref_builder.get_object("entry_RDP_sound")
             self.RDP_cards = self.pref_builder.get_object("check_RDP_cards")
 
-        if protocol == 'RDP' and self.whatProgram['RDP'] == 1:
+        if self.changeProgram(protocol) == "RDP1": #freerdp
             self.RDP_user = self.pref_builder.get_object("entry_RDP1_user")
             self.RDP_domain = self.pref_builder.get_object("entry_RDP1_dom")            
             self.RDP_color = self.pref_builder.get_object("entry_RDP1_color")
@@ -619,7 +619,7 @@ class Gui(Gtk.Application):
             self.NX_crypt = self.pref_builder.get_object("check_NX_crypt")
             self.NX_clipboard = self.pref_builder.get_object("check_NX_clipboard")
 
-        if protocol == 'VNC' and self.whatProgram['VNC'] == 0:
+        if self.changeProgram(protocol) == "VNC": #remmina
             self.VNC_user = self.pref_builder.get_object("entry_VNC_user")            
             self.VNC_color = self.pref_builder.get_object("entry_VNC_color")    
             self.VNC_quality = self.pref_builder.get_object("entry_VNC_quality")
@@ -629,7 +629,7 @@ class Gui(Gtk.Application):
             self.VNC_crypt = self.pref_builder.get_object("check_VNC_crypt")
             self.VNC_clipboard = self.pref_builder.get_object("check_VNC_clipboard")
 
-        if protocol == 'VNC' and self.whatProgram['VNC'] == 1:
+        if self.changeProgram(protocol) == "VNC1": #vncvieiwer
             self.VNC_viewmode = self.pref_builder.get_object("check_VNC1_fullscreen")
             self.VNC_viewonly = self.pref_builder.get_object("check_VNC1_viewonly")
 
@@ -693,7 +693,7 @@ class Gui(Gtk.Application):
             fullscreen = self.VMWARE_fullscreen.get_active()
             args = [user, domain, password, fullscreen]            
         
-        if protocol == 'RDP' and self.whatProgram['RDP'] == 0:
+        if self.changeProgram(protocol) == "RDP":
             user = self.RDP_user.get_text()
             domain = self.RDP_domain.get_text()
             color = self.RDP_color.get_active_id()
@@ -713,7 +713,7 @@ class Gui(Gtk.Application):
             else: smartcards = 0
             args = [user, domain, color, quality, resolution, viewmode, folder, printer, clipboard, sound, smartcards]
 
-        if protocol == 'RDP' and self.whatProgram['RDP'] == 1:
+        if self.changeProgram(protocol) == "RDP1":
             user = self.RDP_user.get_text()
             domain = self.RDP_domain.get_text()
             color = self.RDP_color.get_active_id()
@@ -812,7 +812,7 @@ class Gui(Gtk.Application):
             else: resolution = self.NX_resolution.get_active_id()
             args = [user, quality, resolution, viewmode, keyfile, crypt, clipboard, _exec]
         
-        if protocol == 'VNC' and self.whatProgram['VNC'] == 0:
+        if self.changeProgram(protocol) == "VNC":
             user = self.VNC_user.get_text()
             quality = self.VNC_quality.get_active_id()
             color = self.VNC_color.get_active_id()
@@ -828,7 +828,7 @@ class Gui(Gtk.Application):
             else: showcursor = 0
             args = [user, quality, color, viewmode, viewonly, crypt, clipboard, showcursor]
 
-        if protocol == 'VNC' and self.whatProgram['VNC'] == 1:
+        if self.changeProgram(protocol) == "VNC1":
             if self.VNC_viewmode.get_active(): viewmode = "-fullscreen "
             else: viewmode = ""
             if self.VNC_viewonly.get_active(): viewonly = "-viewonly "
