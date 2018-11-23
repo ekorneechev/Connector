@@ -7,6 +7,7 @@ from gi.repository import Gtk, Gdk, GdkPixbuf, GLib, Gio
 import random, sys, signal
 from ctor import *
 from GLOBAL import *
+import keyring
 
 def viewStatus(bar, message):
     """Функция отображения происходящих действий в строке состояния"""
@@ -278,6 +279,7 @@ class Gui(Gtk.Application):
         """Сигнал кнопке для быстрого подключения к указанному в entry серверу"""
         server = entry.get_text()
         protocol = entry.get_name()
+        id_protocol = self.changeProgram(protocol)
         if server:
             connect = definition(protocol) #по имени виджета (указан в glade) определить протокол
             if self.prefClick: #если нажата кнопка Доп. Параметры
@@ -286,7 +288,7 @@ class Gui(Gtk.Application):
                 parameters.append(server) #для заголовка окна
             else:
                 self.whatProgram = properties.loadFromFile('default.conf')
-                program = self.changeProgram(protocol) + "_ARGS"
+                program = id_protocol + "_ARGS"
                 try: parameters = self.whatProgram[program]
                 except KeyError:
                     try: parameters = DEFAULT[program].copy()
@@ -515,7 +517,8 @@ class Gui(Gtk.Application):
             try:
                 if args[39]:
                     self.RDP_pwdsave.set_active(True)
-                    self.RDP_pwd.set_text(args[40])
+                    try: self.RDP_pwd.set_text(keyring.get_password(str(args[0]),str(args[1])))
+                    except: self.RDP_pwd.set_text('')
             except IndexError:
                 self.RDP_pwdsave.set_active(False)
                 self.RDP_pwd.set_text('')
@@ -1025,8 +1028,15 @@ class Gui(Gtk.Application):
         """Сохранение параметров для дальнейшего подключения с ними"""
         server = entry.get_text()
         protocol = entry.get_name()
+        id_protocol = self.changeProgram(protocol)
         parameters = self.applyPreferences(protocol)
-        name = self.pref_builder.get_object("entry_" + self.changeProgram(protocol) + "_name" ).get_text()
+        if id_protocol == 'RDP1':
+            if parameters[38]: keyring.set_password(server,str(parameters[0]),str(parameters[39]))
+            else:
+                try: keyring.delete_password(server,str(parameters[0]))
+                except: pass
+            parameters[39] = ''
+        name = self.pref_builder.get_object("entry_" + id_protocol + "_name" ).get_text()
         if properties.searchName(name) and not self.editClick:
             os.system("zenity --error --text='Подключение с именем \"" + name + "\" уже существует!' --no-wrap")
         else:
@@ -1124,6 +1134,9 @@ class Gui(Gtk.Application):
             parameters.append(nameConnect)
             if self.correctProgram(parameters):
                 protocol = parameters.pop(0) #извлекаем протокол из файла коннекта
+                if self.changeProgram(protocol) == 'RDP1' and parameters[39]:
+                    try: parameters[40] = keyring.get_password(str(parameters[0]),str(parameters[1]))
+                    except: pass
                 viewStatus(self.statusbar, 'Соединение с "' + nameConnect + '"...')
                 connect = definition(protocol)
                 connect.start(parameters)
