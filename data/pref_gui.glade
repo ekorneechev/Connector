@@ -2520,7 +2520,7 @@
             </child>
             <child>
               <object class="GtkCheckButton" id="check_RDP1_pwd">
-                <property name="label" translatable="yes">Сохранить пароль в связке ключей</property>
+                <property name="label" translatable="yes">Хранить пароль в связке ключей</property>
                 <property name="width_request">235</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>

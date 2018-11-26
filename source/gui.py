@@ -22,6 +22,9 @@ def connectFile(filename, openFile = False):
             protocol = parameters.pop(0)
             if openFile: parameters.append(parameters[0]) #если открывается файл .ctor, то заголовок окна - адрес сервера
             else: parameters.append(properties.nameFromFilename(filename))
+            if protocol == 'RDP' and properties.loadFromFile('default.conf')['RDP'] and parameters[39]:
+                try: parameters[40] = keyring.get_password(str(parameters[0]),str(parameters[1]))
+                except: pass
             connect = definition(protocol)
             connect.start(parameters)
     except (IndexError, KeyError):
