@@ -288,6 +288,9 @@ class Gui(Gtk.Application):
             if self.prefClick: #если нажата кнопка Доп. Параметры
                 parameters = self.applyPreferences(protocol)
                 parameters.insert(0, server)
+                if id_protocol == 'RDP1' and parameters[39]:
+                    _name = self.pref_builder.get_object("entry_" + id_protocol + "_name" ).get_text()
+                    self.saveKeyring (protocol, _name, parameters.copy())
                 parameters.append(server) #для заголовка окна
             else:
                 self.whatProgram = properties.loadFromFile('default.conf')
@@ -1309,6 +1312,14 @@ class Gui(Gtk.Application):
         dialog = Gtk.MessageDialog(self.pref_window, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK,"Настройки по умолчанию сохранены.")
         response = dialog.run()
         dialog.destroy()
+
+    def saveKeyring(self, protocol, name, parameters):
+        """Сохранение пароля в связу ключей и отметки об этом в файл подключения"""
+        fileName = self.resaveFileCtor(name, protocol, parameters[0])
+        parameters[39] = 1
+        keyring.set_password(str(parameters[0]),str(parameters[1]),str(parameters[40]))
+        parameters.insert(0, protocol)
+        properties.saveInFile(fileName, parameters)
 
 def f_main(pwd="/tmp/"):
     os.system("xdg-mime default connector.desktop application/x-connector")
