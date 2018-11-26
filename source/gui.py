@@ -288,7 +288,7 @@ class Gui(Gtk.Application):
             if self.prefClick: #если нажата кнопка Доп. Параметры
                 parameters = self.applyPreferences(protocol)
                 parameters.insert(0, server)
-                if id_protocol == 'RDP1' and parameters[39]:
+                if id_protocol == 'RDP1':
                     _name = self.pref_builder.get_object("entry_" + id_protocol + "_name" ).get_text()
                     self.saveKeyring (protocol, _name, parameters.copy())
                 parameters.append(server) #для заголовка окна
@@ -1215,6 +1215,9 @@ class Gui(Gtk.Application):
                     print(row.strip(), file = endFile)
             endFile.close()
             self.getSavesFromDb() #удаление из liststore
+            parameters = properties.loadFromFile(fileCtor)
+            try: keyring.delete_password(str(parameters[1]),str(parameters[2])) #удаление пароля из связки ключей
+            except: pass
             try: os.remove(WORKFOLDER + fileCtor) #удаление файла с настройками
             except: pass
             properties.log.info("Подключение '%s' удалено!", name)
@@ -1316,8 +1319,13 @@ class Gui(Gtk.Application):
     def saveKeyring(self, protocol, name, parameters):
         """Сохранение пароля в связу ключей и отметки об этом в файл подключения"""
         fileName = self.resaveFileCtor(name, protocol, parameters[0])
-        parameters[39] = 1
-        keyring.set_password(str(parameters[0]),str(parameters[1]),str(parameters[40]))
+        if parameters[39]:
+            parameters[39] = 1
+            keyring.set_password(str(parameters[0]),str(parameters[1]),str(parameters[40]))
+        else:
+            parameters[39] = 0
+            try: keyring.delete_password(str(parameters[0]),str(parameters[1]))
+            except: pass
         parameters.insert(0, protocol)
         properties.saveInFile(fileName, parameters)
 
