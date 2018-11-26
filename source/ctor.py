@@ -179,8 +179,6 @@ class XFreeRdp:
                 if args[27]: command += ' /jpeg'
                 if args[28]: command += ' /jpeg-quality:' + str(args[28])
                 if args[29] and properties.checkPath(USBPATH): command += ' /drive:MEDIA,' + USBPATH
-                if args[30]: command += ' /p:$(zenity --entry --title="Аутентификация (with NLA)" --text="Введите пароль для пользователя '+ args[1] + ':" --hide-text)'
-                else: command += ' -sec-nla'
                 if args[31]: command += ' /workarea'
                 try: #Добавлена совместимость с предыдущей версией; < 1.4.0
                     if args[32]: command += ' /span'
@@ -200,7 +198,10 @@ class XFreeRdp:
                 except IndexError: command += ' +auto-reconnect /cert-ignore'
                 try:
                     if args[40]: command += ' /p:' + args[40]
-                except: pass
+                    elif args[30]: command += ' /p:$(zenity --entry --title="Аутентификация (with NLA)" --text="Введите пароль для пользователя '+ args[1] + ':" --hide-text)'
+                    else: command += ' -sec-nla'
+                except: command += ' -sec-nla'
+
                 server = args[0]
                 properties.log.info ("FreeRDP: подключение к серверу %s. Команда запуска:", server)
                 try: cmd2log = command.replace("/p:" + command.split("/p:")[1].split(' ')[0],"/p:<hidden>")
