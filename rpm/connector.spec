@@ -14,6 +14,7 @@ BuildArch: noarch
 Requires: python3 python3-module-pygobject3 libgtk+3 libgtk+3-gir
 Requires: remmina remmina-plugins tigervnc xfreerdp
 Requires: control xdg-utils
+Requires: python3-module-keyring
 
 %define basedir %_datadir/%name
 
