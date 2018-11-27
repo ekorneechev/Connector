@@ -1140,9 +1140,10 @@ class Gui(Gtk.Application):
             parameters.append(nameConnect)
             if self.correctProgram(parameters):
                 protocol = parameters.pop(0) #извлекаем протокол из файла коннекта
-                if self.changeProgram(protocol) == 'RDP1' and parameters[39]:
-                    try: parameters[40] = keyring.get_password(str(parameters[0]),str(parameters[1]))
-                    except: pass
+                try:
+                    if self.changeProgram(protocol) == 'RDP1' and parameters[39]:
+                        parameters[40] = keyring.get_password(str(parameters[0]),str(parameters[1]))
+                except: pass
                 viewStatus(self.statusbar, 'Соединение с "' + nameConnect + '"...')
                 connect = definition(protocol)
                 connect.start(parameters)
