@@ -282,19 +282,18 @@ class Gui(Gtk.Application):
         """Сигнал кнопке для быстрого подключения к указанному в entry серверу"""
         server = entry.get_text()
         protocol = entry.get_name()
-        id_protocol = self.changeProgram(protocol)
         if server:
             connect = definition(protocol) #по имени виджета (указан в glade) определить протокол
             if self.prefClick: #если нажата кнопка Доп. Параметры
                 parameters = self.applyPreferences(protocol)
                 parameters.insert(0, server)
-                if id_protocol == 'RDP1':
-                    _name = self.pref_builder.get_object("entry_" + id_protocol + "_name" ).get_text()
+                if self.changeProgram(protocol) == 'RDP1':
+                    _name = self.pref_builder.get_object("entry_" + self.changeProgram(protocol) + "_name" ).get_text()
                     self.saveKeyring (protocol, _name, parameters.copy())
                 parameters.append(server) #для заголовка окна
             else:
                 self.whatProgram = properties.loadFromFile('default.conf')
-                program = id_protocol + "_ARGS"
+                program = self.changeProgram(protocol) + "_ARGS"
                 try: parameters = self.whatProgram[program]
                 except KeyError:
                     try: parameters = DEFAULT[program].copy()
