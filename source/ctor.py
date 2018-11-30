@@ -3,6 +3,7 @@
 
 import time, properties
 from GLOBAL import *
+import keyring
 
 try: enableLog = properties.loadFromFile('default.conf')['LOG']
 except KeyError: enableLog = DEFAULT['LOG']
@@ -198,7 +199,7 @@ class XFreeRdp:
                 except IndexError: command += ' +auto-reconnect /cert-ignore'
                 try:
                     if args[40]: command += ' /p:' + args[40]
-                    elif args[30]: command += ' /p:$(zenity --entry --title="Аутентификация (with NLA)" --text="Введите пароль для пользователя '+ args[1] + ':" --hide-text)'
+                    elif args[30]: command += ' /p:' + passwd(args[0], args[1])
                     else: command += ' -sec-nla'
                 except: command += ' -sec-nla'
 
@@ -395,6 +396,20 @@ def freerdpCheckVersion():
     version = subprocess.check_output("xfreerdp /version; exit 0",shell=True, universal_newlines=True).strip().split('\t')
     version = version[0].split(" "); version = version[4].split("-")[0];
     return version
+
+def passwd(server, username):
+    """Ввод пароля и запрос о его сохранении в связке ключей"""
+    password = keyring.get_password(str(server),str(username))
+    if password: return password
+    separator = "|CoNnEcToR|"
+    try:
+        password, save = subprocess.check_output('zenity --forms --title="Аутентификация (with NLA)" --text="Имя пользователя: ' + username + '" --add-password="Пароль:" --add-combo="Хранить пароль в связке ключей:" --combo-values="Да|Нет" --separator="' + separator + '" 2>/dev/null',shell=True, universal_newlines=True).strip().split(separator)
+        if save == "Да" and password: keyring.set_password(str(server),str(username),str(password))
+    #если окно zenity закрыто или нажата кнопка Отмена, делаем raise ошибки FreeRDP
+    except ValueError:
+        password = " /CANCELED"
+        properties.log.warning ("FreeRDP: подключение отменено пользователем (окно zenity закрыто или нажата кнопка Отмена):")
+    return password
 
 if __name__ == "__main__":
     pass

@@ -7,7 +7,6 @@ from gi.repository import Gtk, Gdk, GdkPixbuf, GLib, Gio
 import random, sys, signal
 from ctor import *
 from GLOBAL import *
-import keyring
 
 def viewStatus(bar, message):
     """Функция отображения происходящих действий в строке состояния"""
@@ -520,10 +519,10 @@ class Gui(Gtk.Application):
                 self.RDP_reconnect.set_active(False)
                 self.RDP_certignore.set_active(True)
             try:
-                if args[39]:
-                    self.RDP_pwdsave.set_active(True)
-                    try: self.RDP_pwd.set_text(keyring.get_password(str(args[0]),str(args[1])))
-                    except: self.RDP_pwd.set_text('')
+                password = keyring.get_password(str(args[0]),str(args[1]))
+                if args[39] or password: self.RDP_pwdsave.set_active(True)
+                else: password = ''
+                self.RDP_pwd.set_text(password)
             except IndexError:
                 self.RDP_pwdsave.set_active(False)
                 self.RDP_pwd.set_text('')
