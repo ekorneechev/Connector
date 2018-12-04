@@ -288,7 +288,7 @@ class Gui(Gtk.Application):
                 parameters.insert(0, server)
                 if self.changeProgram(protocol) == 'RDP1':
                     _name = self.pref_builder.get_object("entry_" + self.changeProgram(protocol) + "_name" ).get_text()
-                    self.saveKeyring (protocol, _name, parameters.copy())
+                    self.saveKeyring (parameters.copy())
                 parameters.append(server) #для заголовка окна
             else:
                 self.whatProgram = properties.loadFromFile('default.conf')
@@ -520,8 +520,8 @@ class Gui(Gtk.Application):
                 self.RDP_certignore.set_active(True)
             try:
                 password = keyring.get_password(str(args[0]),str(args[1]))
-                if args[39] or password: self.RDP_pwdsave.set_active(True)
-                else: password = ''
+                if args[39]: self.RDP_pwdsave.set_active(True)
+                if not password: password = ''
                 self.RDP_pwd.set_text(password)
             except IndexError:
                 self.RDP_pwdsave.set_active(False)
@@ -1315,18 +1315,12 @@ class Gui(Gtk.Application):
         response = dialog.run()
         dialog.destroy()
 
-    def saveKeyring(self, protocol, name, parameters):
+    def saveKeyring(self, parameters):
         """Сохранение пароля в связу ключей и отметки об этом в файл подключения"""
-        fileName = self.resaveFileCtor(name, protocol, parameters[0])
-        if parameters[39]:
-            parameters[39] = 1
-            keyring.set_password(str(parameters[0]),str(parameters[1]),str(parameters[40]))
+        if parameters[39]: keyring.set_password(str(parameters[0]),str(parameters[1]),str(parameters[40]))
         else:
-            parameters[39] = 0
             try: keyring.delete_password(str(parameters[0]),str(parameters[1]))
             except: pass
-        parameters.insert(0, protocol)
-        properties.saveInFile(fileName, parameters)
 
 def f_main(pwd="/tmp/"):
     os.system("xdg-mime default connector.desktop application/x-connector")
