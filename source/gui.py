@@ -520,7 +520,7 @@ class Gui(Gtk.Application):
                 self.RDP_certignore.set_active(True)
             try:
                 password = keyring.get_password(str(args[0]),str(args[1]))
-                if args[39]: self.RDP_pwdsave.set_active(True)
+                if args[39] or password: self.RDP_pwdsave.set_active(True)
                 if not password: password = ''
                 self.RDP_pwd.set_text(password)
             except IndexError:
