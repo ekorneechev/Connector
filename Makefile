@@ -10,7 +10,7 @@ MIME = $(PREFIX)/mime
 ICON = $(PREFIX)/icons/hicolor/64x64/apps
 DATESTAMP = `git log --pretty="%cd" --date=short -1 | sed s/-//g 2>/dev/null`
 
-.PHONY: help install uninstall clean
+.PHONY: help install uninstall clean remove
 
 help:
 	@echo "Запустите make с одной из необходимых ролей:"
@@ -61,3 +61,6 @@ clean:
 	sed -i s#$(PREFIX_BIN)/$(TARGET)#/usr/bin/$(TARGET)#g source/*
 	sed -i s#$(PREFIX_BIN)/$(TARGET)#/usr/bin/$(TARGET)#g data/$(TARGET).desktop
 	@if [ -n "$(DATESTAMP)" ]; then sed -i s#.$(DATESTAMP)##g source/GLOBAL.py; fi
+
+remove:
+	make uninstall
