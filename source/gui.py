@@ -1322,6 +1322,14 @@ class Gui(Gtk.Application):
             try: keyring.delete_password(str(parameters[0]),str(parameters[1]))
             except: pass
 
+    def onDeveloper(self, *args):
+        """Кнопка 'Связь с разработчиком'"""
+        os.system ('xdg-open "mailto:ek@myconnector.ru"')
+
+    def onBugs(self, *args):
+        """Кнопка 'Сообщить об ошибке'"""
+        os.system ('xdg-open "http://bugs.myconnector.ru/"')
+
 def f_main(pwd="/tmp/"):
     os.system("xdg-mime default connector.desktop application/x-connector")
     try:
