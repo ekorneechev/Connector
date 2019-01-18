@@ -202,6 +202,9 @@ class XFreeRdp:
                     elif args[30]: command += ' /p:' + passwd(args[0], args[1])
                     else: command += ' -sec-nla'
                 except: command += ' -sec-nla'
+                try:
+                    if args[41]: command += ' +glyph-cache'
+                except IndexError: pass
 
                 server = args[0]
                 properties.log.info ("FreeRDP: подключение к серверу %s. Команда запуска:", server)
