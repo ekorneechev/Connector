@@ -1,0 +1,48 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+import sys
+import argparse
+import pickle
+
+version = "0.1"
+
+def createMyParser():
+    parser = argparse.ArgumentParser(prog="ctor-editor",
+                                     description = "Инструмент командной строки для изменения параметров как самой программы Connector, так и имеющихся сохраненных подключений.")
+    parser.add_argument ('-v','--version', action='version', help = "Вывести номер версии утилиты", version="ctor-editor version " + version)
+    parser.add_argument ('--folder', help = "Папка с настройками программы (default: $HOME/.connector)", default="~/.connector")
+    subparsers = parser.add_subparsers (dest='command', help = "Укажите одно из следующих значений:")
+
+    #Парсер для настройки параметров программы
+    conf_parser = subparsers.add_parser ('config', help = "  - настройка параметров программы")
+
+    conf_parser.add_argument ('--vnc', choices=['remmina', 'vncviewer'])
+    conf_parser.add_argument ('--rdp', choices=['remmina', 'xfreerdp'])
+    conf_parser.add_argument ('--fs')
+    conf_parser.add_argument ('--kiosk', choices=[0,1,2])
+    conf_parser.add_argument ('--kiosk-connection')
+    conf_parser.add_argument ('--tray', choices=['yes','no'])
+    conf_parser.add_argument ('--default-tab', choices=['protocols','connections'])
+    conf_parser.add_argument ('--default-protocol', choices=['rdp','nx','vnc','xdmcp','spice','vmware','citrix','ssh','sftp','web','fs'])
+    conf_parser.add_argument ('--check-version', choices=['yes','no'])
+
+    #Парсер для настройки файлов подключений
+    ctor_parser = subparsers.add_parser ('connection', help = "  - настройка файлов подключений")
+
+    return parser
+
+def main():
+    parser = createMyParser()
+    namespace = parser.parse_args(sys.argv[1:])
+    print(namespace)
+
+    if namespace.command == "connection":
+        ctor_editor (namespace)
+    elif namespace.command == "config":
+        conf_editor (namespace)
+    else: pass
+
+if __name__ == '__main__':
+    main()
+
