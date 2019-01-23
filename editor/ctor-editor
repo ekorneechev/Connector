@@ -1,26 +1,34 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import sys
+import sys, os
 import argparse
 import pickle
 
 version = "0.1"
+folder = os.getenv("HOME") + "/.connector"
+conf_file = "default.conf"
+protocols = ('rdp','nx','vnc','xdmcp','spice','vmware','citrix','ssh','sftp','web','fs')
 
 def createMyParser():
-    parser = argparse.ArgumentParser(prog="ctor-editor",
-                                     description = "Инструмент командной строки для изменения параметров как самой программы Connector, так и имеющихся сохраненных подключений.")
-    parser.add_argument ('-v','--version', action='version', help = "Вывести номер версии утилиты", version="ctor-editor version " + version)
-    parser.add_argument ('--folder', help = "Папка с настройками программы (default: $HOME/.connector)", default="~/.connector")
-    subparsers = parser.add_subparsers (dest='command', help = "Укажите одно из следующих значений:")
+    parser = argparse.ArgumentParser(prog="ctor-editor", add_help = False,
+                                     description = "Инструмент командной строки для изменения параметров как самой программы Connector, так и имеющихся сохраненных подключений.",
+                                     epilog = "См. подробнее по каждой команде: ctor-editor <command> --help")
+    parent_group = parser.add_argument_group (title='Параметры')
+    parent_group.add_argument ('--folder', help = "Директория с настройками программы (default: $HOME/.connector)", default = folder)
+    parent_group.add_argument ('-h', '--help', action='help', help='Вывести справку (это сообщение)')
+    parent_group.add_argument ('-v', '--version', action='version', help = "Вывести информацию о версии",
+                               version="ctor-editor version {} (for connector => 1.8.4)".format(version))
+
+    subparsers = parser.add_subparsers (dest='command', title = "Необходимо указать одно из следующих значений (command)")
 
     #Парсер для настройки параметров программы
-    conf_parser = subparsers.add_parser ('config', help = "  - настройка параметров программы")
+    conf_parser = subparsers.add_parser ('config', help = "Настройка параметров программы",  description = "Изменение параметров программы Connector")
 
     conf_parser.add_argument ('--vnc', choices=['remmina', 'vncviewer'])
     conf_parser.add_argument ('--rdp', choices=['remmina', 'xfreerdp'])
-    conf_parser.add_argument ('--fs')
-    conf_parser.add_argument ('--kiosk', choices=[0,1,2])
+    conf_parser.add_argument ('--fs', metavar="<program>", type=str)
+    conf_parser.add_argument ('--kiosk', choices=[0,1,2], type=int)
     conf_parser.add_argument ('--kiosk-connection')
     conf_parser.add_argument ('--tray', choices=['yes','no'])
     conf_parser.add_argument ('--default-tab', choices=['protocols','connections'])
@@ -28,20 +36,41 @@ def createMyParser():
     conf_parser.add_argument ('--check-version', choices=['yes','no'])
 
     #Парсер для настройки файлов подключений
-    ctor_parser = subparsers.add_parser ('connection', help = "  - настройка файлов подключений")
+    ctor_parser = subparsers.add_parser ('connect', help = "Настройка файлов подключений",  description = "Изменение параметров заданного подключения")
+    pass
 
     return parser
+
+def configEditor(args):
+    if not os.path.isdir(args.folder):
+        print ("Указана неверная директория или ее несуществует!")
+        exit (1)
+    try:
+        with open("{}/{}".format(args.folder,conf_file), "rb") as confFile:
+            options = pickle.load(confFile)
+    except FileNotFoundError: print("Файл настроек ({}) в директории {} не найден!".format(conf_file,folder)); exit (1)
+    except pickle.UnpicklingError: print("_pickle.UnpicklingError");  exit (1)
+    if args.vnc: options['VNC'] = 0 if args.vnc == "remmina" else 1
+    if args.rdp: options['RDP'] = 0 if args.rdp == "remmina" else 1
+    if args.fs: options['FS'] = args.fs
+    if args.kiosk != None: options['KIOSK'] = args.kiosk # добавить описание --kiosk-connection и проверку.
+    if args.default_tab: options['MAIN'] = 0 if args.default_tab == "protocols" else 1
+    if args.default_protocol: options['TAB'] = protocols.index(args.default_protocol)
+    if args.tray: options['TRAY'] = True if args.tray == "yes" else False
+    if args.check_version: options['CHECK_VERSION'] = True if args.check_version == "yes" else False
+
+def connectEditor(args):
+    pass
 
 def main():
     parser = createMyParser()
     namespace = parser.parse_args(sys.argv[1:])
-    print(namespace)
-
-    if namespace.command == "connection":
-        ctor_editor (namespace)
+    # Namespace(check_version=None, command='config', default_protocol=None, default_tab=None, folder='/home/user/.connector', fs=None, kiosk=None, kiosk_connection=None, rdp=None, tray=None, vnc=None)
+    if namespace.command == "connect":
+        connectEditor (namespace)
     elif namespace.command == "config":
-        conf_editor (namespace)
-    else: pass
+        configEditor (namespace)
+    else: parser.print_help()
 
 if __name__ == '__main__':
     main()
