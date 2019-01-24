@@ -6,70 +6,126 @@ import argparse
 import pickle
 
 version = "0.1"
+connector_version = "1.8.3"
+about = "ctor-editor version {} (for connector => {})".format(version, connector_version)
 folder = os.getenv("HOME") + "/.connector"
 conf_file = "default.conf"
 protocols = ('rdp','nx','vnc','xdmcp','spice','vmware','citrix','ssh','sftp','web','fs')
 
+def printF(string):
+    """Форматированный вывод ошибок/сообщений"""
+    print (about); print ("-----------"); print (string)
+
 def createMyParser():
+    """Функция создания парсера аргументов командной строки"""
     parser = argparse.ArgumentParser(prog="ctor-editor", add_help = False,
                                      description = "Инструмент командной строки для изменения параметров как самой программы Connector, так и имеющихся сохраненных подключений.",
                                      epilog = "См. подробнее по каждой команде: ctor-editor <command> --help")
     parent_group = parser.add_argument_group (title='Параметры')
     parent_group.add_argument ('--folder', help = "Директория с настройками программы (default: $HOME/.connector)", default = folder)
     parent_group.add_argument ('-h', '--help', action='help', help='Вывести справку (это сообщение)')
-    parent_group.add_argument ('-v', '--version', action='version', help = "Вывести информацию о версии",
-                               version="ctor-editor version {} (for connector => 1.8.4)".format(version))
+    parent_group.add_argument ('-v', '--version', action='version', help = "Вывести информацию о версии", version=about)
 
     subparsers = parser.add_subparsers (dest='command', title = "Необходимо указать одно из следующих значений (command)")
 
     #Парсер для настройки параметров программы
-    conf_parser = subparsers.add_parser ('config', help = "Настройка параметров программы",  description = "Изменение параметров программы Connector")
+    conf_parser = subparsers.add_parser ('config', help = "Настройка параметров программы", add_help = False,
+                                         description = "Изменение параметров программы Connector")
+    conf_parser.add_argument ('-h', '--help', action='help', help='Справка по изменению настроек программы')
+    conf_parser.add_argument ('--vnc', choices=['remmina', 'vncviewer'], help = "Программа подключения по протоколу VNC")
+    conf_parser.add_argument ('--rdp', choices=['remmina', 'xfreerdp'], help = "Программа подключения по протоколу RDP")
+    conf_parser.add_argument ('--fs', metavar="<program>", type=str, help = "Программа подключения файловых ресурсов (FS)")
+    conf_parser.add_argument ('--kiosk', choices=[0,1,2], type=int, help = "Режим КИОСК: 0 - off , 1 - standalone, 2 - connection")
+    conf_parser.add_argument ('--kiosk-connection', help = "Подключение, используемое в режиме КИОСК (mode: 2)")
+    conf_parser.add_argument ('--tray', choices=['yes','no'], help = "Отображение значка в системном лотке")
+    conf_parser.add_argument ('--default-tab', choices=['protocols','connections'], help = "Вкладка главного окна по умолчанию")
+    conf_parser.add_argument ('--default-protocol', help = "Протокол по умолчанию",
+                              choices=['rdp','nx','vnc','xdmcp','spice','vmware','citrix','ssh','sftp','web','fs'])
+    conf_parser.add_argument ('--check-version', choices=['yes','no'], help = "Проверка новой версии программы при каждом запуске")
+    conf_parser.add_argument ('--log', choices=['yes','no'], help = "Включение/отключение ведения журнала")
+    conf_parser.add_argument ('--init', action='store_const', const=True, default=False, help = "Инициализация рабочей директории и настроек программы")
+    conf_parser.add_argument ('--reset', action='store_const', const=True, default=False, help = "Сброс настроек программы")
 
-    conf_parser.add_argument ('--vnc', choices=['remmina', 'vncviewer'])
-    conf_parser.add_argument ('--rdp', choices=['remmina', 'xfreerdp'])
-    conf_parser.add_argument ('--fs', metavar="<program>", type=str)
-    conf_parser.add_argument ('--kiosk', choices=[0,1,2], type=int)
-    conf_parser.add_argument ('--kiosk-connection')
-    conf_parser.add_argument ('--tray', choices=['yes','no'])
-    conf_parser.add_argument ('--default-tab', choices=['protocols','connections'])
-    conf_parser.add_argument ('--default-protocol', choices=['rdp','nx','vnc','xdmcp','spice','vmware','citrix','ssh','sftp','web','fs'])
-    conf_parser.add_argument ('--check-version', choices=['yes','no'])
+    # Парсер для настройки файлов подключений
+    ctor_parser = subparsers.add_parser ('connect', help = "Настройка файлов подключений", add_help = False,
+                                         description = "Изменение параметров заданного подключения")
+    ctor_parser.add_argument ('-h', '--help', action='help', help='Справка по изменению параметров подключения')
 
-    #Парсер для настройки файлов подключений
-    ctor_parser = subparsers.add_parser ('connect', help = "Настройка файлов подключений",  description = "Изменение параметров заданного подключения")
-    pass
+    # Возвращаем сам парсер и справку каждого из подпарсеров
+    return parser, conf_parser.print_help, ctor_parser.print_help
 
-    return parser
+def pickleMyDump(obj, filename):
+    """Запись конфигурационного файла"""
+    with open(filename, "wb") as confFile:
+        pickle.dump(obj, confFile)
 
-def configEditor(args):
-    if not os.path.isdir(args.folder):
-        print ("Указана неверная директория или ее несуществует!")
+def resetConfig(filename, msg = "Параметры программы сброшены к значениям по умолчанию!"):
+    """Функция сброса к умолчаниям настроек программы"""
+    options = {}
+    options['VNC'] = 1; options['RDP'] = 1
+    options['FS'] = "xdg-open"
+    options['KIOSK'] =  0; options['KIOSK_CONN'] = ""
+    options['MAIN'] = '0'; options['TAB'] = '0'
+    options['TRAY'] = True
+    options['CHECK_VERSION'] = True
+    options['LOG'] = True
+    pickleMyDump(options, filename)
+    printF (msg)
+    exit (0)
+
+def initConfig(filename):
+    """Функция инициализации настроек программы"""
+    try: os.mkdir(folder+'')
+    except FileExistsError:
+        printF ("Директория с настройками программы существует. Инициализация не требуется!")
         exit (1)
-    try:
-        with open("{}/{}".format(args.folder,conf_file), "rb") as confFile:
-            options = pickle.load(confFile)
-    except FileNotFoundError: print("Файл настроек ({}) в директории {} не найден!".format(conf_file,folder)); exit (1)
-    except pickle.UnpicklingError: print("_pickle.UnpicklingError");  exit (1)
-    if args.vnc: options['VNC'] = 0 if args.vnc == "remmina" else 1
-    if args.rdp: options['RDP'] = 0 if args.rdp == "remmina" else 1
-    if args.fs: options['FS'] = args.fs
-    if args.kiosk != None: options['KIOSK'] = args.kiosk # добавить описание --kiosk-connection и проверку.
-    if args.default_tab: options['MAIN'] = 0 if args.default_tab == "protocols" else 1
-    if args.default_protocol: options['TAB'] = protocols.index(args.default_protocol)
-    if args.tray: options['TRAY'] = True if args.tray == "yes" else False
-    if args.check_version: options['CHECK_VERSION'] = True if args.check_version == "yes" else False
+    resetConfig(filename, "Произведена первоначальная инициализация настроек программы!")
+    exit (0)
 
-def connectEditor(args):
-    pass
+def configEditor(args, _help):
+    """Функция изменения настроек программы"""
+    confFile = "{}/{}".format(args.folder,conf_file) # default.conf
+    if args.init: initConfig(confFile)
+    if not os.path.isdir(args.folder):
+        printF ("Указана неверная директория или ее несуществует!")
+        exit (1)
+    confFile = "{}/{}".format(args.folder,conf_file) # default.conf
+    try: # Чтение текущих параметров:
+        with open(confFile, "rb") as conf:
+            options = pickle.load(conf)
+    except FileNotFoundError: printF("Файл настроек ({}) в директории {} не найден!".format(conf_file,folder)); exit (1)
+    except pickle.UnpicklingError: print("Неверный формат файла настроек!");  exit (1)
+
+    # Парсинг введенных значений для последующей записи:
+    edit = False # edit - временная переменная, для отслеживания изменений
+    if args.reset: resetConfig(confFile);
+    if args.vnc: options['VNC'] = 0 if args.vnc == "remmina" else 1; edit = True
+    if args.rdp: options['RDP'] = 0 if args.rdp == "remmina" else 1; edit = True
+    if args.fs: options['FS'] = args.fs; edit = True
+    if args.default_tab: options['MAIN'] = '0' if args.default_tab == "protocols" else '1'; edit = True
+    if args.default_protocol: options['TAB'] = str(protocols.index(args.default_protocol)); edit = True
+    if args.tray: options['TRAY'] = True if args.tray == "yes" else False; edit = True
+    if args.check_version: options['CHECK_VERSION'] = True if args.check_version == "yes" else False; edit = True
+    if args.log: options['LOG'] = True if args.log == "yes" else False; edit = True
+    # Управление режимом КИОСК:
+    if args.kiosk != None: options['KIOSK'] = args.kiosk # добавить описание --kiosk-connection и проверку.
+
+
+    # Запись обновленных параметров обратно в default.conf
+    if edit: pickleMyDump(options, confFile)
+    else: _help()
+
+def connectEditor(args, _help):
+    """Функция изменения настроек подключения"""
+    _help()
 
 def main():
-    parser = createMyParser()
+    parser, config_help, connect_help = createMyParser()
     namespace = parser.parse_args(sys.argv[1:])
-    # Namespace(check_version=None, command='config', default_protocol=None, default_tab=None, folder='/home/user/.connector', fs=None, kiosk=None, kiosk_connection=None, rdp=None, tray=None, vnc=None)
     if namespace.command == "connect":
-        connectEditor (namespace)
+        connectEditor (namespace, connect_help)
     elif namespace.command == "config":
-        configEditor (namespace)
+        configEditor (namespace, config_help)
     else: parser.print_help()
 
 if __name__ == '__main__':
