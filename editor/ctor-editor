@@ -32,6 +32,7 @@ def createMyParser():
     conf_parser = subparsers.add_parser ('config', help = "Настройка параметров программы", add_help = False,
                                          description = "Изменение параметров программы Connector")
     conf_parser.add_argument ('-h', '--help', action='help', help='Справка по изменению настроек программы')
+    conf_parser.add_argument ('--show', action='store_const', const=True, default=False, help = "Отобразить текущие настройки")
     conf_parser.add_argument ('--vnc', choices=['remmina', 'vncviewer'], help = "Программа подключения по протоколу VNC")
     conf_parser.add_argument ('--rdp', choices=['remmina', 'xfreerdp'], help = "Программа подключения по протоколу RDP")
     conf_parser.add_argument ('--fs', metavar="<program>", type=str, help = "Программа подключения файловых ресурсов (FS)")
@@ -58,6 +59,12 @@ def pickleMyDump(obj, filename):
     """Запись конфигурационного файла"""
     with open(filename, "wb") as confFile:
         pickle.dump(obj, confFile)
+
+def showConfig(args):
+    """Функция отображение текущих настроек программы"""
+    printF("Текущие настройки программы (MAIN - default-tab, TAB - default-protocol):")
+    print(args)
+    exit (0)
 
 def resetConfig(filename, msg = "Параметры программы сброшены к значениям по умолчанию!"):
     """Функция сброса к умолчаниям настроек программы"""
@@ -98,7 +105,8 @@ def configEditor(args, _help):
 
     # Парсинг введенных значений для последующей записи:
     edit = False # edit - временная переменная, для отслеживания изменений
-    if args.reset: resetConfig(confFile);
+    if args.show: showConfig(options)
+    if args.reset: resetConfig(confFile)
     if args.vnc: options['VNC'] = 0 if args.vnc == "remmina" else 1; edit = True
     if args.rdp: options['RDP'] = 0 if args.rdp == "remmina" else 1; edit = True
     if args.fs: options['FS'] = args.fs; edit = True
@@ -108,8 +116,8 @@ def configEditor(args, _help):
     if args.check_version: options['CHECK_VERSION'] = True if args.check_version == "yes" else False; edit = True
     if args.log: options['LOG'] = True if args.log == "yes" else False; edit = True
     # Управление режимом КИОСК:
-    if args.kiosk != None: options['KIOSK'] = args.kiosk # добавить описание --kiosk-connection и проверку.
-
+    if args.kiosk != None: options['KIOSK'] = args.kiosk; edit = True
+    # добавить описание --kiosk-connection и проверку.
 
     # Запись обновленных параметров обратно в default.conf
     if edit: pickleMyDump(options, confFile)
