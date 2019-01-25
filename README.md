@@ -1,6 +1,6 @@
 | **`Release`** | **`License`** |
 |-------------------|---------------|
-|[![GitHub release](https://img.shields.io/badge/Release-v1.8.3-blue.svg)](http://get.myconnector.ru) | [![License](https://img.shields.io/badge/License-GPLv2-blue.svg)](http://git.myconnector.ru/blob/master/LICENSE) |
+|[![GitHub release](https://img.shields.io/badge/Release-v1.8.4-blue.svg)](http://get.myconnector.ru) | [![License](https://img.shields.io/badge/License-GPLv2-blue.svg)](http://git.myconnector.ru/blob/master/LICENSE) |
 # Connector
 _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
 **Программа для удаленного подключения к компьютерным системам.**
