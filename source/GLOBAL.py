@@ -131,21 +131,21 @@ echo > /dev/null
 done
 """
 
-try:
-    for _string in open("/etc/connector/kiosk.access"):
-        _string = _string.upper()
-        if _string.find("ACCESS") == 0:
-            _name, _value = _string.strip().split('=')
-            _value = _value.upper().strip()
-            if _value == "1" or _value == "ON" or _value == "YES":
-                KIOSK_OFF = False
-            else: KIOSK_OFF = True
-        else: KIOSK_OFF = True
-except FileNotFoundError:
-    KIOSK_OFF = True
-
-# Если не ALT - режим "киоска" недоступен
-if OS != "altlinux": KIOSK_OFF = True
+def CHECK_KIOSK():
+    if OS != "altlinux": return True # Если не ALT - режим "киоска" недоступен
+    try:
+        for _string in open("/etc/connector/kiosk.access"):
+            _string = _string.upper()
+            if _string.find("ACCESS") == 0:
+                _name, _value = _string.strip().split('=')
+                _value = _value.upper().strip()
+                if _value == "1" or _value == "ON" or _value == "YES":
+                    _state = False
+                else: _state = True
+            else: _state = True
+    except FileNotFoundError:
+        _state = True
+    return _state
 
 #Команда подключения сетевых файловых ресурсов
 DEFAULT['FS'] = 'xdg-open'

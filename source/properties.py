@@ -181,7 +181,7 @@ class Properties(Gtk.Window):
         self.checkTray = builder.get_object("check_TRAY")
         self.checkVersion = builder.get_object("check_VERSION")
         self.checkLog = builder.get_object("check_LOG")
-        if KIOSK_OFF: self.boxKiosk.set_sensitive(0)
+        if CHECK_KIOSK(): self.boxKiosk.set_sensitive(0)
         self.defaultConf = loadFromFile('default.conf')
         if self.defaultConf['RDP']:
             changeRdpFree.set_active(True)
