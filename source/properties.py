@@ -258,6 +258,8 @@ class Properties(Gtk.Window):
             self.defaultConf['KIOSK'] = 0
             self.disableKiosk()
             save = True
+        # Отключаем трей при включении одного из режимов киоска
+        if self.changeKioskAll.get_active() or self.changeKioskCtor.get_active(): self.defaultConf['TRAY'] = False; self.checkTray.set_active(False)
         if save:
             saveInFile('default.conf',self.defaultConf)
             gui.viewStatus(self.statusbar, "Настройки сохранены в файле default.conf...")
