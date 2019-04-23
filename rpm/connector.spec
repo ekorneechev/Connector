@@ -19,7 +19,7 @@ Requires: python3-module-keyring >= 12.0.0 python3-module-secretstorage
 %define basedir %_datadir/%name
 
 %description
-This is an aggregator program to connnect to various servers
+This is an aggregator program to connect to various servers
 using all of the popular remote desktop protocols
 (RDP, VNC, Citrix, VMware, etc).
 
