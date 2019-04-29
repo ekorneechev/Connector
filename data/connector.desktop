@@ -3,7 +3,6 @@ Name=Connector
 Comment=Подключение к различным серверам
 Exec=/usr/bin/connector %f
 Icon=connector
-StartupNotify=true
 Terminal=false
 Type=Application
 Categories=Network;RemoteAccess;
