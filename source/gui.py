@@ -1109,16 +1109,16 @@ class Gui(Gtk.Application):
 
     def correctProgram(self, parameters):
         """Функция проверки корректности параметров для запускаемой программы
-           - VNC - в remmina 11 параметров подключения, RDP - 14.
+           - VNC - в remmina 10 параметров подключения, RDP - 13 (с 1.8.5 - минус 1, т.к. имя подключения не хранится).
             Так как функционал в Remmina расширять не планируется, за основу при проверке берутся эти числа"""
         self.whatProgram = properties.loadFromFile('default.conf')
         if parameters[0] == 'VNC':
-            if self.whatProgram['VNC'] == 0 and len(parameters) == 11: return True
-            elif self.whatProgram['VNC'] == 1 and len(parameters) != 11: return True
+            if self.whatProgram['VNC'] == 0 and len(parameters) == 10: return True
+            elif self.whatProgram['VNC'] == 1 and len(parameters) != 10: return True
             else: return False
         if parameters[0] == 'RDP':
-            if self.whatProgram['RDP'] == 0 and len(parameters) == 14: return True
-            elif self.whatProgram['RDP'] == 1 and len(parameters) !=14: return True
+            if self.whatProgram['RDP'] == 0 and len(parameters) == 13: return True
+            elif self.whatProgram['RDP'] == 1 and len(parameters) != 13: return True
             else: return False
         return True
 
@@ -1141,8 +1141,8 @@ class Gui(Gtk.Application):
         nameConnect, fileCtor = table[indexRow][0], table[indexRow][3]
         parameters = properties.loadFromFile(fileCtor, self.window)
         if parameters is not None: #если файл .ctor имеет верный формат
-            parameters.append(nameConnect)
             if self.correctProgram(parameters):
+                parameters.append(nameConnect)
                 protocol = parameters.pop(0) #извлекаем протокол из файла коннекта
                 try:
                     if self.changeProgram(protocol) == 'RDP1' and parameters[39]:
