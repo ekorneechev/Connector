@@ -1336,6 +1336,10 @@ class Gui(Gtk.Application):
         """Кнопка 'Сообщить об ошибке'"""
         os.system ('xdg-open "http://bugs.myconnector.ru/"')
 
+    def fullscreenOff(self, widget):
+        """Отключение fullscreen при выборе workarea или ручном вводе разрешения"""
+        widget.set_active(0)
+
 def f_main(pwd="/tmp/"):
     os.system("xdg-mime default connector.desktop application/x-connector")
     try:

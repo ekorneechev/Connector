@@ -2662,6 +2662,7 @@
                         <property name="halign">start</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">radio_RDP1_resol_default</property>
+                        <signal name="toggled" handler="fullscreenOff" object="check_RDP1_fullscreen" swapped="no"/>
                         <signal name="toggled" handler="offResolutionSet" object="entry_RDP1_resolution" swapped="no"/>
                       </object>
                       <packing>
@@ -2682,6 +2683,7 @@
                             <property name="receives_default">False</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">radio_RDP1_resol_default</property>
+                            <signal name="toggled" handler="fullscreenOff" object="check_RDP1_fullscreen" swapped="no"/>
                             <signal name="toggled" handler="onResolutionSet" object="entry_RDP1_resolution" swapped="no"/>
                           </object>
                           <packing>
