@@ -1340,6 +1340,10 @@ class Gui(Gtk.Application):
         """Отключение fullscreen при выборе workarea или ручном вводе разрешения"""
         widget.set_active(0)
 
+    def fixServerForLocal(self, widget):
+        """Установка значения поля сервер в 'localhost' при выборе 'Локальный каталог'"""
+        if self.FS_type.get_active_id() == "file" and not widget.get_text() : widget.set_text("localhost")
+
 def f_main(pwd="/tmp/"):
     os.system("xdg-mime default connector.desktop application/x-connector")
     try:

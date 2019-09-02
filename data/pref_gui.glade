@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.1 -->
+<!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkAdjustment" id="adjustment1">
@@ -1957,6 +1957,7 @@
             <property name="model">list_FS_type</property>
             <property name="active">0</property>
             <property name="id_column">1</property>
+            <signal name="changed" handler="fixServerForLocal" object="entry_FS_serv" swapped="no"/>
             <child>
               <object class="GtkCellRendererText" id="cellrenderertext111"/>
               <attributes>

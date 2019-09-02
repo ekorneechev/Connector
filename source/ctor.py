@@ -327,7 +327,7 @@ class FileServer:
         _exec = properties.loadFromFile('default.conf')['FS'] + ' "'
         if type(args) == str:
             if  not args.find("://") != -1:
-                os.system("zenity --warning --text='Введите протокол подключения!\nИли выберите из списка в дополнительных параметрах'")
+                os.system("zenity --warning --text='Введите протокол подключения!\nИли выберите из списка в дополнительных параметрах.'")
                 return 1
             else:
                 command = _exec + args + '"'
