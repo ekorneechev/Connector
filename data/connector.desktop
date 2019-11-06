@@ -1,6 +1,9 @@
 [Desktop Entry]
+Version=1.0
 Name=Connector
-Comment=Подключение к различным серверам
+Name[ru]=Connector
+Comment=Connect to various servers
+Comment[ru]=Подключение к различным серверам
 Exec=/usr/bin/connector %f
 Icon=connector
 Terminal=false
