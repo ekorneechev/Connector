@@ -7,7 +7,6 @@ ETC = /etc/$(TARGET)
 APS = $(PREFIX)/applications
 KIOSK = kiosk.access
 MIME = $(PREFIX)/mime
-ICON = $(PREFIX)/icons/hicolor/64x64/apps
 DATESTAMP = `git log --pretty="%cd" --date=short -1 | sed s/-//g 2>/dev/null`
 
 .PHONY: help install uninstall clean remove
@@ -40,8 +39,7 @@ install:
 	install -m644 data/$(KIOSK) $(ETC)
 	mkdir -p $(MIME)/packages
 	install -m644 data/$(TARGET).xml $(MIME)/packages
-	mkdir -p $(ICON)
-	install -m644 data/emblem $(ICON)/$(TARGET).png
+	cp -r data/icons $(PREFIX)
 	update-mime-database $(MIME)
 	make clean
 
@@ -52,7 +50,7 @@ uninstall:
 	rm -f $(PREFIX)/applications/$(TARGET).desktop
 	@if [ -f $(ETC)/$(KIOSK) ]; then mv -f $(ETC)/$(KIOSK) $(ETC)/$(KIOSK).makesave; fi
 	rm -f $(MIME)/packages/$(TARGET).xml
-	rm -f $(ICON)/$(TARGET).png
+	find $(PREFIX)/icons/hicolor -name $(TARGET).png -delete
 	update-mime-database $(MIME)
 
 clean:
