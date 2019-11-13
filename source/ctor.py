@@ -3,7 +3,13 @@
 
 import time, properties
 from GLOBAL import *
-import keyring
+try: import keyring
+except Exception as error:
+    class Keyring:
+        def set_password(self, *args): pass
+        def get_password(self, *args): return ""
+    keyring = Keyring()
+    properties.log.warning("Python 3: %s. Password storage is not available for FreeRDP." % error)
 
 try: enableLog = properties.loadFromFile('default.conf')['LOG']
 except KeyError: enableLog = DEFAULT['LOG']
