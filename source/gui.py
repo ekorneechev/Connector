@@ -1357,7 +1357,6 @@ def f_main(pwd="/tmp/"):
             if os.path.isfile(name): openFile(name)
             else: os.system("zenity --error --text='Проверьте правильность ввода имени сохраненного\nподключения или файла с параметрами!' --no-wrap")
     except IndexError:
-        properties.log.info("Запуск программы ---")
         gui = Gui()
         initSignal(gui)
         gui.run(None)
