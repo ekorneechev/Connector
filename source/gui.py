@@ -529,6 +529,9 @@ class Gui(Gtk.Application):
             try:
                 if args[41]: self.RDP_glyph.set_active(True)
             except IndexError: pass
+            try:
+                self.RDP_userpref.set_text(args[42])
+            except IndexError: pass
 
         if protocol == 'SPICE':
             if args[1]: self.SPICE_tls.set_active(True)
@@ -616,6 +619,7 @@ class Gui(Gtk.Application):
             self.RDP_pwd = self.pref_builder.get_object("entry_RDP1_pwd")
             self.RDP_pwdsave = self.pref_builder.get_object("check_RDP1_pwd")
             self.RDP_glyph = self.pref_builder.get_object("check_RDP1_glyph")
+            self.RDP_userpref = self.pref_builder.get_object("entry_RDP1_userpref")
 
         if protocol == 'NX':
             self.NX_user = self.pref_builder.get_object("entry_NX_user")
@@ -804,10 +808,11 @@ class Gui(Gtk.Application):
             else: pwdsave = 0
             if self.RDP_glyph.get_active(): glyph = 1
             else: glyph = 0
+            userpref = self.RDP_userpref.get_text()
             args = [user, domain, fullscreen, clipboard, resolution, color, folder, gserver, guser, gdomain, gpasswd, 
                     admin, smartcards, printers, sound, microphone, multimon, compression, compr_level, fonts, 
                     aero, drag, animation, theme, wallpapers, nsc, jpeg, jpeg_quality, usb, nla, workarea, span,
-                    desktop, down, docs, gdi, reconnect, certignore, pwdsave, pwd, glyph]
+                    desktop, down, docs, gdi, reconnect, certignore, pwdsave, pwd, glyph, userpref]
 
         if protocol == 'NX':
             user = self.NX_user.get_text()

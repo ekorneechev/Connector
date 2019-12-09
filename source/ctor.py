@@ -211,6 +211,9 @@ class XFreeRdp:
                 try:
                     if args[41]: command += ' +glyph-cache'
                 except IndexError: pass
+                try:
+                    if args[42]: command += ' ' + args[42]
+                except IndexError: pass
 
                 server = args[0]
                 properties.log.info ("FreeRDP: подключение к серверу %s. Команда запуска:", server)
