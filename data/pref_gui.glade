@@ -3308,7 +3308,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkLabel" id="label_RDP1_userpref">
+              <object class="GtkLabel" id="label_RDP1_userparams">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">start</property>
@@ -3321,7 +3321,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkEntry" id="entry_RDP1_userpref">
+              <object class="GtkEntry" id="entry_RDP1_userparams">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="tooltip_text" translatable="yes">Подробнее: xfreerdp /help</property>
