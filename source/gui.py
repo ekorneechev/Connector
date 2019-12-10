@@ -115,6 +115,9 @@ class Gui(Gtk.Application):
         self.sortedFiltered = Gtk.TreeModelSort(model = self.filterConnections)
         self.treeview = self.builder.get_object("treeview_connections")
         self.treeview.set_model(self.sortedFiltered)
+        self.treeview.enable_model_drag_source(Gdk.ModifierType.BUTTON1_MASK, [], Gdk.DragAction.MOVE)
+        self.treeview.connect("drag-data-get", self.onDragLabel)
+        self.treeview.drag_source_add_uri_targets()
         self.getServersFromDb()
         self.citrixEditClick = False
         self.webEditClick = False
@@ -135,6 +138,19 @@ class Gui(Gtk.Application):
         if self.optionEnabled('CHECK_VERSION'):
             signal.signal(signal.SIGCHLD,signal.SIG_IGN) #чтобы исключить появление процесса-зомби
             subprocess.Popen([MAINFOLDER + "/connector-check-version", VERSION])
+
+    def onDragLabel(self, widget, drag_context, data, info, time):
+        """Drag-and-Drop for create label of the connection"""
+        table, indexRow = self.treeview.get_selection().get_selected()
+        nameConnect = table[indexRow][0]
+        filename = "/tmp/%s.desktop" % nameConnect
+        with open(filename,"w") as label:
+            label.write(DESKTOP_INFO)
+        with open(filename,"a") as label:
+            label.write("Exec=" + EXEC + '"' + nameConnect + "\"\n")
+            label.write("Name=" + nameConnect)
+        os.system('chmod 755 \"%s\"' % filename)
+        data.set_uris(["file://%s" % filename])
 
     def do_activate(self):
         """Обязательный обработчик для Gtk.Application"""
