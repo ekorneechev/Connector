@@ -139,17 +139,21 @@ class Gui(Gtk.Application):
             signal.signal(signal.SIGCHLD,signal.SIG_IGN) #чтобы исключить появление процесса-зомби
             subprocess.Popen([MAINFOLDER + "/connector-check-version", VERSION])
 
-    def onDragLabel(self, widget, drag_context, data, info, time):
-        """Drag-and-Drop for create label of the connection"""
-        table, indexRow = self.treeview.get_selection().get_selected()
-        nameConnect = table[indexRow][0]
-        filename = "/tmp/%s.desktop" % nameConnect
+    def createDesktopFile(self, filename, nameConnect, nameDesktop):
+        """Create desktop-file for connection"""
         with open(filename,"w") as label:
             label.write(DESKTOP_INFO)
         with open(filename,"a") as label:
-            label.write("Exec=" + EXEC + '"' + nameConnect + "\"\n")
-            label.write("Name=" + nameConnect)
+            label.write('Exec=%s "%s"\n' % (EXEC, nameConnect))
+            label.write('Name=%s' % nameDesktop)
         os.system('chmod 755 \"%s\"' % filename)
+
+    def onDragLabel(self, widget, drag_context, data, info, time):
+        """Drag-and-Drop for create desktop-file of the connection"""
+        table, indexRow = self.treeview.get_selection().get_selected()
+        nameConnect = table[indexRow][0]
+        filename = "/tmp/%s.desktop" % nameConnect
+        self.createDesktopFile(filename, nameConnect, nameConnect)
         data.set_uris(["file://%s" % filename])
 
     def do_activate(self):
@@ -1251,7 +1255,7 @@ class Gui(Gtk.Application):
         dialog.destroy() 
 
     def onPopupSave(self, treeView):
-        """Создание ярлыка для запуска подключения напрмую из системы"""
+        """Creation desktop-file for the connection from popup menu"""
         dialog = Gtk.FileChooserDialog("Сохранить ярлык подключения в ...", self.window,
             Gtk.FileChooserAction.SAVE, (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
              Gtk.STOCK_SAVE, Gtk.ResponseType.OK))
@@ -1266,13 +1270,7 @@ class Gui(Gtk.Application):
             name = dialog.get_filename()
             name = name.replace(".desktop","")
             filename = name + ".desktop"
-            with open(filename,"w") as label:
-                label.write(DESKTOP_INFO)
-            f = open(filename,"a")
-            f.write("Exec=" + EXEC + '"' + nameConnect + "\"\n")
-            f.write("Name=" + os.path.basename(name))
-            f.close()
-            os.system('chmod 777 \"' + filename + '"')
+            self.createDesktopFile(filename, nameConnect, os.path.basename(name))
             viewStatus(self.statusbar, 'Сохранено в "' + filename + '"...')
             properties.log.info("Для подключения '%s' сохранен ярлык быстрого запуска: '%s'", nameConnect, filename)
         dialog.destroy()
