@@ -204,15 +204,17 @@ class XFreeRdp:
                     if args[37]: command += ' +auto-reconnect'
                 except IndexError: command += ' +auto-reconnect /cert-ignore'
                 try:
-                    if args[40]: command += ' /p:' + args[40]
+                    if args[40] and len(args) >= 42: command += ' /p:' + args[40]
                     elif args[30]: command += ' /p:' + passwd(args[0], args[1])
                     else: command += ' -sec-nla'
                 except: command += ' -sec-nla'
                 try:
-                    if args[41]: command += ' +glyph-cache'
+                    if args[41] and len(args) >= 43: command += ' +glyph-cache'
                 except IndexError: pass
                 try:
-                    if args[42]: command += ' ' + args[42]
+                    # for compatibility also need to check lenght of 'args'
+                    # length = 'last index' + 1 + 'title of the connect' (since version 1.5.6...)
+                    if args[42] and len(args) >= 44: command += ' ' + args[42]
                 except IndexError: pass
 
                 server = args[0]
