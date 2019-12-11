@@ -41,6 +41,7 @@ install:
 	install -m644 data/$(TARGET).xml $(MIME)/packages
 	cp -r data/icons $(PREFIX)
 	update-mime-database $(MIME)
+	update-desktop-database
 	make clean
 
 uninstall:
@@ -52,6 +53,7 @@ uninstall:
 	rm -f $(MIME)/packages/$(TARGET).xml
 	find $(PREFIX)/icons/hicolor -name $(TARGET).png -delete
 	update-mime-database $(MIME)
+	update-desktop-database
 
 clean:
 	sed -i s#$(PREFIX)#/usr/share#g source/*

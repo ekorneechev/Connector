@@ -9,4 +9,4 @@ Icon=connector
 Terminal=false
 Type=Application
 Categories=Network;RemoteAccess;
-MimeType=application/x-connector;
+MimeType=application/x-connector;application/x-remmina;
