@@ -152,7 +152,10 @@ class Gui(Gtk.Application):
         """Drag-and-Drop for create desktop-file of the connection"""
         table, indexRow = self.treeview.get_selection().get_selected()
         nameConnect = table[indexRow][0]
-        filename = "/tmp/%s.desktop" % nameConnect
+        nameUnicode = nameConnect.encode()
+        if len(nameConnect) == len(nameUnicode):
+            filename = "/tmp/%s.desktop" % nameConnect
+        else: filename = "/tmp/%s.desktop" % nameUnicode
         self.createDesktopFile(filename, nameConnect, nameConnect)
         data.set_uris(["file://%s" % filename])
 
