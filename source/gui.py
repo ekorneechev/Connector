@@ -144,8 +144,8 @@ class Gui(Gtk.Application):
         with open(filename,"w") as label:
             label.write(DESKTOP_INFO)
         with open(filename,"a") as label:
-            label.write('Exec=%s "%s"\n' % (EXEC, nameConnect))
-            label.write('Name=%s' % nameDesktop)
+            label.write('Exec=%s"%s"\n' % (EXEC, nameConnect))
+            label.write('Name=%s\n' % nameDesktop)
         os.system('chmod 755 \"%s\"' % filename)
 
     def onDragLabel(self, widget, drag_context, data, info, time):
