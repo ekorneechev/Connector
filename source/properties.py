@@ -47,10 +47,10 @@ def loadFromFile(fileName, window = None):
             return None
     except (pickle.UnpicklingError, EOFError):
         dialog = Gtk.MessageDialog(window, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK,
-                 "Файл " + fileName + "\nимеет неверный формат")
+                 "Файл %s\nимеет неверный формат" % fileName.replace("tmp_",""))
         response = dialog.run()
         dialog.destroy()
-        log.exception("Файл %s имеет неверный формат! Подробнее:", fileName)
+        log.exception("Файл %s имеет неверный формат! Подробнее:", fileName.replace("tmp_",""))
         if fileName.find('default.conf') != -1: saveInFile(fileName, DEFAULT); return DEFAULT
         return None
 

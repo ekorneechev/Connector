@@ -7,6 +7,7 @@ from gi.repository import Gtk, Gdk, GdkPixbuf, GLib, Gio
 import random, sys, signal
 from ctor import *
 from GLOBAL import *
+from pathlib import Path
 
 def viewStatus(bar, message):
     """Функция отображения происходящих действий в строке состояния"""
@@ -14,7 +15,7 @@ def viewStatus(bar, message):
     bar.push(bar.get_context_id ("statusbar"), message)    
 
 def connectFile(filename, openFile = False):
-    """Функция подключения с помощью указанного файла .ctor"""
+    """Connect to the server with file .ctor"""
     try:
         parameters = properties.loadFromFile(filename)
         if parameters != None:
@@ -27,18 +28,32 @@ def connectFile(filename, openFile = False):
             connect = definition(protocol)
             connect.start(parameters)
     except (IndexError, KeyError):
-        properties.log.exception ("""Ошибка в файле %s: либо он создан в старой версии connector, либо программа по умолчанию выбрана отличная от сохраненного файла""", filename)
-        os.system("zenity --error --text='Проверьте настройки программ по умолчанию' --no-wrap")
+        properties.log.exception ("""Ошибка в файле %s: либо он создан в старой версии connector,
+                                     либо программа по умолчанию выбрана отличная от сохраненного файла""" % filename.replace("tmp_",""))
+        os.system("zenity --error --title='Connector' --text='Проверьте настройки программ по умолчанию.' --no-wrap")
+
+def connectFileRdp(filename):
+    """Connect to the server with file .rdp"""
+    pass
+
+def connectFileRemmina(filename):
+    """Connect to the server with file .remmina"""
+    os.system("remmina --connect %s %s" % (filename, STD_TO_LOG))
 
 def openFile(filename):
-    """Функция открытия файла .ctor (из меню или в командной строке)"""
-    tmpname = 'tmp_' + os.path.basename(filename)
-    os.system('cp "' + filename + '" "' + WORKFOLDER + tmpname + '"')
-    os.chdir(WORKFOLDER)
-    properties.log.info ("Открыт файл " + filename)
-    connectFile(tmpname, True)
-    os.remove(tmpname)
-    os.chdir(MAINFOLDER)
+    """Open file connection (.ctor, .rdp or .remmina)"""
+    ext = Path(filename).suffix.lower()
+    if ext == ".ctor":
+        tmpname = 'tmp_' + os.path.basename(filename)
+        os.system('cp "' + filename + '" "' + WORKFOLDER + tmpname + '"')
+        os.chdir(WORKFOLDER)
+        properties.log.info ("Открыт файл " + filename)
+        connectFile(tmpname, True)
+        os.remove(tmpname)
+        os.chdir(MAINFOLDER)
+    elif ext == ".rdp": connectFileRdp(filename)
+    elif ext == ".remmina": connectFileRemmina(filename)
+    else: os.system("zenity --error --title='Connector' --text='Неподдерживаемый тип файла!' --no-wrap")
 
 def initSignal(gui):
     """Функция обработки сигналов SIGHUP, SIGINT и SIGTERM
