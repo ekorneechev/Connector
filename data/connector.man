@@ -1,25 +1,40 @@
 .\" -*- mode: troff; coding: UTF-8 -*-
-.TH connector 1  "Jule 25, 2018" "version 1.7.1" "USER COMMANDS"
+.TH connector 1  "December 13, 2019" "version 1.8.6" "USER COMMANDS"
 .SH NAME
 connector \- Инструмент системного администратора
 .SH SYNOPSIS
 .B connector
-[<имя подключения>/<файл формата .ctor>]
+[options]
 .SH DESCRIPTION
- Программа-агрегатор для осуществления подключения к различным
- компьютерным системам по всем распространенным протоколам (RDP, VNC,
- Citrix, VMware и прочие).
-.PP
- Wiki: http://wiki.myconnector.ru
+Программа-агрегатор для осуществления подключения к различным
+компьютерным системам по всем распространенным протоколам (RDP, VNC,
+Citrix, VMware и прочие).
 .SH OPTIONS
 .TP
- без опций
- запуск программы с GUI;
-.TP
- [<имя подключения>]
- быстрое соединение c указанным сохраненным подключением;
-.TP
- [<файл формата .ctor>]
- открытие файла и запуск подключения с сохраненными в нем настройками.
+\fBбез\ опций\fR
+.RS 3
+запуск программы с GUI
+.RE
+.PP
+\fB<имя_подключения>\fR
+.RS 3
+быстрое соединение c указанным сохраненным подключением
+.RE
+.PP
+\fB<имя_файла>\fR
+.RS 3
+возможно подключение с помощью файлов .ctor, .remmina и .rdp
+.RE
+.PP
+\fB--help,\ -h,\ /help\fR
+.RS 3
+вывести данную справку
+.RE
+.PP
+\fB--version,\ -v,\ /version\fR
+.RS 3
+вывести версию и релиз программы
+.SH LINKS
+http://myconnector.ru/
 .SH AUTHOR
- Корнеечев Евгений (ek@myconnector.ru)
+Корнеечев Евгений <ek@myconnector.ru>
