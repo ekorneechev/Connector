@@ -52,13 +52,13 @@ def openFile(filename):
         tmpname = 'tmp_' + os.path.basename(filename)
         os.system('cp "' + filename + '" "' + WORKFOLDER + tmpname + '"')
         os.chdir(WORKFOLDER)
-        properties.log.info ("Открыт файл " + filename)
         connectFile(tmpname, True)
         os.remove(tmpname)
         os.chdir(MAINFOLDER)
     elif ext == ".rdp": connectFileRdp(filename)
     elif ext == ".remmina": connectFileRemmina(filename)
     else: os.system("zenity --error --title='Connector' --text='Неподдерживаемый тип файла!' --no-wrap")
+    properties.log.info ("Открыт файл " + filename)
 
 def initSignal(gui):
     """Функция обработки сигналов SIGHUP, SIGINT и SIGTERM
