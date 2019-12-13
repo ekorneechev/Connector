@@ -1400,6 +1400,12 @@ def f_main(pwd="/tmp/"):
     os.system("xdg-mime default connector.desktop application/x-connector")
     try:
         name = sys.argv[1]
+        if name in {"--help", "-h", "/help"}:
+            os.system("man connector")
+            exit (0)
+        if name in {"--version", "-v", "/version"}:
+            print ("Connector - %s (%s)" % (VERSION, RELEASE))
+            exit (0)
         fileCtor = properties.filenameFromName(name)
         if fileCtor:
             properties.log.info ("Запуск сохраненного подключения: " + name)
@@ -1407,7 +1413,9 @@ def f_main(pwd="/tmp/"):
         else:
             if not os.path.isfile(name): name = pwd + name
             if os.path.isfile(name): openFile(name)
-            else: os.system("zenity --error --text='Проверьте правильность ввода имени сохраненного\nподключения или файла с параметрами!' --no-wrap")
+            else:
+                os.system("zenity --error --title='Connector' --text='Проверьте правильность ввода имени подключения или файла с параметрами!' --no-wrap")
+                exit (1)
     except IndexError:
         gui = Gui()
         initSignal(gui)
