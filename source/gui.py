@@ -34,7 +34,12 @@ def connectFile(filename, openFile = False):
 
 def connectFileRdp(filename):
     """Connect to the server with file .rdp"""
-    pass
+    if properties.loadFromFile('default.conf')['RDP']:
+        tmpfile = WORKFOLDER + ".tmp.rdp"
+        os.system("cp -r %s %s" % (filename, tmpfile))
+        os.system("xfreerdp %s -sec-nla %s" % (tmpfile, STD_TO_LOG))
+    else:
+        os.system("remmina --connect %s %s" % (filename, STD_TO_LOG))
 
 def connectFileRemmina(filename):
     """Connect to the server with file .remmina"""
