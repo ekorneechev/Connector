@@ -170,8 +170,8 @@ class Properties(Gtk.Window):
         self.statusbar = builder.get_object("statusbar")
         self.combo_tabs = builder.get_object("combo_tabs")
         self.combo_main = builder.get_object("combo_main")
-        changeRdpFree = builder.get_object("radio_RDP_freeRDP")
-        changeVncView = builder.get_object("radio_VNC_viewer")
+        self.changeRdpFree = builder.get_object("radio_RDP_freeRDP")
+        self.changeVncView = builder.get_object("radio_VNC_viewer")
         self.changeKioskOff = builder.get_object("radio_kiosk_off")
         self.changeKioskAll = builder.get_object("radio_kiosk_all")
         self.changeKioskCtor = builder.get_object("radio_kiosk_ctor")
@@ -181,12 +181,20 @@ class Properties(Gtk.Window):
         self.checkTray = builder.get_object("check_TRAY")
         self.checkVersion = builder.get_object("check_VERSION")
         self.checkLog = builder.get_object("check_LOG")
+        self.initParameters()
+        self.add(box)
+        self.connect("delete-event", self.onClose)
+        cancel.connect("clicked", self.onCancel, self)
+        self.show_all()
+
+    def initParameters(self):
+        """Initializing parameters from a file default.conf"""
         if CHECK_KIOSK(): self.boxKiosk.set_sensitive(0)
         self.defaultConf = loadFromFile('default.conf')
         if self.defaultConf['RDP']:
-            changeRdpFree.set_active(True)
+            self.changeRdpFree.set_active(True)
         if self.defaultConf['VNC']:
-            changeVncView.set_active(True)
+            self.changeVncView.set_active(True)
         try:
             if self.defaultConf['KIOSK'] == 1:
                 self.changeKioskAll.set_active(True)
@@ -211,10 +219,6 @@ class Properties(Gtk.Window):
         except KeyError: self.checkVersion.set_active(DEFAULT['CHECK_VERSION'])
         try: self.checkLog.set_active(self.defaultConf['LOG'])
         except KeyError: self.checkLog.set_active(DEFAULT['LOG'])
-        self.add(box)        
-        self.connect("delete-event", self.onClose)
-        cancel.connect("clicked", self.onCancel, self)
-        self.show_all()
 
     def onCancel (self, button, window):
         window.destroy()
@@ -382,7 +386,7 @@ Ctrl+Alt+F1 - вернуться на "Рабочий стол" """)
             saveInFile(filename, DEFAULT)
             log.info("Выполнен сброс программы к значения по умолчанию.")
         dialog.destroy()
-        self.onClose(self)
+        self.initParameters()
 
 if __name__ == '__main__':
     pass
