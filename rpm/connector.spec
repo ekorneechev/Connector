@@ -1,6 +1,6 @@
 Name: connector
-Version: 1.8.5
-Release: alt2
+Version: 1.8.6
+Release: alt1
 
 Summary: Remote desktop chooser
 License: GPL
@@ -54,6 +54,15 @@ cp -r icons/hicolor %buildroot%_iconsdir/
 %_iconsdir/hicolor/*/apps/%name.png
 
 %changelog
+* Tue Dec 17 2019 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.8.6-alt1
+- Added 'drag-and-drop' for create label of the connection
+- Added the possibility to open Remmina and RDP files
+- Updated emblem; added icons of different sizes
+- FreeRDP:
+ + Added input field for additional user parameters
+ + Fixed work connections from previous version
+- Added keys 'help' and 'version' for cmdline; updated man
+
 * Thu Nov 07 2019 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.8.5-alt2
 - Fixed version
 
