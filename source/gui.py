@@ -261,7 +261,7 @@ class Gui(Gtk.Application):
         about.set_version(VERSION + " (release: " + RELEASE + ')')
         about.set_website("http://myconnector.ru")
         about.set_website_label("Сайт проекта") 
-        about.set_copyright("© Корнеечев Е.А., 2014-2019\ne-mail:ek@myconnector.ru\n\nPayPal: ekorneechev@gmail.com\nWMR: R305760666573, WMZ: Z841082507423")
+        about.set_copyright("© Корнеечев Е.А., 2014-2020\ne-mail:ek@myconnector.ru\n\nPayPal: ekorneechev@gmail.com\nWMR: R305760666573, WMZ: Z841082507423")
         about.set_logo_icon_name("connector")
         about.run()
         about.destroy()
