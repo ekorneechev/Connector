@@ -32,7 +32,7 @@ install:
 	mkdir -p $(BASE)/data/
 	install -m644 data/*.png data/*.glade $(BASE)/data/
 	install -m644 source/*.py $(BASE)
-	install -m755 source/$(TARGET)-check-version $(BASE)
+	install -m755 source/$(TARGET)-check-* $(BASE)
 	mkdir -p $(MAN)
 	install -m644 data/$(TARGET).man $(MAN)/$(TARGET).1
 	mkdir -p $(ETC)

@@ -223,6 +223,9 @@ class XFreeRdp:
                 except: cmd2log = command
                 properties.log.info (cmd2log)
                 os.system(command + STD_TO_LOG)
+                if enableLog:
+                    signal.signal(signal.SIGCHLD,signal.SIG_IGN)
+                    subprocess.Popen([MAINFOLDER + "/connector-check-xfreerdp-errors"])
             else:
                 properties.log.warning ("FreeRDP - версия ниже 1.2!")
                 os.system("zenity --error --text='Установленая версия FreeRDP (" + freerdpVersion + ") не соответствует минимальным требованиям,\nподробности здесь: http://wiki.myconnector.ru/install#freerdp'")

@@ -32,7 +32,7 @@ install -pDm644 %name.desktop %buildroot%_desktopdir/%name.desktop
 mkdir -p %buildroot%basedir/data/
 install -p *.png *.glade %buildroot%basedir/data/
 install -p *.py %buildroot%basedir/
-install -pm755 %name-check-version %buildroot%basedir/
+install -pm755 %name-check-* %buildroot%basedir/
 install -pDm644 %name.man %buildroot%_man1dir/%name.1
 %find_lang --with-man %name
 install -pDm644 kiosk.access %buildroot%_sysconfdir/%name/kiosk.access
@@ -46,7 +46,7 @@ cp -r icons/hicolor %buildroot%_iconsdir/
 %dir %basedir
 %basedir/data
 %basedir/*.py
-%basedir/%name-check-version
+%basedir/%name-check-*
 %_man1dir/*
 %dir %_sysconfdir/%name
 %config(noreplace) %_sysconfdir/%name/kiosk.access

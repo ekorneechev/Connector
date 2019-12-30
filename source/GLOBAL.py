@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-import os, subprocess
+import os, subprocess, signal
 
 #Версия приложения
 VERSION = "1.8.6"
