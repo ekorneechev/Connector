@@ -181,6 +181,7 @@ class Properties(Gtk.Window):
         self.checkTray = builder.get_object("check_TRAY")
         self.checkVersion = builder.get_object("check_VERSION")
         self.checkLog = builder.get_object("check_LOG")
+        self.combo_sort = builder.get_object("combo_sort")
         self.initParameters()
         self.add(box)
         self.connect("delete-event", self.onClose)
@@ -219,6 +220,8 @@ class Properties(Gtk.Window):
         except KeyError: self.checkVersion.set_active(DEFAULT['CHECK_VERSION'])
         try: self.checkLog.set_active(self.defaultConf['LOG'])
         except KeyError: self.checkLog.set_active(DEFAULT['LOG'])
+        try: self.combo_sort.set_active_id(self.defaultConf['SORT'])
+        except KeyError: self.combo_tabs.set_active_id('0')
 
     def onCancel (self, button, window):
         window.destroy()
@@ -241,6 +244,7 @@ class Properties(Gtk.Window):
         self.defaultConf['TRAY'] = self.checkTray.get_active()
         self.defaultConf['CHECK_VERSION'] = self.checkVersion.get_active()
         self.defaultConf['LOG'] = self.checkLog.get_active()
+        self.defaultConf['SORT'] = self.combo_sort.get_active_id()
         save = False
         nameConn = self.entryKioskConn.get_text()
         if self.changeKioskAll.get_active():

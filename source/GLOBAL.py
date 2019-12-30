@@ -167,3 +167,6 @@ DEFAULT['XDMCP_ARGS'] = ['0', 1, '', 0, 0, '']
 DEFAULT['SPICE_ARGS'] = [0, 0, 0, 0, 0, 0, '']
 DEFAULT['SSH_ARGS'] = ['', 0, '', 'UTF-8', '']
 DEFAULT['SFTP_ARGS'] = ['', 0, '', 'UTF-8', '/']
+
+#Default column by sort connections
+DEFAULT['SORT'] = 0

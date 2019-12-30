@@ -133,6 +133,9 @@ class Gui(Gtk.Application):
         self.filterConnections.set_visible_func(self.listFilter) #добавление фильтра для поиска
         self.currentFilter = ''
         self.sortedFiltered = Gtk.TreeModelSort(model = self.filterConnections)
+        try: default_sort = int(properties.loadFromFile('default.conf')['SORT'])
+        except KeyError: default_sort = 0
+        self.sortedFiltered.set_sort_column_id(default_sort, Gtk.SortType.ASCENDING)
         self.treeview = self.builder.get_object("treeview_connections")
         self.treeview.set_model(self.sortedFiltered)
         self.treeview.enable_model_drag_source(Gdk.ModifierType.BUTTON1_MASK, [], Gdk.DragAction.MOVE)
