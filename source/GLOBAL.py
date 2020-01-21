@@ -100,7 +100,8 @@ elif OS == "linuxmint" or OS == "ubuntu":
 
 else:
     VERSION = RELEASE = USBPATH = CITRIX_CHECK = SCARD = ""
-    os.system("zenity --error --text='Ваша операционная система не поддерживается.\nНекоторые функции программы могут не работать!\nПодробнее о поддерживаемых ОС здесь:\nhttp://wiki.myconnector.ru'")
+    os.system("zenity --error --no-wrap --icon-name=connector --text='Ваша операционная система не поддерживается.\n"
+              "Некоторые функции программы могут не работать!\nПодробнее о поддерживаемых ОС <a href=\"http://wiki.myconnector.ru\">здесь</a>.'")
 
 #Режим киоска:
 DEFAULT['KIOSK'] = 0; DEFAULT['KIOSK_CONN'] = ""

@@ -150,6 +150,7 @@ class RdpRemmina(Remmina):
 class XFreeRdp:
     """Класс для настройки RDP-соединения через xfreerdp"""
     def start(self, args):
+        _link = "http://wiki.myconnector.ru/install#freerdp"
         if freerdpCheck():
             freerdpVersion = freerdpCheckVersion()
             if freerdpVersion > "1.2":
@@ -227,11 +228,12 @@ class XFreeRdp:
                     signal.signal(signal.SIGCHLD,signal.SIG_IGN)
                     subprocess.Popen([MAINFOLDER + "/connector-check-xfreerdp-errors"])
             else:
-                properties.log.warning ("FreeRDP - версия ниже 1.2!")
-                os.system("zenity --error --text='Установленая версия FreeRDP (" + freerdpVersion + ") не соответствует минимальным требованиям,\nподробности здесь: http://wiki.myconnector.ru/install#freerdp'")
+                properties.log.warning ("FreeRDP version below 1.2!")
+                os.system("zenity --error --text='\nУстановленная версия FreeRDP (%s) не соответствует минимальным требованиям,"
+                          " подробности <a href=\"%s\">здесь</a>!' --no-wrap --icon-name=connector" % (freerdpVersion, _link))
         else:
-            properties.log.warning ("FreeRDP не установлен!")
-            os.system("zenity --error --text='FreeRDP не установлен, подробности здесь:\nhttp://wiki.myconnector.ru/install#freerdp'")
+            properties.log.warning ("FreeRDP is not installed!")
+            os.system("zenity --error --text='\nFreeRDP не установлен, подробности <a href=\"%s\">здесь</a>!' --no-wrap --icon-name=connector" % _link)
 
 class NxRemmina(Remmina):
     """Класс для настройки NX-соединения через Remmina"""
@@ -297,8 +299,13 @@ class Vmware:
                 if args[3]: command += ' -p ' + args[3]
             os.system(command + STD_TO_LOG)
         else:
-            properties.log.warning ("VMware Horizon Client не установлен!")
-            os.system("zenity --error --text='VMware Horizon Client не установлен!'")
+            properties.log.warning ("VMware Horizon Client is not installed!")
+            os.system("zenity --error --text='\nVMware Horizon Client не установлен!' --no-wrap --icon-name=connector")
+
+def _missCitrix():
+    """Message for user, if Citrix Receiver not installed"""
+    properties.log.warning ("Citrix Receiver is not installed!")
+    os.system("zenity --error --text='\nCitrix Receiver не установлен!' --no-wrap --icon-name=connector")
 
 class Citrix:
     """Класс для настройки ICA-соединения к Citrix-серверу"""
@@ -310,17 +317,13 @@ class Citrix:
             properties.log.info ("Citrix: подключение к серверу %s", addr)
             os.system('/opt/Citrix/ICAClient/util/storebrowse --addstore ' + addr + STD_TO_LOG)
             os.system('/opt/Citrix/ICAClient/selfservice --icaroot /opt/Citrix/ICAClient' + STD_TO_LOG)
-        else:
-            properties.log.warning ("Citrix Receiver не установлен!")
-            os.system("zenity --error --text='Citrix Receiver не установлен!'")
+        else: _missCitrix()
 
     def preferences():
         if citrixCheck():
             properties.log.info ("Citrix: открытие настроек программы")
             os.system('/opt/Citrix/ICAClient/util/configmgr --icaroot /opt/Citrix/ICAClient' + STD_TO_LOG)
-        else:
-            properties.log.warning ("Citrix Receiver не установлен!")
-            os.system("zenity --error --text='Citrix Receiver не установлен!'")
+        else: _missCitrix()
 
 class Web:
     """Класс для настройки подключения к WEB-ресурсу"""
@@ -341,7 +344,8 @@ class FileServer:
         _exec = properties.loadFromFile('default.conf')['FS'] + ' "'
         if type(args) == str:
             if  not args.find("://") != -1:
-                os.system("zenity --warning --text='Введите протокол подключения!\nИли выберите из списка в дополнительных параметрах.'")
+                os.system("zenity --warning --text='Введите протокол подключения!\n"
+                          "Или выберите из списка в дополнительных параметрах.' --no-wrap --icon-name=connector")
                 return 1
             else:
                 command = _exec + args + '"'
@@ -420,7 +424,9 @@ def passwd(server, username):
     if password: return password
     separator = "|CoNnEcToR|"
     try:
-        password, save = subprocess.check_output('zenity --forms --title="Аутентификация (with NLA)" --text="Имя пользователя: ' + username + '" --add-password="Пароль:" --add-combo="Хранить пароль в связке ключей:" --combo-values="Да|Нет" --separator="' + separator + '" 2>/dev/null',shell=True, universal_newlines=True).strip().split(separator)
+        password, save = subprocess.check_output("zenity --forms --title=\"Аутентификация (with NLA)\" --text=\"Имя пользователя: %s\""
+            " --add-password=\"Пароль:\" --add-combo=\"Хранить пароль в связке ключей:\" --combo-values=\"Да|Нет\""
+            " --separator=\"%s\" 2>/dev/null" % (username, separator),shell=True, universal_newlines=True).strip().split(separator)
         if save == "Да" and password: keyring.set_password(str(server),str(username),str(password))
     #если окно zenity закрыто или нажата кнопка Отмена, делаем raise ошибки FreeRDP
     except ValueError:

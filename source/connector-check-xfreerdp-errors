@@ -8,7 +8,7 @@ def main():
     help = check_output("xfreerdp --help | tail 2>/dev/null; exit 0",shell=True, universal_newlines=True).strip()
     log = check_output("sleep 3; tail %s 2>/dev/null; exit 0" % LOG,shell=True, universal_newlines=True).strip()
     if help == log:
-        system("zenity --notification --window-icon='error' --text='FreeRDP\nПроверьте правильность команды подключения.\nПодробнее в %s'" % LOG)
+        system("zenity --notification --window-icon=connector --text='Ошибка FreeRDP\nПроверьте правильность команды подключения.\nПодробнее в %s'" % LOG)
     exit(0)
 
 if __name__ == "__main__":

@@ -30,7 +30,7 @@ def connectFile(filename, openFile = False):
     except (IndexError, KeyError):
         properties.log.exception ("""Ошибка в файле %s: либо он создан в старой версии connector,
                                      либо программа по умолчанию выбрана отличная от сохраненного файла""" % filename.replace("tmp_",""))
-        os.system("zenity --error --title='Connector' --text='Проверьте настройки программ по умолчанию.' --no-wrap")
+        os.system("zenity --error --icon-name=connector --text='Проверьте настройки программ по умолчанию.' --no-wrap")
 
 def connectFileRdp(filename):
     """Connect to the server with file .rdp"""
@@ -57,7 +57,7 @@ def openFile(filename):
         os.chdir(MAINFOLDER)
     elif ext == ".rdp": connectFileRdp(filename)
     elif ext == ".remmina": connectFileRemmina(filename)
-    else: os.system("zenity --error --title='Connector' --text='Неподдерживаемый тип файла!' --no-wrap")
+    else: os.system("zenity --error --icon-name=connector --text='Неподдерживаемый тип файла!' --no-wrap")
     properties.log.info ("Открыт файл " + filename)
 
 def initSignal(gui):
@@ -1109,7 +1109,7 @@ class Gui(Gtk.Application):
             parameters[39] = ''
         name = self.pref_builder.get_object("entry_" + id_protocol + "_name" ).get_text()
         if properties.searchName(name) and not self.editClick:
-            os.system("zenity --error --text='Подключение с именем \"" + name + "\" уже существует!' --no-wrap")
+            os.system("zenity --error --text='Подключение с именем \"%s\" уже существует!' --no-wrap --icon-name=connector" % name)
         else:
             parameters.insert(0, server)
             parameters.insert(0, protocol) #протокол подключения также заносится в файл        
@@ -1132,7 +1132,7 @@ class Gui(Gtk.Application):
         protocol = entry.get_name()
         name = self.builder.get_object("entry_" + protocol + "_name").get_text()
         if properties.searchName(name) and not self.citrixEditClick and not self.webEditClick:
-            os.system("zenity --error --text='Подключение с именем \"" + name + "\" уже существует!' --no-wrap")
+            os.system("zenity --error --text='Подключение с именем \"%s\" уже существует!' --no-wrap --icon-name=connector" % name)
         else:
             parameters = []
             parameters.append(protocol)
@@ -1186,15 +1186,15 @@ class Gui(Gtk.Application):
     def dialogIncorrectProgram(self, _type, _protocol, _name):
         """Функция отображения диалогового окна ошибки формата файла подключения"""
         if _type == "open":
-            text = "Не удается подключиться: \nневерный формат " + _protocol + "-подключения!"
+            text = "Не удается подключиться: неверный формат %s-подключения!" % _protocol
+            title = "Ошибка подключения"
             properties.log.error("Программа по умолчанию для %s выбрана отличная от файла: %s", _protocol, _name)
         elif _type == "import":
-            text = "Не удается импортировать файл:\nневерный формат " + _protocol + "-подключения!"
+            text = "Не удается импортировать файл: неверный формат %s-подключения!" % _protocol
+            title = "Ошибка импорта"
             properties.log.error("Импорт файла %s не удался!", _name)
-        dialog = Gtk.MessageDialog(self.window, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.CLOSE, text)
-        dialog.format_secondary_text("Попробуйте изменить программу по умолчанию в параметрах приложения")
-        response = dialog.run()
-        dialog.destroy()
+        os.system("zenity --error  --title='%s' --text='%s\nПопробуйте изменить программу"
+                  " по умолчанию в параметрах приложения.' --no-wrap --icon-name=connector" % (title,text))
 
     def onSaveConnect(self, treeView, *args):
         """Установка подключения по двойному щелчку на элементе списка"""
@@ -1417,7 +1417,7 @@ def f_main(pwd="/tmp/"):
             if not os.path.isfile(name): name = pwd + name
             if os.path.isfile(name): openFile(name)
             else:
-                os.system("zenity --error --title='Connector' --text='Проверьте правильность ввода имени подключения или файла с параметрами!' --no-wrap")
+                os.system("zenity --error --icon-name=connector --text='Проверьте правильность ввода имени подключения или файла с параметрами!' --no-wrap")
                 exit (1)
     except IndexError:
         gui = Gui()
