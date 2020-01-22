@@ -170,4 +170,4 @@ DEFAULT['SSH_ARGS'] = ['', 0, '', 'UTF-8', '']
 DEFAULT['SFTP_ARGS'] = ['', 0, '', 'UTF-8', '/']
 
 #Default column by sort connections
-DEFAULT['SORT'] = 0
+DEFAULT['SORT'] = '0'
