@@ -31,4 +31,4 @@ else cp control $TARGET/DEBIAN/; fi;
 sed -i "s\Installed-Size:\Installed-Size: $INST_SIZE\g" $TARGET/DEBIAN/control
 fakeroot dpkg-deb --build $TARGET
 mv $TARGET.deb ${TARGET}_`grep Version $TARGET/DEBIAN/control | sed s/Version:\ //g`_all.deb
-#rm -r $TARGET/
+rm -r $TARGET/
