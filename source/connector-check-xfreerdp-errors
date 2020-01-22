@@ -4,6 +4,8 @@ from os import system
 from sys import exit
 
 def main():
+    cmd = check_output("tail -n1 ~/.connector/logs/connector.log 2>/dev/null; exit 0", shell=True, universal_newlines=True).strip()
+    if cmd.find("/CANCELED") != -1: exit (0)
     LOG = "~/.connector/logs/all.log"
     help = check_output("xfreerdp --help | tail 2>/dev/null; exit 0",shell=True, universal_newlines=True).strip()
     log = check_output("sleep 3; tail %s 2>/dev/null; exit 0" % LOG,shell=True, universal_newlines=True).strip()
