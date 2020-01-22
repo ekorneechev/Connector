@@ -1108,8 +1108,10 @@ class Gui(Gtk.Application):
                 except: pass
             parameters[39] = ''
         name = self.pref_builder.get_object("entry_" + id_protocol + "_name" ).get_text()
-        if properties.searchName(name) and not self.editClick:
-            os.system("zenity --error --text='Подключение с именем \"%s\" уже существует!' --no-wrap --icon-name=connector" % name)
+        if name == "":
+            os.system("zenity --error --text='\nУкажите имя подключения!' --no-wrap --icon-name=connector")
+        elif properties.searchName(name) and not self.editClick:
+            os.system("zenity --error --text='\nПодключение с именем \"%s\" уже существует!' --no-wrap --icon-name=connector" % name)
         else:
             parameters.insert(0, server)
             parameters.insert(0, protocol) #протокол подключения также заносится в файл        
@@ -1131,8 +1133,10 @@ class Gui(Gtk.Application):
         server = entry.get_text()
         protocol = entry.get_name()
         name = self.builder.get_object("entry_" + protocol + "_name").get_text()
-        if properties.searchName(name) and not self.citrixEditClick and not self.webEditClick:
-            os.system("zenity --error --text='Подключение с именем \"%s\" уже существует!' --no-wrap --icon-name=connector" % name)
+        if name == "":
+            os.system("zenity --error --text='\nУкажите имя подключения!' --no-wrap --icon-name=connector")
+        elif properties.searchName(name) and not self.citrixEditClick and not self.webEditClick:
+            os.system("zenity --error --text='\nПодключение с именем \"%s\" уже существует!' --no-wrap --icon-name=connector" % name)
         else:
             parameters = []
             parameters.append(protocol)
