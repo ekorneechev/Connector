@@ -1,5 +1,5 @@
 Name: connector
-Version: 1.8.6
+Version: 1.8.7
 Release: alt1
 
 Summary: Remote desktop chooser
@@ -54,6 +54,11 @@ cp -r icons/hicolor %buildroot%_iconsdir/
 %_iconsdir/hicolor/*/apps/%name.png
 
 %changelog
+* Wed Jan 22 2020 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.8.7-alt1
+- FreeRDP: added checking errors
+- Disabled empty name for connections
+- Added default sorting to connections and its change
+
 * Tue Dec 17 2019 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.8.6-alt1
 - Added 'drag-and-drop' for create label of the connection
 - Added the possibility to open Remmina and RDP files
