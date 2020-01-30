@@ -31,7 +31,7 @@ def connectFile(filename, openFile = False):
     except (IndexError, KeyError):
         properties.log.exception ("""Ошибка в файле %s: либо он создан в старой версии connector,
                                      либо программа по умолчанию выбрана отличная от сохраненного файла""" % filename.replace("tmp_",""))
-        os.system("zenity --error --icon-name=connector --text='Проверьте настройки программ по умолчанию.' --no-wrap")
+        os.system("zenity --error --icon-name=connector --text='\nПроверьте настройки программ по умолчанию.' --no-wrap")
 
 def connectFileRdp(filename):
     """Connect to the server with file .rdp"""
@@ -58,7 +58,7 @@ def openFile(filename):
         os.chdir(MAINFOLDER)
     elif ext == ".rdp": connectFileRdp(filename)
     elif ext == ".remmina": connectFileRemmina(filename)
-    else: os.system("zenity --error --icon-name=connector --text='Неподдерживаемый тип файла!' --no-wrap")
+    else: os.system("zenity --error --icon-name=connector --text='\nНеподдерживаемый тип файла!' --no-wrap")
     properties.log.info ("Открыт файл " + filename)
 
 def initSignal(gui):
@@ -1425,7 +1425,7 @@ def f_main(pwd="/tmp/"):
             if not os.path.isfile(name): name = pwd + name
             if os.path.isfile(name): openFile(name)
             else:
-                os.system("zenity --error --icon-name=connector --text='Проверьте правильность ввода имени подключения или файла с параметрами!' --no-wrap")
+                os.system("zenity --error --icon-name=connector --text='\nПроверьте правильность ввода имени подключения или файла с параметрами!' --no-wrap")
                 exit (1)
     else:
         gui = Gui()
