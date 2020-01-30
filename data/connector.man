@@ -1,5 +1,5 @@
 .\" -*- mode: troff; coding: UTF-8 -*-
-.TH connector 1  "December 13, 2019" "version 1.8.6" "USER COMMANDS"
+.TH connector 1  "January 30, 2020" "version 1.8.8" "USER COMMANDS"
 .SH NAME
 connector \- Инструмент системного администратора
 .SH SYNOPSIS
@@ -26,14 +26,19 @@ Citrix, VMware и прочие).
 возможно подключение с помощью файлов .ctor, .remmina и .rdp
 .RE
 .PP
-\fB--help,\ -h,\ /help\fR
+\fB-h,\ --help\fR
 .RS 3
-вывести данную справку
+вывести справку
 .RE
 .PP
-\fB--version,\ -v,\ /version\fR
+\fB-v,\ --version\fR
 .RS 3
 вывести версию и релиз программы
+.RE
+.PP
+\fB-d,\ --debug\fR
+.RS 3
+запустить в режиме отладки (отображение логов)
 .SH LINKS
 http://myconnector.ru/
 .SH AUTHOR
