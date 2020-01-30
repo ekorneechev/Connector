@@ -3,6 +3,7 @@
 
 import time, properties
 from GLOBAL import *
+from re import escape
 try: import keyring
 except Exception as error:
     class Keyring:
@@ -205,8 +206,8 @@ class XFreeRdp:
                     if args[37]: command += ' +auto-reconnect'
                 except IndexError: command += ' +auto-reconnect /cert-ignore'
                 try:
-                    if args[40] and len(args) >= 42: command += ' /p:' + args[40]
-                    elif args[30]: command += ' /p:' + passwd(args[0], args[1])
+                    if args[40] and len(args) >= 42: command += ' /p:' + escape(args[40])
+                    elif args[30]: command += ' /p:' + escape(passwd(args[0], args[1]))
                     else: command += ' -sec-nla'
                 except: command += ' -sec-nla'
                 try:
