@@ -4,10 +4,11 @@
 import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk, GdkPixbuf, GLib, Gio
-import random, sys
+import random
 from ctor import *
 from GLOBAL import *
 from pathlib import Path
+import argparse
 
 def viewStatus(bar, message):
     """Функция отображения происходящих действий в строке состояния"""
@@ -1403,16 +1404,19 @@ class Gui(Gtk.Application):
         """Установка значения поля сервер в 'localhost' при выборе 'Локальный каталог'"""
         if self.FS_type.get_active_id() == "file" and not widget.get_text() : widget.set_text("localhost")
 
+def parseArgs():
+    about = "Connector - %s (%s)" % (VERSION, RELEASE)
+    args = argparse.ArgumentParser(prog = 'connector', formatter_class=argparse.RawTextHelpFormatter,
+                                   description = 'Connector - remote desktop chooser.\n\nDo not specify parameters for starting the GUI.')
+    args.add_argument ('-v', '--version', action = 'version', help = "show the application version", version = about)
+    args.add_argument('name', type = str, nargs = '?', help = 'name of the file (.ctor, .remmina, .rdp) or saved connection')
+    return args.parse_args()
+
 def f_main(pwd="/tmp/"):
     os.system("xdg-mime default connector.desktop application/x-connector")
-    try:
-        name = sys.argv[1]
-        if name in {"--help", "-h", "/help"}:
-            os.system("man connector")
-            exit (0)
-        if name in {"--version", "-v", "/version"}:
-            print ("Connector - %s (%s)" % (VERSION, RELEASE))
-            exit (0)
+    args = parseArgs()
+    name = args.name
+    if name:
         fileCtor = properties.filenameFromName(name)
         if fileCtor:
             properties.log.info ("Запуск сохраненного подключения: " + name)
@@ -1423,7 +1427,7 @@ def f_main(pwd="/tmp/"):
             else:
                 os.system("zenity --error --icon-name=connector --text='Проверьте правильность ввода имени подключения или файла с параметрами!' --no-wrap")
                 exit (1)
-    except IndexError:
+    else:
         gui = Gui()
         initSignal(gui)
         gui.run(None)
