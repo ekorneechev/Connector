@@ -1411,6 +1411,7 @@ def parseArgs():
                                    description = 'Connector - remote desktop chooser.\n\nDo not specify parameters for starting the GUI.')
     args.add_argument ('-v', '--version', action = 'version', help = "show the application version", version = about)
     args.add_argument ('-d', '--debug', action = 'store_true', default = False, help = "show log files online")
+    args.add_argument ('-q', '--quit', action = 'store_true', default = False, help = "quit the application")
     args.add_argument('name', type = str, nargs = '?', help = 'name of the file (.ctor, .remmina, .rdp) or saved connection')
     return args.parse_args()
 
@@ -1419,10 +1420,16 @@ def startDebug():
     os.system('for i in all connector; do xterm -T "Connector DEBUG - $i.log" -e "tail -f %s$i.log" & done' % LOGFOLDER)
     properties.log.info ("The program is running in debug mode.")
 
+def quitApp():
+    """Quit application"""
+    properties.log.info ("The connector is forcibly closed (from cmdline).")
+    os.system("pkill connector")
+
 def f_main(pwd="/tmp/"):
     os.system("xdg-mime default connector.desktop application/x-connector")
     args = parseArgs()
     name = args.name
+    if args.quit: quitApp()
     if args.debug:
         if properties.enableLog: startDebug()
         else: os.system("zenity --error --icon-name=connector --text='\nВедение логов отключено. Отладка невозможна!' --no-wrap")
