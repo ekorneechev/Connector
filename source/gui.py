@@ -82,6 +82,19 @@ def initSignal(gui):
     for sig in filter(None, SIGS):
         GLib.idle_add(install_glib_handler, sig, priority=GLib.PRIORITY_HIGH)
 
+def startDebug():
+    """Start show log files online (uses xterm)"""
+    if properties.enableLog:
+        os.system('for i in all connector; do xterm -T "Connector DEBUG - $i.log" -e "tail -f %s$i.log" & done' % LOGFOLDER)
+        properties.log.info ("The program is running in debug mode.")
+    else:
+        os.system("zenity --error --icon-name=connector --text='\nВедение логов отключено. Отладка невозможна!' --no-wrap")
+
+def quitApp():
+    """Quit application"""
+    properties.log.info ("The connector is forcibly closed (from cmdline).")
+    os.system("pkill connector")
+
 class TrayIcon:
     """Класс, описывающий индикатор и меню в трее (пока только для MATE)
        Thanks: https://eax.me/python-gtk/"""
@@ -1404,35 +1417,8 @@ class Gui(Gtk.Application):
         """Установка значения поля сервер в 'localhost' при выборе 'Локальный каталог'"""
         if self.FS_type.get_active_id() == "file" and not widget.get_text() : widget.set_text("localhost")
 
-def parseArgs():
-    """Description of the command line argument parser"""
-    about = "Connector - %s (%s)" % (VERSION, RELEASE)
-    args = argparse.ArgumentParser(prog = 'connector', formatter_class=argparse.RawTextHelpFormatter,
-                                   description = 'Connector - remote desktop chooser.\n\nDo not specify parameters for starting the GUI.')
-    args.add_argument ('-v', '--version', action = 'version', help = "show the application version", version = about)
-    args.add_argument ('-d', '--debug', action = 'store_true', default = False, help = "show log files online")
-    args.add_argument ('-q', '--quit', action = 'store_true', default = False, help = "quit the application")
-    args.add_argument('name', type = str, nargs = '?', help = 'name of the file (.ctor, .remmina, .rdp) or saved connection')
-    return args.parse_args()
-
-def startDebug():
-    """Start show log files online (uses xterm)"""
-    os.system('for i in all connector; do xterm -T "Connector DEBUG - $i.log" -e "tail -f %s$i.log" & done' % LOGFOLDER)
-    properties.log.info ("The program is running in debug mode.")
-
-def quitApp():
-    """Quit application"""
-    properties.log.info ("The connector is forcibly closed (from cmdline).")
-    os.system("pkill connector")
-
-def f_main(pwd="/tmp/"):
-    os.system("xdg-mime default connector.desktop application/x-connector")
-    args = parseArgs()
-    name = args.name
-    if args.quit: quitApp()
-    if args.debug:
-        if properties.enableLog: startDebug()
-        else: os.system("zenity --error --icon-name=connector --text='\nВедение логов отключено. Отладка невозможна!' --no-wrap")
+def f_main(pwd="/tmp/", name=""):
+    """Main function"""
     if name:
         fileCtor = properties.filenameFromName(name)
         if fileCtor:
