@@ -528,15 +528,14 @@ class Gui(Gtk.Application):
             self.RDP_user.set_text(args[1])
             self.RDP_domain.set_text(args[2])
             if args[3]: self.RDP_fullscreen.set_active(True)
-            else: self.RDP_fullscreen.set_active(False)
-            if args[4]: self.RDP_clipboard.set_active(True)
-            else: self.RDP_clipboard.set_active(False)
-            if args[5] == '' and not args[31]: self.RDP_resol_default.set_active(True)
-            elif args[31]: self.RDP_workarea.set_active(True)
-            else:
+            elif args[5]:
                 RDP_resol_hand = self.pref_builder.get_object("radio_RDP1_resol_hand")
                 RDP_resol_hand.set_active(True)
                 self.RDP_resolution.set_text(args[5])
+            elif args[31]: self.RDP_workarea.set_active(True)
+            else: self.RDP_resol_default.set_active(True)
+            if args[4]: self.RDP_clipboard.set_active(True)
+            else: self.RDP_clipboard.set_active(False)
             self.RDP_color.set_active_id(args[6])
             if args[7] == '': self.RDP_share_folder.set_active(False)
             else:
@@ -649,7 +648,7 @@ class Gui(Gtk.Application):
             self.RDP_color = self.pref_builder.get_object("entry_RDP1_color")
             self.RDP_resolution = self.pref_builder.get_object("entry_RDP1_resolution")
             self.RDP_resolution.set_sensitive(False)
-            self.RDP_fullscreen = self.pref_builder.get_object("check_RDP1_fullscreen")
+            self.RDP_fullscreen = self.pref_builder.get_object("radio_RDP1_fullscreen")
             self.RDP_resol_default = self.pref_builder.get_object("radio_RDP1_resol_default")
             self.RDP_share_folder = self.pref_builder.get_object("check_RDP1_folder")
             self.RDP_name_folder = self.pref_builder.get_object("RDP1_share_folder")
@@ -1408,10 +1407,6 @@ class Gui(Gtk.Application):
     def onBugs(self, *args):
         """Кнопка 'Сообщить об ошибке'"""
         os.system ('xdg-open "http://bugs.myconnector.ru/"')
-
-    def fullscreenOff(self, widget):
-        """Отключение fullscreen при выборе workarea или ручном вводе разрешения"""
-        widget.set_active(0)
 
     def fixServerForLocal(self, widget):
         """Установка значения поля сервер в 'localhost' при выборе 'Локальный каталог'"""

@@ -2623,20 +2623,22 @@
                     <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
                     <child>
-                      <object class="GtkCheckButton" id="check_RDP1_fullscreen">
-                        <property name="label" translatable="yes">Развернуть на весь экран
-(Ctrl+Alt+Enter для выхода)</property>
+                      <object class="GtkRadioButton" id="radio_RDP1_fullscreen">
+                        <property name="label" translatable="yes">Развернуть на весь экран (Ctrl+Alt+Enter)</property>
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="receives_default">False</property>
                         <property name="halign">start</property>
+                        <property name="margin_top">2</property>
                         <property name="active">True</property>
                         <property name="draw_indicator">True</property>
+                        <property name="group">radio_RDP1_resol_default</property>
+                        <signal name="toggled" handler="offResolutionSet" object="entry_RDP1_resolution" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">0</property>
+                        <property name="position">1</property>
                       </packing>
                     </child>
                     <child>
@@ -2653,7 +2655,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">1</property>
+                        <property name="position">2</property>
                       </packing>
                     </child>
                     <child>
@@ -2665,13 +2667,12 @@
                         <property name="halign">start</property>
                         <property name="draw_indicator">True</property>
                         <property name="group">radio_RDP1_resol_default</property>
-                        <signal name="toggled" handler="fullscreenOff" object="check_RDP1_fullscreen" swapped="no"/>
                         <signal name="toggled" handler="offResolutionSet" object="entry_RDP1_resolution" swapped="no"/>
                       </object>
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">2</property>
+                        <property name="position">3</property>
                       </packing>
                     </child>
                     <child>
@@ -2686,7 +2687,6 @@
                             <property name="receives_default">False</property>
                             <property name="draw_indicator">True</property>
                             <property name="group">radio_RDP1_resol_default</property>
-                            <signal name="toggled" handler="fullscreenOff" object="check_RDP1_fullscreen" swapped="no"/>
                             <signal name="toggled" handler="onResolutionSet" object="entry_RDP1_resolution" swapped="no"/>
                           </object>
                           <packing>
@@ -2713,7 +2713,7 @@
                       <packing>
                         <property name="expand">False</property>
                         <property name="fill">True</property>
-                        <property name="position">3</property>
+                        <property name="position">4</property>
                       </packing>
                     </child>
                   </object>
