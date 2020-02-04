@@ -8,7 +8,6 @@ import random
 from ctor import *
 from GLOBAL import *
 from pathlib import Path
-import argparse
 
 def viewStatus(bar, message):
     """Функция отображения происходящих действий в строке состояния"""
