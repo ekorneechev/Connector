@@ -5,6 +5,7 @@ BASE = $(PREFIX)/$(TARGET)
 MAN = $(PREFIX)/man/man1
 APS = $(PREFIX)/applications
 MIME = $(PREFIX)/mime
+KIOSK = $(BASE)/kiosk
 DATESTAMP = `git log --pretty="%cd" --date=short -1 | sed s/-//g 2>/dev/null`
 
 .PHONY: help install uninstall clean remove
@@ -18,10 +19,8 @@ help:
 
 install:
 	apt-get remove connector -y
-	sed -i s#/usr/share#$(PREFIX)#g source/*
-	sed -i s#/usr/share#$(PREFIX)#g data/$(TARGET).desktop
-	sed -i s#/usr/bin/$(TARGET)#$(PREFIX_BIN)/$(TARGET)#g source/*
-	sed -i s#/usr/bin/$(TARGET)#$(PREFIX_BIN)/$(TARGET)#g data/$(TARGET).desktop
+	sed -i s#/usr/share#$(PREFIX)#g source/* data/$(TARGET).desktop kiosk/* 
+	sed -i s#/usr/bin/$(TARGET)#$(PREFIX_BIN)/$(TARGET)#g source/* data/$(TARGET).desktop kiosk/*
 	sed -i s#$(PREFIX)/applications#/usr/share/applications#g source/GLOBAL.py
 	@if [ -n "$(DATESTAMP)" ]; then sed -i s#git#git.$(DATESTAMP)#g source/GLOBAL.py; fi
 	install -m755 source/$(TARGET) $(PREFIX_BIN)
@@ -36,6 +35,9 @@ install:
 	mkdir -p $(MIME)/packages
 	install -m644 data/$(TARGET).xml $(MIME)/packages
 	cp -r data/icons $(PREFIX)
+	mkdir -p $(KIOSK)
+	install -m644 kiosk/*.desktop $(KIOSK)
+	install -m755 kiosk/$(TARGET)-kiosk $(KIOSK)
 	update-mime-database $(MIME)
 	update-desktop-database
 	make clean
@@ -51,10 +53,8 @@ uninstall:
 	update-desktop-database
 
 clean:
-	sed -i s#$(PREFIX)#/usr/share#g source/*
-	sed -i s#$(PREFIX)#/usr/share#g data/$(TARGET).desktop
-	sed -i s#$(PREFIX_BIN)/$(TARGET)#/usr/bin/$(TARGET)#g source/*
-	sed -i s#$(PREFIX_BIN)/$(TARGET)#/usr/bin/$(TARGET)#g data/$(TARGET).desktop
+	sed -i s#$(PREFIX)#/usr/share#g source/* data/$(TARGET).desktop kiosk/*
+	sed -i s#$(PREFIX_BIN)/$(TARGET)#/usr/bin/$(TARGET)#g source/* data/$(TARGET).desktop kiosk/*
 	@if [ -n "$(DATESTAMP)" ]; then sed -i s#.$(DATESTAMP)##g source/GLOBAL.py; fi
 
 remove:
