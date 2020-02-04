@@ -35,7 +35,6 @@ install -p *.py %buildroot%basedir/
 install -pm755 %name-check-* %buildroot%basedir/
 install -pDm644 %name.man %buildroot%_man1dir/%name.1
 %find_lang --with-man %name
-install -pDm644 kiosk.access %buildroot%_sysconfdir/%name/kiosk.access
 install -pDm644 %name.xml %buildroot%_datadir/mime/packages/%name.xml
 mkdir -p %buildroot%_iconsdir
 cp -r icons/hicolor %buildroot%_iconsdir/
@@ -48,8 +47,6 @@ cp -r icons/hicolor %buildroot%_iconsdir/
 %basedir/*.py
 %basedir/%name-check-*
 %_man1dir/*
-%dir %_sysconfdir/%name
-%config(noreplace) %_sysconfdir/%name/kiosk.access
 %_datadir/mime/packages/%name.xml
 %_iconsdir/hicolor/*/apps/%name.png
 

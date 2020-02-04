@@ -3,9 +3,7 @@ PREFIX_BIN = /usr/local/bin
 PREFIX = /usr/local/share
 BASE = $(PREFIX)/$(TARGET)
 MAN = $(PREFIX)/man/man1
-ETC = /etc/$(TARGET)
 APS = $(PREFIX)/applications
-KIOSK = kiosk.access
 MIME = $(PREFIX)/mime
 DATESTAMP = `git log --pretty="%cd" --date=short -1 | sed s/-//g 2>/dev/null`
 
@@ -35,8 +33,6 @@ install:
 	install -m755 source/$(TARGET)-check-* $(BASE)
 	mkdir -p $(MAN)
 	install -m644 data/$(TARGET).man $(MAN)/$(TARGET).1
-	mkdir -p $(ETC)
-	install -m644 data/$(KIOSK) $(ETC)
 	mkdir -p $(MIME)/packages
 	install -m644 data/$(TARGET).xml $(MIME)/packages
 	cp -r data/icons $(PREFIX)
@@ -49,7 +45,6 @@ uninstall:
 	rm -rf $(BASE)
 	rm -f $(MAN)/$(TARGET).1
 	rm -f $(PREFIX)/applications/$(TARGET).desktop
-	@if [ -f $(ETC)/$(KIOSK) ]; then mv -f $(ETC)/$(KIOSK) $(ETC)/$(KIOSK).makesave; fi
 	rm -f $(MIME)/packages/$(TARGET).xml
 	find $(PREFIX)/icons/hicolor -name $(TARGET).png -delete
 	update-mime-database $(MIME)

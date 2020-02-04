@@ -190,7 +190,7 @@ class Properties(Gtk.Window):
 
     def initParameters(self):
         """Initializing parameters from a file default.conf"""
-        if CHECK_KIOSK(): self.boxKiosk.set_sensitive(0)
+        if not KIOSK_ENABLED(): self.boxKiosk.set_sensitive(0)
         self.defaultConf = loadFromFile('default.conf')
         if self.defaultConf['RDP']:
             self.changeRdpFree.set_active(True)
