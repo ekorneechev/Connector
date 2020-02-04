@@ -4,7 +4,7 @@
 import os, subprocess, signal
 
 #Версия приложения
-VERSION = "1.8.7"
+VERSION = "1.8.8"
 
 #Определение домашней папки пользователя
 HOMEFOLDER = os.getenv('HOME')
