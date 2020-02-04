@@ -136,6 +136,12 @@ def KIOSK_ENABLED():
     """Checking 'is root' and OS for access to settings"""
     return (os.getuid() == 0) and (OS == "altlinux")
 
+def WIN_MANAGER():
+    """Checking window manager"""
+    for wm in ("marco", "openbox"):
+        if int(os.popen("which %s > /dev/null 2> /dev/null; echo $?" % wm).read()) == 0: return wm
+    return None
+
 #Команда подключения сетевых файловых ресурсов
 DEFAULT['FS'] = 'xdg-open'
 

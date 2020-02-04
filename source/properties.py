@@ -316,18 +316,15 @@ class Properties(Gtk.Window):
     def enableKiosk (self, all_prog):
         """Включение режима киоска, создание необходимых для этого файлов"""
         existsXs = False #будет ли записан файл
-        marco = int(os.popen('which marco > /dev/null 2> /dev/null; echo $?').read()) #0 если установлено.
-        if marco == 0:
-            existsXs = self.saveXsession('marco', all_prog)
+        wm = WIN_MANAGER()
+        if wm:
+            existsXs = self.saveXsession(wm, all_prog)
         else:
-            openbox = int(os.popen('which openbox > /dev/null 2> /dev/null; echo $?').read())
-            if openbox == 0: existsXs = self.saveXsession('openbox', all_prog)
-            else:
-                dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, "Оконный менеджер не найден!")
-                dialog.format_secondary_text("Для работы в режиме киска необходимо\nустановить один из оконных менеджеров:\n- marco\n- openbox")
-                response = dialog.run()
-                dialog.destroy()
-                self.changeKioskAll.set_active(False)#автоматическое снятие галки
+            dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, "Оконный менеджер не найден!")
+            dialog.format_secondary_text("Для работы в режиме киска необходимо\nустановить один из оконных менеджеров:\n- marco\n- openbox")
+            response = dialog.run()
+            dialog.destroy()
+            self.changeKioskAll.set_active(False)#автоматическое снятие галки
 
         if existsXs:
             try: os.chmod(HOMEFOLDER+"/.xsession", 0o766) #chmod +x
