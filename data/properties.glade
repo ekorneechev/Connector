@@ -541,6 +541,9 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Общие</property>
+            <attributes>
+              <attribute name="foreground" value="#2e2e34343636"/>
+            </attributes>
           </object>
           <packing>
             <property name="tab_fill">False</property>
@@ -916,6 +919,9 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="label" translatable="yes">Расширенные</property>
+            <attributes>
+              <attribute name="foreground" value="#2e2e34343636"/>
+            </attributes>
           </object>
           <packing>
             <property name="position">1</property>
