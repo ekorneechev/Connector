@@ -5,7 +5,6 @@ BASE = $(PREFIX)/$(TARGET)
 MAN = $(PREFIX)/man/man1
 APS = $(PREFIX)/applications
 MIME = $(PREFIX)/mime
-KIOSK = $(BASE)/kiosk
 DATESTAMP = `git log --pretty="%cd" --date=short -1 | sed s/-//g 2>/dev/null`
 
 .PHONY: help install uninstall clean remove
@@ -35,9 +34,7 @@ install:
 	mkdir -p $(MIME)/packages
 	install -m644 data/$(TARGET).xml $(MIME)/packages
 	cp -r data/icons $(PREFIX)
-	mkdir -p $(KIOSK)
-	install -m644 kiosk/*.desktop $(KIOSK)
-	install -m755 kiosk/$(TARGET)-kiosk $(KIOSK)
+	cp -r kiosk $(BASE)
 	update-mime-database $(MIME)
 	update-desktop-database
 	make clean

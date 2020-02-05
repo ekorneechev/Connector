@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.20.1 -->
+<!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.10"/>
   <object class="GtkImage" id="CITRIX_image">
@@ -475,6 +475,17 @@
                         <property name="use_stock">True</property>
                         <signal name="activate" handler="onProperties" swapped="no"/>
                         <accelerator key="p" signal="activate" modifiers="GDK_CONTROL_MASK"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuItem" id="menu_file_kiosk">
+                        <property name="visible">True</property>
+                        <property name="sensitive">False</property>
+                        <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Настройка режима КИОСК
+(доступно при наличии прав root и пакета connector-kiosk)</property>
+                        <property name="label" translatable="yes">Режим КИОСК</property>
+                        <signal name="activate" handler="onKiosk" swapped="no"/>
                       </object>
                     </child>
                     <child>

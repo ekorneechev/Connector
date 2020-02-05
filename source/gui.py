@@ -174,6 +174,12 @@ class Gui(Gtk.Application):
         if self.optionEnabled('CHECK_VERSION'):
             signal.signal(signal.SIGCHLD,signal.SIG_IGN) #чтобы исключить появление процесса-зомби
             subprocess.Popen([MAINFOLDER + "/connector-check-version", VERSION])
+        try:
+            from kiosk import kiosk
+            self.menu_kiosk = self.builder.get_object("menu_file_kiosk")
+            self.menu_kiosk.set_sensitive(kiosk.enabled())
+        except (ModuleNotFoundError, ImportError):
+            properties.log.warning ("The mode KIOSK unavailable, package is not installed.")
 
     def createDesktopFile(self, filename, nameConnect, nameDesktop):
         """Create desktop-file for connection"""
@@ -1410,6 +1416,10 @@ class Gui(Gtk.Application):
     def fixServerForLocal(self, widget):
         """Установка значения поля сервер в 'localhost' при выборе 'Локальный каталог'"""
         if self.FS_type.get_active_id() == "file" and not widget.get_text() : widget.set_text("localhost")
+
+    def onKiosk(self, *args):
+        """Button 'Mode KIOSK'"""
+        pass
 
 def f_main(pwd="/tmp/", name=""):
     """Main function"""

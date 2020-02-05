@@ -1,11 +1,13 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-import os
+import gi, os
+gi.require_version('Gtk', '3.0')
+from gi.repository import Gtk
 
 def enabled():
     """Checking 'is root' and OS for access to settings"""
-    return (os.getuid() == 0) and (OS == "altlinux")
+    return (os.getuid() == 0) and (os.path.exists("/etc/altlinux-release"))
 
 def check_wm():
     """Checking window manager"""
@@ -88,8 +90,8 @@ def offKioskEntry(self, widget):
 
 def onSave (self, *args):
     """Сохранение настроек программы"""
-   nameConn = self.entryKioskConn.get_text()
-   if self.changeKioskAll.get_active():
+    nameConn = self.entryKioskConn.get_text()
+    if self.changeKioskAll.get_active():
         self.defaultConf['KIOSK'] = 1
         self.enableKiosk(True)
         save = True
@@ -111,7 +113,7 @@ def onSave (self, *args):
     # Отключаем трей при включении одного из режимов киоска
     if self.changeKioskAll.get_active() or self.changeKioskCtor.get_active(): self.defaultConf['TRAY'] = False; self.checkTray.set_active(False)
 
-class Kiosk(Gtk.Windows):
+class Kiosk(Gtk.Window):
     def __init__(self):
         Gtk.Window.__init__(self, title = "Параметры режима \"КИОСК\"")
         builder = Gtk.Builder()
