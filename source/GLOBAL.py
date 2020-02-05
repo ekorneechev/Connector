@@ -105,42 +105,7 @@ else:
 
 #Режим киоска:
 DEFAULT['KIOSK'] = 0; DEFAULT['KIOSK_CONN'] = ""
-
-KIOSK= """ &
-while true
-do
-connector
-done
-"""
-
-KIOSK_X = """#!/usr/bin/env xdg-open
-[Desktop Entry]
-Version=1.0
-Type=Application
-Terminal=false
-Icon[ru_RU]=start
-Name[ru_RU]=Ctor_kiosk
-Exec=startx
-Name=Ctor_kiosk
-Icon=start
-"""
-
-KIOSK_ONE=""" &
-while true
-do
-echo > /dev/null
-done
-"""
-
-def KIOSK_ENABLED():
-    """Checking 'is root' and OS for access to settings"""
-    return (os.getuid() == 0) and (OS == "altlinux")
-
-def WIN_MANAGER():
-    """Checking window manager"""
-    for wm in ("marco", "openbox"):
-        if int(os.popen("which %s > /dev/null 2> /dev/null; echo $?" % wm).read()) == 0: return wm
-    return None
+KIOSKFOLDER = MAINFOLDER + "/kiosk"
 
 #Команда подключения сетевых файловых ресурсов
 DEFAULT['FS'] = 'xdg-open'
