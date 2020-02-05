@@ -1,5 +1,5 @@
 Name: connector
-Version: 1.8.8
+Version: 1.8.9
 Release: alt1
 
 Summary: Remote desktop chooser
@@ -23,6 +23,16 @@ This is an aggregator program to connnect to various servers
 using all of the popular remote desktop protocols
 (RDP, VNC, Citrix, VMware, etc).
 
+%package kiosk
+Summary: Mode "KIOSK" for connector
+Group: Networking/Remote access
+
+Requires: connector = %version-%release
+Requires: chromium
+
+%description kiosk
+Files for connector mode "KIOSK"
+
 %prep
 %setup
 
@@ -38,6 +48,9 @@ install -pDm644 %name.man %buildroot%_man1dir/%name.1
 install -pDm644 %name.xml %buildroot%_datadir/mime/packages/%name.xml
 mkdir -p %buildroot%_iconsdir
 cp -r icons/hicolor %buildroot%_iconsdir/
+mkdir -p %buildroot%basedir/kiosk/
+install -p kiosk/*.{py,ui} %buildroot%basedir/kiosk/
+install -pm755 kiosk/connector* %buildroot%basedir/kiosk/
 
 %files -f %name.lang
 %_bindir/%name
@@ -49,6 +62,10 @@ cp -r icons/hicolor %buildroot%_iconsdir/
 %_man1dir/*
 %_datadir/mime/packages/%name.xml
 %_iconsdir/hicolor/*/apps/%name.png
+
+%files kiosk
+%dir %basedir/kiosk
+%%basedir/kiosk/*
 
 %changelog
 * Tue Feb 4 2020 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.8.8-alt1
