@@ -103,10 +103,6 @@ else:
     os.system("zenity --error --no-wrap --icon-name=connector --text='Ваша операционная система не поддерживается.\n"
               "Некоторые функции программы могут не работать!\nПодробнее о поддерживаемых ОС <a href=\"http://wiki.myconnector.ru\">здесь</a>.'")
 
-#Режим киоска:
-DEFAULT['KIOSK'] = 0; DEFAULT['KIOSK_CONN'] = ""
-KIOSKFOLDER = MAINFOLDER + "/kiosk"
-
 #Команда подключения сетевых файловых ресурсов
 DEFAULT['FS'] = 'xdg-open'
 

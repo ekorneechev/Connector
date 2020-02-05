@@ -1419,7 +1419,8 @@ class Gui(Gtk.Application):
 
     def onKiosk(self, *args):
         """Button 'Mode KIOSK'"""
-        pass
+        from kiosk.kiosk import Kiosk
+        window = Kiosk()
 
 def f_main(pwd="/tmp/", name=""):
     """Main function"""
