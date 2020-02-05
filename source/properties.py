@@ -160,7 +160,7 @@ class Properties(Gtk.Window):
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_resizable(False)
         self.set_modal(True)
-        self.set_default_icon_name("gtk-preferences")
+        self.set_default_icon_name("connector")
         builder.add_from_file("data/properties.glade")
         builder.connect_signals(self)
         box = builder.get_object("box_properties")
