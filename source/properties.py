@@ -161,7 +161,7 @@ class Properties(Gtk.Window):
         self.set_resizable(False)
         self.set_modal(True)
         self.set_default_icon_name("connector")
-        builder.add_from_file("data/properties.glade")
+        builder.add_from_file("data/properties.ui")
         builder.connect_signals(self)
         box = builder.get_object("box_properties")
         cancel = builder.get_object("button_cancel")

@@ -123,7 +123,7 @@ class Gui(Gtk.Application):
         self.prefClick = False
         self.editClick = False
         self.builder = Gtk.Builder()
-        self.builder.add_from_file("data/gui.glade")
+        self.builder.add_from_file("data/gui.ui")
         self.builder.connect_signals(self)
         self.window = self.builder.get_object("main_window")
         self.window.set_title("Connector")
@@ -400,7 +400,7 @@ class Gui(Gtk.Application):
         self.pref_window.set_modal(True)
         self.pref_window.resize(400, 400)
         self.pref_builder = Gtk.Builder()
-        self.pref_builder.add_from_file("data/pref_gui.glade")     
+        self.pref_builder.add_from_file("data/pref_gui.ui")
         self.pref_builder.connect_signals(self)
         self.whatProgram = properties.loadFromFile('default.conf')
         name = self.changeProgram(name)

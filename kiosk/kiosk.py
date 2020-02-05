@@ -115,7 +115,7 @@ class Kiosk(Gtk.Windows):
     def __init__(self):
         Gtk.Window.__init__(self, title = "Параметры режима \"КИОСК\"")
         builder = Gtk.Builder()
-        builder.add_from_file("data/kiosk.glade")
+        builder.add_from_file("data/kiosk.ui")
         builder.connect_signals(self)
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_resizable(False)

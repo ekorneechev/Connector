@@ -30,7 +30,7 @@ using all of the popular remote desktop protocols
 install -pDm755 %name %buildroot%_bindir/%name
 install -pDm644 %name.desktop %buildroot%_desktopdir/%name.desktop
 mkdir -p %buildroot%basedir/data/
-install -p *.png *.glade %buildroot%basedir/data/
+install -p *.png *.ui %buildroot%basedir/data/
 install -p *.py %buildroot%basedir/
 install -pm755 %name-check-* %buildroot%basedir/
 install -pDm644 %name.man %buildroot%_man1dir/%name.1

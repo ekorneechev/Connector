@@ -27,7 +27,7 @@ install:
 	mkdir -p $(APS)
 	install -m644 data/$(TARGET).desktop $(APS)
 	mkdir -p $(BASE)/data/
-	install -m644 data/*.png data/*.glade $(BASE)/data/
+	install -m644 data/*.png data/*.ui $(BASE)/data/
 	install -m644 source/*.py $(BASE)
 	install -m755 source/$(TARGET)-check-* $(BASE)
 	mkdir -p $(MAN)
