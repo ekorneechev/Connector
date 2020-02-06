@@ -51,6 +51,7 @@ cp -r icons/hicolor %buildroot%_iconsdir/
 mkdir -p %buildroot%basedir/kiosk/
 install -p kiosk/*.{py,ui} %buildroot%basedir/kiosk/
 install -pm755 kiosk/connector* %buildroot%basedir/kiosk/
+install -pDm600 kiosk/kiosk.conf %buildroot%_sysconfdir/%name/kiosk.conf
 
 %files -f %name.lang
 %_bindir/%name
@@ -66,6 +67,7 @@ install -pm755 kiosk/connector* %buildroot%basedir/kiosk/
 %files kiosk
 %dir %basedir/kiosk
 %%basedir/kiosk/*
+%config(noreplace) %_sysconfdir/%name/kiosk.conf
 
 %changelog
 * Tue Feb 4 2020 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.8.8-alt1

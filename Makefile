@@ -5,6 +5,8 @@ BASE = $(PREFIX)/$(TARGET)
 MAN = $(PREFIX)/man/man1
 APS = $(PREFIX)/applications
 MIME = $(PREFIX)/mime
+ETC = /etc/$(TARGET)
+KIOSK = kiosk.conf
 DATESTAMP = `git log --pretty="%cd" --date=short -1 | sed s/-//g 2>/dev/null`
 
 .PHONY: help install uninstall clean remove
@@ -35,6 +37,9 @@ install:
 	install -m644 data/$(TARGET).xml $(MIME)/packages
 	cp -r data/icons $(PREFIX)
 	cp -r kiosk $(BASE)
+	rm -f $(BASE)/kiosk/$(KIOSK)
+	mkdir -p $(ETC)
+	@if [ ! -f $(ETC)/$(KIOSK) ]; then install -m600 kiosk/$(KIOSK) $(ETC); fi	
 	update-mime-database $(MIME)
 	update-desktop-database
 	make clean
@@ -45,6 +50,7 @@ uninstall:
 	rm -f $(MAN)/$(TARGET).1
 	rm -f $(PREFIX)/applications/$(TARGET).desktop
 	rm -f $(MIME)/packages/$(TARGET).xml
+	@if [ -f $(ETC)/$(KIOSK) ]; then mv -f $(ETC)/$(KIOSK) $(ETC)/$(KIOSK).makesave; fi
 	find $(PREFIX)/icons/hicolor -name $(TARGET).png -delete
 	update-mime-database $(MIME)
 	update-desktop-database
