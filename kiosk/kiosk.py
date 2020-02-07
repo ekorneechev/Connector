@@ -15,6 +15,33 @@ def check_wm():
         if int(os.popen("which %s > /dev/null 2> /dev/null; echo $?" % wm).read()) == 0: return wm
     return None
 
+class Config():
+    __file_cfg = "/etc/connector/kiosk.conf"
+    def __init__(self):
+        self.params = {'mode': '0',
+                       'dir': '/root/.connector',
+                       'user': '_kiosk',
+                       'file': '<path_to_file_ctor>',
+                       'url': '<url_for_kiosk>'}
+        self.read()
+
+    def read(self):
+        try:
+            with open(self.__file_cfg) as file_cfg:
+                for line in file_cfg:
+                    param_cfg = line.split('=')
+                    print(param_cfg)
+                    try: self.params[param_cfg[0].strip()] = param_cfg[1].strip()
+                    except: pass
+        except FileNotFoundError: self.write()
+
+    def print(self):
+        for key in self.params:
+            print("%s = %s" % (key, self.params[key]))
+
+    def write(self):
+        pass
+
 class Kiosk(Gtk.Window):
     def __init__(self):
         """Window with settings of the mode KIOSK"""
