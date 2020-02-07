@@ -30,7 +30,6 @@ class Config():
             with open(self.__file_cfg) as file_cfg:
                 for line in file_cfg:
                     param_cfg = line.split('=')
-                    print(param_cfg)
                     try: self.params[param_cfg[0].strip()] = param_cfg[1].strip()
                     except: pass
         except FileNotFoundError: self.write()
@@ -40,7 +39,10 @@ class Config():
             print("%s = %s" % (key, self.params[key]))
 
     def write(self):
-        pass
+        os.system("sed -i '/^#/!d' %s" % self.__file_cfg)
+        with open(self.__file_cfg, "a") as file_cfg:
+            for key in self.params:
+                print("%s = %s" % (key, self.params[key]), file = file_cfg)
 
 class Kiosk(Gtk.Window):
     def __init__(self):
