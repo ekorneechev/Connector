@@ -33,10 +33,6 @@ class Config():
                     except: pass
         except FileNotFoundError: self.write()
 
-    def print(self):
-        for key in self.params:
-            print("%s = %s" % (key, self.params[key]))
-
     def write(self):
         os.system("sed -i '/^#/!d' %s" % self.__file_cfg)
         with open(self.__file_cfg, "a") as file_cfg:
