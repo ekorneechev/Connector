@@ -19,7 +19,6 @@ class Config():
     __file_cfg = "/etc/connector/kiosk.conf"
     def __init__(self):
         self.params = {'mode': '0',
-                       'dir': '/root/.connector',
                        'user': '_kiosk',
                        'file': '<path_to_file_ctor>',
                        'url': '<url_for_kiosk>'}
@@ -84,15 +83,29 @@ class Kiosk(Gtk.Window):
 
     def onSave (self, *args):
         """Action for button 'Save'"""
-        pass
+        mode = 0; file = ''; url = ''
+        if self.changeKioskOff.get_active(): mode = 0
+        if self.changeKioskAll.get_active(): mode = 1
+        if self.changeKioskCtor.get_active():
+            mode = 2
+            file = self.entryKioskCtor.get_uri().replace("file://","")
+        if self.changeKioskWeb.get_active():
+            mode = 3
+            url = self.entryKioskWeb.get_text()
+        self.config.params['mode']  = mode
+        self.config.params['file']  = file
+        self.config.params['url']  = url
+        self.config.write()
         #else need disable tray...
+        self.onClose()
 
     def initParams (self):
         mode = int(self.config.params['mode'])
+        self.entryKioskCtor.set_current_folder("/etc/kiosk")
         if mode == 1: self.changeKioskAll.set_active(True)
         elif mode == 2:
             self.changeKioskCtor.set_active(True)
-            self.entryKioskCtor.set_text(self.config.params['file'])
+            self.entryKioskCtor.set_uri("file://%s" % self.config.params['file'])
         elif mode == 3:
             self.changeKioskWeb.set_active(True)
             self.entryKioskWeb.set_text(self.config.params['url'])
@@ -101,7 +114,7 @@ class Kiosk(Gtk.Window):
 
     def onReset (self, *args):
         """Action for button 'Reset'"""
-        self.entryKioskCtor.set_text('')
+        self.entryKioskCtor.set_uri('')
         self.entryKioskWeb.set_text('')
         self.initParams()
 
