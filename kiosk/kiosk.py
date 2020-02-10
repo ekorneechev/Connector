@@ -5,15 +5,11 @@ import gi, os
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 
+__kiosk_dir = "/usr/share/connector/kiosk"
+
 def enabled():
     """Checking 'is root' and OS for access to settings"""
     return (os.getuid() == 0) and (os.path.exists("/etc/altlinux-release"))
-
-def check_wm():
-    """Checking window manager"""
-    for wm in ("marco", "openbox"):
-        if int(os.popen("which %s > /dev/null 2> /dev/null; echo $?" % wm).read()) == 0: return wm
-    return None
 
 class Config():
     __file_cfg = "/etc/connector/kiosk.conf"
@@ -93,7 +89,7 @@ class Kiosk(Gtk.Window):
         self.config.params['url']  = url
         self.config.write()
         #else need disable tray...
-        self.onClose()
+        self.onClose(self)
 
     def initParams (self):
         mode = int(self.config.params['mode'])
