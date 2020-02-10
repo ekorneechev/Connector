@@ -40,6 +40,7 @@
         <property name="active">True</property>
         <property name="draw_indicator">True</property>
         <signal name="toggled" handler="entryOff" object="entry_kiosk_ctor" swapped="no"/>
+        <signal name="toggled" handler="entryOff" object="entry_kiosk_web" swapped="no"/>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -58,6 +59,7 @@
         <property name="draw_indicator">True</property>
         <property name="group">radio_kiosk_off</property>
         <signal name="toggled" handler="entryOff" object="entry_kiosk_ctor" swapped="no"/>
+        <signal name="toggled" handler="entryOff" object="entry_kiosk_web" swapped="no"/>
       </object>
       <packing>
         <property name="expand">False</property>
@@ -66,7 +68,7 @@
       </packing>
     </child>
     <child>
-      <object class="GtkBox" id="box_kiosk2">
+      <object class="GtkBox" id="box_kiosk1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child>
@@ -80,6 +82,7 @@
             <property name="margin_bottom">5</property>
             <property name="draw_indicator">True</property>
             <property name="group">radio_kiosk_off</property>
+            <signal name="toggled" handler="entryOff" object="entry_kiosk_web" swapped="no"/>
             <signal name="toggled" handler="entryOn" object="entry_kiosk_ctor" swapped="no"/>
           </object>
           <packing>
@@ -112,20 +115,99 @@
       </packing>
     </child>
     <child>
-      <object class="GtkButton" id="saveButton">
-        <property name="label" translatable="yes">Сохранить</property>
-        <property name="width_request">100</property>
+      <object class="GtkBox" id="box_kiosk2">
         <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="receives_default">True</property>
-        <property name="halign">end</property>
-        <property name="margin_top">4</property>
-        <signal name="clicked" handler="onSave" swapped="no"/>
+        <property name="can_focus">False</property>
+        <child>
+          <object class="GtkRadioButton" id="radio_kiosk_web">
+            <property name="label" translatable="yes"> Подключение к WEB-ресурсу:</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">False</property>
+            <property name="halign">start</property>
+            <property name="margin_top">5</property>
+            <property name="margin_bottom">5</property>
+            <property name="draw_indicator">True</property>
+            <property name="group">radio_kiosk_off</property>
+            <signal name="toggled" handler="entryOff" object="entry_kiosk_ctor" swapped="no"/>
+            <signal name="toggled" handler="entryOn" object="entry_kiosk_web" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="entry_kiosk_web">
+            <property name="width_request">200</property>
+            <property name="visible">True</property>
+            <property name="sensitive">False</property>
+            <property name="can_focus">True</property>
+            <property name="halign">end</property>
+            <property name="valign">center</property>
+            <property name="placeholder_text" translatable="yes">Введите название...</property>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
       </object>
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
         <property name="position">4</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="halign">end</property>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <object class="GtkButton" id="resetButton">
+            <property name="label" translatable="yes">Сброс</property>
+            <property name="width_request">100</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="halign">end</property>
+            <property name="margin_top">4</property>
+            <signal name="clicked" handler="onReset" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="saveButton">
+            <property name="label" translatable="yes">Сохранить</property>
+            <property name="width_request">100</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="halign">end</property>
+            <property name="margin_top">4</property>
+            <signal name="clicked" handler="onSave" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">6</property>
       </packing>
     </child>
   </object>

@@ -58,11 +58,15 @@ class Kiosk(Gtk.Window):
         self.changeKioskOff = builder.get_object("radio_kiosk_off")
         self.changeKioskAll = builder.get_object("radio_kiosk_all")
         self.changeKioskCtor = builder.get_object("radio_kiosk_ctor")
-        self.entryKioskConn = builder.get_object("entry_kiosk_ctor")
+        self.entryKioskCtor = builder.get_object("entry_kiosk_ctor")
+        self.changeKioskWeb = builder.get_object("radio_kiosk_web")
+        self.entryKioskWeb = builder.get_object("entry_kiosk_web")
         box = builder.get_object("box")
         self.add(box)
         self.connect("delete-event", self.onClose)
         self.show_all()
+        self.config = Config()
+        self.initParams()
 
     def onClose (self, window, *args):
         """Close window"""
@@ -82,6 +86,24 @@ class Kiosk(Gtk.Window):
         """Action for button 'Save'"""
         pass
         #else need disable tray...
+
+    def initParams (self):
+        mode = int(self.config.params['mode'])
+        if mode == 1: self.changeKioskAll.set_active(True)
+        elif mode == 2:
+            self.changeKioskCtor.set_active(True)
+            self.entryKioskCtor.set_text(self.config.params['file'])
+        elif mode == 3:
+            self.changeKioskWeb.set_active(True)
+            self.entryKioskWeb.set_text(self.config.params['url'])
+        else:
+            self.changeKioskOff.set_active(True)
+
+    def onReset (self, *args):
+        """Action for button 'Reset'"""
+        self.entryKioskCtor.set_text('')
+        self.entryKioskWeb.set_text('')
+        self.initParams()
 
 if __name__ == '__main__':
     pass
