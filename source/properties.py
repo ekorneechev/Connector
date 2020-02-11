@@ -227,21 +227,19 @@ class Properties(Gtk.Window):
         self.defaultConf['CHECK_VERSION'] = self.checkVersion.get_active()
         self.defaultConf['LOG'] = self.checkLog.get_active()
         self.defaultConf['SORT'] = self.combo_sort.get_active_id()
-        save = False
-        if save:
-            saveInFile('default.conf',self.defaultConf)
-            gui.viewStatus(self.statusbar, "Настройки сохранены в файле default.conf...")
-            log.info("Новые настройки для программы сохранены в файле default.conf.")
-            if not self.checkLog.get_active(): log.warning("ВЕДЕНИЕ ЖУРНАЛА ПОСЛЕ ПЕРЕЗАПУСКА ПРОГРАММЫ БУДЕТ ОТКЛЮЧЕНО!")
-            gui.Gui.initLabels(True, self.labelRDP, self.labelVNC, self.labelFS)
-            self.conn_note.set_current_page(int(self.defaultConf['TAB']))
-            if self.defaultConf['TRAY']:
-                if self.main_window.trayDisplayed:
-                    self.main_window.iconTray.show()
-                else: self.main_window.trayDisplayed = gui.Gui.initTray(self.main_window)
-            else:
-                try: self.main_window.iconTray.hide()
-                except: pass
+        saveInFile('default.conf',self.defaultConf)
+        gui.viewStatus(self.statusbar, "Настройки сохранены в файле default.conf...")
+        log.info("Новые настройки для программы сохранены в файле default.conf.")
+        if not self.checkLog.get_active(): log.warning("ВЕДЕНИЕ ЖУРНАЛА ПОСЛЕ ПЕРЕЗАПУСКА ПРОГРАММЫ БУДЕТ ОТКЛЮЧЕНО!")
+        gui.Gui.initLabels(True, self.labelRDP, self.labelVNC, self.labelFS)
+        self.conn_note.set_current_page(int(self.defaultConf['TAB']))
+        if self.defaultConf['TRAY']:
+            if self.main_window.trayDisplayed:
+                self.main_window.iconTray.show()
+            else: self.main_window.trayDisplayed = gui.Gui.initTray(self.main_window)
+        else:
+            try: self.main_window.iconTray.hide()
+            except: pass
 
     def clearFile(self, filename, title, message):
         """Функция для очисти БД серверов или списка подключений"""
