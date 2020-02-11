@@ -4,13 +4,14 @@
 import gi, os
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-import re
+from re import findall
 
 _kiosk_dir = "/usr/share/connector/kiosk"
 _kiosk_conf = "/etc/connector/kiosk.conf"
 _ligthdm_conf = "/etc/lightdm/lightdm.conf"
 _lightdm_conf_dir = "%s.d" % _ligthdm_conf
 _autologin_conf = "%s/kiosk.conf" % _lightdm_conf_dir
+_etc_dir = "/etc/kiosk"
 
 def enabled():
     """Checking 'is root' and OS for access to settings"""
@@ -27,7 +28,7 @@ def load_kiosk_user():
     """Load username for KIOSK from the config"""
     username = "_kiosk"
     with open(_kiosk_conf) as f:
-        res = re.findall (r"\nuser.*", f.read())
+        res = findall (r"\nuser.*", f.read())
     if res: username = res[0].split('=')[1].strip()
     return username
 
@@ -38,8 +39,22 @@ def autologin_enable(username):
     with open (_autologin_conf, "w") as f:
         print("[Seat:*]\nautologin-user=%s" % username, file = f)
 
+def create_kiosk_exec(username, shortcut):
+    kiosk_exec = "/etc/X11/xsession.user.d/%s" % username
+    with open (kiosk_exec, "w") as f:
+        print("""#!/bin/sh
+PROFILE=%s
+e="$(sed -n s/^Exec[[:space:]]*=[[:space:]]*//p "/etc/kiosk/$PROFILE")"
+test -n "$e" && `$e`""" % shortcut, file = f)
+    os.chmod(kiosk_exec, 0o755)
+
 def enable_kiosk_all():
-    pass
+    """Exec connector in the mode KIOSK"""
+    username = load_kiosk_user()
+    autologin_enable(username)
+    shortcut = "connector-kiosk.desktop"
+    os.system ("ln -s %s/%s %s/" % (_kiosk_dir, shortcut, _etc_dir))
+    create_kiosk_exec(username, shortcut)
 
 def enable_kiosk_ctor():
     pass
@@ -48,7 +63,9 @@ def enable_kiosk_web():
     pass
 
 def disable_kiosk():
-    pass
+    lightdm_clear_autologin()
+    os.system("rm -f /etc/X11/xsession.user.d/%s" % load_kiosk_user())
+    os.system("rm -f %s/connector-*.desktop" % _etc_dir)
 
 class Config():
     def __init__(self):
@@ -96,6 +113,7 @@ class Kiosk(Gtk.Window):
         self.show_all()
         self.config = Config()
         self.initParams()
+        os.makedirs (_etc_dir, exist_ok = True)
 
     def onClose (self, window, *args):
         """Close window"""
@@ -114,8 +132,12 @@ class Kiosk(Gtk.Window):
     def onSave (self, *args):
         """Action for button 'Save'"""
         mode = 0; file = ''; url = ''
-        if self.changeKioskOff.get_active(): mode = 0
-        if self.changeKioskAll.get_active(): mode = 1
+        if self.changeKioskOff.get_active():
+            mode = 0
+            disable_kiosk()
+        if self.changeKioskAll.get_active():
+            mode = 1
+            enable_kiosk_all()
         if self.changeKioskCtor.get_active():
             mode = 2
             file = self.entryKioskCtor.get_uri().replace("file://","")
