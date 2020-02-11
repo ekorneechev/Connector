@@ -4,15 +4,50 @@
 import gi, os
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
+import re
 
-__kiosk_dir = "/usr/share/connector/kiosk"
+_kiosk_dir = "/usr/share/connector/kiosk"
+_kiosk_conf = "/etc/connector/kiosk.conf"
+_ligthdm_conf = "/etc/lightdm/lightdm.conf"
+_lightdm_conf_dir = "%s.d" % _ligthdm_conf
+_autologin_conf = "%s/autologin.conf" % _lightdm_conf_dir
 
 def enabled():
     """Checking 'is root' and OS for access to settings"""
     return (os.getuid() == 0) and (os.path.exists("/etc/altlinux-release"))
 
+def lightdm_clear_autologin():
+    """Disable existing records for autologin-user"""
+    os.system("sed -i \"s/^autologin-user.*/#autologin-user=/\" %s" % _ligthdm_conf)
+
+def load_kiosk_user():
+    """Load username for KIOSK from the config"""
+    username = "_kiosk"
+    with open(_kiosk_conf) as f:
+        res = re.findall (r"\nuser.*", f.read())
+    if res: username = res[0].split('=')[1].strip()
+    return username
+
+def autologin_enable(username):
+    """Enable autologin for the mode KIOSK"""
+    lightdm_clear_autologin()
+    os.mkdir (_lightdm_conf_dir, exist_ok = True)
+    with open (_autologin_conf, "w") as f:
+        print("[Seat:*]\nautologin-user=%s" % username, file = f)
+
+def enable_kiosk_all():
+    pass
+
+def enable_kiosk_ctor():
+    pass
+
+def enable_kiosk_web():
+    pass
+
+def disable_kiosk():
+    pass
+
 class Config():
-    __file_cfg = "/etc/connector/kiosk.conf"
     def __init__(self):
         self.params = {'mode': '0',
                        'user': '_kiosk',
@@ -22,18 +57,18 @@ class Config():
 
     def read(self):
         try:
-            with open(self.__file_cfg) as file_cfg:
-                for line in file_cfg:
+            with open(_kiosk_conf) as f:
+                for line in f:
                     param_cfg = line.split('=')
                     try: self.params[param_cfg[0].strip()] = param_cfg[1].strip()
                     except: pass
         except FileNotFoundError: self.write()
 
     def write(self):
-        os.system("sed -i '/^#/!d' %s" % self.__file_cfg)
-        with open(self.__file_cfg, "a") as file_cfg:
+        os.system("sed -i '/^#/!d' %s" % _kiosk_conf)
+        with open(_kiosk_conf, "a") as f:
             for key in self.params:
-                print("%s = %s" % (key, self.params[key]), file = file_cfg)
+                print("%s = %s" % (key, self.params[key]), file = f)
 
 class Kiosk(Gtk.Window):
     def __init__(self):
