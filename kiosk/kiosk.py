@@ -26,7 +26,7 @@ def lightdm_clear_autologin():
 
 def load_kiosk_user():
     """Load username for KIOSK from the config"""
-    username = "_kiosk"
+    username = "kiosk"
     with open(_kiosk_conf) as f:
         res = findall (r"\nuser.*", f.read())
     if res: username = res[0].split('=')[1].strip()
@@ -70,7 +70,7 @@ def disable_kiosk():
 class Config():
     def __init__(self):
         self.params = {'mode': '0',
-                       'user': '_kiosk',
+                       'user': 'kiosk',
                        'file': '<path_to_file_ctor>',
                        'url': '<url_for_kiosk>'}
         self.read()
