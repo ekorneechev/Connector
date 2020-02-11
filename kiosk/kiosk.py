@@ -10,7 +10,7 @@ _kiosk_dir = "/usr/share/connector/kiosk"
 _kiosk_conf = "/etc/connector/kiosk.conf"
 _ligthdm_conf = "/etc/lightdm/lightdm.conf"
 _lightdm_conf_dir = "%s.d" % _ligthdm_conf
-_autologin_conf = "%s/autologin.conf" % _lightdm_conf_dir
+_autologin_conf = "%s/kiosk.conf" % _lightdm_conf_dir
 
 def enabled():
     """Checking 'is root' and OS for access to settings"""
@@ -18,7 +18,10 @@ def enabled():
 
 def lightdm_clear_autologin():
     """Disable existing records for autologin-user"""
-    os.system("sed -i \"s/^autologin-user.*/#autologin-user=/\" %s" % _ligthdm_conf)
+    clear_cmd = "sed -i \"s/^autologin-user.*/#autologin-user=/\""
+    os.system ("%s %s" % (clear_cmd, _ligthdm_conf))
+    if os.path.exists (_lightdm_conf_dir): os.system ("%s %s/*.conf" % (clear_cmd, _lightdm_conf_dir))
+    if os.path.exists (_autologin_conf): os.remove(_autologin_conf)
 
 def load_kiosk_user():
     """Load username for KIOSK from the config"""
@@ -31,7 +34,7 @@ def load_kiosk_user():
 def autologin_enable(username):
     """Enable autologin for the mode KIOSK"""
     lightdm_clear_autologin()
-    os.mkdir (_lightdm_conf_dir, exist_ok = True)
+    os.makedirs (_lightdm_conf_dir, exist_ok = True)
     with open (_autologin_conf, "w") as f:
         print("[Seat:*]\nautologin-user=%s" % username, file = f)
 
