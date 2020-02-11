@@ -53,7 +53,7 @@ def enable_kiosk_all():
     username = load_kiosk_user()
     autologin_enable(username)
     shortcut = "connector-kiosk.desktop"
-    os.system ("ln -s %s/%s %s/" % (_kiosk_dir, shortcut, _etc_dir))
+    os.system ("install -m644 %s/%s %s/" % (_kiosk_dir, shortcut, _etc_dir))
     create_kiosk_exec(username, shortcut)
 
 def enable_kiosk_ctor():
