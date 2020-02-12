@@ -56,8 +56,10 @@ def enable_kiosk( mode = "kiosk" ):
     os.system ("install -m644 %s/%s %s/" % (_kiosk_dir, shortcut, _etc_dir))
     create_kiosk_exec(username, shortcut)
 
-def enable_kiosk_ctor():
-    pass
+def enable_kiosk_ctor(file):
+    """Exec connector (with ctor-file) in the mode KIOSK"""
+    enable_kiosk()
+    os.system ("sed -i \"s|\$CTOR|%s|g\" %s/connector-kiosk.desktop" % (file, _etc_dir))
 
 def enable_kiosk_web(url):
     """Exec chromium in the mode KIOSK"""
@@ -143,6 +145,7 @@ class Kiosk(Gtk.Window):
         if self.changeKioskCtor.get_active():
             mode = 2
             file = self.entryKioskCtor.get_uri().replace("file://","")
+            enable_kiosk_ctor(file)
         if self.changeKioskWeb.get_active():
             mode = 3
             url = self.entryKioskWeb.get_text()

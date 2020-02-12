@@ -1,7 +1,8 @@
 [Desktop Entry]
 Version=1.0
-Name=Connector
-Exec=/usr/share/connector/kiosk/connector-kiosk
+Name=Connector - KIOSK
+Name[ru_RU]=Connector - режим КИОСК
+Exec=/usr/share/connector/kiosk/connector-kiosk $CTOR
 Icon=connector
 Terminal=false
 Type=Application
