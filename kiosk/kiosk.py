@@ -59,8 +59,14 @@ def enable_kiosk_all():
 def enable_kiosk_ctor():
     pass
 
-def enable_kiosk_web():
-    pass
+def enable_kiosk_web(url):
+    """Exec chromium in the mode KIOSK"""
+    username = load_kiosk_user()
+    autologin_enable(username)
+    shortcut = "connector-webkiosk.desktop"
+    os.system ("install -m644 %s/%s %s/" % (_kiosk_dir, shortcut, _etc_dir))
+    os.system ("sed -i \"s|\$URL|%s|g\" %s/%s" % (url, _etc_dir, shortcut))
+    create_kiosk_exec(username, shortcut)
 
 def disable_kiosk():
     lightdm_clear_autologin()
@@ -144,6 +150,7 @@ class Kiosk(Gtk.Window):
         if self.changeKioskWeb.get_active():
             mode = 3
             url = self.entryKioskWeb.get_text()
+            enable_kiosk_web(url)
         self.config.params['mode']  = mode
         self.config.params['file']  = file
         self.config.params['url']  = url
