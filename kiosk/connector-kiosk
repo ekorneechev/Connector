@@ -1,5 +1,3 @@
 #!/bin/bash
-# marco - default window manager in MATE.
-# You also may be try openbox, awesome and others WM.
-marco --replace &
+openbox --replace &
 /usr/bin/connector $1
