@@ -40,6 +40,7 @@ def autologin_enable(username):
         print("[Seat:*]\nautologin-user=%s" % username, file = f)
 
 def create_kiosk_exec(username, shortcut):
+    """Create executable file in X11 directory"""
     kiosk_exec = "/etc/X11/xsession.user.d/%s" % username
     with open (kiosk_exec, "w") as f:
         print("""#!/bin/sh
@@ -72,7 +73,9 @@ def disable_kiosk():
     os.system("rm -f %s/connector-*.desktop" % _etc_dir)
 
 class Config():
+    """Class with config of the mode KIOSK"""
     def __init__(self):
+        """Defaul config"""
         self.params = {'mode': '0',
                        'user': 'kiosk',
                        'file': '<path_to_file_ctor>',
@@ -80,6 +83,7 @@ class Config():
         self.read()
 
     def read(self):
+        """Read config from kiosk.conf"""
         try:
             with open(_kiosk_conf) as f:
                 for line in f:
@@ -89,6 +93,7 @@ class Config():
         except FileNotFoundError: self.write()
 
     def write(self):
+        """Write config to kiosk.conf"""
         os.system("sed -i '/^#/!d' %s" % _kiosk_conf)
         with open(_kiosk_conf, "a") as f:
             for key in self.params:
@@ -158,6 +163,7 @@ class Kiosk(Gtk.Window):
         self.onClose(self)
 
     def initParams (self):
+        """Initialisation state of the UI elements"""
         mode = int(self.config.params['mode'])
         self.entryKioskCtor.set_current_folder("/etc/kiosk")
         if mode == 1: self.changeKioskAll.set_active(True)
