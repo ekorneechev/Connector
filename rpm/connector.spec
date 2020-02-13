@@ -28,7 +28,7 @@ Summary: Mode "KIOSK" for connector
 Group: Networking/Remote access
 
 Requires: connector = %version-%release
-Requires: chromium xinitrc openbox
+Requires: chromium xinitrc
 
 %description kiosk
 Files for connector mode "KIOSK"

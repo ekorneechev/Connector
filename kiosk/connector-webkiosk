@@ -1,3 +1,5 @@
 #!/bin/bash
-openbox --replace &
+# marco - default window manager in MATE.
+# You also may be try openbox, awesome and others WM.
+marco --replace &
 chromium --kiosk $1
