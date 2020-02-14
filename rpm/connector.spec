@@ -1,5 +1,5 @@
 Name: connector
-Version: 1.8.9
+Version: 1.9.0.rc0
 Release: alt1
 
 Summary: Remote desktop chooser
@@ -66,10 +66,13 @@ install -pDm600 kiosk/kiosk.conf %buildroot%_sysconfdir/%name/kiosk.conf
 
 %files kiosk
 %dir %basedir/kiosk
-%%basedir/kiosk/*
+%basedir/kiosk/*
 %config(noreplace) %_sysconfdir/%name/kiosk.conf
 
 %changelog
+* Fri Feb 14 2020 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.9.0.rc0-alt1
+- [kiosk] Global remaking
+
 * Tue Feb 4 2020 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.8.8-alt1
 - FreeRDP:
  + Added escaping special characters in a password
