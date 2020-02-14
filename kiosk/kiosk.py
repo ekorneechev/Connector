@@ -57,15 +57,22 @@ def enable_kiosk( mode = "kiosk" ):
     os.system ("install -m644 %s/%s %s/" % (_kiosk_dir, shortcut, _etc_dir))
     create_kiosk_exec(username, shortcut)
 
-def enable_kiosk_ctor(file):
+def fix_shortcut(mode, _input, output):
+    """Replace variable in the desktop files"""
+    shortcut = "%s/connector-%s.desktop" % (_etc_dir, mode)
+    os.system ("sed -i \"s|\%s|%s|g\" %s" % (_input, output, shortcut))
+
+def enable_kiosk_ctor(_file):
     """Exec connector (with ctor-file) in the mode KIOSK"""
-    enable_kiosk()
-    os.system ("sed -i \"s|\$CTOR|%s|g\" %s/connector-kiosk.desktop" % (file, _etc_dir))
+    mode = "kiosk"
+    enable_kiosk(mode)
+    fix_shortcut(mode, "$CTOR", _file)
 
 def enable_kiosk_web(url):
     """Exec chromium in the mode KIOSK"""
-    enable_kiosk("webkiosk")
-    os.system ("sed -i \"s|\$URL|%s|g\" %s/connector-webkiosk.desktop" % (url, _etc_dir))
+    mode = "webkiosk"
+    enable_kiosk(mode)
+    fix_shortcut(mode, "$URL", url)
 
 def disable_kiosk():
     lightdm_clear_autologin()
@@ -147,6 +154,7 @@ class Kiosk(Gtk.Window):
         if self.changeKioskAll.get_active():
             mode = 1
             enable_kiosk()
+            fix_shortcut("kiosk", "$CTOR", "")
         if self.changeKioskCtor.get_active():
             mode = 2
             file = self.entryKioskCtor.get_uri().replace("file://","")
