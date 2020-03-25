@@ -1371,9 +1371,6 @@ class Gui(Gtk.Application):
     def changePage(self, index = 1):
         self.main_note.set_current_page(index)
 
-    def onLogout(self, *args):
-        os.system("mate-session-save --logout")
-
     def onShowWindow(self, *args):
         if self.window.is_active():
             self.onHideWindow(self)
