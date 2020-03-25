@@ -178,7 +178,7 @@ class Gui(Gtk.Application):
             from kiosk import kiosk
             self.menu_kiosk = self.builder.get_object("menu_file_kiosk")
             self.menu_kiosk.set_sensitive(kiosk.enabled())
-        except (ModuleNotFoundError, ImportError):
+        except ImportError:
             properties.log.warning ("The mode KIOSK unavailable, package is not installed.")
 
     def createDesktopFile(self, filename, nameConnect, nameDesktop):
