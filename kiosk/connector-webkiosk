@@ -2,4 +2,7 @@
 # marco - default window manager in MATE.
 # You also may be try openbox, awesome and others WM.
 marco --replace &
-chromium --kiosk $1
+while :
+do
+chromium --kiosk --incognito $1
+done
