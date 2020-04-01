@@ -106,8 +106,8 @@ else:
 #Команда подключения сетевых файловых ресурсов
 DEFAULT['FS'] = 'xdg-open'
 
-#По умолчанию индикатор в системном лотке включен
-DEFAULT['TRAY'] = True
+#Tray icon is disabled by default
+DEFAULT['TRAY'] = False
 
 #Проверка обновлений программы
 DEFAULT['CHECK_VERSION'] = True
