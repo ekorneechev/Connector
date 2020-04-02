@@ -2,6 +2,10 @@
 # marco - default window manager in MATE.
 # You also may be try openbox, awesome and others WM.
 marco --replace &
+
+# Caps = Ctrl, Ctrl is disabled.
+#setxkbmap -v -option ctrl:swapcaps; xmodmap -e "keycode 105 = "; xmodmap -e "keycode 37 = "
+
 while :
 do
 chromium --kiosk --incognito $1

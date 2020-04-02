@@ -42,6 +42,7 @@
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
+        <property name="halign">start</property>
         <property name="margin_top">5</property>
         <property name="margin_bottom">5</property>
         <property name="active">True</property>
@@ -61,6 +62,7 @@
         <property name="visible">True</property>
         <property name="can_focus">True</property>
         <property name="receives_default">False</property>
+        <property name="halign">start</property>
         <property name="margin_top">5</property>
         <property name="margin_bottom">5</property>
         <property name="draw_indicator">True</property>
@@ -104,12 +106,14 @@
             <property name="visible">True</property>
             <property name="sensitive">False</property>
             <property name="can_focus">False</property>
+            <property name="halign">end</property>
+            <property name="valign">center</property>
             <property name="filter">filefilter1</property>
             <property name="show_hidden">True</property>
             <property name="title" translatable="yes">Выбор файла подключения для режима КИОСК</property>
           </object>
           <packing>
-            <property name="expand">False</property>
+            <property name="expand">True</property>
             <property name="fill">True</property>
             <property name="position">2</property>
           </packing>
@@ -169,13 +173,124 @@
       </packing>
     </child>
     <child>
-      <object class="GtkBox">
+      <object class="GtkFrame" id="frame">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="label_xalign">0.019999999552965164</property>
+        <property name="shadow_type">in</property>
+        <child>
+          <object class="GtkAlignment" id="frame_child">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="left_padding">12</property>
+            <child>
+              <object class="GtkBox" id="box_kiosk4">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkBox" id="box_kiosk_login">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <child>
+                      <object class="GtkLabel" id="label_kiosk">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Имя пользователя: </property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkEntry" id="entry_kiosk_login">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="placeholder_text" translatable="yes">kiosk (по умолчанию)</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkCheckButton" id="check_kiosk_adduser">
+                        <property name="label" translatable="yes">Создать, если нет</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">False</property>
+                        <property name="draw_indicator">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="check_kiosk_autologin">
+                    <property name="label" translatable="yes">Автовход пользователя</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="halign">start</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="check_kiosk_safe">
+                    <property name="label" translatable="yes">Отключить клавишу "Ctrl" в WEB-киоске </property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="tooltip_text" translatable="yes">Ее функцию в сеансе будет выполнять  клавиша CapsLock</property>
+                    <property name="halign">start</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child type="label">
+          <object class="GtkLabel" id="title1">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">Дополнительные параметры:</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">5</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkBox" id="box_kiosk3">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <property name="halign">end</property>
-        <child>
-          <placeholder/>
-        </child>
         <child>
           <object class="GtkButton" id="resetButton">
             <property name="label" translatable="yes">Сброс</property>
