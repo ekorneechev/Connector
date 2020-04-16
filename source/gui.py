@@ -36,21 +36,21 @@ def connectFileRdp(filename):
     """Connect to the server with file .rdp"""
     if properties.loadFromFile('default.conf')['RDP']:
         tmpfile = WORKFOLDER + ".tmp.rdp"
-        os.system("cp -r %s %s" % (filename, tmpfile))
-        os.system("xfreerdp %s -sec-nla %s" % (tmpfile, STD_TO_LOG))
+        os.system('cp -r "%s" "%s"' % (filename, tmpfile))
+        os.system('xfreerdp "%s" -sec-nla %s' % (tmpfile, STD_TO_LOG))
     else:
-        os.system("remmina --connect %s %s" % (filename, STD_TO_LOG))
+        os.system('remmina --connect "%s" %s' % (filename, STD_TO_LOG))
 
 def connectFileRemmina(filename):
     """Connect to the server with file .remmina"""
-    os.system("remmina --connect %s %s" % (filename, STD_TO_LOG))
+    os.system('remmina --connect "%s" %s' % (filename, STD_TO_LOG))
 
 def openFile(filename):
     """Open file connection (.ctor, .rdp or .remmina)"""
     ext = Path(filename).suffix.lower()
     if ext == ".ctor":
         tmpname = 'tmp_' + os.path.basename(filename)
-        os.system('cp "' + filename + '" "' + WORKFOLDER + tmpname + '"')
+        os.system('cp "%s" "%s%s"' % (filename, WORKFOLDER, tmpname))
         os.chdir(WORKFOLDER)
         connectFile(tmpname, True)
         os.remove(tmpname)
