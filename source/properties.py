@@ -27,7 +27,7 @@ def saveInFile(fileName, obj):
 
 def loadFromFile(fileName, window = None):
     """Загрузка сохраненных параметров из файла"""
-    try: 
+    try:
         dbfile = open(WORKFOLDER + fileName, 'rb')
         obj = pickle.load(dbfile)
         dbfile.close()
@@ -79,7 +79,7 @@ def importFromFile(fileName, window = None):
         return None
 
 def searchSshUser(query):
-    """Определение имени пользователя и сервера 
+    """Определение имени пользователя и сервера
     в формате адреса SSH и SFTP - логин@адрес"""
     try:
         login, server = query.strip().split('@')
@@ -229,7 +229,7 @@ class Properties(Gtk.Window):
     def onClose (self, window, *args):
         window.destroy()
         self.main_window.onShowWindow()
-    
+
     def onSave (self, *args):
         """Сохранение настроек программы"""
         if self.changeRdpRem.get_active():
@@ -293,7 +293,7 @@ class Properties(Gtk.Window):
             f.close()
             gui.viewStatus(self.statusbar, "Выполнено, изменения вступят в силу после перезапуска...")
             log.info("Очищен файл %s", filename)
-        dialog.destroy()    
+        dialog.destroy()
 
     def onClearServers(self, widget):
         self.clearFile("servers.db", "Подтвердите очистку данных автозаполнения",

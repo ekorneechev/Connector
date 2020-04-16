@@ -101,7 +101,7 @@ class Remmina:
             self.cfg['sharesmartcard'] = args[5]
             self.cfg['enableaudio'] = args[6]
             self.cfg['cacert'] = args[7]
-        f_write(self.f_name, self.cfg)        
+        f_write(self.f_name, self.cfg)
 
     def start(self, parameters):
         """Запуск remmina с необходимыми параметрами"""
@@ -114,12 +114,12 @@ class Remmina:
 class VncRemmina(Remmina):
     """Класс для настройки VNC-соединения через Remmina"""
     def __init__(self):
-        self.cfg = dict(keymap='', quality=9, disableencryption=0, colordepth=24, 
-                       hscale=0, group='', password='', name='VNC-connection: ', viewonly=0, 
+        self.cfg = dict(keymap='', quality=9, disableencryption=0, colordepth=24,
+                       hscale=0, group='', password='', name='VNC-connection: ', viewonly=0,
                        disableclipboard=0, protocol='VNC', vscale=0, username='', disablepasswordstoring=1,
                        showcursor=0, disableserverinput=0, server='',aspectscale=0,
                        window_maximize=1, window_width=800, window_height=600, viewmode=1)
-        self.f_name = '.tmp_VNC.remmina' 
+        self.f_name = '.tmp_VNC.remmina'
 
 class VncViewer:
     """Класс для настройки VNC-соединения через VncViewer"""
@@ -140,7 +140,7 @@ class VncViewer:
 class RdpRemmina(Remmina):
     """Класс для настройки RDP-соединения через Remmina"""
     def __init__(self):
-        self.cfg = dict(disableclipboard=0, clientname='', quality=0, console=0, sharesmartcard=0, 
+        self.cfg = dict(disableclipboard=0, clientname='', quality=0, console=0, sharesmartcard=0,
                        resolution='', group='', password='', name='RDP-connection: ',
                        shareprinter=0, security='', protocol='RDP', execpath='', disablepasswordstoring=1,
                        sound='off', username='', sharefolder='', domain='', viewmode=3,
@@ -258,16 +258,16 @@ class XdmcpRemmina(Remmina):
 class SftpRemmina(Remmina):
     """Класс для настройки SFTP-соединения через Remmina"""
     def __init__(self):
-        self.cfg = dict(name='SFTP-connection: ', protocol='SFTP', ssh_enabled=0, ssh_auth=0, 
+        self.cfg = dict(name='SFTP-connection: ', protocol='SFTP', ssh_enabled=0, ssh_auth=0,
                         ssh_charset='UTF-8', ssh_privatekey='', username='', ssh_username='',
-                        group='', password='', execpath='/', server='', window_maximize=0, 
+                        group='', password='', execpath='/', server='', window_maximize=0,
                         window_height=600, window_width=800, ftp_vpanedpos=360, viewmode=0, disablepasswordstoring=1)
         self.f_name = '.tmp_SFTP.remmina'
 
 class SshRemmina(Remmina):
     """Класс для настройки SSH-соединения через Remmina"""
     def __init__(self):
-        self.cfg = dict(name='SSH-connection: ', protocol='SSH', ssh_auth=0, ssh_charset='UTF-8', 
+        self.cfg = dict(name='SSH-connection: ', protocol='SSH', ssh_auth=0, ssh_charset='UTF-8',
                         ssh_privatekey='', group='', password='', username='', ssh_username='', ssh_enabled=0,
                         server='', window_maximize=0, window_width=500, window_height=500, viewmode=0, disablepasswordstoring=1)
         self.cfg['exec'] = ''
