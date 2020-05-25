@@ -105,6 +105,7 @@ class Kiosk(Gtk.Window):
         self.entryKioskCtor = builder.get_object("entry_kiosk_ctor")
         self.changeKioskWeb = builder.get_object("radio_kiosk_web")
         self.entryKioskWeb = builder.get_object("entry_kiosk_web")
+        self.checkKioskCtrl = builder.get_object("check_kiosk_safe")
         box = builder.get_object("box")
         self.add(box)
         self.connect("delete-event", self.onClose)
@@ -150,9 +151,15 @@ class Kiosk(Gtk.Window):
             mode = "3"
             url = self.entryKioskWeb.get_text()
             enable_kiosk_web(url)
+        ctrl = self.checkKioskCtrl.get_active()
+        if ctrl:
+            disable_ctrl()
+        else:
+            enable_ctrl()
         self.config['kiosk']['mode'] = mode
         self.config['kiosk']['file'] = file
         self.config['kiosk']['url'] = url
+        self.config['kiosk']['ctrl_disabled'] = str( ctrl )
         with open( _kiosk_conf, 'w' ) as configfile:
             self.config.write( configfile )
         #else need disable tray...
@@ -171,6 +178,9 @@ class Kiosk(Gtk.Window):
             self.entryKioskWeb.set_text( self.config.get( "kiosk", "url" ) )
         else:
             self.changeKioskOff.set_active(True)
+        ctrl = self.config.get( "kiosk", "ctrl_disabled" )
+        if ctrl in ( "True", "true", "Yes", "yes" ):
+            self.checkKioskCtrl.set_active( True )
 
     def onReset (self, *args):
         """Action for button 'Reset'"""
