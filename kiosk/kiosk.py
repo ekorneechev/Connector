@@ -4,7 +4,7 @@
 import gi, os
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-from re import findall
+import configparser
 
 _kiosk_dir = "/usr/share/connector/kiosk"
 _kiosk_conf = "/etc/connector/kiosk.conf"
@@ -26,10 +26,8 @@ def lightdm_clear_autologin():
 
 def load_kiosk_user():
     """Load username for KIOSK from the config"""
-    username = "kiosk"
-    with open(_kiosk_conf) as f:
-        res = findall (r"\nuser.*", f.read())
-    if res: username = res[0].split('=')[1].strip()
+    try: username = self.config.get( "kiosk", "user" )
+    except: username = "kiosk"
     return username
 
 def autologin_enable(username):
@@ -79,33 +77,6 @@ def disable_kiosk():
     os.system("rm -f /etc/X11/xsession.user.d/%s" % load_kiosk_user())
     os.system("rm -f %s/connector-*.desktop" % _etc_dir)
 
-class Config():
-    """Class with config of the mode KIOSK"""
-    def __init__(self):
-        """Defaul config"""
-        self.params = {'mode': '0',
-                       'user': 'kiosk',
-                       'file': '<path_to_file_ctor>',
-                       'url': '<url_for_kiosk>'}
-        self.read()
-
-    def read(self):
-        """Read config from kiosk.conf"""
-        try:
-            with open(_kiosk_conf) as f:
-                for line in f:
-                    param_cfg = line.split('=')
-                    try: self.params[param_cfg[0].strip()] = param_cfg[1].strip()
-                    except: pass
-        except FileNotFoundError: self.write()
-
-    def write(self):
-        """Write config to kiosk.conf"""
-        os.system("sed -i '/^#/!d' %s" % _kiosk_conf)
-        with open(_kiosk_conf, "a") as f:
-            for key in self.params:
-                print("%s = %s" % (key, self.params[key]), file = f)
-
 class Kiosk(Gtk.Window):
     def __init__(self):
         """Window with settings of the mode KIOSK"""
@@ -127,7 +98,8 @@ class Kiosk(Gtk.Window):
         self.add(box)
         self.connect("delete-event", self.onClose)
         self.show_all()
-        self.config = Config()
+        self.config = configparser.ConfigParser()
+        self.config.read( _kiosk_conf )
         self.initParams()
         os.makedirs (_etc_dir, exist_ok = True)
 
@@ -147,40 +119,41 @@ class Kiosk(Gtk.Window):
 
     def onSave (self, *args):
         """Action for button 'Save'"""
-        mode = 0; file = ''; url = ''
+        mode = "0"; file = ''; url = ''
         if self.changeKioskOff.get_active():
-            mode = 0
+            mode = "0"
             disable_kiosk()
         if self.changeKioskAll.get_active():
-            mode = 1
+            mode = "1"
             enable_kiosk()
             fix_shortcut("kiosk", "$CTOR", "")
         if self.changeKioskCtor.get_active():
-            mode = 2
+            mode = "2"
             file = self.entryKioskCtor.get_uri().replace("file://","")
             enable_kiosk_ctor(file)
         if self.changeKioskWeb.get_active():
-            mode = 3
+            mode = "3"
             url = self.entryKioskWeb.get_text()
             enable_kiosk_web(url)
-        self.config.params['mode']  = mode
-        self.config.params['file']  = file
-        self.config.params['url']  = url
-        self.config.write()
+        self.config['kiosk']['mode'] = mode
+        self.config['kiosk']['file'] = file
+        self.config['kiosk']['url'] = url
+        with open( _kiosk_conf, 'w' ) as configfile:
+            self.config.write( configfile )
         #else need disable tray...
         self.onClose(self)
 
     def initParams (self):
         """Initialisation state of the UI elements"""
-        mode = int(self.config.params['mode'])
+        mode = self.config.get( "kiosk", "mode" )
         self.entryKioskCtor.set_current_folder("/etc/kiosk")
-        if mode == 1: self.changeKioskAll.set_active(True)
-        elif mode == 2:
+        if mode == "1": self.changeKioskAll.set_active(True)
+        elif mode == "2":
             self.changeKioskCtor.set_active(True)
-            self.entryKioskCtor.set_uri("file://%s" % self.config.params['file'])
-        elif mode == 3:
+            self.entryKioskCtor.set_uri( "file://%s" % self.config.get( "kiosk", "file" ) )
+        elif mode == "3":
             self.changeKioskWeb.set_active(True)
-            self.entryKioskWeb.set_text(self.config.params['url'])
+            self.entryKioskWeb.set_text( self.config.get( "kiosk", "url" ) )
         else:
             self.changeKioskOff.set_active(True)
 
