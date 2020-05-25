@@ -5,6 +5,7 @@ import gi, os
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 import configparser
+from urllib.parse import unquote
 
 _kiosk_dir = "/usr/share/connector/kiosk"
 _kiosk_conf = "/etc/connector/kiosk.conf"
@@ -58,7 +59,7 @@ def enable_kiosk( mode = "kiosk" ):
 def fix_shortcut(mode, _input, output):
     """Replace variable in the desktop files"""
     shortcut = "%s/connector-%s.desktop" % (_etc_dir, mode)
-    os.system ("sed -i \"s|\%s|%s|g\" %s" % (_input, output, shortcut))
+    os.system ("sed -i \"s|\%s|'%s'|g\" %s" % (_input, output, shortcut))
 
 def enable_kiosk_ctor(_file):
     """Exec connector (with ctor-file) in the mode KIOSK"""
@@ -98,7 +99,7 @@ class Kiosk(Gtk.Window):
         self.add(box)
         self.connect("delete-event", self.onClose)
         self.show_all()
-        self.config = configparser.ConfigParser()
+        self.config = configparser.ConfigParser( interpolation = None )
         self.config.read( _kiosk_conf )
         self.initParams()
         os.makedirs (_etc_dir, exist_ok = True)
@@ -131,7 +132,7 @@ class Kiosk(Gtk.Window):
             mode = "2"
             uri = self.entryKioskCtor.get_uri()
             if uri:
-                file = uri.replace( "file://" , "" )
+                file = unquote( uri.replace( "file://" , "" ))
                 enable_kiosk_ctor( file )
             else:
                 os.system( "zenity --error --title='Connector Kiosk' --text='No connection file specified!'" )
