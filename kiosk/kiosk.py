@@ -8,6 +8,7 @@ import configparser
 from urllib.parse import unquote
 
 _kiosk_dir = "/usr/share/connector/kiosk"
+_webkiosk = "%s/connector-webkiosk" % _kiosk_dir
 _kiosk_conf = "/etc/connector/kiosk.conf"
 _ligthdm_conf = "/etc/lightdm/lightdm.conf"
 _lightdm_conf_dir = "%s.d" % _ligthdm_conf
@@ -78,6 +79,15 @@ def disable_kiosk():
     os.system("rm -f /etc/X11/xsession.user.d/%s" % load_kiosk_user())
     os.system("rm -f %s/connector-*.desktop" % _etc_dir)
 
+def enable_ctrl():
+    os.system( "sed -i /^xmodmap/d %s" % _webkiosk )
+    os.system( "sed -i /^setxkbmap/d %s" % _webkiosk )
+
+def disable_ctrl():
+    enable_ctrl()
+    os.system( "sed -i s/while/\"setxkbmap -v -option ctrl:swapcaps\\nxmodmap"
+               " -e 'keycode 105 = '\\nxmodmap -e 'keycode 37 = '\\nwhile\"/g %s" % _webkiosk )
+
 class Kiosk(Gtk.Window):
     def __init__(self):
         """Window with settings of the mode KIOSK"""
@@ -122,7 +132,6 @@ class Kiosk(Gtk.Window):
         """Action for button 'Save'"""
         mode = "0"; file = ''; url = ''
         if self.changeKioskOff.get_active():
-            mode = "0"
             disable_kiosk()
         if self.changeKioskAll.get_active():
             mode = "1"
