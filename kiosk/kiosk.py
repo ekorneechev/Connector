@@ -129,8 +129,13 @@ class Kiosk(Gtk.Window):
             fix_shortcut("kiosk", "$CTOR", "")
         if self.changeKioskCtor.get_active():
             mode = "2"
-            file = self.entryKioskCtor.get_uri().replace("file://","")
-            enable_kiosk_ctor(file)
+            uri = self.entryKioskCtor.get_uri()
+            if uri:
+                file = uri.replace( "file://" , "" )
+                enable_kiosk_ctor( file )
+            else:
+                os.system( "zenity --error --title='Connector Kiosk' --text='No connection file specified!'" )
+                return 1
         if self.changeKioskWeb.get_active():
             mode = "3"
             url = self.entryKioskWeb.get_text()
