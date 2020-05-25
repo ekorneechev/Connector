@@ -20,7 +20,7 @@ help:
 
 install:
 	apt-get remove connector -y
-	sed -i s#/usr/share#$(PREFIX)#g source/* data/$(TARGET).desktop kiosk/* 
+	sed -i s#/usr/share#$(PREFIX)#g source/* data/$(TARGET).desktop kiosk/*
 	sed -i s#/usr/bin/$(TARGET)#$(PREFIX_BIN)/$(TARGET)#g source/* data/$(TARGET).desktop kiosk/*
 	sed -i s#$(PREFIX)/applications#/usr/share/applications#g source/GLOBAL.py
 	@if [ -n "$(DATESTAMP)" ]; then sed -i s#git#git.$(DATESTAMP)#g source/GLOBAL.py; fi
@@ -37,9 +37,8 @@ install:
 	install -m644 data/$(TARGET).xml $(MIME)/packages
 	cp -r data/icons $(PREFIX)
 	cp -r kiosk $(BASE)
-	rm -f $(BASE)/kiosk/$(KIOSK)
 	mkdir -p $(ETC)
-	@if [ ! -f $(ETC)/$(KIOSK) ]; then install -m600 kiosk/$(KIOSK) $(ETC); fi	
+	@if [ ! -f $(ETC)/$(KIOSK) ]; then install -m600 kiosk/$(KIOSK) $(ETC); fi
 	update-mime-database $(MIME)
 	update-desktop-database
 	make clean
