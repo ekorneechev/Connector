@@ -1427,6 +1427,7 @@ def f_main(pwd="/tmp/", name=""):
             properties.log.info ("Запуск сохраненного подключения: " + name)
             connectFile(fileCtor)
         else:
+            if name[0] == "'": name = name.replace( "'", "" ) #for KIOSK (mode=2)
             if not os.path.isfile(name): name = pwd + name
             if os.path.isfile(name): openFile(name)
             else:
