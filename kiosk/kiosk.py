@@ -80,20 +80,24 @@ def enable_kiosk_web(url):
     fix_shortcut(mode, "$URL", url)
 
 def disable_kiosk():
+    """Disable the mode KIOSK"""
     lightdm_clear_autologin()
     os.system("rm -f /etc/X11/xsession.user.d/%s" % load_kiosk_user())
     os.system("rm -f %s/connector-*.desktop" % _etc_dir)
 
 def enable_ctrl():
+    """Enable key 'Ctrl' in webkiosk"""
     os.system( "sed -i /^xmodmap/d %s" % _webkiosk )
     os.system( "sed -i /^setxkbmap/d %s" % _webkiosk )
 
 def disable_ctrl():
+    """Disable key 'Ctrl' in webkiosk (swap with 'CapsLock')"""
     enable_ctrl()
     os.system( "sed -i s/while/\"setxkbmap -v -option ctrl:swapcaps\\nxmodmap"
                " -e 'keycode 105 = '\\nxmodmap -e 'keycode 37 = '\\nwhile\"/g %s" % _webkiosk )
 
 def config_init():
+    """Default config for KIOSK"""
     _config["kiosk"] = { 'mode': '0',
                          'user': 'kiosk',
                          'autologin': 'true',
