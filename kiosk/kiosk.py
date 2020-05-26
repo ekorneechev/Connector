@@ -10,6 +10,7 @@ from urllib.parse import unquote
 _kiosk_dir = "/usr/share/connector/kiosk"
 _webkiosk = "%s/connector-webkiosk" % _kiosk_dir
 _kiosk_conf = "/etc/connector/kiosk.conf"
+_config = configparser.ConfigParser( interpolation = None )
 _ligthdm_conf = "/etc/lightdm/lightdm.conf"
 _lightdm_conf_dir = "%s.d" % _ligthdm_conf
 _autologin_conf = "%s/kiosk.conf" % _lightdm_conf_dir
@@ -29,7 +30,7 @@ def lightdm_clear_autologin():
 
 def load_kiosk_user():
     """Load username for KIOSK from the config"""
-    try: username = self.config.get( "kiosk", "user" )
+    try: username = _config.get( "kiosk", "user" )
     except: username = "kiosk"
     return username
 
@@ -53,7 +54,10 @@ test -n "$e" && `$e`""" % shortcut, file = f)
 def enable_kiosk( mode = "kiosk" ):
     """Exec connector in the mode KIOSK"""
     username = load_kiosk_user()
-    autologin_enable( username )
+    if _config['kiosk']['autologin'] == "True":
+        autologin_enable( username )
+    else:
+        lightdm_clear_autologin()
     shortcut = "connector-%s.desktop" % mode
     os.system ("install -m644 %s/%s %s/" % (_kiosk_dir, shortcut, _etc_dir))
     create_kiosk_exec(username, shortcut)
@@ -112,8 +116,7 @@ class Kiosk(Gtk.Window):
         self.add(box)
         self.connect("delete-event", self.onClose)
         self.show_all()
-        self.config = configparser.ConfigParser( interpolation = None )
-        self.config.read( _kiosk_conf )
+        _config.read( _kiosk_conf )
         self.initParams()
         os.makedirs (_etc_dir, exist_ok = True)
 
@@ -136,6 +139,8 @@ class Kiosk(Gtk.Window):
         mode = "0"; file = ''; url = ''
         if self.changeKioskOff.get_active():
             disable_kiosk()
+        autologin = self.checkKioskAutologin.get_active()
+        _config['kiosk']['autologin'] = str( autologin )
         if self.changeKioskAll.get_active():
             mode = "1"
             enable_kiosk()
@@ -158,36 +163,32 @@ class Kiosk(Gtk.Window):
             disable_ctrl()
         else:
             enable_ctrl()
-        autologin = self.checkKioskAutologin.get_active()
-        if not autologin:
-            lightdm_clear_autologin()
-        self.config['kiosk']['mode'] = mode
-        self.config['kiosk']['file'] = file
-        self.config['kiosk']['url'] = url
-        self.config['kiosk']['ctrl_disabled'] = str( ctrl )
-        self.config['kiosk']['autologin'] = str( autologin )
+        _config['kiosk']['mode'] = mode
+        _config['kiosk']['file'] = file
+        _config['kiosk']['url'] = url
+        _config['kiosk']['ctrl_disabled'] = str( ctrl )
         with open( _kiosk_conf, 'w' ) as configfile:
-            self.config.write( configfile )
+            _config.write( configfile )
         #else need disable tray...
         self.onClose(self)
 
     def initParams (self):
         """Initialisation state of the UI elements"""
-        mode = self.config.get( "kiosk", "mode" )
+        mode = _config.get( "kiosk", "mode" )
         self.entryKioskCtor.set_current_folder("/etc/kiosk")
         if mode == "1": self.changeKioskAll.set_active(True)
         elif mode == "2":
             self.changeKioskCtor.set_active(True)
-            self.entryKioskCtor.set_uri( "file://%s" % self.config.get( "kiosk", "file" ) )
+            self.entryKioskCtor.set_uri( "file://%s" % _config.get( "kiosk", "file" ) )
         elif mode == "3":
             self.changeKioskWeb.set_active(True)
-            self.entryKioskWeb.set_text( self.config.get( "kiosk", "url" ) )
+            self.entryKioskWeb.set_text( _config.get( "kiosk", "url" ) )
         else:
             self.changeKioskOff.set_active(True)
-        ctrl = self.config.get( "kiosk", "ctrl_disabled" )
+        ctrl = _config.get( "kiosk", "ctrl_disabled" )
         if ctrl in _true:
             self.checkKioskCtrl.set_active( True )
-        autologin = self.config.get( "kiosk", "autologin" )
+        autologin = _config.get( "kiosk", "autologin" )
         if autologin in _true:
             self.checkKioskAutologin.set_active( True )
 
