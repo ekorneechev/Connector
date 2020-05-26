@@ -92,6 +92,16 @@ def disable_ctrl():
     os.system( "sed -i s/while/\"setxkbmap -v -option ctrl:swapcaps\\nxmodmap"
                " -e 'keycode 105 = '\\nxmodmap -e 'keycode 37 = '\\nwhile\"/g %s" % _webkiosk )
 
+def config_init():
+    _config["kiosk"] = { 'mode': '0',
+                         'user': 'kiosk',
+                         'autologin': 'true',
+                         'file': '',
+                         'url': '',
+                         'ctrl_disabled': 'false' }
+    with open( _kiosk_conf, 'w' ) as configfile:
+        _config.write( configfile )
+
 class Kiosk(Gtk.Window):
     def __init__(self):
         """Window with settings of the mode KIOSK"""
@@ -119,7 +129,8 @@ class Kiosk(Gtk.Window):
         self.add(box)
         self.connect("delete-event", self.onClose)
         self.show_all()
-        _config.read( _kiosk_conf )
+        result = _config.read( _kiosk_conf )
+        if not result: config_init()
         self.initParams()
 
     def onClose (self, window, *args):
