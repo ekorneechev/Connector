@@ -1422,7 +1422,9 @@ def f_main(pwd="/tmp/", name=""):
             if not os.path.isfile(name): name = pwd + name
             if os.path.isfile(name): openFile(name)
             else:
-                os.system("zenity --error --icon-name=connector --text='\nПроверьте правильность ввода имени подключения или файла с параметрами!' --no-wrap")
+                error = "Проверьте правильность имени сохраненного подключения или файла с параметрами"
+                properties.log.error ( "%s: %s" % ( error, name ) )
+                os.system( "zenity --error --icon-name=connector --text='\n%s!' --no-wrap" % error )
                 exit (1)
     else:
         gui = Gui()
