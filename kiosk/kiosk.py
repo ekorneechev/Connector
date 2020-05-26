@@ -14,6 +14,7 @@ _ligthdm_conf = "/etc/lightdm/lightdm.conf"
 _lightdm_conf_dir = "%s.d" % _ligthdm_conf
 _autologin_conf = "%s/kiosk.conf" % _lightdm_conf_dir
 _etc_dir = "/etc/kiosk"
+_true = ( "True", "true", "Yes", "yes" )
 
 def enabled():
     """Checking 'is root' and OS for access to settings"""
@@ -52,7 +53,7 @@ test -n "$e" && `$e`""" % shortcut, file = f)
 def enable_kiosk( mode = "kiosk" ):
     """Exec connector in the mode KIOSK"""
     username = load_kiosk_user()
-    autologin_enable(username)
+    autologin_enable( username )
     shortcut = "connector-%s.desktop" % mode
     os.system ("install -m644 %s/%s %s/" % (_kiosk_dir, shortcut, _etc_dir))
     create_kiosk_exec(username, shortcut)
@@ -106,6 +107,7 @@ class Kiosk(Gtk.Window):
         self.changeKioskWeb = builder.get_object("radio_kiosk_web")
         self.entryKioskWeb = builder.get_object("entry_kiosk_web")
         self.checkKioskCtrl = builder.get_object("check_kiosk_safe")
+        self.checkKioskAutologin = builder.get_object("check_kiosk_autologin")
         box = builder.get_object("box")
         self.add(box)
         self.connect("delete-event", self.onClose)
@@ -156,10 +158,14 @@ class Kiosk(Gtk.Window):
             disable_ctrl()
         else:
             enable_ctrl()
+        autologin = self.checkKioskAutologin.get_active()
+        if not autologin:
+            lightdm_clear_autologin()
         self.config['kiosk']['mode'] = mode
         self.config['kiosk']['file'] = file
         self.config['kiosk']['url'] = url
         self.config['kiosk']['ctrl_disabled'] = str( ctrl )
+        self.config['kiosk']['autologin'] = str( autologin )
         with open( _kiosk_conf, 'w' ) as configfile:
             self.config.write( configfile )
         #else need disable tray...
@@ -179,8 +185,11 @@ class Kiosk(Gtk.Window):
         else:
             self.changeKioskOff.set_active(True)
         ctrl = self.config.get( "kiosk", "ctrl_disabled" )
-        if ctrl in ( "True", "true", "Yes", "yes" ):
+        if ctrl in _true:
             self.checkKioskCtrl.set_active( True )
+        autologin = self.config.get( "kiosk", "autologin" )
+        if autologin in _true:
+            self.checkKioskAutologin.set_active( True )
 
     def onReset (self, *args):
         """Action for button 'Reset'"""
