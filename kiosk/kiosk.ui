@@ -205,7 +205,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkEntry" id="entry_kiosk_login">
+                      <object class="GtkEntry" id="entry_kiosk_user">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="placeholder_text" translatable="yes">kiosk (по умолчанию)</property>

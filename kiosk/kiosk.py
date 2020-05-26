@@ -110,6 +110,7 @@ class Kiosk(Gtk.Window):
         self.entryKioskCtor = builder.get_object("entry_kiosk_ctor")
         self.changeKioskWeb = builder.get_object("radio_kiosk_web")
         self.entryKioskWeb = builder.get_object("entry_kiosk_web")
+        self.entryKioskUser = builder.get_object("entry_kiosk_user")
         self.checkKioskCtrl = builder.get_object("check_kiosk_safe")
         self.checkKioskAutologin = builder.get_object("check_kiosk_autologin")
         box = builder.get_object("box")
@@ -139,8 +140,9 @@ class Kiosk(Gtk.Window):
         mode = "0"; file = ''; url = ''
         if self.changeKioskOff.get_active():
             disable_kiosk()
-        autologin = self.checkKioskAutologin.get_active()
-        _config['kiosk']['autologin'] = str( autologin )
+        _config['kiosk']['autologin'] = str( self.checkKioskAutologin.get_active() )
+        user = self.entryKioskUser.get_text()
+        _config['kiosk']['user'] = "kiosk" if user == "" else user
         if self.changeKioskAll.get_active():
             mode = "1"
             enable_kiosk()
@@ -191,6 +193,9 @@ class Kiosk(Gtk.Window):
         autologin = _config.get( "kiosk", "autologin" )
         if autologin in _true:
             self.checkKioskAutologin.set_active( True )
+        user = _config.get( "kiosk", "user" )
+        if user == "kiosk": user = ""
+        self.entryKioskUser.set_text( user )
 
     def onReset (self, *args):
         """Action for button 'Reset'"""
