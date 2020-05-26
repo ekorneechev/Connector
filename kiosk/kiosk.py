@@ -64,14 +64,13 @@ def enable_kiosk( mode = "kiosk" ):
 def fix_shortcut(mode, _input, output):
     """Replace variable in the desktop files"""
     shortcut = "%s/connector-%s.desktop" % (_etc_dir, mode)
-    if output: output = "'%s'" % output
     os.system ("sed -i \"s|\%s|%s|g\" %s" % (_input, output, shortcut))
 
 def enable_kiosk_ctor(_file):
     """Exec connector (with ctor-file) in the mode KIOSK"""
     mode = "kiosk"
     enable_kiosk(mode)
-    fix_shortcut(mode, "$CTOR", _file)
+    fix_shortcut(mode, "$CTOR", "'%s'" % _file)
 
 def enable_kiosk_web(url):
     """Exec chromium in the mode KIOSK"""
