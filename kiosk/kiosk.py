@@ -37,7 +37,6 @@ def load_kiosk_user():
 def autologin_enable(username):
     """Enable autologin for the mode KIOSK"""
     lightdm_clear_autologin()
-    os.makedirs (_lightdm_conf_dir, exist_ok = True)
     with open (_autologin_conf, "w") as f:
         print("[Seat:*]\nautologin-user=%s" % username, file = f)
 
@@ -96,6 +95,8 @@ def disable_ctrl():
 class Kiosk(Gtk.Window):
     def __init__(self):
         """Window with settings of the mode KIOSK"""
+        os.makedirs (_lightdm_conf_dir, exist_ok = True)
+        os.makedirs (_etc_dir, exist_ok = True)
         Gtk.Window.__init__(self, title = "Параметры режима \"КИОСК\"")
         builder = Gtk.Builder()
         builder.add_from_file("kiosk/kiosk.ui")
@@ -120,7 +121,6 @@ class Kiosk(Gtk.Window):
         self.show_all()
         _config.read( _kiosk_conf )
         self.initParams()
-        os.makedirs (_etc_dir, exist_ok = True)
 
     def onClose (self, window, *args):
         """Close window"""
