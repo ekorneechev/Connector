@@ -6,6 +6,7 @@ gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 import configparser
 from urllib.parse import unquote
+import shutil
 
 _kiosk_dir = "/usr/share/connector/kiosk"
 _webkiosk = "%s/connector-webkiosk" % _kiosk_dir
@@ -163,7 +164,13 @@ class Kiosk(Gtk.Window):
             mode = "2"
             uri = self.entryKioskCtor.get_uri()
             if uri:
-                file = unquote( uri.replace( "file://" , "" ))
+                source = unquote( uri.replace( "file://" , "" ))
+                file = "/home/%s/%s" % ( user, os.path.basename( source ) )
+                try:
+                    shutil.copy( source, file )
+                except shutil.SameFileError:
+                    pass
+                shutil.chown ( file, user, user )
                 enable_kiosk_ctor( file )
             else:
                 os.system( "zenity --error --title='Connector Kiosk' --text='No connection file specified!'" )
@@ -189,7 +196,6 @@ class Kiosk(Gtk.Window):
     def initParams (self):
         """Initialisation state of the UI elements"""
         mode = _config.get( "kiosk", "mode" )
-        self.entryKioskCtor.set_current_folder("/etc/kiosk")
         if mode == "1": self.changeKioskAll.set_active(True)
         elif mode == "2":
             self.changeKioskCtor.set_active(True)
@@ -206,6 +212,7 @@ class Kiosk(Gtk.Window):
         if autologin in _true:
             self.checkKioskAutologin.set_active( True )
         user = _config.get( "kiosk", "user" )
+        self.entryKioskCtor.set_current_folder( "/home/%s" % user )
         if user == "kiosk": user = ""
         self.entryKioskUser.set_text( user )
 
