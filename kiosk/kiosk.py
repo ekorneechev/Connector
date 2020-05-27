@@ -154,8 +154,11 @@ class Kiosk(Gtk.Window):
 
     def onSave (self, *args):
         """Action for button 'Save'"""
-        mode = "0"; file = ''; url = ''
+        mode = None
+        file = ''
+        url = ''
         if self.changeKioskOff.get_active():
+            mode = "0"
             disable_kiosk()
         _config['kiosk']['autologin'] = str( self.checkKioskAutologin.get_active() )
         user = self.entryKioskUser.get_text()
@@ -175,9 +178,12 @@ class Kiosk(Gtk.Window):
                 file = "/home/%s/%s" % ( user, os.path.basename( source ) )
                 try:
                     shutil.copy( source, file )
+                    shutil.chown ( file, user, user )
+                except FileNotFoundError as e:
+                    os.system( "zenity --error --title='Connector Kiosk' --text='%s\nFile did not copy to home dir!'" )
+                    file = source
                 except shutil.SameFileError:
                     pass
-                shutil.chown ( file, user, user )
                 enable_kiosk_ctor( file )
             else:
                 os.system( "zenity --error --title='Connector Kiosk' --text='No connection file specified!'" )
