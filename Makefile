@@ -33,6 +33,7 @@ install:
 	install -m755 source/$(TARGET)-check-* $(BASE)
 	mkdir -p $(MAN)
 	install -m644 data/$(TARGET).man $(MAN)/$(TARGET).1
+	install -m644 kiosk/$(TARGET)-kiosk.man $(MAN)/$(TARGET)-kiosk.1
 	mkdir -p $(MIME)/packages
 	install -m644 data/$(TARGET).xml $(MIME)/packages
 	cp -r data/icons $(PREFIX)
@@ -47,6 +48,7 @@ uninstall:
 	rm -f $(PREFIX_BIN)/$(TARGET)
 	rm -rf $(BASE)
 	rm -f $(MAN)/$(TARGET).1
+	rm -f $(MAN)/$(TARGET)-kiosk.1
 	rm -f $(PREFIX)/applications/$(TARGET).desktop
 	rm -f $(MIME)/packages/$(TARGET).xml
 	@if [ -f $(ETC)/$(KIOSK) ]; then mv -f $(ETC)/$(KIOSK) $(ETC)/$(KIOSK).makesave; fi

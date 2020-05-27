@@ -1,0 +1,55 @@
+.\" -*- mode: troff; coding: UTF-8 -*-
+.TH connector-kiosk 1  "May 27, 2020" "version 1.9.0" "CONNECTOR KIOSK"
+.SH NAME
+connector-kiosk \- Mode KIOSK for 'Connector'
+.SH DESCRIPTION
+Configuration file for Connector mode KIOSK - /etc/connector/kiosk.conf
+
+.RE
+\fBmode\fR - one of the following operating modes:
+.RS 3
+"0" - disable
+.RE
+.RS 3
+"1" - enable (run Connector)
+.RE
+.RS 3
+"2" - enable (run saved connection, from 'file')
+.RE
+.RS 3
+"3" - enable WEB-kiosk (open 'url')
+
+.RE
+\fBfile\fR - file for mode=2
+
+.RE
+\fBurl\fR - url for WEB-kiosk
+
+.RE
+\fBuser\fR - user for the mode KIOSK
+
+.RE
+\fBautologin\fR - enable/disable user autologin
+.RE
+.RS 3
+True,Yes - enable
+.RE
+.RS 3
+False,No - disable
+.RE
+
+\fBctrl_disabled\fR - disable key 'Ctrl' in the webkiosk
+.RE
+.RS 3
+True,Yes - disable
+.RE
+.RS 3
+False,No - enable
+.SH SEE ALSO
+\fIconnector\fP(1)
+.SH LINKS
+http://myconnector.ru
+.TP
+http://wiki.myconnector.ru/kiosk
+.SH AUTHOR
+Корнеечев Евгений <ek@myconnector.ru>

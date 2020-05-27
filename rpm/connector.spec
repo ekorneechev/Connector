@@ -53,6 +53,7 @@ mkdir -p %buildroot%basedir/kiosk/
 install -p kiosk/*.{py,ui} %buildroot%basedir/kiosk/
 install -pm755 kiosk/connector* %buildroot%basedir/kiosk/
 install -pDm600 kiosk/kiosk.conf %buildroot%_sysconfdir/%name/kiosk.conf
+install -pDm644 kiosk/%name-kiosk.man %buildroot%_man1dir/%name-kiosk.1
 
 %files -f %name.lang
 %_bindir/%name
@@ -65,7 +66,7 @@ install -pDm600 kiosk/kiosk.conf %buildroot%_sysconfdir/%name/kiosk.conf
 %_datadir/mime/packages/%name.xml
 %_iconsdir/hicolor/*/apps/%name.png
 
-%files kiosk
+%files kiosk  -f %name-kiosk.lang
 %dir %basedir/kiosk
 %basedir/kiosk/*
 %config(noreplace) %_sysconfdir/%name/kiosk.conf
