@@ -29,6 +29,7 @@ Group: Networking/Remote access
 
 Requires: connector = %version-%release
 Requires: chromium xinitrc
+Requires: xterm
 
 %description kiosk
 Files for connector mode "KIOSK"
