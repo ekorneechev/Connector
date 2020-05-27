@@ -161,6 +161,8 @@ class Kiosk(Gtk.Window):
         user = self.entryKioskUser.get_text()
         if user == "": user = "kiosk"
         _config['kiosk']['user'] = user
+        if self.checkKioskAdduser.get_active() and mode != "0":
+            os.system( "xterm -e 'adduser %s'" % user )
         if self.changeKioskAll.get_active():
             mode = "1"
             enable_kiosk()
@@ -193,8 +195,6 @@ class Kiosk(Gtk.Window):
         _config['kiosk']['file'] = file
         _config['kiosk']['url'] = url
         _config['kiosk']['ctrl_disabled'] = str( ctrl )
-        if self.checkKioskAdduser.get_active() and mode != "0":
-            os.system( "adduser %s" % user )
         with open( _kiosk_conf, 'w' ) as configfile:
             _config.write( configfile )
         #else need disable tray...
