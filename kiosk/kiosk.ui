@@ -2,13 +2,6 @@
 <!-- Generated with glade 3.22.1 -->
 <interface>
   <requires lib="gtk+" version="3.20"/>
-  <object class="GtkFileFilter" id="filefilter1">
-    <patterns>
-      <pattern>*.ctor</pattern>
-      <pattern>*.rdp</pattern>
-      <pattern>*.remmina</pattern>
-    </patterns>
-  </object>
   <object class="GtkBox" id="box">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -108,7 +101,6 @@
             <property name="can_focus">False</property>
             <property name="halign">end</property>
             <property name="valign">center</property>
-            <property name="filter">filefilter1</property>
             <property name="show_hidden">True</property>
             <property name="title" translatable="yes">Выбор файла подключения для режима КИОСК</property>
           </object>
