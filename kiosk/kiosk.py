@@ -129,6 +129,7 @@ class Kiosk(Gtk.Window):
         self.entryKioskUser = builder.get_object("entry_kiosk_user")
         self.checkKioskCtrl = builder.get_object("check_kiosk_safe")
         self.checkKioskAutologin = builder.get_object("check_kiosk_autologin")
+        self.checkKioskAdduser = builder.get_object("check_kiosk_adduser")
         box = builder.get_object("box")
         self.add(box)
         self.connect("delete-event", self.onClose)
@@ -192,6 +193,8 @@ class Kiosk(Gtk.Window):
         _config['kiosk']['file'] = file
         _config['kiosk']['url'] = url
         _config['kiosk']['ctrl_disabled'] = str( ctrl )
+        if self.checkKioskAdduser.get_active() and mode != "0":
+            os.system( "adduser %s" % user )
         with open( _kiosk_conf, 'w' ) as configfile:
             _config.write( configfile )
         #else need disable tray...
