@@ -26,7 +26,7 @@ def lightdm_clear_autologin():
     """Disable existing records for autologin-user"""
     clear_cmd = "sed -i \"s/^autologin-user.*/#autologin-user=/\""
     os.system ("%s %s" % (clear_cmd, _ligthdm_conf))
-    if os.path.exists (_lightdm_conf_dir): os.system ("%s %s/*.conf" % (clear_cmd, _lightdm_conf_dir))
+    if os.path.exists (_lightdm_conf_dir): os.system ("%s %s/*.conf 2>/dev/null" % (clear_cmd, _lightdm_conf_dir))
     if os.path.exists (_autologin_conf): os.remove(_autologin_conf)
 
 def load_kiosk_user():
