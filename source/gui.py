@@ -12,7 +12,7 @@ from pathlib import Path
 def viewStatus(bar, message):
     """Функция отображения происходящих действий в строке состояния"""
     message = message[:65] + '...' if len(message) > 65 else message #для обреза длинных сообщений
-    bar.push(bar.get_context_id ("statusbar"), message)    
+    bar.push(bar.get_context_id ("statusbar"), message)
 
 def connectFile(filename, openFile = False):
     """Connect to the server with file .ctor"""
@@ -36,21 +36,21 @@ def connectFileRdp(filename):
     """Connect to the server with file .rdp"""
     if properties.loadFromFile('default.conf')['RDP']:
         tmpfile = WORKFOLDER + ".tmp.rdp"
-        os.system("cp -r %s %s" % (filename, tmpfile))
-        os.system("xfreerdp %s -sec-nla %s" % (tmpfile, STD_TO_LOG))
+        os.system('cp -r "%s" "%s"' % (filename, tmpfile))
+        os.system('xfreerdp "%s" -sec-nla %s' % (tmpfile, STD_TO_LOG))
     else:
-        os.system("remmina --connect %s %s" % (filename, STD_TO_LOG))
+        os.system('remmina --connect "%s" %s' % (filename, STD_TO_LOG))
 
 def connectFileRemmina(filename):
     """Connect to the server with file .remmina"""
-    os.system("remmina --connect %s %s" % (filename, STD_TO_LOG))
+    os.system('remmina --connect "%s" %s' % (filename, STD_TO_LOG))
 
 def openFile(filename):
     """Open file connection (.ctor, .rdp or .remmina)"""
     ext = Path(filename).suffix.lower()
     if ext == ".ctor":
         tmpname = 'tmp_' + os.path.basename(filename)
-        os.system('cp "' + filename + '" "' + WORKFOLDER + tmpname + '"')
+        os.system('cp "%s" "%s%s"' % (filename, WORKFOLDER, tmpname))
         os.chdir(WORKFOLDER)
         connectFile(tmpname, True)
         os.remove(tmpname)
@@ -142,7 +142,7 @@ class Gui(Gtk.Application):
 
         self.liststore_connect = Gtk.ListStore(str, str, str, str)
         self.getSavesFromDb()#запись из файла в ListStore
-        self.filterConnections = self.liststore_connect.filter_new()        
+        self.filterConnections = self.liststore_connect.filter_new()
         self.filterConnections.set_visible_func(self.listFilter) #добавление фильтра для поиска
         self.currentFilter = ''
         self.sortedFiltered = Gtk.TreeModelSort(model = self.filterConnections)
@@ -271,18 +271,18 @@ class Gui(Gtk.Application):
             properties.log.info (msg)
             print ('\n' + msg)
         self.quit()
-    
+
     def onViewAbout(self, *args):
         """Создает диалоговое окно 'О программе'"""
         about = Gtk.AboutDialog(parent = self.window)
         about.set_program_name("Connector")
-        comments = """Программа-фронтэнд для удаленного администрирования 
-                      компьютеров с различными операционными системами. 
+        comments = """Программа-фронтэнд для удаленного администрирования
+                      компьютеров с различными операционными системами.
                       Поддерживается большинство распространенных типов подключения.""".replace('  ','')
         about.set_comments(comments)
         about.set_version(VERSION + " (release: " + RELEASE + ')')
         about.set_website("http://myconnector.ru")
-        about.set_website_label("Сайт проекта") 
+        about.set_website_label("Сайт проекта")
         about.set_copyright("© Корнеечев Е.А., 2014-2020\ne-mail:ek@myconnector.ru\n\nPayPal: ekorneechev@gmail.com\nWMR: R305760666573, WMZ: Z841082507423")
         about.set_logo_icon_name("connector")
         about.run()
@@ -351,7 +351,7 @@ class Gui(Gtk.Application):
         filter_any.set_name("Все файлы")
         filter_any.add_pattern("*")
         dialog.add_filter(filter_any)
-    
+
     def onButtonConnect(self, entry):
         """Сигнал кнопке для быстрого подключения к указанному в entry серверу"""
         server = entry.get_text()
@@ -393,7 +393,7 @@ class Gui(Gtk.Application):
         return protocol
 
     def onButtonPref(self, entry_server, nameConnect = ''):
-        """Дополнительные параметры подключения к серверу. 
+        """Дополнительные параметры подключения к серверу.
         Доступно как с кнопки, так и из пункта меню 'Подключение'"""
         self.pref_window = Gtk.Window()
         self.prefClick = True #для определения нажатия на кнопку Доп. параметры
@@ -451,7 +451,7 @@ class Gui(Gtk.Application):
             if args[8]: self.VNC_showcursor.set_active(True)
             else: self.VNC_showcursor.set_active(False)
 
-        if protocol == 'VMWARE':            
+        if protocol == 'VMWARE':
             self.VMWARE_user.set_text(args[1])
             self.VMWARE_domain.set_text(args[2])
             self.VMWARE_password.set_text(args[3])
@@ -565,7 +565,7 @@ class Gui(Gtk.Application):
             if args[24]: self.RDP_theme.set_active(False)
             if args[25]: self.RDP_wallpapers.set_active(False)
             if args[26]: self.RDP_nsc.set_active(True)
-            if args[27]: 
+            if args[27]:
                 self.RDP_jpeg.set_active(True)
                 self.RDP_jpeg_quality.set_value(args[28])
             if args[29]: self.RDP_usb.set_active(True)
@@ -633,7 +633,7 @@ class Gui(Gtk.Application):
         """В этой функции определяются различные для протоколов параметры"""
         if self.changeProgram(protocol) == "RDP": #remmina
             self.RDP_user = self.pref_builder.get_object("entry_RDP_user")
-            self.RDP_domain = self.pref_builder.get_object("entry_RDP_dom")            
+            self.RDP_domain = self.pref_builder.get_object("entry_RDP_dom")
             self.RDP_color = self.pref_builder.get_object("entry_RDP_color")
             self.RDP_quality = self.pref_builder.get_object("entry_RDP_quality")
             self.RDP_resolution = self.pref_builder.get_object("entry_RDP_resolution")
@@ -649,7 +649,7 @@ class Gui(Gtk.Application):
 
         if self.changeProgram(protocol) == "RDP1": #freerdp
             self.RDP_user = self.pref_builder.get_object("entry_RDP1_user")
-            self.RDP_domain = self.pref_builder.get_object("entry_RDP1_dom")            
+            self.RDP_domain = self.pref_builder.get_object("entry_RDP1_dom")
             self.RDP_color = self.pref_builder.get_object("entry_RDP1_color")
             self.RDP_resolution = self.pref_builder.get_object("entry_RDP1_resolution")
             self.RDP_resolution.set_sensitive(False)
@@ -660,7 +660,7 @@ class Gui(Gtk.Application):
             self.RDP_name_folder.set_current_folder(HOMEFOLDER)
             self.RDP_clipboard = self.pref_builder.get_object("check_RDP1_clipboard")
             self.RDP_guser = self.pref_builder.get_object("entry_RDP1_guser")
-            self.RDP_gdomain = self.pref_builder.get_object("entry_RDP1_gdom") 
+            self.RDP_gdomain = self.pref_builder.get_object("entry_RDP1_gdom")
             self.RDP_gserver = self.pref_builder.get_object("entry_RDP1_gserv")
             self.RDP_gpasswd = self.pref_builder.get_object("entry_RDP1_gpwd")
             self.RDP_admin = self.pref_builder.get_object("check_RDP1_adm")
@@ -698,9 +698,9 @@ class Gui(Gtk.Application):
         if protocol == 'NX':
             self.NX_user = self.pref_builder.get_object("entry_NX_user")
             self.NX_keyfile = self.pref_builder.get_object("check_NX_keyfile")
-            self.NX_path_keyfile = self.pref_builder.get_object("NX_keyfile")   
-            self.NX_path_keyfile.set_current_folder(HOMEFOLDER)        
-            self.NX_quality = self.pref_builder.get_object("entry_NX_quality")            
+            self.NX_path_keyfile = self.pref_builder.get_object("NX_keyfile")
+            self.NX_path_keyfile.set_current_folder(HOMEFOLDER)
+            self.NX_quality = self.pref_builder.get_object("entry_NX_quality")
             self.NX_resolution = self.pref_builder.get_object("entry_NX_resolution")
             self.NX_viewmode = self.pref_builder.get_object("check_NX_fullscreen")
             self.NX_resol_window = self.pref_builder.get_object("radio_NX_resol_window")
@@ -709,8 +709,8 @@ class Gui(Gtk.Application):
             self.NX_clipboard = self.pref_builder.get_object("check_NX_clipboard")
 
         if self.changeProgram(protocol) == "VNC": #remmina
-            self.VNC_user = self.pref_builder.get_object("entry_VNC_user")            
-            self.VNC_color = self.pref_builder.get_object("entry_VNC_color")    
+            self.VNC_user = self.pref_builder.get_object("entry_VNC_user")
+            self.VNC_color = self.pref_builder.get_object("entry_VNC_color")
             self.VNC_quality = self.pref_builder.get_object("entry_VNC_quality")
             self.VNC_viewmode = self.pref_builder.get_object("check_VNC_fullscreen")
             self.VNC_viewonly = self.pref_builder.get_object("check_VNC_viewonly")
@@ -731,20 +731,20 @@ class Gui(Gtk.Application):
             self.XDMCP_once = self.pref_builder.get_object("check_XDMCP_once")
             self.XDMCP_exec = self.pref_builder.get_object("entry_XDMCP_exec")
 
-        if protocol == 'SSH':            
+        if protocol == 'SSH':
             self.SSH_user = self.pref_builder.get_object("entry_SSH_user")
             self.SSH_publickey = self.pref_builder.get_object("radio_SSH_publickey")
             self.SSH_keyfile = self.pref_builder.get_object("radio_SSH_keyfile")
-            self.SSH_path_keyfile = self.pref_builder.get_object("SSH_keyfile")   
+            self.SSH_path_keyfile = self.pref_builder.get_object("SSH_keyfile")
             self.SSH_path_keyfile.set_current_folder(HOMEFOLDER)
             self.SSH_exec = self.pref_builder.get_object("entry_SSH_exec")
             self.SSH_charset = self.pref_builder.get_object("entry_SSH_charset")
 
-        if protocol == 'SFTP':            
+        if protocol == 'SFTP':
             self.SFTP_user = self.pref_builder.get_object("entry_SFTP_user")
             self.SFTP_publickey = self.pref_builder.get_object("radio_SFTP_publickey")
             self.SFTP_keyfile = self.pref_builder.get_object("radio_SFTP_keyfile")
-            self.SFTP_path_keyfile = self.pref_builder.get_object("SFTP_keyfile")   
+            self.SFTP_path_keyfile = self.pref_builder.get_object("SFTP_keyfile")
             self.SFTP_path_keyfile.set_current_folder(HOMEFOLDER)
             self.SFTP_execpath = self.pref_builder.get_object("entry_SFTP_execpath")
             self.SFTP_charset = self.pref_builder.get_object("entry_SFTP_charset")
@@ -780,14 +780,14 @@ class Gui(Gtk.Application):
             domain = self.VMWARE_domain.get_text()
             password = self.VMWARE_password.get_text()
             fullscreen = self.VMWARE_fullscreen.get_active()
-            args = [user, domain, password, fullscreen]            
-        
+            args = [user, domain, password, fullscreen]
+
         if self.changeProgram(protocol) == "RDP":
             user = self.RDP_user.get_text()
             domain = self.RDP_domain.get_text()
             color = self.RDP_color.get_active_id()
             quality = self.RDP_quality.get_active_id()
-            sound = self.RDP_sound.get_active_id() 
+            sound = self.RDP_sound.get_active_id()
             if self.RDP_viewmode.get_active(): viewmode = 3
             else: viewmode = 0
             if self.RDP_resol_default.get_active(): resolution = ''
@@ -812,9 +812,9 @@ class Gui(Gtk.Application):
             else: clipboard = 0
             workarea = 0
             resolution = ''
-            if self.RDP_workarea.get_active(): workarea = 1            
+            if self.RDP_workarea.get_active(): workarea = 1
             elif self.RDP_resol_default.get_active(): pass
-            else: resolution = self.RDP_resolution.get_text()  
+            else: resolution = self.RDP_resolution.get_text()
             if self.RDP_share_folder.get_active(): folder = self.RDP_name_folder.get_filename()
             else: folder = ''
             gserver = self.RDP_gserver.get_text()
@@ -833,7 +833,7 @@ class Gui(Gtk.Application):
             else: microphone = 0
             if self.RDP_multimon.get_active(): multimon = 1
             else: multimon = 0
-            if self.RDP_compression.get_active(): 
+            if self.RDP_compression.get_active():
                 compression = 1
                 compr_level = self.RDP_compr_level.get_active_id()
             else:
@@ -853,7 +853,7 @@ class Gui(Gtk.Application):
             else: wallpapers = 1
             if self.RDP_nsc.get_active(): nsc = 1
             else: nsc = 0
-            if self.RDP_jpeg.get_active(): 
+            if self.RDP_jpeg.get_active():
                 jpeg = 1
                 jpeg_quality = int(self.RDP_jpeg_quality.get_value())
             else:
@@ -883,8 +883,8 @@ class Gui(Gtk.Application):
             if self.RDP_glyph.get_active(): glyph = 1
             else: glyph = 0
             userparams = self.RDP_userparams.get_text()
-            args = [user, domain, fullscreen, clipboard, resolution, color, folder, gserver, guser, gdomain, gpasswd, 
-                    admin, smartcards, printers, sound, microphone, multimon, compression, compr_level, fonts, 
+            args = [user, domain, fullscreen, clipboard, resolution, color, folder, gserver, guser, gdomain, gpasswd,
+                    admin, smartcards, printers, sound, microphone, multimon, compression, compr_level, fonts,
                     aero, drag, animation, theme, wallpapers, nsc, jpeg, jpeg_quality, usb, nla, workarea, span,
                     desktop, down, docs, gdi, reconnect, certignore, pwdsave, pwd, glyph, userparams]
 
@@ -897,13 +897,13 @@ class Gui(Gtk.Application):
             if self.NX_clipboard.get_active(): clipboard = 1
             else: clipboard = 0
             if self.NX_keyfile.get_active(): keyfile = self.NX_path_keyfile.get_filename()
-            else: keyfile = ''      
+            else: keyfile = ''
             if self.NX_viewmode.get_active(): viewmode = 4
             else: viewmode = 1
             if self.NX_resol_window.get_active(): resolution = ''
             else: resolution = self.NX_resolution.get_active_id()
             args = [user, quality, resolution, viewmode, keyfile, crypt, clipboard, _exec]
-        
+
         if self.changeProgram(protocol) == "VNC":
             user = self.VNC_user.get_text()
             quality = self.VNC_quality.get_active_id()
@@ -911,7 +911,7 @@ class Gui(Gtk.Application):
             if self.VNC_crypt.get_active(): crypt = 1
             else: crypt = 0
             if self.VNC_clipboard.get_active(): clipboard = 1
-            else: clipboard = 0   
+            else: clipboard = 0
             if self.VNC_viewmode.get_active(): viewmode = 4
             else: viewmode = 1
             if self.VNC_viewonly.get_active(): viewonly = 1
@@ -938,21 +938,21 @@ class Gui(Gtk.Application):
             else: showcursor = 0
             if self.XDMCP_once.get_active(): once = 1
             else: once = 0
-            args = [color, viewmode, resolution, once, showcursor, _exec]            
+            args = [color, viewmode, resolution, once, showcursor, _exec]
 
         if protocol == 'SSH':
             user = self.SSH_user.get_text()
             charset = self.SSH_charset.get_text()
             if not charset: charset = 'UTF-8'
             _exec = self.SSH_exec.get_text()
-            if self.SSH_publickey.get_active(): 
+            if self.SSH_publickey.get_active():
                 SSH_auth = 2
-            elif self.SSH_keyfile.get_active(): 
-                SSH_auth = 1                
+            elif self.SSH_keyfile.get_active():
+                SSH_auth = 1
             else: SSH_auth = 0
-            if SSH_auth == 1: 
+            if SSH_auth == 1:
                 keyfile = self.SSH_path_keyfile.get_filename()
-            else: keyfile = ''         
+            else: keyfile = ''
             args = [user, SSH_auth, keyfile, charset, _exec]
 
         if protocol == 'SFTP':
@@ -960,15 +960,15 @@ class Gui(Gtk.Application):
             charset = self.SFTP_charset.get_text()
             if not charset: charset = 'UTF-8'
             execpath = self.SFTP_execpath.get_text()
-            if self.SFTP_publickey.get_active(): 
+            if self.SFTP_publickey.get_active():
                 SSH_auth = 2
-            elif self.SFTP_keyfile.get_active(): 
+            elif self.SFTP_keyfile.get_active():
                 SSH_auth = 1
             else: SSH_auth = 0
-            if SSH_auth == 1: 
+            if SSH_auth == 1:
                 keyfile = self.SFTP_path_keyfile.get_filename()
             else: keyfile = ''
-            args = [user, SSH_auth, keyfile, charset, execpath]    
+            args = [user, SSH_auth, keyfile, charset, execpath]
 
         if protocol == 'SPICE':
             if self.SPICE_tls.get_active(): tls = 1
@@ -1010,7 +1010,7 @@ class Gui(Gtk.Application):
 
     def onFolderChoose(self, widget, *args):
         """При нажатии на выбор папки в окне доп. параметров"""
-        widget.set_active(True)       
+        widget.set_active(True)
 
     def createDb(self, filename):
         """Создает пустой файл БД (или любой другой)"""
@@ -1019,21 +1019,21 @@ class Gui(Gtk.Application):
 
     def getServersFromDb(self):
         """Чтение списка ранее посещенных серверов из файла"""
-        try: 
+        try:
             for server in open(WORKFOLDER + "servers.db"):
                 try: #попытка прочитать протокол/сервер
-                    protocol, address = server.strip().split(':::')        
+                    protocol, address = server.strip().split(':::')
                     self.liststore[protocol].append([address])
                 except ValueError:
                     properties.log.warning("Неверный формат строки в файле servers.db; skipped")
         except FileNotFoundError:
             properties.log.warning("Список серверов (servers.db) не найден, создан пустой.")
-            self.createDb("servers.db")            
+            self.createDb("servers.db")
 
     def getSavesFromDb(self):
         """Чтение списка сохраненных соединений из файла"""
         self.liststore_connect.clear()
-        try: 
+        try:
             for connect in open(WORKFOLDER + "connections.db"):
                 try: #попытка прочитать строку с параметрами подключений
                     record = list(connect.strip().split(':::'))
@@ -1042,7 +1042,7 @@ class Gui(Gtk.Application):
                     properties.log.warning("Неверный формат строки в файле connections.db; skipped")
         except FileNotFoundError:
             properties.log.warning("Список подключений (connections.db) не найден, создан пустой.")
-            self.createDb("connections.db") 
+            self.createDb("connections.db")
 
     def writeServerInDb(self, entry):
         """Запись сервера в файл со списком ранее посещенных серверов"""
@@ -1060,7 +1060,7 @@ class Gui(Gtk.Application):
     def onResolutionSet(self, widget):
         """Отображение списка разрешений"""
         try: widget.set_button_sensitivity(Gtk.SensitivityType.ON)
-        except: widget.set_sensitive(True)        
+        except: widget.set_sensitive(True)
 
     def offResolutionSet(self, widget):
         """Скрытие списка разрешений"""
@@ -1091,11 +1091,11 @@ class Gui(Gtk.Application):
 
     def saveFileCtor(self, name, protocol, server):
         """Создание ассоциации файла подключения с подключением в списке"""
-        fileName = [] 
+        fileName = []
         for i in range (12): #для случайного имени сохраняемого файла
             fileName.append(random.choice(['0','1','2','3','4','5','6','7','8','9']))
         fileName = "".join(fileName) + '.ctor'
-        print (name + ':::' + protocol + ':::' + server + ':::' + fileName, 
+        print (name + ':::' + protocol + ':::' + server + ':::' + fileName,
                file = open(WORKFOLDER + "connections.db", "a"))
         properties.log.info("Добавлено новое %s-подключение '%s' (host: %s)", protocol, name, server)
         return fileName
@@ -1111,7 +1111,7 @@ class Gui(Gtk.Application):
             dbFile.write(line)
         dbFile.close()
         properties.log.info("Внесены изменения в подключение '%s'", name)
-        return fileName    
+        return fileName
 
     def onButtonSave(self, entry):
         """Сохранение параметров для дальнейшего подключения с ними"""
@@ -1132,7 +1132,7 @@ class Gui(Gtk.Application):
             os.system("zenity --error --text='\nПодключение с именем \"%s\" уже существует!' --no-wrap --icon-name=connector" % name)
         else:
             parameters.insert(0, server)
-            parameters.insert(0, protocol) #протокол подключения также заносится в файл        
+            parameters.insert(0, protocol) #протокол подключения также заносится в файл
             if self.editClick:#если нажата кнопка Изменить, то пересохранить
                 fileName = self.resaveFileCtor(name, protocol, server)
             else:
@@ -1173,15 +1173,15 @@ class Gui(Gtk.Application):
 
     def onWCEdit(self, name, server, protocol, edit = True):
         """Функция изменения Citrix или WEB-подключения """
-        if protocol == "CITRIX": 
+        if protocol == "CITRIX":
             self.citrixEditClick = edit
             index_tab = 6
-        if protocol == "WEB": 
+        if protocol == "WEB":
             self.webEditClick = edit
             index_tab = 9
         self.main_note.set_current_page(0)
-        self.conn_note.set_current_page(index_tab)       
-        entry_serv = self.builder.get_object("entry_serv_" + protocol)               
+        self.conn_note.set_current_page(index_tab)
+        entry_serv = self.builder.get_object("entry_serv_" + protocol)
         entry_name = self.builder.get_object("entry_" + protocol + "_name")
         entry_serv.set_text(server)
         entry_name.set_text(name)
@@ -1275,7 +1275,7 @@ class Gui(Gtk.Application):
             else: self.dialogIncorrectProgram("open", parameters[0], nameConnect)
 
     class AnalogEntry:
-        """Класс с методами аналогичными методам Gtk.Entry и реализующий 
+        """Класс с методами аналогичными методам Gtk.Entry и реализующий
            инициализацию сохраненных параметров подключения в окне параметров"""
         def __init__(self, name, parameters):
             self.name = name
@@ -1296,7 +1296,7 @@ class Gui(Gtk.Application):
             fileCtor = table[indexRow][3]
             #удаление из базы подключений
             with open(WORKFOLDER + "connections.db") as fileDb:
-                tmpArr = fileDb.readlines()            
+                tmpArr = fileDb.readlines()
             endFile = open(WORKFOLDER + "connections.db", 'w')
             for row in tmpArr:
                 if row.find(fileCtor) == -1:
@@ -1310,7 +1310,7 @@ class Gui(Gtk.Application):
             except: pass
             properties.log.info("Подключение '%s' удалено!", name)
             self.initSubmenuTray()
-        dialog.destroy() 
+        dialog.destroy()
 
     def onPopupSave(self, treeView):
         """Creation desktop-file for the connection from popup menu"""
@@ -1339,13 +1339,13 @@ class Gui(Gtk.Application):
 
     def listFilter(self, model, iter, data):
         """Функция для фильтра подключений в списке"""
-        row = ''        
+        row = ''
         if self.currentFilter == '':
             return True
         else:
-            for i in range(3):            
+            for i in range(3):
                 row += model[iter][i] #объединяем поля в одну строку для поиска в ней символов
-            if row.upper().find(self.currentFilter.upper()) != -1: 
+            if row.upper().find(self.currentFilter.upper()) != -1:
                 return True
             else: return False
 
@@ -1356,7 +1356,7 @@ class Gui(Gtk.Application):
 
     def onSearchReset(self, entry):
         """Сброс фильтрации и очистка поля поиска"""
-        entry.set_text('') 
+        entry.set_text('')
         self.currentFilter = ''
         self.filterConnections.refilter()
 
@@ -1367,7 +1367,7 @@ class Gui(Gtk.Application):
     def onWiki(self, *args):
         """Открытие wiki в Интернете"""
         os.system ('xdg-open "http://wiki.myconnector.ru/"')
-    
+
     def changePage(self, index = 1):
         self.main_note.set_current_page(index)
 
@@ -1431,7 +1431,9 @@ def f_main(pwd="/tmp/", name=""):
             if not os.path.isfile(name): name = pwd + name
             if os.path.isfile(name): openFile(name)
             else:
-                os.system("zenity --error --icon-name=connector --text='\nПроверьте правильность ввода имени подключения или файла с параметрами!' --no-wrap")
+                error = "Проверьте правильность имени сохраненного подключения или файла с параметрами"
+                properties.log.error ( "%s: %s" % ( error, name ) )
+                os.system( "zenity --error --icon-name=connector --text='\n%s!' --no-wrap" % error )
                 exit (1)
     else:
         gui = Gui()
