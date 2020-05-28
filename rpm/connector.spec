@@ -1,9 +1,9 @@
 Name: connector
-Version: 1.9.0.rc0
+Version: 1.9.0.rc1
 Release: alt1
 
 Summary: Remote desktop chooser
-License: GPL
+License: GPL-2.0
 Group: Networking/Remote access
 
 Url: http://myconnector.ru
@@ -55,25 +55,42 @@ install -pm755 kiosk/connector* %buildroot%basedir/kiosk/
 install -pDm600 kiosk/kiosk.conf %buildroot%_sysconfdir/%name/kiosk.conf
 install -pDm644 kiosk/%name-kiosk.man %buildroot%_man1dir/%name-kiosk.1
 
-%files -f %name.lang
+%files
 %_bindir/%name
 %_desktopdir/%name.desktop
 %dir %basedir
 %basedir/data
 %basedir/*.py
 %basedir/%name-check-*
-%_man1dir/*
+%_man1dir/%name.*
 %_datadir/mime/packages/%name.xml
 %_iconsdir/hicolor/*/apps/%name.png
 
-%files kiosk  -f %name-kiosk.lang
+%files kiosk
 %dir %basedir/kiosk
 %basedir/kiosk/*
 %config(noreplace) %_sysconfdir/%name/kiosk.conf
+%_man1dir/%name-kiosk.*
+
 
 %changelog
+* Thu May 28 2020 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.9.0.rc1-alt1
+- Removed the button 'Logout'
+- Disabled TRAY by default
+- kiosk:
+ + Updated WEB-kiosk (incognito and endless cycle)
+ + Added ability to disable 'Ctrl' in the WEB-kiosk
+ + Added ability to set a username, enable its autologin and create it
+ + The connection file is copied to homedir.
+ + Added manual
+- UI fixes for BlueMenta theme
+
 * Fri Feb 14 2020 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.9.0.rc0-alt1
-- [kiosk] Global remaking
+- kiosk remaking (like a wiki altlinux.org/kiosk):
+ + Added subpackage connector-kiosk
+ + root available only
+ + WEB-kiosk through chromium
+ + The connection file is selected from filesystem (not from list connections)
 
 * Tue Feb 4 2020 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.8.8-alt1
 - FreeRDP:
