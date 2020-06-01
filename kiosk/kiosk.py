@@ -154,12 +154,10 @@ class Kiosk(Gtk.Window):
 
     def onSave (self, *args):
         """Action for button 'Save'"""
-        mode = None
+        mode = "0"
         file = ''
         url = ''
-        if self.changeKioskOff.get_active():
-            mode = "0"
-            disable_kiosk()
+        disable_kiosk()
         _config['kiosk']['autologin'] = str( self.checkKioskAutologin.get_active() )
         user = self.entryKioskUser.get_text()
         if user == "": user = "kiosk"
