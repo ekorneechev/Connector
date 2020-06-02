@@ -85,6 +85,7 @@ install -pDm644 kiosk/%name-kiosk.man %buildroot%_man1dir/%name-kiosk.1
 - kiosk:
  + Added disabling the mode before its enabling
  + Dropped chromium from deps
+ + Added --disable-kiosk to connector cmdline
 - Updated man (added key 'quit')
 
 * Thu May 28 2020 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.9.0.rc1-alt1

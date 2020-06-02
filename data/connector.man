@@ -26,6 +26,11 @@ Citrix, VMware и прочие).
 возможно подключение с помощью файлов .ctor, .remmina и .rdp
 .RE
 .PP
+\fB--disable-kiosk\fR
+.RS 3
+отключение режима Киоск (при наличии доступа и пакета \fIconnector-kiosk\fR)
+.RE
+.PP
 \fB-h,\ --help\fR
 .RS 3
 вывести справку
