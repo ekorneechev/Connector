@@ -11,10 +11,17 @@ Source0: %name-%version.tar.gz
 Packager: Korneechev Evgeniy <ekorneechev@altlinux.org>
 
 BuildArch: noarch
-Requires: python3 python3-module-pygobject3 libgtk+3 libgtk+3-gir
-Requires: remmina remmina-plugins tigervnc xfreerdp
-Requires: control xdg-utils
-Requires: python3-module-keyring >= 12.0.0 python3-module-secretstorage
+Requires: control
+Requires: libgtk+3
+Requires: libgtk+3-gir
+Requires: python3-module-pygobject3
+Requires: python3-module-keyring >= 12.0.0
+Requires: python3-module-secretstorage
+Requires: remmina
+Requires: remmina-plugins
+Requires: tigervnc
+Requires: xdg-utils
+Requires: xfreerdp
 
 %define basedir %_datadir/%name
 
@@ -27,7 +34,7 @@ using all of the popular remote desktop protocols
 Summary: Mode "KIOSK" for connector
 Group: Networking/Remote access
 
-Requires: connector = %version-%release
+Requires: connector = %EVR
 Requires: xinitrc
 Requires: xterm
 
@@ -71,7 +78,6 @@ install -pDm644 kiosk/%name-kiosk.man %buildroot%_man1dir/%name-kiosk.1
 %basedir/kiosk/*
 %config(noreplace) %_sysconfdir/%name/kiosk.conf
 %_man1dir/%name-kiosk.*
-
 
 %changelog
 * Thu May 28 2020 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.9.0.rc1-alt1
