@@ -1,5 +1,5 @@
 Name: connector
-Version: 1.9.0.rc1
+Version: 1.9.0.rc2
 Release: alt1
 
 Summary: Remote desktop chooser
@@ -80,6 +80,12 @@ install -pDm644 kiosk/%name-kiosk.man %buildroot%_man1dir/%name-kiosk.1
 %_man1dir/%name-kiosk.*
 
 %changelog
+* Tue Jun 02 2020 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.9.0.rc2-alt1
+- kiosk:
+ + Added disabling the mode before its enabling
+ + Dropped chromium from deps
+- Updated man (added key 'quit')
+
 * Thu May 28 2020 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.9.0.rc1-alt1
 - Removed the button 'Logout'
 - Disabled TRAY by default
