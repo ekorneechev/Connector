@@ -16,8 +16,7 @@
         <property name="can_focus">False</property>
         <property name="halign">start</property>
         <property name="label" translatable="yes"> Данный режим находится на стадии тестирования, подробности на wiki.
- Доступен только для ОС семейства Альт.
- Для настройки запустите программу с правами root.</property>
+ Доступен только для ОС семейства Альт.</property>
         <attributes>
           <attribute name="font-desc" value="Sans 8"/>
           <attribute name="foreground" value="#88888a8a8585"/>
