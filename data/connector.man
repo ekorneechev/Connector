@@ -1,5 +1,5 @@
 .\" -*- mode: troff; coding: UTF-8 -*-
-.TH connector 1  "January 30, 2020" "version 1.8.8" "USER COMMANDS"
+.TH connector 1  "June 2, 2020" "version 1.9.0" "USER COMMANDS"
 .SH NAME
 connector \- Инструмент системного администратора
 .SH SYNOPSIS
@@ -39,7 +39,12 @@ Citrix, VMware и прочие).
 \fB-d,\ --debug\fR
 .RS 3
 запустить в режиме отладки (отображение логов)
+.RE
+.PP
+\fB-q,\ --quit\fR
+.RS 3
+принудительно завершить работу имеющейся копии программы
 .SH LINKS
 http://myconnector.ru/
 .SH AUTHOR
-Корнеечев Евгений <ek@myconnector.ru>
+Korneechev Evgeniy <ek@myconnector.ru>
