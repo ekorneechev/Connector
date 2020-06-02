@@ -76,6 +76,7 @@ install -pDm644 kiosk/%name-kiosk.man %buildroot%_man1dir/%name-kiosk.1
 %files kiosk
 %dir %basedir/kiosk
 %basedir/kiosk/*
+%dir %_sysconfdir/%name
 %config(noreplace) %_sysconfdir/%name/kiosk.conf
 %_man1dir/%name-kiosk.*
 
