@@ -162,7 +162,7 @@ class Kiosk(Gtk.Window):
         user = self.entryKioskUser.get_text()
         if user == "": user = "kiosk"
         _config['kiosk']['user'] = user
-        if self.checkKioskAdduser.get_active() and mode != "0":
+        if self.checkKioskAdduser.get_active() and not self.changeKioskOff.get_active():
             os.system( "xterm -e 'adduser %s'" % user )
         if self.changeKioskAll.get_active():
             mode = "1"
