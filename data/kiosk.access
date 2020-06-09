@@ -1,5 +1,0 @@
-# Enable/disable mode 'KIOSK'
-# Change the key to 1, yes or on to activate the mode.
-# Leave the key blank or enter 0/no/off to turn off the mode.
-
-ACCESS = OFF
