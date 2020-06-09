@@ -1,5 +1,5 @@
 Name: connector
-Version: 1.9.0.rc2
+Version: 1.9.3
 Release: alt1
 
 Summary: Remote desktop chooser
@@ -81,6 +81,9 @@ install -pDm644 kiosk/%name-kiosk.man %buildroot%_man1dir/%name-kiosk.1
 %_man1dir/%name-kiosk.*
 
 %changelog
+* Tue Jun 02 2020 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.9.3-alt1
+- new stable version
+
 * Tue Jun 02 2020 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.9.0.rc2-alt1
 - kiosk:
  + Added disabling the mode before its enabling
