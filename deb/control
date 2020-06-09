@@ -1,5 +1,5 @@
 Package: connector
-Version: 1.8.8-1ubuntu18+mint19
+Version: 1.9.3-1ubuntu18+mint19
 Provides: connector
 Maintainer: Korneechev E. <ek@myconnector.ru>
 Architecture: all

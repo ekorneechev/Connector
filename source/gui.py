@@ -123,7 +123,7 @@ class Gui(Gtk.Application):
         self.prefClick = False
         self.editClick = False
         self.builder = Gtk.Builder()
-        self.builder.add_from_file("data/gui.glade")
+        self.builder.add_from_file("data/gui.ui")
         self.builder.connect_signals(self)
         self.window = self.builder.get_object("main_window")
         self.window.set_title("Connector")
@@ -174,6 +174,12 @@ class Gui(Gtk.Application):
         if self.optionEnabled('CHECK_VERSION'):
             signal.signal(signal.SIGCHLD,signal.SIG_IGN) #чтобы исключить появление процесса-зомби
             subprocess.Popen([MAINFOLDER + "/connector-check-version", VERSION])
+        try:
+            from kiosk import kiosk
+            self.menu_kiosk = self.builder.get_object("menu_file_kiosk")
+            self.menu_kiosk.set_sensitive(kiosk.enabled())
+        except ImportError:
+            properties.log.warning ("The mode KIOSK unavailable, package is not installed.")
 
     def createDesktopFile(self, filename, nameConnect, nameDesktop):
         """Create desktop-file for connection"""
@@ -400,7 +406,7 @@ class Gui(Gtk.Application):
         self.pref_window.set_modal(True)
         self.pref_window.resize(400, 400)
         self.pref_builder = Gtk.Builder()
-        self.pref_builder.add_from_file("data/pref_gui.glade")
+        self.pref_builder.add_from_file("data/pref_gui.ui")
         self.pref_builder.connect_signals(self)
         self.whatProgram = properties.loadFromFile('default.conf')
         name = self.changeProgram(name)
@@ -1365,9 +1371,6 @@ class Gui(Gtk.Application):
     def changePage(self, index = 1):
         self.main_note.set_current_page(index)
 
-    def onLogout(self, *args):
-        os.system("mate-session-save --logout")
-
     def onShowWindow(self, *args):
         if self.window.is_active():
             self.onHideWindow(self)
@@ -1411,6 +1414,11 @@ class Gui(Gtk.Application):
         """Установка значения поля сервер в 'localhost' при выборе 'Локальный каталог'"""
         if self.FS_type.get_active_id() == "file" and not widget.get_text() : widget.set_text("localhost")
 
+    def onKiosk(self, *args):
+        """Button 'Mode KIOSK'"""
+        from kiosk.kiosk import Kiosk
+        window = Kiosk()
+
 def f_main(pwd="/tmp/", name=""):
     """Main function"""
     if name:
@@ -1419,6 +1427,7 @@ def f_main(pwd="/tmp/", name=""):
             properties.log.info ("Запуск сохраненного подключения: " + name)
             connectFile(fileCtor)
         else:
+            if name[0] == "'": name = name.replace( "'", "" ) #for KIOSK (mode=2)
             if not os.path.isfile(name): name = pwd + name
             if os.path.isfile(name): openFile(name)
             else:

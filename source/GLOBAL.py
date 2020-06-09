@@ -4,7 +4,7 @@
 import os, subprocess, signal
 
 #Версия приложения
-VERSION = "1.8.8"
+VERSION = "1.9.3"
 
 #Определение домашней папки пользователя
 HOMEFOLDER = os.getenv('HOME')
@@ -103,56 +103,11 @@ else:
     os.system("zenity --error --no-wrap --icon-name=connector --text='Ваша операционная система не поддерживается.\n"
               "Некоторые функции программы могут не работать!\nПодробнее о поддерживаемых ОС <a href=\"http://wiki.myconnector.ru\">здесь</a>.'")
 
-#Режим киоска:
-DEFAULT['KIOSK'] = 0; DEFAULT['KIOSK_CONN'] = ""
-
-KIOSK= """ &
-while true
-do
-connector
-done
-"""
-
-KIOSK_X = """#!/usr/bin/env xdg-open
-[Desktop Entry]
-Version=1.0
-Type=Application
-Terminal=false
-Icon[ru_RU]=start
-Name[ru_RU]=Ctor_kiosk
-Exec=startx
-Name=Ctor_kiosk
-Icon=start
-"""
-
-KIOSK_ONE=""" &
-while true
-do
-echo > /dev/null
-done
-"""
-
-def CHECK_KIOSK():
-    if OS != "altlinux": return True # Если не ALT - режим "киоска" недоступен
-    try:
-        for _string in open("/etc/connector/kiosk.access"):
-            _string = _string.upper()
-            if _string.find("ACCESS") == 0:
-                _name, _value = _string.strip().split('=')
-                _value = _value.upper().strip()
-                if _value == "1" or _value == "ON" or _value == "YES":
-                    _state = False
-                else: _state = True
-            else: _state = True
-    except FileNotFoundError:
-        _state = True
-    return _state
-
 #Команда подключения сетевых файловых ресурсов
 DEFAULT['FS'] = 'xdg-open'
 
-#По умолчанию индикатор в системном лотке включен
-DEFAULT['TRAY'] = True
+#Tray icon is disabled by default
+DEFAULT['TRAY'] = False
 
 #Проверка обновлений программы
 DEFAULT['CHECK_VERSION'] = True
