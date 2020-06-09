@@ -7,7 +7,6 @@ DATA=$PREFIX/data
 APPS=$SHARE/applications
 MAN=$SHARE/man/man1
 MIME=$SHARE/mime/packages
-OS=$1
 
 rm -rf $TARGET
 mkdir -p $BIN $APPS $PREFIX $MAN $MIME
@@ -25,9 +24,7 @@ mkdir -p $TARGET/DEBIAN
 cd $TARGET
 md5deep -rl usr > DEBIAN/md5sums
 cd ..
-if [ "$OS" == "mint17" -o "$OS" == "ubuntu14" ];
-then cp control.old $TARGET/DEBIAN/control;
-else cp control $TARGET/DEBIAN/; fi;
+cp control $TARGET/DEBIAN/
 sed -i "s\Installed-Size:\Installed-Size: $INST_SIZE\g" $TARGET/DEBIAN/control
 fakeroot dpkg-deb --build $TARGET
 mv $TARGET.deb ${TARGET}_`grep Version $TARGET/DEBIAN/control | sed s/Version:\ //g`_all.deb
