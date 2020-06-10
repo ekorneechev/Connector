@@ -230,15 +230,15 @@ class Properties(Gtk.Window):
         self.defaultConf['LOG'] = self.checkLog.get_active()
         self.defaultConf['SORT'] = self.combo_sort.get_active_id()
         saveInFile('default.conf',self.defaultConf)
-        ui.viewStatus(self.statusbar, "Настройки сохранены в файле default.conf...")
+        myconnector.ui.viewStatus(self.statusbar, "Настройки сохранены в файле default.conf...")
         log.info("Новые настройки для программы сохранены в файле default.conf.")
         if not self.checkLog.get_active(): log.warning("ВЕДЕНИЕ ЖУРНАЛА ПОСЛЕ ПЕРЕЗАПУСКА ПРОГРАММЫ БУДЕТ ОТКЛЮЧЕНО!")
-        ui.Gui.initLabels(True, self.labelRDP, self.labelVNC, self.labelFS)
+        myconnector.ui.Gui.initLabels(True, self.labelRDP, self.labelVNC, self.labelFS)
         self.conn_note.set_current_page(int(self.defaultConf['TAB']))
         if self.defaultConf['TRAY']:
             if self.main_window.trayDisplayed:
                 self.main_window.iconTray.show()
-            else: self.main_window.trayDisplayed = ui.Gui.initTray(self.main_window)
+            else: self.main_window.trayDisplayed = myconnector.ui.Gui.initTray(self.main_window)
         else:
             try: self.main_window.iconTray.hide()
             except: pass
@@ -251,7 +251,7 @@ class Properties(Gtk.Window):
         if response == Gtk.ResponseType.OK:
             f = open(WORKFOLDER + filename,"w")
             f.close()
-            ui.viewStatus(self.statusbar, "Выполнено, изменения вступят в силу после перезапуска...")
+            myconnector.ui.viewStatus(self.statusbar, "Выполнено, изменения вступят в силу после перезапуска...")
             log.info("Очищен файл %s", filename)
         dialog.destroy()
 

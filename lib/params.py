@@ -7,7 +7,7 @@ import signal
 
 VERSION = "2.0.rc0"
 HOMEFOLDER = os.getenv('HOME')
-WORKFOLDER = "%s/.connector" % HOMEFOLDER #TODO: rename
+WORKFOLDER = "%s/.connector/" % HOMEFOLDER #TODO: rename
 MAINFOLDER = "/usr/share/myconnector"
 ICONFOLDER = "%s/icons" % MAINFOLDER
 UIFOLDER = "%s/ui" % MAINFOLDER
