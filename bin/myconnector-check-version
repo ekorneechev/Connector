@@ -4,10 +4,10 @@ from os import system
 from sys import argv, exit
 
 def main():
-    currentVersion = check_output("curl https://raw.githubusercontent.com/ekorneechev/Connector/master/VERSION 2>/dev/null; exit 0",shell=True, universal_newlines=True).strip()
+    currentVersion = check_output( "curl https://raw.githubusercontent.com/MyConnector/MyConnector/master/VERSION 2>/dev/null; exit 0", shell=True, universal_newlines=True ).strip()
     if currentVersion and currentVersion != argv[1] and len(currentVersion) <= 8: #8 - чтобы не оповещало о RC
-        system("zenity --notification --window-icon=connector --text='Программа Connector\n"
-               "Ваша версия программы устарела!\nТекущая: %s\nАктуальная: %s'" % (argv[1], currentVersion))
+        system( "zenity --notification --window-icon=connector --text='Программа MyConnector\n"
+               "Ваша версия программы устарела!\nТекущая: %s\nАктуальная: %s'" % ( argv[1], currentVersion ))
     exit(0)
 
 if __name__ == "__main__":
