@@ -10,9 +10,7 @@ mkdir -p $USR $PYTHON
 cp -r ../bin/ $USR/
 cp -r ../share/ $USR/
 chmod 755 $BIN/*
-cd $BIN
-ln -s $TARGET connector
-cd - > /dev/null
+ln -s $TARGET $BIN/connector
 mv $BIN/$TARGET-check-* $USR/share/$TARGET
 cp ../lib/* $PYTHON/
 mkdir -p $MAN
@@ -26,4 +24,4 @@ cp control $TARGET/DEBIAN/
 sed -i "s\Installed-Size:\Installed-Size: $INST_SIZE\g" $TARGET/DEBIAN/control
 fakeroot dpkg-deb --build $TARGET
 mv $TARGET.deb ${TARGET}_`grep Version $TARGET/DEBIAN/control | sed s/Version:\ //g`_all.deb
-#rm -r $TARGET/
+rm -r $TARGET/
