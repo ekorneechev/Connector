@@ -1,6 +1,7 @@
-Package: connector
-Version: 1.9.3-1ubuntu18+mint19
+Package: myconnector
+Version: 2.0.rc0-1
 Provides: connector
+Conflicts: connector (<<2.0)
 Maintainer: Korneechev E. <ek@myconnector.ru>
 Architecture: all
 Section: net
