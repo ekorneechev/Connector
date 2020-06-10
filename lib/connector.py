@@ -1,8 +1,9 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-import time, properties
-from GLOBAL import *
+import time
+import myconnector.options as options
+from myconnector.params import *
 from re import escape
 try: import keyring
 except Exception as error:
@@ -10,9 +11,9 @@ except Exception as error:
         def set_password(self, *args): pass
         def get_password(self, *args): return ""
     keyring = Keyring()
-    properties.log.warning("Python 3: %s. Password storage is not available for FreeRDP." % error)
+    options.log.warning("Python 3: %s. Password storage is not available for FreeRDP." % error)
 
-try: enableLog = properties.loadFromFile('default.conf')['LOG']
+try: enableLog = options.loadFromFile('default.conf')['LOG']
 except KeyError: enableLog = DEFAULT['LOG']
 if enableLog: STD_TO_LOG = ' >> ' + STDLOGFILE + " 2>&1 &"
 else: STD_TO_LOG = ' &'
@@ -32,7 +33,7 @@ class Remmina:
     def create_cfg_file(self, args):
         """Создание файла конфигурации для соединения"""
         protocol = self.cfg['protocol']
-        server, login = properties.searchSshUser(args[0])
+        server, login = options.searchSshUser(args[0])
         self.cfg['server'] = server
         self.cfg['name'] = args.pop()
         if protocol == 'RDP':
@@ -106,9 +107,9 @@ class Remmina:
     def start(self, parameters):
         """Запуск remmina с необходимыми параметрами"""
         self.create_cfg_file(parameters)
-        properties.log.info ("Remmina: подключение по протоколу %s к серверу: %s", self.cfg['protocol'], self.cfg['server'])
+        options.log.info ("Remmina: подключение по протоколу %s к серверу: %s", self.cfg['protocol'], self.cfg['server'])
         command = 'remmina -c "' + WORKFOLDER + self.f_name + '"'
-        properties.log.info (command)
+        options.log.info (command)
         os.system('cd $HOME && ' + command + STD_TO_LOG)
 
 class VncRemmina(Remmina):
@@ -125,7 +126,7 @@ class VncViewer:
     """Класс для настройки VNC-соединения через VncViewer"""
     def start(self, args):
         if type(args) == str:
-            properties.log.info ("VNC: подключение к серверу %s", args)
+            options.log.info ("VNC: подключение к серверу %s", args)
             command = 'vncviewer ' + args
             server = args
         else:
@@ -133,8 +134,8 @@ class VncViewer:
             if args[1]: command += args[1]
             if args[2]: command += args[2]
             server = args[0]
-        properties.log.info ("VNC: подключение к серверу %s. Команда запуска:", server)
-        properties.log.info (command)
+        options.log.info ("VNC: подключение к серверу %s. Команда запуска:", server)
+        options.log.info (command)
         os.system(command + STD_TO_LOG)
 
 class RdpRemmina(Remmina):
@@ -187,7 +188,7 @@ class XFreeRdp:
                 if args[26]: command += ' /nsc'
                 if args[27]: command += ' /jpeg'
                 if args[28]: command += ' /jpeg-quality:' + str(args[28])
-                if args[29] and properties.checkPath(USBPATH): command += ' /drive:MEDIA,' + USBPATH
+                if args[29] and options.checkPath(USBPATH): command += ' /drive:MEDIA,' + USBPATH
                 if args[31]: command += ' /workarea'
                 try: #Добавлена совместимость с предыдущей версией; < 1.4.0
                     if args[32]: command += ' /span'
@@ -220,20 +221,20 @@ class XFreeRdp:
                 except IndexError: pass
 
                 server = args[0]
-                properties.log.info ("FreeRDP: подключение к серверу %s. Команда запуска:", server)
+                options.log.info ("FreeRDP: подключение к серверу %s. Команда запуска:", server)
                 try: cmd2log = command.replace("/p:" + command.split("/p:")[1].split(' ')[0],"/p:<hidden>")
                 except: cmd2log = command
-                properties.log.info (cmd2log)
+                options.log.info (cmd2log)
                 os.system(command + STD_TO_LOG)
                 if enableLog:
                     signal.signal(signal.SIGCHLD,signal.SIG_IGN)
                     subprocess.Popen([MAINFOLDER + "/connector-check-xfreerdp-errors"])
             else:
-                properties.log.warning ("FreeRDP version below 1.2!")
+                options.log.warning ("FreeRDP version below 1.2!")
                 os.system("zenity --error --text='\nУстановленная версия FreeRDP (%s) не соответствует минимальным требованиям,"
                           " подробности <a href=\"%s\">здесь</a>!' --no-wrap --icon-name=connector" % (freerdpVersion, _link))
         else:
-            properties.log.warning ("FreeRDP is not installed!")
+            options.log.warning ("FreeRDP is not installed!")
             os.system("zenity --error --text='\nFreeRDP не установлен, подробности <a href=\"%s\">здесь</a>!' --no-wrap --icon-name=connector" % _link)
 
 class NxRemmina(Remmina):
@@ -288,24 +289,24 @@ class Vmware:
         if vmwareCheck():
             if type(args) == str:
                 command = 'vmware-view -q -s ' + args
-                properties.log.info ("VMware: подключение к серверу %s", args)
-                properties.log.info (command)
+                options.log.info ("VMware: подключение к серверу %s", args)
+                options.log.info (command)
             else:
                 command = 'vmware-view -q -s ' + args[0]
                 if args[1]: command += ' -u ' + args[1]
                 if args[2]: command += ' -d ' + args[2]
                 if args[4]: command += ' --fullscreen'
-                properties.log.info ("VMware: подключение к серверу %s", args[0])
-                properties.log.info (command)
+                options.log.info ("VMware: подключение к серверу %s", args[0])
+                options.log.info (command)
                 if args[3]: command += ' -p ' + args[3]
             os.system(command + STD_TO_LOG)
         else:
-            properties.log.warning ("VMware Horizon Client is not installed!")
+            options.log.warning ("VMware Horizon Client is not installed!")
             os.system("zenity --error --text='\nVMware Horizon Client не установлен!' --no-wrap --icon-name=connector")
 
 def _missCitrix():
     """Message for user, if Citrix Receiver not installed"""
-    properties.log.warning ("Citrix Receiver is not installed!")
+    options.log.warning ("Citrix Receiver is not installed!")
     os.system("zenity --error --text='\nCitrix Receiver не установлен!' --no-wrap --icon-name=connector")
 
 class Citrix:
@@ -315,14 +316,14 @@ class Citrix:
             addr = args[0]
         else: addr = args
         if citrixCheck():
-            properties.log.info ("Citrix: подключение к серверу %s", addr)
+            options.log.info ("Citrix: подключение к серверу %s", addr)
             os.system('/opt/Citrix/ICAClient/util/storebrowse --addstore ' + addr + STD_TO_LOG)
             os.system('/opt/Citrix/ICAClient/selfservice --icaroot /opt/Citrix/ICAClient' + STD_TO_LOG)
         else: _missCitrix()
 
     def preferences():
         if citrixCheck():
-            properties.log.info ("Citrix: открытие настроек программы")
+            options.log.info ("Citrix: открытие настроек программы")
             os.system('/opt/Citrix/ICAClient/util/configmgr --icaroot /opt/Citrix/ICAClient' + STD_TO_LOG)
         else: _missCitrix()
 
@@ -335,14 +336,14 @@ class Web:
         if  not addr.find("://") != -1:
             addr = "http://" + addr
         command = 'xdg-open "' + addr + '"'
-        properties.log.info ("WWW: открытие web-ресурса %s", addr)
-        properties.log.info (command)
+        options.log.info ("WWW: открытие web-ресурса %s", addr)
+        options.log.info (command)
         os.system ( command + STD_TO_LOG)
 
 class FileServer:
     """Класс для настройки подключения к файловому серверу"""
     def start(self, args):
-        _exec = properties.loadFromFile('default.conf')['FS'] + ' "'
+        _exec = options.loadFromFile('default.conf')['FS'] + ' "'
         if type(args) == str:
             if  not args.find("://") != -1:
                 os.system("zenity --warning --text='Введите протокол подключения!\n"
@@ -360,13 +361,13 @@ class FileServer:
             command += server
             if args[3]: command += '/' + args[3]
             command += '"'
-        properties.log.info ("Открытие файлового сервера %s. Команда запуска:", server)
-        properties.log.info (command)
+        options.log.info ("Открытие файлового сервера %s. Команда запуска:", server)
+        options.log.info (command)
         os.system (command + STD_TO_LOG)
 
 def definition(protocol):
     """Функция определения протокола"""
-    whatProgram = properties.loadFromFile('default.conf') #загрузка параметров с выбором программ для подключения
+    whatProgram = options.loadFromFile('default.conf') #загрузка параметров с выбором программ для подключения
     if protocol == 'VNC':
         if whatProgram['VNC'] == 0:
             connect = VncRemmina()
@@ -432,7 +433,7 @@ def passwd(server, username):
     #если окно zenity закрыто или нажата кнопка Отмена, делаем raise ошибки FreeRDP
     except ValueError:
         password = " /CANCELED"
-        properties.log.warning ("FreeRDP: подключение отменено пользователем (окно zenity закрыто или нажата кнопка Отмена):")
+        options.log.warning ("FreeRDP: подключение отменено пользователем (окно zenity закрыто или нажата кнопка Отмена):")
     return password
 
 if __name__ == "__main__":

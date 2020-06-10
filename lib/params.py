@@ -1,10 +1,12 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-import os, subprocess, signal
+import os
+import subprocess
+import signal
 
 #Версия приложения
-VERSION = "1.9.3"
+VERSION = "2.0.rc0"
 
 #Определение домашней папки пользователя
 HOMEFOLDER = os.getenv('HOME')
@@ -24,7 +26,7 @@ DESKTOP_INFO = """#!/usr/bin/env xdg-open
 Version=1.0
 Type=Application
 Terminal=false
-Icon=connector
+Icon=myconnector
 """
 
 #Запускаемый файл приложения

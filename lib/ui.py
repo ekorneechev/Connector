@@ -5,8 +5,8 @@ import gi
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gdk, GdkPixbuf, GLib, Gio
 import random
-from ctor import *
-from GLOBAL import *
+from myconnector.connector import *
+from myconnector.params import *
 from pathlib import Path
 
 def viewStatus(bar, message):
