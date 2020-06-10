@@ -5,52 +5,52 @@
   <object class="GtkImage" id="CITRIX_image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">CITRIX.png</property>
+    <property name="pixbuf">../icons/CITRIX.png</property>
   </object>
   <object class="GtkImage" id="FS_image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">FS.png</property>
+    <property name="pixbuf">../icons/FS.png</property>
   </object>
   <object class="GtkImage" id="NX_image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">NX.png</property>
+    <property name="pixbuf">../icons/NX.png</property>
   </object>
   <object class="GtkImage" id="RDP_image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">RDP.png</property>
+    <property name="pixbuf">../icons/RDP.png</property>
   </object>
   <object class="GtkImage" id="SFTP_image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">SFTP.png</property>
+    <property name="pixbuf">../icons/SFTP.png</property>
   </object>
   <object class="GtkImage" id="SPICE_image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">SPICE.png</property>
+    <property name="pixbuf">../icons/SPICE.png</property>
   </object>
   <object class="GtkImage" id="SSH_image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">SSH.png</property>
+    <property name="pixbuf">../icons/SSH.png</property>
   </object>
   <object class="GtkImage" id="VMWARE_image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">VMWARE.png</property>
+    <property name="pixbuf">../icons/VMWARE.png</property>
   </object>
   <object class="GtkImage" id="VNC_image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">VNC.png</property>
+    <property name="pixbuf">../icons/VNC.png</property>
   </object>
   <object class="GtkImage" id="XDMCP_image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">XDMCP.png</property>
+    <property name="pixbuf">../icons/XDMCP.png</property>
   </object>
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
@@ -134,7 +134,7 @@
   <object class="GtkImage" id="image4">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="pixbuf">WEB.png</property>
+    <property name="pixbuf">../icons/WEB.png</property>
   </object>
   <object class="GtkImage" id="image_param_tray">
     <property name="visible">True</property>
@@ -805,7 +805,7 @@
                                     <property name="tooltip_text" translatable="yes">Поддерживается следующий формат:
  - сервер
  - сервер:порт</property>
-                                    <property name="primary_icon_pixbuf">RDP.png</property>
+                                    <property name="primary_icon_pixbuf">../icons/RDP.png</property>
                                     <property name="placeholder_text" translatable="yes">Введите адрес сервера...</property>
                                     <property name="completion">completion_RDP</property>
                                     <signal name="activate" handler="onButtonConnect" swapped="no"/>
@@ -924,7 +924,7 @@
                                     <property name="tooltip_text" translatable="yes">Поддерживается следующий формат:
  - сервер
  - сервер:порт</property>
-                                    <property name="primary_icon_pixbuf">NX.png</property>
+                                    <property name="primary_icon_pixbuf">../icons/NX.png</property>
                                     <property name="placeholder_text" translatable="yes">Введите адрес сервера...</property>
                                     <property name="completion">completion_NX</property>
                                     <signal name="activate" handler="onButtonConnect" swapped="no"/>
@@ -1076,7 +1076,7 @@
                                     <property name="tooltip_text" translatable="yes">Поддерживается следующий формат:
  - сервер
  - сервер:порт</property>
-                                    <property name="primary_icon_pixbuf">VNC.png</property>
+                                    <property name="primary_icon_pixbuf">../icons/VNC.png</property>
                                     <property name="primary_icon_tooltip_text" translatable="yes">Поддерживается следующий формат:
  - сервер
  - сервер:порт</property>
@@ -1203,7 +1203,7 @@
                                     <property name="tooltip_text" translatable="yes">Поддерживается следующий формат:
  - сервер
  - сервер:порт</property>
-                                    <property name="primary_icon_pixbuf">XDMCP.png</property>
+                                    <property name="primary_icon_pixbuf">../icons/XDMCP.png</property>
                                     <property name="placeholder_text" translatable="yes">Введите адрес сервера...</property>
                                     <property name="completion">completion_XDMCP</property>
                                     <signal name="activate" handler="onButtonConnect" swapped="no"/>
@@ -1326,7 +1326,7 @@
                                     <property name="tooltip_text" translatable="yes">Поддерживается следующий формат:
  - сервер
  - сервер:порт</property>
-                                    <property name="primary_icon_pixbuf">SPICE.png</property>
+                                    <property name="primary_icon_pixbuf">../icons/SPICE.png</property>
                                     <property name="placeholder_text" translatable="yes">Введите адрес сервера...</property>
                                     <property name="completion">completion_SPICE</property>
                                     <signal name="activate" handler="onButtonConnect" swapped="no"/>
@@ -1449,7 +1449,7 @@
                                     <property name="tooltip_text" translatable="yes">Поддерживается следующий формат:
  - сервер
  - сервер:порт</property>
-                                    <property name="primary_icon_pixbuf">VMWARE.png</property>
+                                    <property name="primary_icon_pixbuf">../icons/VMWARE.png</property>
                                     <property name="placeholder_text" translatable="yes">Введите адрес сервера...</property>
                                     <property name="completion">completion_VMWARE</property>
                                     <signal name="activate" handler="onButtonConnect" swapped="no"/>
@@ -1571,7 +1571,7 @@
                                     <property name="tooltip_text" translatable="yes">Поддерживается следующий формат:
  - сервер
  - сервер:порт</property>
-                                    <property name="primary_icon_pixbuf">CITRIX.png</property>
+                                    <property name="primary_icon_pixbuf">../icons/CITRIX.png</property>
                                     <property name="placeholder_text" translatable="yes">Введите адрес сервера...</property>
                                     <property name="completion">completion_CITRIX</property>
                                     <signal name="activate" handler="onButtonConnect" swapped="no"/>
@@ -1723,7 +1723,7 @@
                                     <property name="tooltip_text" translatable="yes">Поддерживается следующий формат:
  - [имя@]сервер
  - [имя@]сервер:порт</property>
-                                    <property name="primary_icon_pixbuf">SSH.png</property>
+                                    <property name="primary_icon_pixbuf">../icons/SSH.png</property>
                                     <property name="placeholder_text" translatable="yes">Введите адрес сервера...</property>
                                     <property name="completion">completion_SSH</property>
                                     <signal name="activate" handler="onButtonConnect" swapped="no"/>
@@ -1846,7 +1846,7 @@
                                     <property name="tooltip_text" translatable="yes">Поддерживается следующий формат:
  - [имя@]сервер
  - [имя@]сервер:порт</property>
-                                    <property name="primary_icon_pixbuf">SFTP.png</property>
+                                    <property name="primary_icon_pixbuf">../icons/SFTP.png</property>
                                     <property name="placeholder_text" translatable="yes">Введите адрес сервера...</property>
                                     <property name="completion">completion_SFTP</property>
                                     <signal name="activate" handler="onButtonConnect" swapped="no"/>
@@ -1960,7 +1960,7 @@
                                 <property name="can_focus">True</property>
                                 <property name="tooltip_text" translatable="yes">Необходим следующий формат:
 [Протокол://] Адрес [:Порт]</property>
-                                <property name="primary_icon_pixbuf">WEB.png</property>
+                                <property name="primary_icon_pixbuf">../icons/WEB.png</property>
                                 <property name="placeholder_text" translatable="yes">Введите адрес сервера...</property>
                                 <property name="completion">completion_WEB</property>
                                 <signal name="activate" handler="onButtonConnect" swapped="no"/>
@@ -2129,7 +2129,7 @@
                                     <property name="can_focus">True</property>
                                     <property name="tooltip_text" translatable="yes">Поддерживается следующий формат:
  - протокол://[имя_пользователя@]сервер[:порт]/[папка]</property>
-                                    <property name="primary_icon_pixbuf">FS.png</property>
+                                    <property name="primary_icon_pixbuf">../icons/FS.png</property>
                                     <property name="placeholder_text" translatable="yes">Введите адрес сервера...</property>
                                     <property name="completion">completion_FS</property>
                                     <signal name="activate" handler="onButtonConnect" swapped="no"/>

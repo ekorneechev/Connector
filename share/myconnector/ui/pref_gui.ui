@@ -30,7 +30,7 @@
               <object class="GtkImage" id="image6">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="pixbuf">SFTP.png</property>
+                <property name="pixbuf">../icons/SFTP.png</property>
                 <property name="icon_size">1</property>
               </object>
               <packing>
@@ -463,7 +463,7 @@
           <object class="GtkImage" id="image4spice">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="pixbuf">SPICE.png</property>
+            <property name="pixbuf">../icons/SPICE.png</property>
             <property name="icon_size">1</property>
           </object>
           <packing>
@@ -826,7 +826,7 @@
           <object class="GtkImage" id="image5">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="pixbuf">SSH.png</property>
+            <property name="pixbuf">../icons/SSH.png</property>
             <property name="icon_size">1</property>
           </object>
           <packing>
@@ -1253,7 +1253,7 @@
           <object class="GtkImage" id="image7">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="pixbuf">VMWARE.png</property>
+            <property name="pixbuf">../icons/VMWARE.png</property>
             <property name="icon_size">1</property>
           </object>
           <packing>
@@ -1577,7 +1577,7 @@
           <object class="GtkImage" id="image8">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="pixbuf">VNC.png</property>
+            <property name="pixbuf">../icons/VNC.png</property>
             <property name="icon_size">1</property>
           </object>
           <packing>
@@ -1879,7 +1879,7 @@
           <object class="GtkImage" id="image12">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="pixbuf">FS.png</property>
+            <property name="pixbuf">../icons/FS.png</property>
             <property name="icon_size">1</property>
           </object>
           <packing>
@@ -2342,7 +2342,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="margin_left">2</property>
-                    <property name="pixbuf">RDP.png</property>
+                    <property name="pixbuf">../icons/RDP.png</property>
                     <property name="icon_size">1</property>
                   </object>
                   <packing>
@@ -2967,7 +2967,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="margin_left">2</property>
-                    <property name="pixbuf">RDP.png</property>
+                    <property name="pixbuf">../icons/RDP.png</property>
                     <property name="icon_size">1</property>
                   </object>
                   <packing>
@@ -3370,7 +3370,7 @@
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="margin_left">2</property>
-                    <property name="pixbuf">RDP.png</property>
+                    <property name="pixbuf">../icons/RDP.png</property>
                     <property name="icon_size">1</property>
                   </object>
                   <packing>
@@ -3900,7 +3900,7 @@
           <object class="GtkImage" id="image3">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="pixbuf">VNC.png</property>
+            <property name="pixbuf">../icons/VNC.png</property>
             <property name="icon_size">1</property>
           </object>
           <packing>
@@ -4387,7 +4387,7 @@
           <object class="GtkImage" id="image2">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="pixbuf">NX.png</property>
+            <property name="pixbuf">../icons/NX.png</property>
             <property name="icon_size">1</property>
           </object>
           <packing>
@@ -4931,7 +4931,7 @@
           <object class="GtkImage" id="image4">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="pixbuf">XDMCP.png</property>
+            <property name="pixbuf">../icons/XDMCP.png</property>
             <property name="icon_size">1</property>
           </object>
           <packing>
@@ -5418,7 +5418,7 @@
           <object class="GtkImage" id="image1">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
-            <property name="pixbuf">RDP.png</property>
+            <property name="pixbuf">../icons/RDP.png</property>
             <property name="icon_size">1</property>
           </object>
           <packing>

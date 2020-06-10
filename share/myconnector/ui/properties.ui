@@ -166,7 +166,7 @@
                   <object class="GtkImage" id="image_RDP">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="pixbuf">RDP.png</property>
+                    <property name="pixbuf">../icons/RDP.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -262,7 +262,7 @@
                   <object class="GtkImage" id="image_VNC">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="pixbuf">VNC.png</property>
+                    <property name="pixbuf">../icons/VNC.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -358,7 +358,7 @@
                   <object class="GtkImage" id="image_FS">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="pixbuf">FS.png</property>
+                    <property name="pixbuf">../icons/FS.png</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
