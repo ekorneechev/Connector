@@ -3,7 +3,7 @@ TARGET=myconnector
 USR=$TARGET/usr
 BIN=$USR/bin
 MAN=$USR/share/man/man1
-PYTHON=$USR/lib/python3/dist-packages/$TARGET
+PYTHON=$USR/lib/python3/dist-packages/$TARGET #TODO fix for Alt
 
 rm -rf $TARGET
 mkdir -p $USR $PYTHON

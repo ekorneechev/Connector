@@ -1,16 +1,17 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-import gi, os
+import gi
 gi.require_version('Gtk', '3.0')
+import os
 from gi.repository import Gtk
 import configparser
 from urllib.parse import unquote
 import shutil
 
-_kiosk_dir = "/usr/share/connector/kiosk"
-_webkiosk = "%s/connector-webkiosk" % _kiosk_dir
-_kiosk_conf = "/etc/connector/kiosk.conf"
+_kiosk_dir = "/usr/share/myconnector/kiosk"
+_webkiosk = "%s/myconnector-webkiosk" % _kiosk_dir
+_kiosk_conf = "/etc/myconnector/kiosk.conf"
 _config = configparser.ConfigParser( interpolation = None )
 _ligthdm_conf = "/etc/lightdm/lightdm.conf"
 _lightdm_conf_dir = "%s.d" % _ligthdm_conf
@@ -52,23 +53,23 @@ test -n "$e" && `$e`""" % shortcut, file = f)
     os.chmod(kiosk_exec, 0o755)
 
 def enable_kiosk( mode = "kiosk" ):
-    """Exec connector in the mode KIOSK"""
+    """Exec MyConnector in the mode KIOSK"""
     username = load_kiosk_user()
     if _config['kiosk']['autologin'] == "True":
         autologin_enable( username )
     else:
         lightdm_clear_autologin()
-    shortcut = "connector-%s.desktop" % mode
+    shortcut = "myconnector-%s.desktop" % mode
     os.system ("install -m644 %s/%s %s/" % (_kiosk_dir, shortcut, _etc_dir))
     create_kiosk_exec(username, shortcut)
 
 def fix_shortcut(mode, _input, output):
     """Replace variable in the desktop files"""
-    shortcut = "%s/connector-%s.desktop" % (_etc_dir, mode)
+    shortcut = "%s/myconnector-%s.desktop" % (_etc_dir, mode)
     os.system ("sed -i \"s|\%s|%s|g\" %s" % (_input, output, shortcut))
 
 def enable_kiosk_ctor(_file):
-    """Exec connector (with ctor-file) in the mode KIOSK"""
+    """Exec MyConnector (with ctor-file) in the mode KIOSK"""
     mode = "kiosk"
     enable_kiosk(mode)
     fix_shortcut(mode, "$CTOR", "'%s'" % _file)
@@ -83,7 +84,7 @@ def disable_kiosk():
     """Disable the mode KIOSK"""
     lightdm_clear_autologin()
     os.system("rm -f /etc/X11/xsession.user.d/%s" % load_kiosk_user())
-    os.system("rm -f %s/connector-*.desktop" % _etc_dir)
+    os.system("rm -f %s/myconnector-*.desktop" % _etc_dir)
 
 def enable_ctrl():
     """Enable key 'Ctrl' in webkiosk"""
@@ -114,12 +115,12 @@ class Kiosk(Gtk.Window):
         os.makedirs (_etc_dir, exist_ok = True)
         Gtk.Window.__init__(self, title = "Параметры режима \"КИОСК\"")
         builder = Gtk.Builder()
-        builder.add_from_file("kiosk/kiosk.ui")
+        builder.add_from_file("/usr/share/myconnector/ui/kiosk.ui")
         builder.connect_signals(self)
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_resizable(False)
         self.set_modal(True)
-        self.set_default_icon_name("connector")
+        self.set_default_icon_name("myconnector")
         self.changeKioskOff = builder.get_object("radio_kiosk_off")
         self.changeKioskAll = builder.get_object("radio_kiosk_all")
         self.changeKioskCtor = builder.get_object("radio_kiosk_ctor")
@@ -178,13 +179,13 @@ class Kiosk(Gtk.Window):
                     shutil.copy( source, file )
                     shutil.chown ( file, user, user )
                 except FileNotFoundError as e:
-                    os.system( "zenity --error --title='Connector Kiosk' --text='%s\nFile did not copy to home dir!'" )
+                    os.system( "zenity --error --title='MyConnector Kiosk' --icon-name=myconnector--text='%s\nFile did not copy to home dir!'" )
                     file = source
                 except shutil.SameFileError:
                     pass
                 enable_kiosk_ctor( file )
             else:
-                os.system( "zenity --error --title='Connector Kiosk' --text='No connection file specified!'" )
+                os.system( "zenity --error --title='MyConnector Kiosk' --icon-name=myconnector --text='No connection file specified!'" )
                 return 1
         if self.changeKioskWeb.get_active():
             mode = "3"

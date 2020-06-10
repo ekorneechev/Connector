@@ -9,6 +9,7 @@ APS = $(PREFIX)/applications
 MIME = $(PREFIX)/mime
 ETC = /etc/$(TARGET)
 KIOSK = kiosk.conf
+KIOSK_DIR = $(BASE)/kiosk
 DATESTAMP = `git log --pretty="%cd" --date=short -1 | sed s/-//g 2>/dev/null`
 GLOBAL = lib/params.py
 
@@ -22,20 +23,23 @@ help:
 	@echo "... clean (сброс изменений в исходниках)"
 
 install:
-	apt-get remove connector myconnector -y
+	#apt-get remove connector myconnector -y
 	sed -i s#/usr/share#$(PREFIX)#g $(GLOBAL) kiosk/*
 	sed -i s#/usr/bin/$(TARGET)#$(PREFIX_BIN)/$(TARGET)#g $(GLOBAL) share/applications/$(TARGET).desktop kiosk/*
 	sed -i s#$(PREFIX)/applications#/usr/share/applications#g $(GLOBAL)
 	@if [ -n "$(DATESTAMP)" ]; then sed -i s#git#git.$(DATESTAMP)#g $(GLOBAL); fi
 	install -m755 bin/$(TARGET) $(PREFIX_BIN)
 	cp -r share $(LOCAL)
-	mkdir -p $(PYTHON) $(MAN) $(ETC)
+	mkdir -p $(PYTHON)/kiosk $(MAN) $(ETC) $(KIOSK_DIR)
 	install -m644 lib/*.py $(PYTHON)
 	install -m755 bin/$(TARGET)-check-* $(BASE)
 	install -m644 $(TARGET).man $(MAN)/$(TARGET).1
-	# TODO install -m644 kiosk/$(TARGET)-kiosk.man $(MAN)/$(TARGET)-kiosk.1
-	# TODO cp -r kiosk $(BASE)
-	# TODO @if [ ! -f $(ETC)/$(KIOSK) ]; then install -m600 kiosk/$(KIOSK) $(ETC); fi
+	install -m644 kiosk/$(TARGET)-kiosk.man $(MAN)/$(TARGET)-kiosk.1
+	install -m644 kiosk/*.desktop $(KIOSK_DIR)
+	install -m755 kiosk/$(TARGET)-*kiosk $(KIOSK_DIR)
+	install -m644 kiosk/*.py $(PYTHON)/kiosk
+	install -m644 kiosk/*.ui $(BASE)/ui
+	@if [ ! -f $(ETC)/$(KIOSK) ]; then install -m600 kiosk/$(KIOSK) $(ETC); fi
 	update-mime-database $(MIME)
 	update-desktop-database
 	make clean

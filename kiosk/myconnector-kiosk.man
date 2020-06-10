@@ -1,9 +1,9 @@
 .\" -*- mode: troff; coding: UTF-8 -*-
-.TH connector-kiosk 1  "May 27, 2020" "version 1.9.0" "CONNECTOR KIOSK"
+.TH myconnector-kiosk 1  "May 27, 2020" "version 1.9.0" "MYCONNECTOR KIOSK"
 .SH NAME
-connector-kiosk \- Mode KIOSK for 'Connector'
+myconnector-kiosk \- Mode KIOSK for 'MyConnector'
 .SH DESCRIPTION
-Configuration file for Connector mode KIOSK - /etc/connector/kiosk.conf
+Configuration file for Connector mode KIOSK - /etc/myconnector/kiosk.conf
 
 .RE
 \fBmode\fR - one of the following operating modes:
@@ -11,7 +11,7 @@ Configuration file for Connector mode KIOSK - /etc/connector/kiosk.conf
 "0" - disable
 .RE
 .RS 3
-"1" - enable (run Connector)
+"1" - enable (run MyConnector)
 .RE
 .RS 3
 "2" - enable (run saved connection, from 'file')
@@ -46,7 +46,7 @@ True,Yes - disable
 .RS 3
 False,No - enable
 .SH SEE ALSO
-\fIconnector\fP(1)
+\fImyconnector\fP(1)
 .SH LINKS
 http://myconnector.ru
 .TP

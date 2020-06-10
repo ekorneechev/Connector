@@ -1,9 +1,0 @@
-[Desktop Entry]
-Version=1.0
-Name=Connector - WEB-kiosk
-Name[ru_RU]=Connector - WEB-киоск
-Exec=/usr/share/connector/kiosk/connector-webkiosk $URL
-Icon=connector
-Terminal=false
-Type=Application
-Categories=Network;RemoteAccess;

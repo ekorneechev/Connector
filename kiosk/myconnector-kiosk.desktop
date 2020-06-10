@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.0
+Name=MyConnector - KIOSK
+Exec=/usr/share/myconnector/kiosk/myconnector-kiosk $CTOR
+Icon=myconnector
+Terminal=false
+Type=Application
+Categories=Network;RemoteAccess;
+Name[ru]=MyConnector - режим КИОСК

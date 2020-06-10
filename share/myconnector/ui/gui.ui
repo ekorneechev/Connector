@@ -60,7 +60,7 @@
   <object class="GtkImage" id="image2">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="icon_name">connector</property>
+    <property name="icon_name">myconnector</property>
   </object>
   <object class="GtkMenu" id="menu_popup">
     <property name="visible">True</property>
@@ -406,7 +406,7 @@
     <property name="can_focus">False</property>
     <property name="resizable">False</property>
     <property name="window_position">center</property>
-    <property name="icon_name">connector</property>
+    <property name="icon_name">myconnector</property>
     <signal name="delete-event" handler="onHideWindow" swapped="no"/>
     <child type="titlebar">
       <placeholder/>
@@ -478,7 +478,7 @@
                         <property name="sensitive">False</property>
                         <property name="can_focus">False</property>
                         <property name="tooltip_text" translatable="yes">Настройка режима КИОСК
-(доступно при наличии прав root и пакета connector-kiosk)</property>
+(доступно при наличии прав root и пакета myconnector-kiosk)</property>
                         <property name="label" translatable="yes">Режим КИОСК</property>
                         <signal name="activate" handler="onKiosk" swapped="no"/>
                       </object>
@@ -2401,7 +2401,7 @@
   <object class="GtkImage" id="tray_select_image">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="icon_name">connector</property>
+    <property name="icon_name">myconnector</property>
   </object>
   <object class="GtkMenu" id="menu_tray">
     <property name="visible">True</property>
