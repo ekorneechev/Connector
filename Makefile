@@ -1,13 +1,16 @@
-TARGET = connector
-PREFIX_BIN = /usr/local/bin
-PREFIX = /usr/local/share
+TARGET = myconnector
+LOCAL = /usr/local
+PREFIX = $(LOCAL)/share
 BASE = $(PREFIX)/$(TARGET)
+PREFIX_BIN = $(LOCAL)/bin
+PYTHON = /usr/lib/python3/dist-packages/$(TARGET)
 MAN = $(PREFIX)/man/man1
 APS = $(PREFIX)/applications
 MIME = $(PREFIX)/mime
 ETC = /etc/$(TARGET)
 KIOSK = kiosk.conf
 DATESTAMP = `git log --pretty="%cd" --date=short -1 | sed s/-//g 2>/dev/null`
+GLOBAL = lib/params.py
 
 .PHONY: help install uninstall clean remove
 
@@ -19,37 +22,30 @@ help:
 	@echo "... clean (сброс изменений в исходниках)"
 
 install:
-	apt-get remove connector -y
-	sed -i s#/usr/share#$(PREFIX)#g source/* data/$(TARGET).desktop kiosk/*
-	sed -i s#/usr/bin/$(TARGET)#$(PREFIX_BIN)/$(TARGET)#g source/* data/$(TARGET).desktop kiosk/*
-	sed -i s#$(PREFIX)/applications#/usr/share/applications#g source/GLOBAL.py
-	@if [ -n "$(DATESTAMP)" ]; then sed -i s#git#git.$(DATESTAMP)#g source/GLOBAL.py; fi
-	install -m755 source/$(TARGET) $(PREFIX_BIN)
-	mkdir -p $(APS)
-	install -m644 data/$(TARGET).desktop $(APS)
-	mkdir -p $(BASE)/data/
-	install -m644 data/*.png data/*.ui $(BASE)/data/
-	install -m644 source/*.py $(BASE)
-	install -m755 source/$(TARGET)-check-* $(BASE)
-	mkdir -p $(MAN)
-	install -m644 data/$(TARGET).man $(MAN)/$(TARGET).1
-	install -m644 kiosk/$(TARGET)-kiosk.man $(MAN)/$(TARGET)-kiosk.1
-	mkdir -p $(MIME)/packages
-	install -m644 data/$(TARGET).xml $(MIME)/packages
-	cp -r data/icons $(PREFIX)
-	cp -r kiosk $(BASE)
-	mkdir -p $(ETC)
-	@if [ ! -f $(ETC)/$(KIOSK) ]; then install -m600 kiosk/$(KIOSK) $(ETC); fi
+	apt-get remove connector myconnector -y
+	sed -i s#/usr/share#$(PREFIX)#g $(GLOBAL) kiosk/*
+	sed -i s#/usr/bin/$(TARGET)#$(PREFIX_BIN)/$(TARGET)#g $(GLOBAL) share/applications/$(TARGET).desktop kiosk/*
+	sed -i s#$(PREFIX)/applications#/usr/share/applications#g $(GLOBAL)
+	@if [ -n "$(DATESTAMP)" ]; then sed -i s#git#git.$(DATESTAMP)#g $(GLOBAL); fi
+	install -m755 bin/$(TARGET) $(PREFIX_BIN)
+	cp -r share $(LOCAL)
+	mkdir -p $(PYTHON) $(MAN) $(ETC)
+	install -m644 lib/*.py $(PYTHON)
+	install -m755 bin/$(TARGET)-check-* $(BASE)
+	install -m644 $(TARGET).man $(MAN)/$(TARGET).1
+	# TODO install -m644 kiosk/$(TARGET)-kiosk.man $(MAN)/$(TARGET)-kiosk.1
+	# TODO cp -r kiosk $(BASE)
+	# TODO @if [ ! -f $(ETC)/$(KIOSK) ]; then install -m600 kiosk/$(KIOSK) $(ETC); fi
 	update-mime-database $(MIME)
 	update-desktop-database
 	make clean
 
 uninstall:
 	rm -f $(PREFIX_BIN)/$(TARGET)
-	rm -rf $(BASE)
+	rm -rf $(BASE) $(PYTHON)
 	rm -f $(MAN)/$(TARGET).1
 	rm -f $(MAN)/$(TARGET)-kiosk.1
-	rm -f $(PREFIX)/applications/$(TARGET).desktop
+	rm -f $(APS)/$(TARGET).desktop
 	rm -f $(MIME)/packages/$(TARGET).xml
 	@if [ -f $(ETC)/$(KIOSK) ]; then mv -f $(ETC)/$(KIOSK) $(ETC)/$(KIOSK).makesave; fi
 	find $(PREFIX)/icons/hicolor -name $(TARGET).png -delete
@@ -57,9 +53,9 @@ uninstall:
 	update-desktop-database
 
 clean:
-	sed -i s#$(PREFIX)#/usr/share#g source/* data/$(TARGET).desktop kiosk/*
-	sed -i s#$(PREFIX_BIN)/$(TARGET)#/usr/bin/$(TARGET)#g source/* data/$(TARGET).desktop kiosk/*
-	@if [ -n "$(DATESTAMP)" ]; then sed -i s#.$(DATESTAMP)##g source/GLOBAL.py; fi
+	sed -i s#$(PREFIX)#/usr/share#g $(GLOBAL) kiosk/*
+	sed -i s#$(PREFIX_BIN)/$(TARGET)#/usr/bin/$(TARGET)#g $(GLOBAL) share/applications/$(TARGET).desktop kiosk/*
+	@if [ -n "$(DATESTAMP)" ]; then sed -i s#.$(DATESTAMP)##g $(GLOBAL); fi
 
 remove:
 	make uninstall
