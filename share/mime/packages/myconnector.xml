@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+   <mime-type type="application/x-myconnector">
+     <comment>MyConnector connection file</comment>
+     <comment xml:lang="ru">Файл подключения MyConnector</comment>
+     <glob pattern="*.ctor"/>
+     <icon name="myconnector"/>
+   </mime-type>
+</mime-info>

@@ -1,12 +1,12 @@
 [Desktop Entry]
 Version=1.0
-Name=Connector
-Name[ru]=Connector
+Name=MyConnector
+Name[ru]=MyConnector
 Comment=Connect to various servers
 Comment[ru]=Подключение к различным серверам
-Exec=/usr/bin/connector %f
-Icon=connector
+Exec=/usr/bin/myconnector %f
+Icon=myconnector
 Terminal=false
 Type=Application
 Categories=Network;RemoteAccess;
-MimeType=application/x-connector;application/x-remmina;
+MimeType=application/x-connector;application/x-remmina;application/x-myconnector;
