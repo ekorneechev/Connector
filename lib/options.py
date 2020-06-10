@@ -59,7 +59,7 @@ def loadFromFile(fileName, window = None):
 try: enableLog = loadFromFile('default.conf')['LOG']
 except KeyError: enableLog = DEFAULT['LOG']
 if enableLog:
-    log = logging.getLogger("connector")
+    log = logging.getLogger( "myconnector" )
     logging.basicConfig (
         filename = LOGFILE,
         format = "--- %(levelname)-10s %(asctime)s --- %(message)s",
@@ -162,8 +162,8 @@ class Properties(Gtk.Window):
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_resizable(False)
         self.set_modal(True)
-        self.set_default_icon_name("connector")
-        builder.add_from_file("data/properties.ui")
+        self.set_default_icon_name( "myconnector" )
+        builder.add_from_file( "%s/properties.ui" % UIFOLDER )
         builder.connect_signals(self)
         box = builder.get_object("box_properties")
         cancel = builder.get_object("button_cancel")

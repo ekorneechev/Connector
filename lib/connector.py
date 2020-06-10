@@ -228,14 +228,14 @@ class XFreeRdp:
                 os.system(command + STD_TO_LOG)
                 if enableLog:
                     signal.signal(signal.SIGCHLD,signal.SIG_IGN)
-                    subprocess.Popen([MAINFOLDER + "/connector-check-xfreerdp-errors"])
+                    subprocess.Popen([MAINFOLDER + "/myconnector-check-xfreerdp-errors"])
             else:
                 options.log.warning ("FreeRDP version below 1.2!")
-                os.system("zenity --error --text='\nУстановленная версия FreeRDP (%s) не соответствует минимальным требованиям,"
-                          " подробности <a href=\"%s\">здесь</a>!' --no-wrap --icon-name=connector" % (freerdpVersion, _link))
+                os.system( "zenity --error --text='\nУстановленная версия FreeRDP (%s) не соответствует минимальным требованиям,"
+                          " подробности <a href=\"%s\">здесь</a>!' --no-wrap --icon-name=myconnector" % ( freerdpVersion, _link ))
         else:
             options.log.warning ("FreeRDP is not installed!")
-            os.system("zenity --error --text='\nFreeRDP не установлен, подробности <a href=\"%s\">здесь</a>!' --no-wrap --icon-name=connector" % _link)
+            os.system( "zenity --error --text='\nFreeRDP не установлен, подробности <a href=\"%s\">здесь</a>!' --no-wrap --icon-name=myconnector" % _link )
 
 class NxRemmina(Remmina):
     """Класс для настройки NX-соединения через Remmina"""
@@ -302,12 +302,12 @@ class Vmware:
             os.system(command + STD_TO_LOG)
         else:
             options.log.warning ("VMware Horizon Client is not installed!")
-            os.system("zenity --error --text='\nVMware Horizon Client не установлен!' --no-wrap --icon-name=connector")
+            os.system( "zenity --error --text='\nVMware Horizon Client не установлен!' --no-wrap --icon-name=myconnector" )
 
 def _missCitrix():
     """Message for user, if Citrix Receiver not installed"""
     options.log.warning ("Citrix Receiver is not installed!")
-    os.system("zenity --error --text='\nCitrix Receiver не установлен!' --no-wrap --icon-name=connector")
+    os.system( "zenity --error --text='\nCitrix Receiver не установлен!' --no-wrap --icon-name=myconnector" )
 
 class Citrix:
     """Класс для настройки ICA-соединения к Citrix-серверу"""
@@ -346,8 +346,8 @@ class FileServer:
         _exec = options.loadFromFile('default.conf')['FS'] + ' "'
         if type(args) == str:
             if  not args.find("://") != -1:
-                os.system("zenity --warning --text='Введите протокол подключения!\n"
-                          "Или выберите из списка в дополнительных параметрах.' --no-wrap --icon-name=connector")
+                os.system( "zenity --warning --text='Введите протокол подключения!\n"
+                          "Или выберите из списка в дополнительных параметрах.' --no-wrap --icon-name=myconnector" )
                 return 1
             else:
                 command = _exec + args + '"'

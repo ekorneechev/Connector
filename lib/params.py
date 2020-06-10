@@ -5,17 +5,12 @@ import os
 import subprocess
 import signal
 
-#Версия приложения
 VERSION = "2.0.rc0"
-
-#Определение домашней папки пользователя
 HOMEFOLDER = os.getenv('HOME')
-
-#Директория в домашней папке пользователя для хранения настроек и подключений
-WORKFOLDER = HOMEFOLDER + '/.connector/'
-
-#Папка программы
-MAINFOLDER = "/usr/share/connector"
+WORKFOLDER = "%s/.connector" % HOMEFOLDER #TODO: rename
+MAINFOLDER = "/usr/share/myconnector"
+ICONFOLDER = "%s/icons" % MAINFOLDER
+UIFOLDER = "%s/ui" % MAINFOLDER
 
 #Установки по умолчанию для параметров программы (какие приложения использовать)
 DEFAULT = dict(RDP = 1, VNC = 1, TAB = '0', MAIN = '0')
@@ -30,12 +25,12 @@ Icon=myconnector
 """
 
 #Запускаемый файл приложения
-EXEC = "/usr/bin/connector "
+EXEC = "/usr/bin/myconnector "
 
 #Ведение логов
 DEFAULT['LOG'] = True
 LOGFOLDER = WORKFOLDER + "logs/"
-LOGFILE = LOGFOLDER + "connector.log"
+LOGFILE = LOGFOLDER + "myconnector.log"
 STDLOGFILE = LOGFOLDER + "all.log"
 
 #Определение путей до папок пользователя
@@ -63,7 +58,7 @@ except FileNotFoundError:
 
 if OS == "altlinux":
     #Версия и релиз приложения
-    _package_info = subprocess.check_output("rpm -q connector 2>/dev/null; exit 0",shell=True, universal_newlines=True).strip().split('-')
+    _package_info = subprocess.check_output("rpm -q myconnector 2>/dev/null; exit 0",shell=True, universal_newlines=True).strip().split('-')
     try: RELEASE = _package_info[2].split('.')[0]
     except: RELEASE = "git"
 
@@ -82,12 +77,12 @@ if OS == "altlinux":
 
 elif OS == "linuxmint" or OS == "ubuntu":
     try:
-        _package_install = subprocess.check_output("dpkg-query -s connector | head -2 | tail -1 2>/dev/null;\
+        _package_install = subprocess.check_output("dpkg-query -s myconnector | head -2 | tail -1 2>/dev/null;\
                                                     exit 0",shell=True, universal_newlines=True).strip().split(' ')[1]
     except IndexError: _package_install = 'deinstall'
     if _package_install == 'deinstall': RELEASE = "git"
     else:
-        _package_info = subprocess.check_output("dpkg-query -W connector 2>/dev/null;\
+        _package_info = subprocess.check_output("dpkg-query -W myconnector 2>/dev/null;\
                                                 exit 0",shell=True, universal_newlines=True).strip().split('\t')
         try:
             _package_info = _package_info[1].split("-")
@@ -102,8 +97,8 @@ elif OS == "linuxmint" or OS == "ubuntu":
 
 else:
     VERSION = RELEASE = USBPATH = CITRIX_CHECK = SCARD = ""
-    os.system("zenity --error --no-wrap --icon-name=connector --text='Ваша операционная система не поддерживается.\n"
-              "Некоторые функции программы могут не работать!\nПодробнее о поддерживаемых ОС <a href=\"http://wiki.myconnector.ru\">здесь</a>.'")
+    os.system( "zenity --error --no-wrap --icon-name=myconnector --text='Ваша операционная система не поддерживается.\n"
+              "Некоторые функции программы могут не работать!\nПодробнее о поддерживаемых ОС <a href=\"http://wiki.myconnector.ru\">здесь</a>.'" )
 
 #Команда подключения сетевых файловых ресурсов
 DEFAULT['FS'] = 'xdg-open'

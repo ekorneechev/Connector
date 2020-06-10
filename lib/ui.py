@@ -17,24 +17,24 @@ def viewStatus(bar, message):
 def connectFile(filename, openFile = False):
     """Connect to the server with file .ctor"""
     try:
-        parameters = properties.loadFromFile(filename)
+        parameters = options.loadFromFile(filename)
         if parameters != None:
             protocol = parameters.pop(0)
             if openFile: parameters.append(parameters[0]) #если открывается файл .ctor, то заголовок окна - адрес сервера
-            else: parameters.append(properties.nameFromFilename(filename))
-            if protocol == 'RDP' and properties.loadFromFile('default.conf')['RDP']:
+            else: parameters.append(options.nameFromFilename(filename))
+            if protocol == 'RDP' and options.loadFromFile('default.conf')['RDP']:
                 try: parameters[40] = keyring.get_password(str(parameters[0]),str(parameters[1]))
                 except: pass
             connect = definition(protocol)
             connect.start(parameters)
     except (IndexError, KeyError):
-        properties.log.exception ("""Ошибка в файле %s: либо он создан в старой версии connector,
-                                     либо программа по умолчанию выбрана отличная от сохраненного файла""" % filename.replace("tmp_",""))
-        os.system("zenity --error --icon-name=connector --text='\nПроверьте настройки программ по умолчанию.' --no-wrap")
+        options.log.exception ( """Ошибка в файле %s: либо он создан в старой версии MyConnector,
+                                     либо программа по умолчанию выбрана отличная от сохраненного файла""" % filename.replace( "tmp_","" ))
+        os.system( "zenity --error --icon-name=myconnector --text='\nПроверьте настройки программ по умолчанию.' --no-wrap" )
 
 def connectFileRdp(filename):
     """Connect to the server with file .rdp"""
-    if properties.loadFromFile('default.conf')['RDP']:
+    if options.loadFromFile('default.conf')['RDP']:
         tmpfile = WORKFOLDER + ".tmp.rdp"
         os.system('cp -r "%s" "%s"' % (filename, tmpfile))
         os.system('xfreerdp "%s" -sec-nla %s' % (tmpfile, STD_TO_LOG))
@@ -57,8 +57,8 @@ def openFile(filename):
         os.chdir(MAINFOLDER)
     elif ext == ".rdp": connectFileRdp(filename)
     elif ext == ".remmina": connectFileRemmina(filename)
-    else: os.system("zenity --error --icon-name=connector --text='\nНеподдерживаемый тип файла!' --no-wrap")
-    properties.log.info ("Открыт файл " + filename)
+    else: os.system( "zenity --error --icon-name=myconnector --text='\nНеподдерживаемый тип файла!' --no-wrap" )
+    options.log.info ("Открыт файл " + filename)
 
 def initSignal(gui):
     """Функция обработки сигналов SIGHUP, SIGINT и SIGTERM
@@ -83,16 +83,16 @@ def initSignal(gui):
 
 def startDebug():
     """Start show log files online (uses xterm)"""
-    if properties.enableLog:
-        os.system('for i in all connector; do xterm -T "Connector DEBUG - $i.log" -e "tail -f %s$i.log" & done' % LOGFOLDER)
-        properties.log.info ("The program is running in debug mode.")
+    if options.enableLog:
+        os.system( 'for i in all myconnector; do xterm -T "MyConnector DEBUG - $i.log" -e "tail -f %s$i.log" & done' % LOGFOLDER )
+        options.log.info ("The program is running in debug mode.")
     else:
-        os.system("zenity --error --icon-name=connector --text='\nВедение логов отключено. Отладка невозможна!' --no-wrap")
+        os.system( "zenity --error --icon-name=myconnector --text='\nВедение логов отключено. Отладка невозможна!' --no-wrap" )
 
 def quitApp():
     """Quit application"""
-    properties.log.info ("The connector is forcibly closed (from cmdline).")
-    os.system("pkill connector")
+    options.log.info ( "The MyConnector is forcibly closed (from cmdline)." )
+    os.system( "pkill myconnector" ) #TODO: check kill for old name (from link)
 
 class TrayIcon:
     """Класс, описывающий индикатор и меню в трее (пока только для MATE)
@@ -102,7 +102,7 @@ class TrayIcon:
         self.ind = Gtk.StatusIcon()
         self.ind.set_from_icon_name(icon)
         self.ind.connect('popup-menu', self.onTrayMenu)
-        self.ind.set_tooltip_text("Программа Connector")
+        self.ind.set_tooltip_text("Программа MyConnector")
 
     def onTrayMenu(self, icon, button, time):
         self.menu.popup(None, None, Gtk.StatusIcon.position_menu, icon,
@@ -119,14 +119,14 @@ class TrayIcon:
 
 class Gui(Gtk.Application):
     def __init__(self):
-        Gtk.Application.__init__(self, application_id="ru.myconnector.Connector", flags=Gio.ApplicationFlags.FLAGS_NONE)
+        Gtk.Application.__init__(self, application_id="ru.myconnector.MyConnector", flags=Gio.ApplicationFlags.FLAGS_NONE)
         self.prefClick = False
         self.editClick = False
         self.builder = Gtk.Builder()
-        self.builder.add_from_file("data/gui.ui")
+        self.builder.add_from_file( "%s/gui.ui" % UIFOLDER )
         self.builder.connect_signals(self)
         self.window = self.builder.get_object("main_window")
-        self.window.set_title("Connector")
+        self.window.set_title("MyConnector")
         self.statusbar = self.builder.get_object("statusbar")
         self.liststore = {'RDP' : self.builder.get_object("liststore_RDP"),
                           'VNC' : self.builder.get_object("liststore_VNC"),
@@ -146,7 +146,7 @@ class Gui(Gtk.Application):
         self.filterConnections.set_visible_func(self.listFilter) #добавление фильтра для поиска
         self.currentFilter = ''
         self.sortedFiltered = Gtk.TreeModelSort(model = self.filterConnections)
-        try: default_sort = int(properties.loadFromFile('default.conf')['SORT'])
+        try: default_sort = int(options.loadFromFile('default.conf')['SORT'])
         except KeyError: default_sort = 0
         self.sortedFiltered.set_sort_column_id(default_sort, Gtk.SortType.ASCENDING)
         self.treeview = self.builder.get_object("treeview_connections")
@@ -157,9 +157,9 @@ class Gui(Gtk.Application):
         self.getServersFromDb()
         self.citrixEditClick = False
         self.webEditClick = False
-        try: default_tab = properties.loadFromFile('default.conf')['TAB']
+        try: default_tab = options.loadFromFile('default.conf')['TAB']
         except KeyError: default_tab = '0'
-        try: default_main = properties.loadFromFile('default.conf')['MAIN']
+        try: default_main = options.loadFromFile('default.conf')['MAIN']
         except KeyError: default_main = '0'
         self.main_note = self.builder.get_object("main_note")
         self.main_note.set_current_page(int(default_main))
@@ -173,13 +173,13 @@ class Gui(Gtk.Application):
         if self.optionEnabled('TRAY'): self.trayDisplayed = self.initTray()
         if self.optionEnabled('CHECK_VERSION'):
             signal.signal(signal.SIGCHLD,signal.SIG_IGN) #чтобы исключить появление процесса-зомби
-            subprocess.Popen([MAINFOLDER + "/connector-check-version", VERSION])
+            subprocess.Popen([ "%s/myconnector-check-version" % MAINFOLDER, VERSION ])
         try:
             from kiosk import kiosk
             self.menu_kiosk = self.builder.get_object("menu_file_kiosk")
             self.menu_kiosk.set_sensitive(kiosk.enabled())
         except ImportError:
-            properties.log.warning ("The mode KIOSK unavailable, package is not installed.")
+            options.log.warning ("The mode KIOSK unavailable, package is not installed.")
 
     def createDesktopFile(self, filename, nameConnect, nameDesktop):
         """Create desktop-file for connection"""
@@ -213,7 +213,7 @@ class Gui(Gtk.Application):
     def initTray(self):
         """Инициализация индикатора в системном лотке"""
         self.menu_tray = self.builder.get_object("menu_tray")
-        self.iconTray = TrayIcon("connector", self.menu_tray)
+        self.iconTray = TrayIcon( "myconnector", self.menu_tray )
         self.iconTray.connect(self.onShowWindow)
         self.initSubmenuTray()
         self.menu_tray.show_all()
@@ -229,7 +229,7 @@ class Gui(Gtk.Application):
             name, protocol = record[0], record[1]
             item = Gtk.ImageMenuItem(name)
             image = Gtk.Image()
-            image.set_from_pixbuf(GdkPixbuf.Pixbuf.new_from_file("data/" + protocol + ".png"))
+            image.set_from_pixbuf( GdkPixbuf.Pixbuf.new_from_file( "%s/%s.png" % ( ICONFOLDER, protocol )))
             item.set_image(image)
             item.connect("activate",self.onTrayConnect, name)
             self.tray_submenu.append(item)
@@ -241,19 +241,19 @@ class Gui(Gtk.Application):
 
     def onTrayConnect(self, menuitem, name):
         """Функция запуска сохраненного подключения из трея"""
-        fileCtor = properties.filenameFromName(name)
+        fileCtor = options.filenameFromName(name)
         if fileCtor: connectFile(fileCtor)
 
     def optionEnabled(self, option):
         try:
-            check = properties.loadFromFile('default.conf')[option]
+            check = options.loadFromFile('default.conf')[option]
         except KeyError:
             check = DEFAULT[option]
         return check
 
     def initLabels(self, rdp, vnc, fs):
         """Отбражает на главном окне выбранную программу для подключения RDP, VNC и FS"""
-        whatProgram = properties.loadFromFile('default.conf')
+        whatProgram = options.loadFromFile('default.conf')
         if whatProgram['RDP']: rdp.set_text('(FreeRDP)')
         else: rdp.set_text('(Remmina)')
         if whatProgram['VNC']: vnc.set_text('(vncviewer)')
@@ -267,15 +267,15 @@ class Gui(Gtk.Application):
     def onDeleteWindow(self, *args):
         """Закрытие программы"""
         if args[0] == 2:
-            msg = "KeyboardInterrupt: the connector is closed!"
-            properties.log.info (msg)
+            msg = "KeyboardInterrupt: the MyConnector is closed!"
+            options.log.info (msg)
             print ('\n' + msg)
         self.quit()
 
     def onViewAbout(self, *args):
         """Создает диалоговое окно 'О программе'"""
         about = Gtk.AboutDialog(parent = self.window)
-        about.set_program_name("Connector")
+        about.set_program_name( "MyConnector (ex. Connector)" )
         comments = """Программа-фронтэнд для удаленного администрирования
                       компьютеров с различными операционными системами.
                       Поддерживается большинство распространенных типов подключения.""".replace('  ','')
@@ -284,7 +284,7 @@ class Gui(Gtk.Application):
         about.set_website("http://myconnector.ru")
         about.set_website_label("Сайт проекта")
         about.set_copyright("© Корнеечев Е.А., 2014-2020\ne-mail:ek@myconnector.ru\n\nPayPal: ekorneechev@gmail.com\nWMR: R305760666573, WMZ: Z841082507423")
-        about.set_logo_icon_name("connector")
+        about.set_logo_icon_name( "myconnector" )
         about.run()
         about.destroy()
 
@@ -315,7 +315,7 @@ class Gui(Gtk.Application):
         response = dialog.run()
         if response == Gtk.ResponseType.OK:
             filename = dialog.get_filename()
-            parameters = properties.importFromFile(filename)
+            parameters = options.importFromFile(filename)
             if parameters != None:
                 if self.correctProgram(parameters):
                     protocol = parameters.pop(0)
@@ -325,7 +325,7 @@ class Gui(Gtk.Application):
                         analogEntry = self.AnalogEntry(protocol, parameters)
                         self.onButtonPref(analogEntry)
                     msg = "Импортирован файл " + filename
-                    properties.log.info (msg)
+                    options.log.info (msg)
                     viewStatus(self.statusbar, msg)
                 else: self.dialogIncorrectProgram("import", parameters[0], filename)
         else:
@@ -334,7 +334,7 @@ class Gui(Gtk.Application):
 
     def addFilters(self, dialog):
         filter_ctor = Gtk.FileFilter()
-        filter_ctor.set_name("Файлы подключений Connector")
+        filter_ctor.set_name( "Файлы подключений MyConnector" )
         filter_ctor.add_pattern("*.ctor")
         dialog.add_filter(filter_ctor)
         filter_rdp = Gtk.FileFilter()
@@ -366,7 +366,7 @@ class Gui(Gtk.Application):
                     self.saveKeyring (parameters.copy())
                 parameters.append(server) #для заголовка окна
             else:
-                self.whatProgram = properties.loadFromFile('default.conf')
+                self.whatProgram = options.loadFromFile('default.conf')
                 program = self.changeProgram(protocol) + "_ARGS"
                 try: parameters = self.whatProgram[program]
                 except KeyError:
@@ -400,15 +400,15 @@ class Gui(Gtk.Application):
         name = entry_server.get_name() ; protocol = name
         server = entry_server.get_text()
         self.pref_window.set_title("Параметры " + name + "-подключения")
-        self.pref_window.set_icon_from_file("data/" + name + ".png")
+        self.pref_window.set_icon_from_file( "%s/%s.png" % ( ICONFOLDER, name ))
         self.pref_window.set_position(Gtk.WindowPosition.CENTER)
         self.pref_window.set_resizable(False)
         self.pref_window.set_modal(True)
         self.pref_window.resize(400, 400)
         self.pref_builder = Gtk.Builder()
-        self.pref_builder.add_from_file("data/pref_gui.ui")
+        self.pref_builder.add_from_file( "%s/pref_gui.ui" % UIFOLDER )
         self.pref_builder.connect_signals(self)
-        self.whatProgram = properties.loadFromFile('default.conf')
+        self.whatProgram = options.loadFromFile('default.conf')
         name = self.changeProgram(name)
         entryName = self.pref_builder.get_object("entry_" + name + "_name")
         if nameConnect: entryName.set_text(nameConnect)
@@ -424,7 +424,7 @@ class Gui(Gtk.Application):
         if 'loadParameters' in dir(entry_server): #если изменяется или копируется соединение, то загружаем параметры (фэйковый класс Entry)
             parameters = entry_server.loadParameters()
         else: #иначе (новое подключение), пытаемся загрузить дефолтные настройки
-            try: parameters = properties.loadFromFile('default.conf')[name + '_ARGS']
+            try: parameters = options.loadFromFile('default.conf')[name + '_ARGS']
             except KeyError:
                 try: parameters = DEFAULT[name + '_ARGS'].copy()
                 except KeyError: parameters = None
@@ -1025,9 +1025,9 @@ class Gui(Gtk.Application):
                     protocol, address = server.strip().split(':::')
                     self.liststore[protocol].append([address])
                 except ValueError:
-                    properties.log.warning("Неверный формат строки в файле servers.db; skipped")
+                    options.log.warning("Неверный формат строки в файле servers.db; skipped")
         except FileNotFoundError:
-            properties.log.warning("Список серверов (servers.db) не найден, создан пустой.")
+            options.log.warning("Список серверов (servers.db) не найден, создан пустой.")
             self.createDb("servers.db")
 
     def getSavesFromDb(self):
@@ -1039,9 +1039,9 @@ class Gui(Gtk.Application):
                     record = list(connect.strip().split(':::'))
                     self.liststore_connect.append(record)
                 except ValueError:
-                    properties.log.warning("Неверный формат строки в файле connections.db; skipped")
+                    options.log.warning("Неверный формат строки в файле connections.db; skipped")
         except FileNotFoundError:
-            properties.log.warning("Список подключений (connections.db) не найден, создан пустой.")
+            options.log.warning("Список подключений (connections.db) не найден, создан пустой.")
             self.createDb("connections.db")
 
     def writeServerInDb(self, entry):
@@ -1087,7 +1087,7 @@ class Gui(Gtk.Application):
 
     def onProperties(self, *args):
         """Окно параметров приложения"""
-        window = properties.Properties(self)
+        window = options.Properties(self)
 
     def saveFileCtor(self, name, protocol, server):
         """Создание ассоциации файла подключения с подключением в списке"""
@@ -1097,7 +1097,7 @@ class Gui(Gtk.Application):
         fileName = "".join(fileName) + '.ctor'
         print (name + ':::' + protocol + ':::' + server + ':::' + fileName,
                file = open(WORKFOLDER + "connections.db", "a"))
-        properties.log.info("Добавлено новое %s-подключение '%s' (host: %s)", protocol, name, server)
+        options.log.info("Добавлено новое %s-подключение '%s' (host: %s)", protocol, name, server)
         return fileName
 
     def resaveFileCtor(self, name, protocol, server):
@@ -1110,7 +1110,7 @@ class Gui(Gtk.Application):
                 line = name + ':::' + protocol + ':::' + server + ':::' + fileName  + '\n'
             dbFile.write(line)
         dbFile.close()
-        properties.log.info("Внесены изменения в подключение '%s'", name)
+        options.log.info("Внесены изменения в подключение '%s'", name)
         return fileName
 
     def onButtonSave(self, entry):
@@ -1127,9 +1127,9 @@ class Gui(Gtk.Application):
             parameters[39] = ''
         name = self.pref_builder.get_object("entry_" + id_protocol + "_name" ).get_text()
         if name == "":
-            os.system("zenity --error --text='\nУкажите имя подключения!' --no-wrap --icon-name=connector")
-        elif properties.searchName(name) and not self.editClick:
-            os.system("zenity --error --text='\nПодключение с именем \"%s\" уже существует!' --no-wrap --icon-name=connector" % name)
+            os.system( "zenity --error --text='\nУкажите имя подключения!' --no-wrap --icon-name=myconnector" )
+        elif options.searchName(name) and not self.editClick:
+            os.system( "zenity --error --text='\nПодключение с именем \"%s\" уже существует!' --no-wrap --icon-name=myconnector" % name )
         else:
             parameters.insert(0, server)
             parameters.insert(0, protocol) #протокол подключения также заносится в файл
@@ -1138,7 +1138,7 @@ class Gui(Gtk.Application):
             else:
                 fileName = self.saveFileCtor(name, protocol, server)
                 self.initSubmenuTray()
-            properties.saveInFile(fileName, parameters)
+            options.saveInFile(fileName, parameters)
             self.getSavesFromDb()#добавление в листсторе
             self.pref_window.destroy()
             self.editClick = False
@@ -1152,9 +1152,9 @@ class Gui(Gtk.Application):
         protocol = entry.get_name()
         name = self.builder.get_object("entry_" + protocol + "_name").get_text()
         if name == "":
-            os.system("zenity --error --text='\nУкажите имя подключения!' --no-wrap --icon-name=connector")
-        elif properties.searchName(name) and not self.citrixEditClick and not self.webEditClick:
-            os.system("zenity --error --text='\nПодключение с именем \"%s\" уже существует!' --no-wrap --icon-name=connector" % name)
+            os.system( "zenity --error --text='\nУкажите имя подключения!' --no-wrap --icon-name=myconnector" )
+        elif options.searchName(name) and not self.citrixEditClick and not self.webEditClick:
+            os.system( "zenity --error --text='\nПодключение с именем \"%s\" уже существует!' --no-wrap --icon-name=myconnector" % name )
         else:
             parameters = []
             parameters.append(protocol)
@@ -1164,7 +1164,7 @@ class Gui(Gtk.Application):
             else:
                 fileName = self.saveFileCtor(name, protocol, server)
                 self.initSubmenuTray()
-            properties.saveInFile(fileName, parameters)
+            options.saveInFile(fileName, parameters)
             self.getSavesFromDb()
             self.citrixEditClick = False
             self.webEditClick = False
@@ -1194,7 +1194,7 @@ class Gui(Gtk.Application):
         """Функция проверки корректности параметров для запускаемой программы
            - VNC - в remmina 10 параметров подключения, RDP - 13 (с 1.8.5 - минус 1, т.к. имя подключения не хранится).
             Так как функционал в Remmina расширять не планируется, за основу при проверке берутся эти числа"""
-        self.whatProgram = properties.loadFromFile('default.conf')
+        self.whatProgram = options.loadFromFile('default.conf')
         if parameters[0] == 'VNC':
             if self.whatProgram['VNC'] == 0 and len(parameters) == 10: return True
             elif self.whatProgram['VNC'] == 1 and len(parameters) != 10: return True
@@ -1210,19 +1210,19 @@ class Gui(Gtk.Application):
         if _type == "open":
             text = "Не удается подключиться: неверный формат %s-подключения!" % _protocol
             title = "Ошибка подключения"
-            properties.log.error("Программа по умолчанию для %s выбрана отличная от файла: %s", _protocol, _name)
+            options.log.error("Программа по умолчанию для %s выбрана отличная от файла: %s", _protocol, _name)
         elif _type == "import":
             text = "Не удается импортировать файл: неверный формат %s-подключения!" % _protocol
             title = "Ошибка импорта"
-            properties.log.error("Импорт файла %s не удался!", _name)
-        os.system("zenity --error  --title='%s' --text='%s\nПопробуйте изменить программу"
-                  " по умолчанию в параметрах приложения.' --no-wrap --icon-name=connector" % (title,text))
+            options.log.error("Импорт файла %s не удался!", _name)
+        os.system( "zenity --error  --title='%s' --text='%s\nПопробуйте изменить программу"
+                  " по умолчанию в параметрах приложения.' --no-wrap --icon-name=myconnector" % ( title,text ))
 
     def onSaveConnect(self, treeView, *args):
         """Установка подключения по двойному щелчку на элементе списка"""
         table, indexRow = treeView.get_selection().get_selected()
         nameConnect, fileCtor = table[indexRow][0], table[indexRow][3]
-        parameters = properties.loadFromFile(fileCtor, self.window)
+        parameters = options.loadFromFile(fileCtor, self.window)
         if parameters is not None: #если файл .ctor имеет верный формат
             if self.correctProgram(parameters):
                 parameters.append(nameConnect)
@@ -1246,7 +1246,7 @@ class Gui(Gtk.Application):
         """Изменение выбранного подключения"""
         table, indexRow = treeView.get_selection().get_selected()
         nameConnect, self.fileCtor = table[indexRow][0], table[indexRow][3]
-        parameters = properties.loadFromFile(self.fileCtor, self.window)
+        parameters = options.loadFromFile(self.fileCtor, self.window)
         if parameters is not None: #если файл .ctor имеет верный формат
             if self.correctProgram(parameters):
                 protocol = parameters.pop(0)  #извлекаем протокол из файла коннекта
@@ -1262,7 +1262,7 @@ class Gui(Gtk.Application):
         """Копирование выбранного подключения"""
         table, indexRow = treeView.get_selection().get_selected()
         nameConnect, self.fileCtor = table[indexRow][0], table[indexRow][3]
-        parameters = properties.loadFromFile(self.fileCtor, self.window)
+        parameters = options.loadFromFile(self.fileCtor, self.window)
         if parameters is not None: #если файл .ctor имеет верный формат
             if self.correctProgram(parameters):
                 nameConnect = nameConnect + ' (копия)'
@@ -1303,12 +1303,12 @@ class Gui(Gtk.Application):
                     print(row.strip(), file = endFile)
             endFile.close()
             self.getSavesFromDb() #удаление из liststore
-            parameters = properties.loadFromFile(fileCtor)
+            parameters = options.loadFromFile(fileCtor)
             try: keyring.delete_password(str(parameters[1]),str(parameters[2])) #удаление пароля из связки ключей
             except: pass
             try: os.remove(WORKFOLDER + fileCtor) #удаление файла с настройками
             except: pass
-            properties.log.info("Подключение '%s' удалено!", name)
+            options.log.info("Подключение '%s' удалено!", name)
             self.initSubmenuTray()
         dialog.destroy()
 
@@ -1330,7 +1330,7 @@ class Gui(Gtk.Application):
             filename = name + ".desktop"
             self.createDesktopFile(filename, nameConnect, os.path.basename(name))
             viewStatus(self.statusbar, 'Сохранено в "' + filename + '"...')
-            properties.log.info("Для подключения '%s' сохранен ярлык быстрого запуска: '%s'", nameConnect, filename)
+            options.log.info("Для подключения '%s' сохранен ярлык быстрого запуска: '%s'", nameConnect, filename)
         dialog.destroy()
 
     def onChangePage(self, notepad, box, page):
@@ -1388,9 +1388,9 @@ class Gui(Gtk.Application):
         """Сохранение параметров подключений по умолчанию"""
         name = entry.get_name()
         program = self.changeProgram(name) + "_ARGS"
-        parameters = properties.loadFromFile('default.conf')
+        parameters = options.loadFromFile('default.conf')
         parameters[program] = self.applyPreferences(name)
-        properties.saveInFile('default.conf', parameters)
+        options.saveInFile('default.conf', parameters)
         dialog = Gtk.MessageDialog(self.pref_window, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK,"Настройки по умолчанию сохранены.")
         response = dialog.run()
         dialog.destroy()
@@ -1422,9 +1422,9 @@ class Gui(Gtk.Application):
 def f_main(pwd="/tmp/", name=""):
     """Main function"""
     if name:
-        fileCtor = properties.filenameFromName(name)
+        fileCtor = options.filenameFromName(name)
         if fileCtor:
-            properties.log.info ("Запуск сохраненного подключения: " + name)
+            options.log.info ("Запуск сохраненного подключения: " + name)
             connectFile(fileCtor)
         else:
             if name[0] == "'": name = name.replace( "'", "" ) #for KIOSK (mode=2)
@@ -1432,14 +1432,14 @@ def f_main(pwd="/tmp/", name=""):
             if os.path.isfile(name): openFile(name)
             else:
                 error = "Проверьте правильность имени сохраненного подключения или файла с параметрами"
-                properties.log.error ( "%s: %s" % ( error, name ) )
-                os.system( "zenity --error --icon-name=connector --text='\n%s!' --no-wrap" % error )
+                options.log.error ( "%s: %s" % ( error, name ) )
+                os.system( "zenity --error --icon-name=myconnector --text='\n%s!' --no-wrap" % error )
                 exit (1)
     else:
         gui = Gui()
         initSignal(gui)
         gui.run(None)
-        properties.checkLogFile(LOGFILE); properties.checkLogFile(STDLOGFILE)
+        options.checkLogFile(LOGFILE); options.checkLogFile(STDLOGFILE)
 
 if __name__ == '__main__':
     f_main()

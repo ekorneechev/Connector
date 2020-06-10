@@ -6,9 +6,9 @@ from .params import (VERSION, RELEASE)
 
 def parseArgs():
     """Description of the command line argument parser"""
-    about = "Connector - %s (%s)" % (VERSION, RELEASE)
-    args = argparse.ArgumentParser(prog = 'connector', formatter_class=argparse.RawTextHelpFormatter,
-                                   description = 'Connector - remote desktop chooser.\n\nDo not specify parameters for starting the GUI.')
+    about = "MyConnector - %s (%s)" % (VERSION, RELEASE)
+    args = argparse.ArgumentParser(prog = 'myconnector', formatter_class=argparse.RawTextHelpFormatter,
+                                   description = 'MyConnector - remote desktop chooser.\n\nDo not specify parameters for starting the GUI.')
     args.add_argument ( '--disable-kiosk', action = 'store_true', default = False, help = "disable the mode KIOSK" )
     args.add_argument ('-v', '--version', action = 'version', help = "show the application version", version = about)
     args.add_argument ('-d', '--debug', action = 'store_true', default = False, help = "show log files online")

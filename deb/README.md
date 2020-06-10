@@ -14,9 +14,9 @@ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 * Выполнение скрипта сборки DEB-пакета:
 
       git clone https://github.com/MyConnector/MyConnector
-      cd Connector/deb; chmod 755 buildDeb.sh;
-      ./buildDeb.sh #для Ubuntu 18.04 и Mint 19
+      cd MyConnector/deb; chmod 755 buildDeb.sh;
+      ./buildDeb.sh
 
 * Установка пакета:
 
-      sudo dpkg -i connector*.deb
+      sudo apt deb myconnector*.deb
