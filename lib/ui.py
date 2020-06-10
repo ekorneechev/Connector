@@ -92,7 +92,7 @@ def startDebug():
 def quitApp():
     """Quit application"""
     options.log.info ( "The MyConnector is forcibly closed (from cmdline)." )
-    os.system( "pkill myconnector" ) #TODO: check kill for old name (from link)
+    os.system( "pkill [my]?connector" )
 
 class TrayIcon:
     """Класс, описывающий индикатор и меню в трее (пока только для MATE)
