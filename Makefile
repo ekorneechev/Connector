@@ -30,14 +30,14 @@ install:
 	@if [ -n "$(DATESTAMP)" ]; then sed -i s#git#git.$(DATESTAMP)#g $(GLOBAL); fi
 	install -m755 bin/$(TARGET) $(PREFIX_BIN)
 	cp -r share $(LOCAL)
-	mkdir -p $(PYTHON)/kiosk $(MAN) $(ETC) $(KIOSK_DIR)
+	mkdir -p $(PYTHON) $(MAN) $(ETC) $(KIOSK_DIR)
 	install -m644 lib/*.py $(PYTHON)
 	install -m755 bin/$(TARGET)-check-* $(BASE)
 	install -m644 $(TARGET).man $(MAN)/$(TARGET).1
 	install -m644 kiosk/$(TARGET)-kiosk.man $(MAN)/$(TARGET)-kiosk.1
 	install -m644 kiosk/*.desktop $(KIOSK_DIR)
 	install -m755 kiosk/$(TARGET)-*kiosk $(KIOSK_DIR)
-	install -m644 kiosk/*.py $(PYTHON)/kiosk
+	install -m644 kiosk/kiosk.py $(PYTHON)
 	install -m644 kiosk/*.ui $(BASE)/ui
 	@if [ ! -f $(ETC)/$(KIOSK) ]; then install -m600 kiosk/$(KIOSK) $(ETC); fi
 	update-mime-database $(MIME)

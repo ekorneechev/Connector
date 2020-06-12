@@ -175,9 +175,9 @@ class Gui(Gtk.Application):
             signal.signal(signal.SIGCHLD,signal.SIG_IGN) #чтобы исключить появление процесса-зомби
             subprocess.Popen([ "%s/myconnector-check-version" % MAINFOLDER, VERSION ])
         try:
-            from myconnector.kiosk import kiosk
+            from myconnector.kiosk import enabled
             self.menu_kiosk = self.builder.get_object("menu_file_kiosk")
-            self.menu_kiosk.set_sensitive(kiosk.enabled())
+            self.menu_kiosk.set_sensitive( enabled() )
         except ImportError:
             options.log.warning ("The mode KIOSK unavailable, package is not installed.")
 
@@ -1416,7 +1416,7 @@ class Gui(Gtk.Application):
 
     def onKiosk(self, *args):
         """Button 'Mode KIOSK'"""
-        from myconnector.kiosk.kiosk import Kiosk
+        from myconnector.kiosk import Kiosk
         window = Kiosk()
 
 def f_main(pwd="/tmp/", name=""):
