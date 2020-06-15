@@ -1,16 +1,18 @@
-Name: connector
-Version: 1.9.3
-Release: alt1
+%define basedir %_datadir/%name
 
-Summary: Remote desktop chooser
-License: GPL-2.0
-Group: Networking/Remote access
+Name:     myconnector
+Version:  2.0.rc0
+Release:  alt1
 
-Url: http://myconnector.ru
-Source0: %name-%version.tar.gz
+Summary:  MyConnector - remote desktop chooser
+License:  GPL-2.0
+Group:    Networking/Remote access
+
+Url:      http://myconnector.ru
+Source0:  %name-%version.tar.gz
 Packager: Korneechev Evgeniy <ekorneechev@altlinux.org>
 
-BuildArch: noarch
+BuildRequires(pre): rpm-build-python3
 Requires: control
 Requires: libgtk+3
 Requires: libgtk+3-gir
@@ -23,18 +25,21 @@ Requires: tigervnc
 Requires: xdg-utils
 Requires: xfreerdp
 
-%define basedir %_datadir/%name
+Provides: connector = %EVR
+Conflicts: connector < %EVR
+
+BuildArch: noarch
 
 %description
-This is an aggregator program to connnect to various servers
+This is an aggregator program to connect to various servers
 using all of the popular remote desktop protocols
 (RDP, VNC, Citrix, VMware, etc).
 
 %package kiosk
-Summary: Mode "KIOSK" for connector
-Group: Networking/Remote access
+Summary: Mode "KIOSK" for MyConnector
+Group:   Networking/Remote access
 
-Requires: connector = %EVR
+Requires: myconnector = %EVR
 Requires: xinitrc
 Requires: xterm
 
@@ -45,43 +50,47 @@ Files for connector mode "KIOSK"
 %setup
 
 %install
-install -pDm755 %name %buildroot%_bindir/%name
-install -pDm644 %name.desktop %buildroot%_desktopdir/%name.desktop
-mkdir -p %buildroot%basedir/data/
-install -p *.png *.ui %buildroot%basedir/data/
-install -p *.py %buildroot%basedir/
-install -pm755 %name-check-* %buildroot%basedir/
+install -pDm755 bin/%name %buildroot%_bindir/%name
+ln -s %name %buildroot%_bindir/connector
+mkdir -p %buildroot%python3_sitelibdir/%name
+cp -av lib/*.py %buildroot%python3_sitelibdir/%name
+cp -r share %buildroot%_usr/
+install -pm755 bin/%name-check-* %buildroot%basedir
 install -pDm644 %name.man %buildroot%_man1dir/%name.1
-%find_lang --with-man %name
-install -pDm644 %name.xml %buildroot%_datadir/mime/packages/%name.xml
-mkdir -p %buildroot%_iconsdir
-cp -r icons/hicolor %buildroot%_iconsdir/
+
 mkdir -p %buildroot%basedir/kiosk/
-install -p kiosk/*.{py,ui} %buildroot%basedir/kiosk/
-install -pm755 kiosk/connector* %buildroot%basedir/kiosk/
+install -pm644 kiosk/kiosk.py %buildroot%python3_sitelibdir/%name
+install -pm644 kiosk/kiosk.ui %buildroot%basedir/ui
+install -pm755 kiosk/myconnector-*kiosk %buildroot%basedir/kiosk
+install -pm755 kiosk/*.desktop %buildroot%basedir/kiosk
 install -pDm600 kiosk/kiosk.conf %buildroot%_sysconfdir/%name/kiosk.conf
 install -pDm644 kiosk/%name-kiosk.man %buildroot%_man1dir/%name-kiosk.1
 
 %files
 %_bindir/%name
+%python3_sitelibdir/%name
 %_desktopdir/%name.desktop
 %dir %basedir
-%basedir/data
-%basedir/*.py
+%basedir/ui
+%basedir/icons
 %basedir/%name-check-*
 %_man1dir/%name.*
 %_datadir/mime/packages/%name.xml
 %_iconsdir/hicolor/*/apps/%name.png
 
 %files kiosk
-%dir %basedir/kiosk
-%basedir/kiosk/*
+%basedir/kiosk
+%basedir/ui/kiosk.ui
+%python3_sitelibdir/%name/kiosk.py
 %dir %_sysconfdir/%name
 %config(noreplace) %_sysconfdir/%name/kiosk.conf
 %_man1dir/%name-kiosk.*
 
 %changelog
-* Tue Jun 02 2020 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.9.3-alt1
+* Tue Jun 16 2020 Evgeniy Korneechev <ekorneechev@altlinux.org> 2.0.rc0-alt1
+- MyConnector 2.0
+
+* Tue Jun 09 2020 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.9.3-alt1
 - new stable version
 
 * Tue Jun 02 2020 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.9.0.rc2-alt1
