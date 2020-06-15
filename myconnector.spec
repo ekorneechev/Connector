@@ -57,7 +57,6 @@ cp -av lib/*.py %buildroot%python3_sitelibdir/%name
 cp -r share %buildroot%_usr/
 install -pm755 bin/%name-check-* %buildroot%basedir
 install -pDm644 %name.man %buildroot%_man1dir/%name.1
-
 mkdir -p %buildroot%basedir/kiosk/
 install -pm644 kiosk/kiosk.py %buildroot%python3_sitelibdir/%name
 install -pm644 kiosk/kiosk.ui %buildroot%basedir/ui
@@ -67,11 +66,14 @@ install -pDm600 kiosk/kiosk.conf %buildroot%_sysconfdir/%name/kiosk.conf
 install -pDm644 kiosk/%name-kiosk.man %buildroot%_man1dir/%name-kiosk.1
 
 %files
-%_bindir/%name
+%_bindir/*
 %python3_sitelibdir/%name
+%exclude %python3_sitelibdir/%name/kiosk.py
+%exclude %python3_sitelibdir/%name/__pycache__/kiosk.*
 %_desktopdir/%name.desktop
 %dir %basedir
 %basedir/ui
+%exclude %basedir/ui/kiosk.ui
 %basedir/icons
 %basedir/%name-check-*
 %_man1dir/%name.*
@@ -82,6 +84,7 @@ install -pDm644 kiosk/%name-kiosk.man %buildroot%_man1dir/%name-kiosk.1
 %basedir/kiosk
 %basedir/ui/kiosk.ui
 %python3_sitelibdir/%name/kiosk.py
+%python3_sitelibdir/%name/__pycache__/kiosk.*
 %dir %_sysconfdir/%name
 %config(noreplace) %_sysconfdir/%name/kiosk.conf
 %_man1dir/%name-kiosk.*
