@@ -1,17 +1,23 @@
-TARGET = myconnector
-LOCAL = /usr/local
-PREFIX = $(LOCAL)/share
-BASE = $(PREFIX)/$(TARGET)
-PREFIX_BIN = $(LOCAL)/bin
-PYTHON = /usr/lib/python3/dist-packages/$(TARGET)
-MAN = $(PREFIX)/man/man1
-APS = $(PREFIX)/applications
-MIME = $(PREFIX)/mime
-ETC = /etc/$(TARGET)
-KIOSK = kiosk.conf
-KIOSK_DIR = $(BASE)/kiosk
-DATESTAMP = `git log --pretty="%cd" --date=short -1 | sed s/-//g 2>/dev/null`
-GLOBAL = lib/params.py
+TARGET := myconnector
+LOCAL := /usr/local
+PREFIX := $(LOCAL)/share
+BASE := $(PREFIX)/$(TARGET)
+PREFIX_BIN := $(LOCAL)/bin
+PY := /usr/lib/python3/dist-packages/$(TARGET)
+ALT := $(shell cat /etc/altlinux-release 2>/dev/null)
+ifdef ALT
+	PYTHON := /usr/lib/python3/site-packages/$(TARGET)
+else
+	PYTHON := /usr/lib/python3/dist-packages/$(TARGET)
+endif
+MAN := $(PREFIX)/man/man1
+APS := $(PREFIX)/applications
+MIME := $(PREFIX)/mime
+ETC := /etc/$(TARGET)
+KIOSK := kiosk.conf
+KIOSK_DIR := $(BASE)/kiosk
+DATESTAMP := $(shell git log --pretty="%cd" --date=short -1 | sed s/-//g 2>/dev/null)
+GLOBAL := lib/params.py
 
 .PHONY: help install uninstall clean remove
 
@@ -23,7 +29,7 @@ help:
 	@echo "... clean (сброс изменений в исходниках)"
 
 install:
-	#apt-get remove connector myconnector -y
+	apt-get remove connector myconnector -y
 	sed -i s#/usr/share#$(PREFIX)#g $(GLOBAL) kiosk/*
 	sed -i s#/usr/bin/$(TARGET)#$(PREFIX_BIN)/$(TARGET)#g $(GLOBAL) share/applications/$(TARGET).desktop kiosk/*
 	sed -i s#$(PREFIX)/applications#/usr/share/applications#g $(GLOBAL)
@@ -42,7 +48,7 @@ install:
 	@if [ ! -f $(ETC)/$(KIOSK) ]; then install -m600 kiosk/$(KIOSK) $(ETC); fi
 	update-mime-database $(MIME)
 	update-desktop-database
-	make clean
+	@make clean
 
 uninstall:
 	rm -f $(PREFIX_BIN)/$(TARGET)
