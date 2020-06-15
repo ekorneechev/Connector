@@ -1,18 +1,21 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-import gi
-gi.require_version('Gtk', '3.0')
+from gi import require_version
+require_version('Gtk', '3.0')
+
 import os
 from gi.repository import Gtk
-import configparser
+from configparser import ConfigParser
 from urllib.parse import unquote
-import shutil
+from shutil import ( copy,
+                     chown,
+                     SameFileError )
 
 _kiosk_dir = "/usr/share/myconnector/kiosk"
 _webkiosk = "%s/myconnector-webkiosk" % _kiosk_dir
 _kiosk_conf = "/etc/myconnector/kiosk.conf"
-_config = configparser.ConfigParser( interpolation = None )
+_config = ConfigParser( interpolation = None )
 _ligthdm_conf = "/etc/lightdm/lightdm.conf"
 _lightdm_conf_dir = "%s.d" % _ligthdm_conf
 _autologin_conf = "%s/kiosk.conf" % _lightdm_conf_dir
@@ -176,12 +179,12 @@ class Kiosk(Gtk.Window):
                 source = unquote( uri.replace( "file://" , "" ))
                 file = "/home/%s/%s" % ( user, os.path.basename( source ) )
                 try:
-                    shutil.copy( source, file )
-                    shutil.chown ( file, user, user )
+                    copy( source, file )
+                    chown( file, user, user )
                 except FileNotFoundError as e:
                     os.system( "zenity --error --title='MyConnector Kiosk' --icon-name=myconnector--text='%s\nFile did not copy to home dir!'" )
                     file = source
-                except shutil.SameFileError:
+                except SameFileError:
                     pass
                 enable_kiosk_ctor( file )
             else:

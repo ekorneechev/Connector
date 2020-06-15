@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 
 import os
-import subprocess
 import signal
+from subprocess import ( check_output,
+                         Popen )
 
 VERSION = "2.0.rc0"
 HOMEFOLDER = os.getenv('HOME')
@@ -57,16 +58,16 @@ try:
     OS = "altlinux"
     _tmp.close()
 except FileNotFoundError:
-    OS = subprocess.check_output("grep '^ID=' /etc/os-release; exit 0",shell=True, universal_newlines=True).strip().split('=')[1]
+    OS = check_output( "grep '^ID=' /etc/os-release; exit 0", shell=True, universal_newlines=True ).strip().split( '=' )[1]
 
 if OS == "altlinux":
     #Версия и релиз приложения
-    _package_info = subprocess.check_output("rpm -q myconnector 2>/dev/null; exit 0",shell=True, universal_newlines=True).strip().split('-')
+    _package_info = check_output( "rpm -q myconnector 2>/dev/null; exit 0", shell=True, universal_newlines=True ).strip().split( '-' )
     try: RELEASE = _package_info[2].split('.')[0]
     except: RELEASE = "git"
 
     #Папка монтирования устройств
-    _udisks2 = subprocess.check_output("/usr/sbin/control udisks2; exit 0",shell=True, universal_newlines=True).strip()
+    _udisks2 = check_output( "/usr/sbin/control udisks2; exit 0", shell=True, universal_newlines=True ).strip()
     if _udisks2 == 'default':
         USBPATH = "/run/media/$USER"
     if _udisks2 == 'shared':
@@ -80,13 +81,14 @@ if OS == "altlinux":
 
 elif OS == "linuxmint" or OS == "ubuntu":
     try:
-        _package_install = subprocess.check_output("dpkg-query -s myconnector | head -2 | tail -1 2>/dev/null;\
-                                                    exit 0",shell=True, universal_newlines=True).strip().split(' ')[1]
+        _package_install = check_output( "dpkg-query -s myconnector  2>/dev/null | head -2 | tail -1; exit 0",
+                                         shell=True, universal_newlines=True ).strip().split( ' ' )[1]
     except IndexError: _package_install = 'deinstall'
-    if _package_install == 'deinstall': RELEASE = "git"
+    if _package_install == 'deinstall':
+        RELEASE = "git"
     else:
-        _package_info = subprocess.check_output("dpkg-query -W myconnector 2>/dev/null;\
-                                                exit 0",shell=True, universal_newlines=True).strip().split('\t')
+        _package_info = check_output( "dpkg-query -W myconnector 2>/dev/null; exit 0",
+                                      shell=True, universal_newlines=True ).strip().split( '\t' )
         try:
             _package_info = _package_info[1].split("-")
             RELEASE = _package_info[1]

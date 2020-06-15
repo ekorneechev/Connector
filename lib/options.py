@@ -1,15 +1,18 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-"""Модуль управления параметрами Коннектора"""
-import pickle
+from gi import require_version
+require_version('Gtk', '3.0')
+
+from pickle import ( load,
+                     dump,
+                     UnpicklingError )
 import myconnector.ui
-import gi
-gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
 from myconnector.params import *
-import logging
-import tarfile
+from logging import ( getLogger,
+                      basicConfig,
+                      INFO )
 
 class FakeLog():
     def info (self, *args, **kwargs): pass
@@ -24,14 +27,14 @@ def saveInFile(fileName, obj):
     """Запись параметров в файл:
     saveInFile(<имя файла>, <имя объекта для записи>)"""
     dbfile = open(WORKFOLDER+fileName, 'wb')
-    pickle.dump(obj, dbfile)
+    dump( obj, dbfile )
     dbfile.close()
 
 def loadFromFile(fileName, window = None):
     """Загрузка сохраненных параметров из файла"""
     try:
         dbfile = open(WORKFOLDER + fileName, 'rb')
-        obj = pickle.load(dbfile)
+        obj = load( dbfile )
         dbfile.close()
         return obj
     except FileNotFoundError:
@@ -47,7 +50,7 @@ def loadFromFile(fileName, window = None):
             dialog.destroy()
             log.exception("Файл %s c сохраненными настройками не найден! Подробнее:", fileName)
             return None
-    except (pickle.UnpicklingError, EOFError):
+    except ( UnpicklingError, EOFError ):
         dialog = Gtk.MessageDialog(window, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK,
                  "Файл %s\nимеет неверный формат" % fileName.replace("tmp_",""))
         response = dialog.run()
@@ -59,20 +62,20 @@ def loadFromFile(fileName, window = None):
 try: enableLog = loadFromFile('default.conf')['LOG']
 except KeyError: enableLog = DEFAULT['LOG']
 if enableLog:
-    log = logging.getLogger( "myconnector" )
-    logging.basicConfig (
+    log = getLogger( "myconnector" )
+    basicConfig (
         filename = LOGFILE,
         format = "--- %(levelname)-10s %(asctime)s --- %(message)s",
-        level = logging.INFO)
+        level = INFO)
 
 def importFromFile(fileName, window = None):
     """Импорт параметров из файла .ctor"""
     try:
         dbfile = open(fileName, 'rb')
-        obj = pickle.load(dbfile)
+        obj = load( dbfile )
         dbfile.close()
         return obj
-    except (pickle.UnpicklingError, EOFError):
+    except ( UnpicklingError, EOFError ):
         dialog = Gtk.MessageDialog(window, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK,
                  "Файл " + fileName + "\nимеет неверный формат")
         response = dialog.run()
@@ -123,18 +126,14 @@ def searchName(name):
         log.warning("Файл сохраненных подключений (connections.db) не найден!")
     return False
 
-def checkPath(path):
-    """Функция проверки существования файла/папки"""
-    return not bool(int(subprocess.check_output("stat " + path + " > /dev/null 2>&1; echo $?; exit 0",
-                                                  shell=True, universal_newlines=True).strip()))
 def checkLogFile(filePath):
     """Функция проверки размера лог-файла и его архивация, если он больше 10Мб"""
-    exists = checkPath(filePath)
-    if exists:
-        sizeLog = int(subprocess.check_output("stat -c%s " + filePath + "; exit 0",
-                                              shell=True, universal_newlines=True).strip())
+    if os.path.exists( filePath ):
+        sizeLog = int( check_output( "stat -c%%s %s; exit 0" % filePath,
+                                     shell=True, universal_newlines=True ).strip() )
         if sizeLog > 10000000:
-            import tarfile; from datetime import datetime
+            import tarfile
+            from datetime import datetime
             os.chdir(LOGFOLDER)
             fileName = os.path.basename(filePath)
             #'2017-04-05 15:09:52.981053' -> 20170405:
@@ -146,9 +145,7 @@ def checkLogFile(filePath):
             os.chdir(MAINFOLDER)
             tar.close()
             msg = "Логфайл %s превысил допустимый размер (10Мб), упакован в архив %s" % (fileName, os.path.basename(tarName))
-            if filePath == LOGFILE:
-                os.system('echo "--- INFO       ' + str(dt) + ' ' + msg + '" > ' + LOGFILE)
-            else: log.info(msg)
+            os.system( 'echo "--- INFO       %s  %s" >> %s' % ( str( dt ), msg, LOGFILE ))
 
 class Properties(Gtk.Window):
     def __init__(self, mainWindow):

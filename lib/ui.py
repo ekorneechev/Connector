@@ -1,10 +1,15 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-import gi
-gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, Gdk, GdkPixbuf, GLib, Gio
-import random
+from gi import require_version
+require_version('Gtk', '3.0')
+
+from gi.repository import ( Gtk,
+                            Gdk,
+                            GdkPixbuf,
+                            GLib,
+                            Gio )
+from random import choice
 from myconnector.connector import *
 from myconnector.params import *
 from pathlib import Path
@@ -172,8 +177,8 @@ class Gui(Gtk.Application):
         self.tray_submenu = self.builder.get_object("tray_submenu")
         if self.optionEnabled('TRAY'): self.trayDisplayed = self.initTray()
         if self.optionEnabled('CHECK_VERSION'):
-            signal.signal(signal.SIGCHLD,signal.SIG_IGN) #чтобы исключить появление процесса-зомби
-            subprocess.Popen([ "%s/myconnector-check-version" % MAINFOLDER, VERSION ])
+            signal.signal( signal.SIGCHLD, signal.SIG_IGN ) # without zombie
+            Popen( [ "%s/myconnector-check-version" % MAINFOLDER, VERSION ] )
         try:
             from myconnector.kiosk import enabled
             self.menu_kiosk = self.builder.get_object("menu_file_kiosk")
@@ -1093,7 +1098,7 @@ class Gui(Gtk.Application):
         """Создание ассоциации файла подключения с подключением в списке"""
         fileName = []
         for i in range (12): #для случайного имени сохраняемого файла
-            fileName.append(random.choice(['0','1','2','3','4','5','6','7','8','9']))
+            fileName.append( choice( [ '0','1','2','3','4','5','6','7','8','9' ] ))
         fileName = "".join(fileName) + '.ctor'
         print (name + ':::' + protocol + ':::' + server + ':::' + fileName,
                file = open(WORKFOLDER + "connections.db", "a"))

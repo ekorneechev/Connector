@@ -1,13 +1,16 @@
 #!/usr/bin/python3
 
-import os
-import argparse
-from .params import (VERSION, RELEASE)
+from os import ( system,
+                 getuid )
+from argparse import ( ArgumentParser,
+                       RawTextHelpFormatter )
+from .params import ( VERSION,
+                      RELEASE )
 
 def parseArgs():
     """Description of the command line argument parser"""
     about = "MyConnector - %s (%s)" % (VERSION, RELEASE)
-    args = argparse.ArgumentParser(prog = 'myconnector', formatter_class=argparse.RawTextHelpFormatter,
+    args = ArgumentParser( prog = 'myconnector', formatter_class = RawTextHelpFormatter,
                                    description = 'MyConnector - remote desktop chooser.\n\nDo not specify parameters for starting the GUI.')
     args.add_argument ( '--disable-kiosk', action = 'store_true', default = False, help = "disable the mode KIOSK" )
     args.add_argument ('-v', '--version', action = 'version', help = "show the application version", version = about)
@@ -17,15 +20,16 @@ def parseArgs():
     return args.parse_args()
 
 def main():
-    os.system("xdg-mime default myconnector.desktop application/x-myconnector")
+    system( "xdg-mime default myconnector.desktop application/x-myconnector" )
     args = parseArgs()
     if args.quit:
         from .ui import quitApp as quit
         quit()
     if args.disable_kiosk:
-        if os.getuid() == 0:
+        if getuid() == 0:
             try:
-                from kiosk.kiosk import ( disable_kiosk, config_init )
+                from kiosk.kiosk import ( disable_kiosk,
+                                          config_init )
                 disable_kiosk()
                 config_init()
                 exit (0)

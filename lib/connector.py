@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-import time
 import myconnector.options as options
 from myconnector.params import *
 from re import escape
@@ -227,8 +226,8 @@ class XFreeRdp:
                 options.log.info (cmd2log)
                 os.system(command + STD_TO_LOG)
                 if enableLog:
-                    signal.signal(signal.SIGCHLD,signal.SIG_IGN)
-                    subprocess.Popen([MAINFOLDER + "/myconnector-check-xfreerdp-errors"])
+                    signal.signal( signal.SIGCHLD, signal.SIG_IGN ) # without zombie
+                    Popen( [ MAINFOLDER + "/myconnector-check-xfreerdp-errors" ] )
             else:
                 options.log.warning ("FreeRDP version below 1.2!")
                 os.system( "zenity --error --text='\nУстановленная версия FreeRDP (%s) не соответствует минимальным требованиям,"
@@ -398,25 +397,25 @@ def definition(protocol):
 
 def citrixCheck():
     """Фунцкия проверки наличия в системе Citrix Receiver"""
-    check = int(subprocess.check_output(CITRIX_CHECK + "/dev/null 2>&1; echo $?", shell=True, universal_newlines=True).strip())
+    check = int( check_output( "%s/dev/null 2>&1; echo $?" % CITRIX_CHECK, shell=True, universal_newlines=True ).strip() )
     check = not bool(check)
     return check
 
 def vmwareCheck():
     """Фунцкия проверки наличия в системе VMware Horizon Client"""
-    check = int(subprocess.check_output("which vmware-view > /dev/null 2>&1; echo $?", shell=True, universal_newlines=True).strip())
+    check = int( check_output( "which vmware-view > /dev/null 2>&1; echo $?", shell=True, universal_newlines=True ).strip() )
     check = not bool(check)
     return check
 
 def freerdpCheck():
     """Фунцкия проверки наличия в системе FreeRDP"""
-    check = int(subprocess.check_output("which xfreerdp > /dev/null 2>&1; echo $?", shell=True, universal_newlines=True).strip())
+    check = int( check_output( "which xfreerdp > /dev/null 2>&1; echo $?", shell=True, universal_newlines=True ).strip() )
     check = not bool(check)
     return check
 
 def freerdpCheckVersion():
     """Фунцкия определения версии FreeRDP"""
-    version = subprocess.check_output("xfreerdp /version; exit 0",shell=True, universal_newlines=True).strip().split('\t')
+    version = check_output( "xfreerdp /version; exit 0",shell=True, universal_newlines=True ).strip().split( '\t' )
     version = version[0].split(" "); version = version[4].split("-")[0];
     return version
 
@@ -426,7 +425,7 @@ def passwd(server, username):
     if password: return password
     separator = "|CoNnEcToR|"
     try:
-        password, save = subprocess.check_output("zenity --forms --title=\"Аутентификация (with NLA)\" --text=\"Имя пользователя: %s\""
+        password, save = check_output( "zenity --forms --title=\"Аутентификация (with NLA)\" --text=\"Имя пользователя: %s\""
             " --add-password=\"Пароль:\" --add-combo=\"Хранить пароль в связке ключей:\" --combo-values=\"Да|Нет\""
             " --separator=\"%s\" 2>/dev/null" % (username, separator),shell=True, universal_newlines=True).strip().split(separator)
         if save == "Да" and password: keyring.set_password(str(server),str(username),str(password))
