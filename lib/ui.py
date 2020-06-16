@@ -42,7 +42,7 @@ def connectFile(filename, openFile = False):
             protocol = parameters.pop(0)
             if openFile: parameters.append(parameters[0]) #если открывается файл .ctor, то заголовок окна - адрес сервера
             else: parameters.append(options.nameFromFilename(filename))
-            if protocol == 'RDP' and options.loadFromFile('default.conf')['RDP']:
+            if protocol == 'RDP' and CONFIG[ 'rdp' ] == '1': #TODO 1=freerdp
                 try: parameters[40] = keyring.get_password(str(parameters[0]),str(parameters[1]))
                 except: pass
             connect = definition(protocol)
@@ -54,7 +54,7 @@ def connectFile(filename, openFile = False):
 
 def connectFileRdp(filename):
     """Connect to the server with file .rdp"""
-    if options.loadFromFile('default.conf')['RDP']:
+    if CONFIG[ 'rdp' ] == '1': #TODO 1=freerdp
         tmpfile = WORKFOLDER + ".tmp.rdp"
         os.system('cp -r "%s" "%s"' % (filename, tmpfile))
         os.system('xfreerdp "%s" -sec-nla %s' % (tmpfile, STD_TO_LOG))
@@ -166,7 +166,7 @@ class Gui(Gtk.Application):
         self.filterConnections.set_visible_func(self.listFilter) #добавление фильтра для поиска
         self.currentFilter = ''
         self.sortedFiltered = Gtk.TreeModelSort(model = self.filterConnections)
-        try: default_sort = int(options.loadFromFile('default.conf')['SORT'])
+        try: default_sort = int( CONFIG[ 'sort' ] )
         except KeyError: default_sort = 0
         self.sortedFiltered.set_sort_column_id(default_sort, Gtk.SortType.ASCENDING)
         self.treeview = self.builder.get_object("treeview_connections")
@@ -177,9 +177,9 @@ class Gui(Gtk.Application):
         self.getServersFromDb()
         self.citrixEditClick = False
         self.webEditClick = False
-        try: default_tab = options.loadFromFile('default.conf')['TAB']
+        try: default_tab = CONFIG[ 'tab' ]
         except KeyError: default_tab = '0'
-        try: default_main = options.loadFromFile('default.conf')['MAIN']
+        try: default_main = CONFIG[ 'main' ]
         except KeyError: default_main = '0'
         self.main_note = self.builder.get_object("main_note")
         self.main_note.set_current_page(int(default_main))
@@ -190,8 +190,8 @@ class Gui(Gtk.Application):
         self.initLabels(self.labelRDP, self.labelVNC, self.labelFS)
         self.trayDisplayed = False
         self.tray_submenu = self.builder.get_object("tray_submenu")
-        if self.optionEnabled('TRAY'): self.trayDisplayed = self.initTray()
-        if self.optionEnabled('CHECK_VERSION'):
+        if self.optionEnabled( 'tray' ): self.trayDisplayed = self.initTray()
+        if self.optionEnabled( 'check_version' ):
             signal.signal( signal.SIGCHLD, signal.SIG_IGN ) # without zombie
             Popen( [ "%s/myconnector-check-version" % MAINFOLDER, VERSION ] )
         try:
@@ -266,22 +266,21 @@ class Gui(Gtk.Application):
 
     def optionEnabled(self, option):
         try:
-            check = options.loadFromFile('default.conf')[option]
+            check = CONFIG.getboolean( option )
         except KeyError:
-            check = DEFAULT[option]
+            check = DEFAULT[ option ]
         return check
 
     def initLabels(self, rdp, vnc, fs):
         """Отбражает на главном окне выбранную программу для подключения RDP, VNC и FS"""
-        whatProgram = options.loadFromFile('default.conf')
-        if whatProgram['RDP']: rdp.set_text('(FreeRDP)')
+        if CONFIG[ 'rdp' ] == '1': rdp.set_text( '(FreeRDP)' ) #TODO 1=freerdp
         else: rdp.set_text('(Remmina)')
-        if whatProgram['VNC']: vnc.set_text('(vncviewer)')
+        if CONFIG[ 'vnc' ] == '1': vnc.set_text( '(vncviewer)' ) #TODO 1=vncviewer
         else: vnc.set_text('(Remmina)')
         try:
-            fs_prog = whatProgram['FS']
+            fs_prog = CONFIG [ 'fs' ]
         except KeyError:
-            fs_prog = DEFAULT['FS']
+            fs_prog = DEFAULT[ 'fs' ]
         fs.set_text('(' + fs_prog + ')')
 
     def onDeleteWindow(self, *args):
@@ -399,9 +398,8 @@ class Gui(Gtk.Application):
                     self.saveKeyring (parameters.copy())
                 parameters.append(server) #для заголовка окна
             else:
-                self.whatProgram = options.loadFromFile('default.conf')
                 program = self.changeProgram( protocol ).lower() + "_args"
-                try: parameters = self.whatProgram[program]
+                try: parameters = CONFIG[ program ]
                 except KeyError:
                     try: parameters = DEFAULT[program].copy()
                     except KeyError: parameters = server
@@ -420,7 +418,7 @@ class Gui(Gtk.Application):
     def changeProgram(self, protocol):
         #Функция, возвращающая RDP1 или VNC1 при параметрах, отличных от Реммины
         try:
-            if self.whatProgram[protocol] and protocol != "FS": protocol += "1"
+            if CONFIG[ protocol ] and protocol != "FS": protocol += "1"
         except KeyError:
             pass #если нет возможности выбора программ для протокола
         return protocol
@@ -441,7 +439,6 @@ class Gui(Gtk.Application):
         self.pref_builder = Gtk.Builder()
         self.pref_builder.add_from_file( "%s/pref_gui.ui" % UIFOLDER )
         self.pref_builder.connect_signals(self)
-        self.whatProgram = options.loadFromFile('default.conf')
         name = self.changeProgram(name)
         entryName = self.pref_builder.get_object("entry_" + name + "_name")
         if nameConnect: entryName.set_text(nameConnect)
@@ -457,9 +454,10 @@ class Gui(Gtk.Application):
         if 'loadParameters' in dir(entry_server): #если изменяется или копируется соединение, то загружаем параметры (фэйковый класс Entry)
             parameters = entry_server.loadParameters()
         else: #иначе (новое подключение), пытаемся загрузить дефолтные настройки
-            try: parameters = options.loadFromFile( 'default.conf' )[ name.lower() + '_args' ]
+            prog = name.lower() + '_args'
+            try: parameters = CONFIG[ prog ]
             except KeyError:
-                try: parameters = DEFAULT[ name.lower() + '_args' ].copy()
+                try: parameters = DEFAULT[ prog ].copy()
                 except KeyError: parameters = None
             if type(parameters) == list: parameters.insert(0,server)
         self.setPreferences(protocol, parameters)
@@ -469,11 +467,11 @@ class Gui(Gtk.Application):
     def setPreferences(self, protocol, args):
         """В этой функции параметры загружаются из сохраненного файла"""
         if not args: return False
-        if protocol == 'VNC' and self.whatProgram['VNC'] == 1:
+        if protocol == 'VNC' and CONFIG[ 'vnc' ] == 1: #TODO vncviewer
             if args[1] != '': self.VNC_viewmode.set_active(True)
             if args[2] != '': self.VNC_viewonly.set_active(True)
 
-        if protocol == 'VNC' and self.whatProgram['VNC'] == 0:
+        if protocol == 'VNC' and CONFIG[ 'vnc' ] == 0: #TODO remmina
             self.VNC_user.set_text(args[1])
             self.VNC_quality.set_active_id(args[2])
             self.VNC_color.set_active_id(args[3])
@@ -541,7 +539,7 @@ class Gui(Gtk.Application):
             if args[7]: self.NX_clipboard.set_active(True)
             self.NX_exec.set_text(args[8])
 
-        if protocol == 'RDP' and self.whatProgram['RDP'] == 0:
+        if protocol == 'RDP' and CONFIG[ 'rdp' ] == 0: #TODO remmina
             self.RDP_user.set_text(args[1])
             self.RDP_domain.set_text(args[2])
             self.RDP_color.set_active_id(args[3])
@@ -562,7 +560,7 @@ class Gui(Gtk.Application):
             self.RDP_sound.set_active_id(args[10])
             if args[11]: self.RDP_cards.set_active(True)
 
-        if protocol == 'RDP' and self.whatProgram['RDP'] == 1:
+        if protocol == 'RDP' and CONFIG[ 'rdp' ] == 1: #TODO freerdp
             self.RDP_user.set_text(args[1])
             self.RDP_domain.set_text(args[2])
             if args[3]: self.RDP_fullscreen.set_active(True)
@@ -1227,14 +1225,13 @@ class Gui(Gtk.Application):
         """Функция проверки корректности параметров для запускаемой программы
            - VNC - в remmina 10 параметров подключения, RDP - 13 (с 1.8.5 - минус 1, т.к. имя подключения не хранится).
             Так как функционал в Remmina расширять не планируется, за основу при проверке берутся эти числа"""
-        self.whatProgram = options.loadFromFile('default.conf')
-        if parameters[0] == 'VNC':
-            if self.whatProgram['VNC'] == 0 and len(parameters) == 10: return True
-            elif self.whatProgram['VNC'] == 1 and len(parameters) != 10: return True
+        if parameters[0] == 'VNC': #TODO ==remmina/freerdp
+            if CONFIG[ 'vnc' ] == '0' and len(parameters) == 10: return True
+            elif CONFIG[ 'vnc' ] == '1' and len(parameters) != 10: return True
             else: return False
         if parameters[0] == 'RDP':
-            if self.whatProgram['RDP'] == 0 and len(parameters) == 13: return True
-            elif self.whatProgram['RDP'] == 1 and len(parameters) != 13: return True
+            if CONFIG[ 'rdp' ] == '0' and len(parameters) == 13: return True
+            elif CONFIG[ 'rdp' ] == '1' and len(parameters) != 13: return True
             else: return False
         return True
 
@@ -1410,7 +1407,7 @@ class Gui(Gtk.Application):
         else: self.showWin()
 
     def onHideWindow(self, *args):
-        if self.optionEnabled('TRAY'):
+        if self.optionEnabled( 'tray' ):
             self.window.hide()
             if not self.trayDisplayed: self.trayDisplayed = self.initTray()
             return True
@@ -1421,9 +1418,8 @@ class Gui(Gtk.Application):
         """Сохранение параметров подключений по умолчанию"""
         name = entry.get_name()
         program = self.changeProgram( name ).lower() + "_args"
-        parameters = options.loadFromFile('default.conf')
-        parameters[program] = self.applyPreferences(name)
-        options.saveInFile('default.conf', parameters)
+        CONFIG[ program ] = self.applyPreferences(name)
+        config_save()
         dialog = Gtk.MessageDialog(self.pref_window, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK,"Настройки по умолчанию сохранены.")
         response = dialog.run()
         dialog.destroy()

@@ -209,11 +209,11 @@ class Properties(Gtk.Window):
         except KeyError: self.combo_tabs.set_active_id( '0' )
         try: self.entryFS.set_text( CONFIG[ 'fs' ] )
         except KeyError: self.entryFS.set_text( DEFAULT[ 'fs' ] )
-        try: self.checkTray.set_active( CONFIG[ 'tray' ] )
+        try: self.checkTray.set_active( CONFIG.getboolean( 'tray' ) )
         except KeyError: self.checkTray.set_active( DEFAULT[ 'tray' ] )
-        try: self.checkVersion.set_active( CONFIG[ 'check_version' ] )
+        try: self.checkVersion.set_active( CONFIG.getboolean( 'check_version' ) )
         except KeyError: self.checkVersion.set_active( DEFAULT[ 'check_version' ] )
-        try: self.checkLog.set_active( CONFIG[ 'log' ] )
+        try: self.checkLog.set_active( CONFIG.getboolean( 'log' ) )
         except KeyError: self.checkLog.set_active( DEFAULT[ 'log' ] )
         try: self.combo_sort.set_active_id( CONFIG[ 'sort' ] )
         except KeyError: self.combo_tabs.set_active_id( '0' )
@@ -228,25 +228,25 @@ class Properties(Gtk.Window):
     def onSave (self, *args):
         """Сохранение настроек программы"""
         if self.changeRdpRem.get_active():
-            self.defaultConf['RDP'] = 0
-        else: self.defaultConf['RDP'] = 1
+            CONFIG[ 'rdp' ] = '0'
+        else: CONFIG[ 'rdp' ] = '1'
         if self.changeVncRem.get_active():
-            self.defaultConf['VNC'] = 0
-        else: self.defaultConf['VNC'] = 1
-        self.defaultConf['TAB'] = self.combo_tabs.get_active_id()
-        self.defaultConf['MAIN'] = self.combo_main.get_active_id()
-        self.defaultConf['FS'] = self.entryFS.get_text()
-        self.defaultConf['TRAY'] = self.checkTray.get_active()
-        self.defaultConf['CHECK_VERSION'] = self.checkVersion.get_active()
-        self.defaultConf['LOG'] = self.checkLog.get_active()
-        self.defaultConf['SORT'] = self.combo_sort.get_active_id()
-        saveInFile('default.conf',self.defaultConf)
-        myconnector.ui.viewStatus(self.statusbar, "Настройки сохранены в файле default.conf...")
-        log.info("Новые настройки для программы сохранены в файле default.conf.")
+            CONFIG[ 'vnc' ] = '0'
+        else: CONFIG[ 'vnc' ] = '1'
+        CONFIG[ 'tab' ] = self.combo_tabs.get_active_id()
+        CONFIG[ 'main' ] = self.combo_main.get_active_id()
+        CONFIG[ 'fs' ] = self.entryFS.get_text()
+        CONFIG[ 'tray' ] = str( self.checkTray.get_active() )
+        CONFIG[ 'check_version' ] = str( self.checkVersion.get_active() )
+        CONFIG[ 'log' ] = str( self.checkLog.get_active() )
+        CONFIG[ 'sort' ] = self.combo_sort.get_active_id()
+        config_save()
+        myconnector.ui.viewStatus(self.statusbar, "Настройки сохранены в файле myconnector.conf...")
+        log.info("Новые настройки для программы сохранены в файле myconnector.conf.")
         if not self.checkLog.get_active(): log.warning("ВЕДЕНИЕ ЖУРНАЛА ПОСЛЕ ПЕРЕЗАПУСКА ПРОГРАММЫ БУДЕТ ОТКЛЮЧЕНО!")
         myconnector.ui.Gui.initLabels(True, self.labelRDP, self.labelVNC, self.labelFS)
-        self.conn_note.set_current_page(int(self.defaultConf['TAB']))
-        if self.defaultConf['TRAY']:
+        self.conn_note.set_current_page( int( CONFIG[ 'tab' ] ) )
+        if CONFIG.getboolean( 'tray' ):
             if self.main_window.trayDisplayed:
                 self.main_window.iconTray.show()
             else: self.main_window.trayDisplayed = myconnector.ui.Gui.initTray(self.main_window)
@@ -280,7 +280,7 @@ class Properties(Gtk.Window):
         dialog.format_secondary_text("Подтвердите сброс параметров программы к значениям по умолчанию")
         response = dialog.run()
         if response == Gtk.ResponseType.OK:
-            config_init()
+            config_save( default = True )
             log.info("Выполнен сброс программы к значения по умолчанию.")
         dialog.destroy()
         self.initParameters()

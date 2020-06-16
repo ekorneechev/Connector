@@ -27,8 +27,8 @@ except Exception as error:
     keyring = Keyring()
     options.log.warning("Python 3: %s. Password storage is not available for FreeRDP." % error)
 
-try: enableLog = options.loadFromFile('default.conf')['LOG']
-except KeyError: enableLog = DEFAULT['LOG']
+try: enableLog = CONFIG.getboolean( 'log' )
+except KeyError: enableLog = DEFAULT[ 'log' ]
 if enableLog: STD_TO_LOG = ' >> ' + STDLOGFILE + " 2>&1 &"
 else: STD_TO_LOG = ' &'
 
@@ -357,7 +357,7 @@ class Web:
 class FileServer:
     """Класс для настройки подключения к файловому серверу"""
     def start(self, args):
-        _exec = options.loadFromFile('default.conf')['FS'] + ' "'
+        _exec = CONFIG[ 'fs' ] + ' "'
         if type(args) == str:
             if  not args.find("://") != -1:
                 os.system( "zenity --warning --text='Введите протокол подключения!\n"
@@ -381,13 +381,12 @@ class FileServer:
 
 def definition(protocol):
     """Функция определения протокола"""
-    whatProgram = options.loadFromFile('default.conf') #загрузка параметров с выбором программ для подключения
     if protocol == 'VNC':
-        if whatProgram['VNC'] == 0:
+        if CONFIG [ 'vnc' ] == '0': #TODO 0=remmina
             connect = VncRemmina()
         else: connect = VncViewer()
     elif protocol == 'RDP':
-        if whatProgram['RDP'] == 0:
+        if CONFIG[ 'rdp' ] == '0': #TODO 0=remmina
             connect = RdpRemmina()
         else: connect = XFreeRdp()
     elif protocol == 'NX':

@@ -147,15 +147,17 @@ DEFAULT[ 'sort' ] = '0'
 
 _config = ConfigParser( interpolation = None )
 _config_file = "%smyconnector.conf" % WORKFOLDER
-_result = _config.read( _config_file )
-if not _result:
-    config_init()
-    _config.read( _config_file )
-CONFIG = _config[ "myconnector" ]
 
-def config_init():
+def config_save( default = False ):
     """Default config for MyConnector"""
-    CONFIG = DEFAULT
+    if default:
+        _config[ "myconnector" ] = DEFAULT
     with open( _config_file, 'w' ) as configfile:
         _config.write( configfile )
+
+_result = _config.read( _config_file )
+if not _result:
+    config_save( default = True)
+    _config.read( _config_file )
+CONFIG = _config[ "myconnector" ]
 
