@@ -44,7 +44,7 @@ help:
 	@echo "... clean (сброс изменений в исходниках)"
 
 install:
-	apt-get remove connector myconnector -y
+	apt-get remove connector myconnector -y || /bin/true
 	sed -i s#/usr/share#$(PREFIX)#g $(GLOBAL) kiosk/*
 	sed -i s#/usr/bin/$(TARGET)#$(PREFIX_BIN)/$(TARGET)#g $(GLOBAL) share/applications/$(TARGET).desktop kiosk/*
 	sed -i s#$(PREFIX)/applications#/usr/share/applications#g $(GLOBAL)
