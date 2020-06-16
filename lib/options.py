@@ -199,9 +199,9 @@ class Properties(Gtk.Window):
 
     def initParameters(self):
         """Initializing parameters from a file default.conf"""
-        if CONFIG[ 'rdp' ]:
+        if CONFIG[ 'rdp' ] == '1': #TODO 1=freerdp
             self.changeRdpFree.set_active( True )
-        if CONFIG[ 'vnc' ]:
+        if CONFIG[ 'vnc' ] == '1': #TODO 1=vncviewer
             self.changeVncView.set_active( True )
         try: self.combo_tabs.set_active_id( CONFIG[ 'tab' ] )
         except KeyError: self.combo_tabs.set_active_id( '0' )
