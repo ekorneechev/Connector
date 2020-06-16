@@ -199,25 +199,24 @@ class Properties(Gtk.Window):
 
     def initParameters(self):
         """Initializing parameters from a file default.conf"""
-        self.defaultConf = loadFromFile('default.conf')
-        if self.defaultConf['RDP']:
-            self.changeRdpFree.set_active(True)
-        if self.defaultConf['VNC']:
-            self.changeVncView.set_active(True)
-        try: self.combo_tabs.set_active_id(self.defaultConf['TAB'])
-        except KeyError: self.combo_tabs.set_active_id('0')
-        try: self.combo_main.set_active_id(self.defaultConf['MAIN'])
-        except KeyError: self.combo_tabs.set_active_id('0')
-        try: self.entryFS.set_text(self.defaultConf['FS'])
-        except KeyError: self.entryFS.set_text(DEFAULT['FS'])
-        try: self.checkTray.set_active(self.defaultConf['TRAY'])
-        except KeyError: self.checkTray.set_active(DEFAULT['TRAY'])
-        try: self.checkVersion.set_active(self.defaultConf['CHECK_VERSION'])
-        except KeyError: self.checkVersion.set_active(DEFAULT['CHECK_VERSION'])
-        try: self.checkLog.set_active(self.defaultConf['LOG'])
-        except KeyError: self.checkLog.set_active(DEFAULT['LOG'])
-        try: self.combo_sort.set_active_id(self.defaultConf['SORT'])
-        except KeyError: self.combo_tabs.set_active_id('0')
+        if CONFIG[ 'rdp' ]:
+            self.changeRdpFree.set_active( True )
+        if CONFIG[ 'vnc' ]:
+            self.changeVncView.set_active( True )
+        try: self.combo_tabs.set_active_id( CONFIG[ 'tab' ] )
+        except KeyError: self.combo_tabs.set_active_id( '0' )
+        try: self.combo_main.set_active_id( CONFIG[ 'main' ] )
+        except KeyError: self.combo_tabs.set_active_id( '0' )
+        try: self.entryFS.set_text( CONFIG[ 'fs' ] )
+        except KeyError: self.entryFS.set_text( DEFAULT[ 'fs' ] )
+        try: self.checkTray.set_active( CONFIG[ 'tray' ] )
+        except KeyError: self.checkTray.set_active( DEFAULT[ 'tray' ] )
+        try: self.checkVersion.set_active( CONFIG[ 'check_version' ] )
+        except KeyError: self.checkVersion.set_active( DEFAULT[ 'check_version' ] )
+        try: self.checkLog.set_active( CONFIG[ 'log' ] )
+        except KeyError: self.checkLog.set_active( DEFAULT[ 'log' ] )
+        try: self.combo_sort.set_active_id( CONFIG[ 'sort' ] )
+        except KeyError: self.combo_tabs.set_active_id( '0' )
 
     def onCancel (self, button, window):
         window.destroy()

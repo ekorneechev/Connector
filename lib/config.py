@@ -20,7 +20,6 @@ import os
 import signal
 from subprocess import ( check_output,
                          Popen )
-
 from configparser import ConfigParser
 
 VERSION = "2.0.rc0"
@@ -148,10 +147,15 @@ DEFAULT[ 'sort' ] = '0'
 
 _config = ConfigParser( interpolation = None )
 _config_file = "%smyconnector.conf" % WORKFOLDER
+_result = _config.read( _config_file )
+if not _result:
+    config_init()
+    _config.read( _config_file )
+CONFIG = _config[ "myconnector" ]
 
 def config_init():
     """Default config for MyConnector"""
-    _config["myconnector"] = DEFAULT
+    CONFIG = DEFAULT
     with open( _config_file, 'w' ) as configfile:
         _config.write( configfile )
 
