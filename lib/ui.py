@@ -467,11 +467,11 @@ class Gui(Gtk.Application):
     def setPreferences(self, protocol, args):
         """В этой функции параметры загружаются из сохраненного файла"""
         if not args: return False
-        if protocol == 'VNC' and CONFIG[ 'vnc' ] == 1: #TODO vncviewer
+        if protocol == 'VNC' and CONFIG[ 'vnc' ] == '1': #TODO vncviewer
             if args[1] != '': self.VNC_viewmode.set_active(True)
             if args[2] != '': self.VNC_viewonly.set_active(True)
 
-        if protocol == 'VNC' and CONFIG[ 'vnc' ] == 0: #TODO remmina
+        if protocol == 'VNC' and CONFIG[ 'vnc' ] == '0': #TODO remmina
             self.VNC_user.set_text(args[1])
             self.VNC_quality.set_active_id(args[2])
             self.VNC_color.set_active_id(args[3])
@@ -539,7 +539,7 @@ class Gui(Gtk.Application):
             if args[7]: self.NX_clipboard.set_active(True)
             self.NX_exec.set_text(args[8])
 
-        if protocol == 'RDP' and CONFIG[ 'rdp' ] == 0: #TODO remmina
+        if protocol == 'RDP' and CONFIG[ 'rdp' ] == '0': #TODO remmina
             self.RDP_user.set_text(args[1])
             self.RDP_domain.set_text(args[2])
             self.RDP_color.set_active_id(args[3])
@@ -560,7 +560,7 @@ class Gui(Gtk.Application):
             self.RDP_sound.set_active_id(args[10])
             if args[11]: self.RDP_cards.set_active(True)
 
-        if protocol == 'RDP' and CONFIG[ 'rdp' ] == 1: #TODO freerdp
+        if protocol == 'RDP' and CONFIG[ 'rdp' ] == '1': #TODO freerdp
             self.RDP_user.set_text(args[1])
             self.RDP_domain.set_text(args[2])
             if args[3]: self.RDP_fullscreen.set_active(True)
