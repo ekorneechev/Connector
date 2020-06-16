@@ -17,7 +17,7 @@
 # along with this program. If not, see http://www.gnu.org/licenses/.
 
 import myconnector.options as options
-from myconnector.params import *
+from myconnector.config import *
 from re import escape
 try: import keyring
 except Exception as error:

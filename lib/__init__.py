@@ -20,7 +20,7 @@ from os import ( system,
                  getuid )
 from argparse import ( ArgumentParser,
                        RawTextHelpFormatter )
-from .params import ( VERSION,
+from .config import ( VERSION,
                       RELEASE )
 
 def parseArgs():

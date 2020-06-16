@@ -26,7 +26,7 @@ from gi.repository import ( Gtk,
                             Gio )
 from random import choice
 from myconnector.connector import *
-from myconnector.params import *
+from myconnector.config import *
 from pathlib import Path
 
 def viewStatus(bar, message):

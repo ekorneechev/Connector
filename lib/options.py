@@ -24,11 +24,10 @@ from pickle import ( load,
                      UnpicklingError )
 import myconnector.ui
 from gi.repository import Gtk
-from myconnector.params import *
+from myconnector.config import *
 from logging import ( getLogger,
                       basicConfig,
                       INFO )
-import myconnector.config as config
 
 class FakeLog():
     def info (self, *args, **kwargs): pass
@@ -282,7 +281,7 @@ class Properties(Gtk.Window):
         dialog.format_secondary_text("Подтвердите сброс параметров программы к значениям по умолчанию")
         response = dialog.run()
         if response == Gtk.ResponseType.OK:
-            config.init()
+            config_init()
             log.info("Выполнен сброс программы к значения по умолчанию.")
         dialog.destroy()
         self.initParameters()

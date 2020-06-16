@@ -32,7 +32,7 @@ ETC := /etc/$(TARGET)
 KIOSK := kiosk.conf
 KIOSK_DIR := $(BASE)/kiosk
 DATESTAMP := $(shell git log --pretty="%cd" --date=short -1 | sed s/-//g 2>/dev/null)
-GLOBAL := lib/params.py
+GLOBAL := lib/config.py
 
 .PHONY: help install uninstall clean remove
 
