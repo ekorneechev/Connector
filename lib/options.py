@@ -225,6 +225,15 @@ class Properties(Gtk.Window):
         window.destroy()
         self.main_window.onShowWindow()
 
+    def updateTray( self ):
+        if CONFIG.getboolean( 'tray' ):
+            if self.main_window.trayDisplayed:
+                self.main_window.iconTray.show()
+            else: self.main_window.trayDisplayed = myconnector.ui.Gui.initTray(self.main_window)
+        else:
+            try: self.main_window.iconTray.hide()
+            except: pass
+
     def onSave (self, *args):
         """Сохранение настроек программы"""
         if self.changeRdpRem.get_active():
@@ -246,13 +255,7 @@ class Properties(Gtk.Window):
         if not self.checkLog.get_active(): log.warning("ВЕДЕНИЕ ЖУРНАЛА ПОСЛЕ ПЕРЕЗАПУСКА ПРОГРАММЫ БУДЕТ ОТКЛЮЧЕНО!")
         myconnector.ui.Gui.initLabels(True, self.labelRDP, self.labelVNC, self.labelFS)
         self.conn_note.set_current_page( int( CONFIG[ 'tab' ] ) )
-        if CONFIG.getboolean( 'tray' ):
-            if self.main_window.trayDisplayed:
-                self.main_window.iconTray.show()
-            else: self.main_window.trayDisplayed = myconnector.ui.Gui.initTray(self.main_window)
-        else:
-            try: self.main_window.iconTray.hide()
-            except: pass
+        self.updateTray()
 
     def clearFile(self, filename, title, message):
         """Функция для очисти БД серверов или списка подключений"""
@@ -284,6 +287,7 @@ class Properties(Gtk.Window):
             log.info("Выполнен сброс программы к значения по умолчанию.")
         dialog.destroy()
         self.initParameters()
+        self.updateTray()
 
 if __name__ == '__main__':
     pass
