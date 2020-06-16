@@ -28,6 +28,7 @@ from myconnector.params import *
 from logging import ( getLogger,
                       basicConfig,
                       INFO )
+import myconnector.config as config
 
 class FakeLog():
     def info (self, *args, **kwargs): pass
@@ -277,13 +278,11 @@ class Properties(Gtk.Window):
 
     def onButtonReset(self,*args):
         """Сброс параметров программы"""
-        filename = "default.conf"
         dialog = Gtk.MessageDialog(self, 0, Gtk.MessageType.WARNING, Gtk.ButtonsType.OK_CANCEL, "Сброс параметров")
         dialog.format_secondary_text("Подтвердите сброс параметров программы к значениям по умолчанию")
         response = dialog.run()
         if response == Gtk.ResponseType.OK:
-            os.remove(WORKFOLDER + filename)
-            saveInFile(filename, DEFAULT)
+            config.init()
             log.info("Выполнен сброс программы к значения по умолчанию.")
         dialog.destroy()
         self.initParameters()
