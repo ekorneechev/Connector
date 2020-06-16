@@ -26,7 +26,7 @@ VERSION = "2.0.rc0"
 HOMEFOLDER = os.getenv('HOME')
 WORKFOLDER = "%s/.myconnector/" % HOMEFOLDER
 _CONNECTOR = "%s/.connector" % HOMEFOLDER
-if os.path.exists( _CONNECTOR ):
+if os.path.exists( _CONNECTOR ) and not os.path.exists( WORKFOLDER ):
     os.rename( _CONNECTOR, WORKFOLDER )
 MAINFOLDER = "/usr/share/myconnector"
 ICONFOLDER = "%s/icons" % MAINFOLDER
