@@ -400,7 +400,7 @@ class Gui(Gtk.Application):
                 parameters.append(server) #для заголовка окна
             else:
                 self.whatProgram = options.loadFromFile('default.conf')
-                program = self.changeProgram(protocol) + "_ARGS"
+                program = self.changeProgram( protocol ).lower() + "_args"
                 try: parameters = self.whatProgram[program]
                 except KeyError:
                     try: parameters = DEFAULT[program].copy()
@@ -457,9 +457,9 @@ class Gui(Gtk.Application):
         if 'loadParameters' in dir(entry_server): #если изменяется или копируется соединение, то загружаем параметры (фэйковый класс Entry)
             parameters = entry_server.loadParameters()
         else: #иначе (новое подключение), пытаемся загрузить дефолтные настройки
-            try: parameters = options.loadFromFile('default.conf')[name + '_ARGS']
+            try: parameters = options.loadFromFile( 'default.conf' )[ name.lower() + '_args' ]
             except KeyError:
-                try: parameters = DEFAULT[name + '_ARGS'].copy()
+                try: parameters = DEFAULT[ name.lower() + '_args' ].copy()
                 except KeyError: parameters = None
             if type(parameters) == list: parameters.insert(0,server)
         self.setPreferences(protocol, parameters)
@@ -1420,7 +1420,7 @@ class Gui(Gtk.Application):
     def onButtonDefault(self, entry):
         """Сохранение параметров подключений по умолчанию"""
         name = entry.get_name()
-        program = self.changeProgram(name) + "_ARGS"
+        program = self.changeProgram( name ).lower() + "_args"
         parameters = options.loadFromFile('default.conf')
         parameters[program] = self.applyPreferences(name)
         options.saveInFile('default.conf', parameters)

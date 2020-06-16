@@ -32,7 +32,7 @@ ICONFOLDER = "%s/icons" % MAINFOLDER
 UIFOLDER = "%s/ui" % MAINFOLDER
 
 #Установки по умолчанию для параметров программы (какие приложения использовать)
-DEFAULT = dict(RDP = 1, VNC = 1, TAB = '0', MAIN = '0')
+DEFAULT = dict( rdp = 1, vnc = 1, tab = '0', main = '0' )
 
 #Исходные данные для ярлыка подключения
 DESKTOP_INFO = """#!/usr/bin/env xdg-open
@@ -47,7 +47,7 @@ Icon=myconnector
 EXEC = "/usr/bin/myconnector "
 
 #Ведение логов
-DEFAULT['LOG'] = True
+DEFAULT[ 'log' ] = True
 LOGFOLDER = WORKFOLDER + "logs/"
 LOGFILE = LOGFOLDER + "myconnector.log"
 STDLOGFILE = LOGFOLDER + "all.log"
@@ -121,25 +121,25 @@ else:
               "Некоторые функции программы могут не работать!\nПодробнее о поддерживаемых ОС <a href=\"http://wiki.myconnector.ru\">здесь</a>.'" )
 
 #Команда подключения сетевых файловых ресурсов
-DEFAULT['FS'] = 'xdg-open'
+DEFAULT[ 'fs' ] = 'xdg-open'
 
 #Tray icon is disabled by default
-DEFAULT['TRAY'] = False
+DEFAULT[ 'tray' ] = False
 
 #Проверка обновлений программы
-DEFAULT['CHECK_VERSION'] = True
+DEFAULT[ 'check_version' ] = True
 
 #Параметры подключений по умолчанию
 #FreeRDP:
-DEFAULT['RDP1_ARGS'] = ['','', 1, 1, '', '32', '', '', '', '', '', 0, 0, 0, 0, 0, 0, 0, None, 0, 0, 0, 0, 0, 0, 0, 0, None, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, '']
+DEFAULT[ 'rdp1_args' ] = [ '','', 1, 1, '', '32', '', '', '', '', '', 0, 0, 0, 0, 0, 0, 0, None, 0, 0, 0, 0, 0, 0, 0, 0, None, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, '' ]
 #Remmina
-DEFAULT['RDP_ARGS'] = ['', '', '32', '0', '', 3, '', 0, 0, 'off', 0]
-DEFAULT['VNC_ARGS'] = ['', '9', '24', 1, 0, 0, 0, 1]
-DEFAULT['NX_ARGS'] = ['', '0', '', 1, '', 0, 0, '']
-DEFAULT['XDMCP_ARGS'] = ['0', 1, '', 0, 0, '']
-DEFAULT['SPICE_ARGS'] = [0, 0, 0, 0, 0, 0, '']
-DEFAULT['SSH_ARGS'] = ['', 0, '', 'UTF-8', '']
-DEFAULT['SFTP_ARGS'] = ['', 0, '', 'UTF-8', '/']
+DEFAULT[ 'rdp_args' ] = [ '', '', '32', '0', '', 3, '', 0, 0, 'off', 0 ]
+DEFAULT[ 'vnc_args' ] = [ '', '9', '24', 1, 0, 0, 0, 1 ]
+DEFAULT[ 'nx_args' ] = [ '', '0', '', 1, '', 0, 0, '' ]
+DEFAULT[ 'xdmcp_args' ] = [ '0', 1, '', 0, 0, '' ]
+DEFAULT[ 'spice_args' ] = [0, 0, 0, 0, 0, 0, '' ]
+DEFAULT[ 'ssh_args' ] = [ '', 0, '', 'UTF-8', '' ]
+DEFAULT[ 'sftp_args' ] = [ '', 0, '', 'UTF-8', '/' ]
 
 #Default column by sort connections
-DEFAULT['SORT'] = '0'
+DEFAULT[ 'sort' ] = '0'
