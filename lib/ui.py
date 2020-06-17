@@ -1186,9 +1186,9 @@ class Gui(Gtk.Application):
         elif options.searchName(name) and not self.citrixEditClick and not self.webEditClick:
             os.system( "zenity --error --text='\nПодключение с именем \"%s\" уже существует!' --no-wrap --icon-name=myconnector" % name )
         else:
-            parameters = []
-            parameters.append(protocol)
-            parameters.append(server)
+            parameters = { "name"     : name,
+                           "protocol" : protocol,
+                           "server"   : server }
             if self.citrixEditClick or self.webEditClick:
                 fileName = self.resaveFileCtor(name, protocol, server)
             else:

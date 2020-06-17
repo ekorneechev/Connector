@@ -326,9 +326,10 @@ def _missCitrix():
 class Citrix:
     """Класс для настройки ICA-соединения к Citrix-серверу"""
     def start(self, args):
-        if type(args) == list:
-            addr = args[0]
-        else: addr = args
+        if type(args) == str:
+            addr = args
+        else:
+            addr = args [ "server" ]
         if citrixCheck():
             options.log.info ("Citrix: подключение к серверу %s", addr)
             os.system('/opt/Citrix/ICAClient/util/storebrowse --addstore ' + addr + STD_TO_LOG)
@@ -344,9 +345,10 @@ class Citrix:
 class Web:
     """Класс для настройки подключения к WEB-ресурсу"""
     def start(self, args):
-        if type(args) == list:
-            addr = args[0]
-        else: addr = args
+        if type(args) == str:
+            addr = args
+        else:
+            addr = args [ "server" ]
         if  not addr.find("://") != -1:
             addr = "http://" + addr
         command = 'xdg-open "' + addr + '"'
