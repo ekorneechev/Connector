@@ -87,6 +87,10 @@ def importFromFile(fileName, window = None):
         dbfile.close()
         return obj
     except ( UnpicklingError, EOFError ):
+        conf = ConfigParser()
+        conf.read( fileName )
+        return conf[ "myconnector" ]
+    except:
         dialog = Gtk.MessageDialog(window, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK,
                  "Файл " + fileName + "\nимеет неверный формат")
         response = dialog.run()
