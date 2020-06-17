@@ -39,9 +39,9 @@ def connectFile(filename, openFile = False):
     try:
         parameters = options.loadFromFile(filename)
         if parameters != None:
-            protocol = parameters.pop(0)
-            if openFile: parameters.append(parameters[0]) #если открывается файл .ctor, то заголовок окна - адрес сервера
-            else: parameters.append(options.nameFromFilename(filename))
+            protocol = parameters[ "protocol" ]
+            #if openFile: parameters.append(parameters[0]) #если открывается файл .ctor, то заголовок окна - адрес сервера
+            #else: parameters.append(options.nameFromFilename(filename))
             if protocol == 'RDP' and CONFIG[ 'rdp' ] == '1': #TODO 1=freerdp
                 try: parameters[40] = keyring.get_password(str(parameters[0]),str(parameters[1]))
                 except: pass
@@ -74,7 +74,6 @@ def openFile(filename):
         os.chdir(WORKFOLDER)
         connectFile(tmpname, True)
         os.remove(tmpname)
-        os.chdir(MAINFOLDER)
     elif ext == ".rdp": connectFileRdp(filename)
     elif ext == ".remmina": connectFileRemmina(filename)
     else: os.system( "zenity --error --icon-name=myconnector --text='\nНеподдерживаемый тип файла!' --no-wrap" )
@@ -349,17 +348,17 @@ class Gui(Gtk.Application):
             filename = dialog.get_filename()
             parameters = options.importFromFile(filename)
             if parameters != None:
+                protocol = parameters [ "protocol" ]
                 if self.correctProgram(parameters):
-                    protocol = parameters.pop(0)
                     if protocol == 'CITRIX' or protocol == 'WEB':
-                        self.onWCEdit('', parameters[0], protocol)
+                        self.onWCEdit( '', parameters [ "server" ], protocol )
                     else:
                         analogEntry = self.AnalogEntry(protocol, parameters)
                         self.onButtonPref(analogEntry)
                     msg = "Импортирован файл " + filename
                     options.log.info (msg)
                     viewStatus(self.statusbar, msg)
-                else: self.dialogIncorrectProgram("import", parameters[0], filename)
+                else: self.dialogIncorrectProgram("import", protocol, filename)
         else:
             viewStatus(self.statusbar, "Файл не был выбран!")
         dialog.destroy()
@@ -392,20 +391,19 @@ class Gui(Gtk.Application):
             connect = definition(protocol) #по имени виджета (указан в glade) определить протокол
             if self.prefClick: #если нажата кнопка Доп. Параметры
                 parameters = self.applyPreferences(protocol)
-                parameters.insert(0, server)
+                parameters[ "server" ] = server
                 if self.changeProgram(protocol) == 'RDP1':
                     _name = self.pref_builder.get_object("entry_" + self.changeProgram(protocol) + "_name" ).get_text()
                     self.saveKeyring (parameters.copy())
-                parameters.append(server) #для заголовка окна
             else:
-                program = self.changeProgram( protocol ).lower() + "_args"
-                try: parameters = CONFIG[ program ]
+                program = self.changeProgram( protocol )
+                try: parameters = CONFIGS[ program ]
                 except KeyError:
-                    try: parameters = DEFAULT[program].copy()
+                    try: parameters = DEFAULT[ "%s_args" % program.lower() ].copy()
                     except KeyError: parameters = server
-                if type(parameters) == list:
-                    parameters.insert(0,server)
-                    parameters.append(server) #для заголовка окна
+                try:
+                    parameters[ "server" ] = server #для заголовка окна
+                except: pass
             connect.start(parameters)
             viewStatus(self.statusbar, "Подключение к серверу " + server + "...")
             self.writeServerInDb(entry)
@@ -454,12 +452,14 @@ class Gui(Gtk.Application):
         if 'loadParameters' in dir(entry_server): #если изменяется или копируется соединение, то загружаем параметры (фэйковый класс Entry)
             parameters = entry_server.loadParameters()
         else: #иначе (новое подключение), пытаемся загрузить дефолтные настройки
-            prog = name.lower() + '_args'
-            try: parameters = CONFIG[ prog ]
+            try: parameters = CONFIGS[ name ]
             except KeyError:
-                try: parameters = DEFAULT[ prog ].copy()
-                except KeyError: parameters = None
-            if type(parameters) == list: parameters.insert(0,server)
+                try:
+                    parameters = DEFAULT[ "%s_args" % name.lower() ].copy()
+                except KeyError:
+                    parameters = None
+            if type(parameters) == dict:
+                parameters[ "server" ] = server
         self.setPreferences(protocol, parameters)
         self.pref_window.add(box)
         self.pref_window.show_all()
@@ -468,8 +468,8 @@ class Gui(Gtk.Application):
         """В этой функции параметры загружаются из сохраненного файла"""
         if not args: return False
         if protocol == 'VNC' and CONFIG[ 'vnc' ] == '1': #TODO vncviewer
-            if args[1] != '': self.VNC_viewmode.set_active(True)
-            if args[2] != '': self.VNC_viewonly.set_active(True)
+            if args[ "fullscreen" ] == 'True': self.VNC_viewmode.set_active( True )
+            if args[ "viewonly" ] == 'True': self.VNC_viewonly.set_active( True )
 
         if protocol == 'VNC' and CONFIG[ 'vnc' ] == '0': #TODO remmina
             self.VNC_user.set_text(args[1])
@@ -952,11 +952,9 @@ class Gui(Gtk.Application):
             args = [user, quality, color, viewmode, viewonly, crypt, clipboard, showcursor]
 
         if self.changeProgram(protocol) == "VNC1":
-            if self.VNC_viewmode.get_active(): viewmode = "-fullscreen "
-            else: viewmode = ""
-            if self.VNC_viewonly.get_active(): viewonly = "-viewonly "
-            else: viewonly = ""
-            args = [viewmode, viewonly]
+            args = {}
+            args[ "fullscreen" ] = str( self.VNC_viewmode.get_active() )
+            args[ "viewonly" ] = str( self.VNC_viewonly.get_active() )
 
         if protocol == 'XDMCP':
             color = self.XDMCP_color.get_active_id()
@@ -1162,8 +1160,8 @@ class Gui(Gtk.Application):
         elif options.searchName(name) and not self.editClick:
             os.system( "zenity --error --text='\nПодключение с именем \"%s\" уже существует!' --no-wrap --icon-name=myconnector" % name )
         else:
-            parameters.insert(0, server)
-            parameters.insert(0, protocol) #протокол подключения также заносится в файл
+            parameters[ "server" ] = server
+            parameters[ "protocol" ] = protocol
             if self.editClick:#если нажата кнопка Изменить, то пересохранить
                 fileName = self.resaveFileCtor(name, protocol, server)
             else:
@@ -1225,11 +1223,11 @@ class Gui(Gtk.Application):
         """Функция проверки корректности параметров для запускаемой программы
            - VNC - в remmina 10 параметров подключения, RDP - 13 (с 1.8.5 - минус 1, т.к. имя подключения не хранится).
             Так как функционал в Remmina расширять не планируется, за основу при проверке берутся эти числа"""
-        if parameters[0] == 'VNC': #TODO ==remmina/freerdp
+        if parameters[ "protocol" ] == 'VNC': #TODO ==remmina/freerdp
             if CONFIG[ 'vnc' ] == '0' and len(parameters) == 10: return True
             elif CONFIG[ 'vnc' ] == '1' and len(parameters) != 10: return True
             else: return False
-        if parameters[0] == 'RDP':
+        if parameters[ "protocol" ] == 'RDP':
             if CONFIG[ 'rdp' ] == '0' and len(parameters) == 13: return True
             elif CONFIG[ 'rdp' ] == '1' and len(parameters) != 13: return True
             else: return False
@@ -1254,17 +1252,17 @@ class Gui(Gtk.Application):
         nameConnect, fileCtor = table[indexRow][0], table[indexRow][3]
         parameters = options.loadFromFile(fileCtor, self.window)
         if parameters is not None: #если файл .ctor имеет верный формат
+            protocol = parameters[ "protocol" ]
             if self.correctProgram(parameters):
-                parameters.append(nameConnect)
-                protocol = parameters.pop(0) #извлекаем протокол из файла коннекта
+                parameters[ "name" ] = nameConnect
                 try:
-                    if self.changeProgram(protocol) == 'RDP1' and parameters[39]:
+                    if self.changeProgram( protocol ) == 'RDP1' and parameters[39]:
                         parameters[40] = keyring.get_password(str(parameters[0]),str(parameters[1]))
                 except: pass
                 viewStatus(self.statusbar, 'Соединение с "' + nameConnect + '"...')
                 connect = definition(protocol)
                 connect.start(parameters)
-            else: self.dialogIncorrectProgram("open", parameters[0], nameConnect)
+            else: self.dialogIncorrectProgram( "open", protocol, nameConnect )
 
     def onPopupMenu(self, widget, event):
         """Контекстное меню списка сохраненных подключений"""
@@ -1278,15 +1276,15 @@ class Gui(Gtk.Application):
         nameConnect, self.fileCtor = table[indexRow][0], table[indexRow][3]
         parameters = options.loadFromFile(self.fileCtor, self.window)
         if parameters is not None: #если файл .ctor имеет верный формат
+            protocol = parameters [ "protocol" ]
             if self.correctProgram(parameters):
-                protocol = parameters.pop(0)  #извлекаем протокол из файла коннекта
                 if protocol == 'CITRIX' or protocol == 'WEB':
-                    self.onWCEdit(nameConnect, parameters[0], protocol)
+                    self.onWCEdit( nameConnect, parameters [ "server" ], protocol )
                 else:
                     self.editClick = True
                     analogEntry = self.AnalogEntry(protocol, parameters)
                     self.onButtonPref(analogEntry, nameConnect)
-            else: self.dialogIncorrectProgram("open", parameters[0], nameConnect)
+            else: self.dialogIncorrectProgram( "open", protocol, nameConnect )
 
     def onPopupCopy(self, treeView):
         """Копирование выбранного подключения"""
@@ -1294,15 +1292,15 @@ class Gui(Gtk.Application):
         nameConnect, self.fileCtor = table[indexRow][0], table[indexRow][3]
         parameters = options.loadFromFile(self.fileCtor, self.window)
         if parameters is not None: #если файл .ctor имеет верный формат
+            protocol = parameters[ "protocol" ]
             if self.correctProgram(parameters):
                 nameConnect = nameConnect + ' (копия)'
-                protocol = parameters.pop(0)  #извлекаем протокол из файла коннекта
                 if protocol == 'CITRIX' or protocol == 'WEB':
-                    self.onWCEdit(nameConnect, parameters[0], protocol, False)
+                    self.onWCEdit( nameConnect, parameters[ "server" ], protocol, False )
                 else:
                     analogEntry = self.AnalogEntry(protocol, parameters)
                     self.onButtonPref(analogEntry, nameConnect)
-            else: self.dialogIncorrectProgram("open", parameters[0], nameConnect)
+            else: self.dialogIncorrectProgram( "open", protocol, nameConnect )
 
     class AnalogEntry:
         """Класс с методами аналогичными методам Gtk.Entry и реализующий
@@ -1310,9 +1308,12 @@ class Gui(Gtk.Application):
         def __init__(self, name, parameters):
             self.name = name
             self.parameters = parameters
-        def get_name(self): return self.name
-        def get_text(self): return self.parameters[0]
-        def loadParameters(self): return self.parameters
+        def get_name( self ):
+            return self.name
+        def get_text( self ):
+            return self.parameters[ "server" ]
+        def loadParameters( self ):
+            return self.parameters
 
     def onPopupRemove(self, treeView):
         """Удаление выбранного подключения из списка, БД и файла с его настройками"""
@@ -1417,10 +1418,12 @@ class Gui(Gtk.Application):
     def onButtonDefault(self, entry):
         """Сохранение параметров подключений по умолчанию"""
         name = entry.get_name()
-        program = self.changeProgram( name ).lower() + "_args"
-        CONFIG[ program ] = self.applyPreferences(name)
+        program = self.changeProgram( name )
+        args = self.applyPreferences( name )
+        for key in args.keys():
+            CONFIGS[ program ][ key ] = args[ key ]
         config_save()
-        dialog = Gtk.MessageDialog(self.pref_window, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK,"Настройки по умолчанию сохранены.")
+        dialog = Gtk.MessageDialog( self.pref_window, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "Настройки по умолчанию сохранены." )
         response = dialog.run()
         dialog.destroy()
 

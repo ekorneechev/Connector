@@ -1715,7 +1715,7 @@ along with this program. If not, see http://www.gnu.org/licenses/.
       <packing>
         <property name="expand">False</property>
         <property name="fill">True</property>
-        <property name="position">5</property>
+        <property name="position">4</property>
       </packing>
     </child>
     <child>
@@ -1729,6 +1729,21 @@ along with this program. If not, see http://www.gnu.org/licenses/.
         <property name="expand">False</property>
         <property name="fill">True</property>
         <property name="position">5</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="button_VNC1_default">
+        <property name="label" translatable="yes">Сохранить как параметры по умолчанию</property>
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="margin_bottom">3</property>
+        <signal name="clicked" handler="onButtonDefault" object="entry_VNC1_serv" swapped="no"/>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">6</property>
       </packing>
     </child>
     <child>

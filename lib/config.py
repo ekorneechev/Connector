@@ -130,7 +130,13 @@ DEFAULT[ 'tray' ] = False
 #Проверка обновлений программы
 DEFAULT[ 'check_version' ] = True
 
+#Default column by sort connections
+DEFAULT[ 'sort' ] = '0'
+
 #Параметры подключений по умолчанию
+#vncviewer
+DEFAULT [ "vnc1_args" ] = { "fullscreen" : "False",
+                            "viewonly"   : "False" }
 #FreeRDP:
 DEFAULT[ 'rdp1_args' ] = [ '','', 1, 1, '', '32', '', '', '', '', '', 0, 0, 0, 0, 0, 0, 0, None, 0, 0, 0, 0, 0, 0, 0, 0, None, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, '' ]
 #Remmina
@@ -142,9 +148,6 @@ DEFAULT[ 'spice_args' ] = [0, 0, 0, 0, 0, 0, '' ]
 DEFAULT[ 'ssh_args' ] = [ '', 0, '', 'UTF-8', '' ]
 DEFAULT[ 'sftp_args' ] = [ '', 0, '', 'UTF-8', '/' ]
 
-#Default column by sort connections
-DEFAULT[ 'sort' ] = '0'
-
 _config = ConfigParser( interpolation = None )
 _config_file = "%smyconnector.conf" % WORKFOLDER
 
@@ -152,6 +155,7 @@ def config_save( default = False ):
     """Default config for MyConnector"""
     if default:
         _config[ "myconnector" ] = DEFAULT
+        _config[ "vncviewer" ] = DEFAULT [ "vnc1_args" ].copy()
     with open( _config_file, 'w' ) as configfile:
         _config.write( configfile )
 
@@ -160,4 +164,5 @@ if not _result:
     config_save( default = True)
     _config.read( _config_file )
 CONFIG = _config[ "myconnector" ]
+CONFIGS = { "VNC1": _config[ "vncviewer" ] }
 

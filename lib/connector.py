@@ -144,10 +144,10 @@ class VncViewer:
             command = 'vncviewer ' + args
             server = args
         else:
-            command = 'vncviewer ' + args[0] + ' '
-            if args[1]: command += args[1]
-            if args[2]: command += args[2]
-            server = args[0]
+            server = args[ "server" ]
+            command = 'vncviewer %s ' % server
+            if args[ "fullscreen" ] == "True": command += "-fullscreen "
+            if args[ "viewonly" ] == "True": command += "-viewonly "
         options.log.info ("VNC: подключение к серверу %s. Команда запуска:", server)
         options.log.info (command)
         os.system(command + STD_TO_LOG)
