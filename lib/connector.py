@@ -146,8 +146,8 @@ class VncViewer:
         else:
             server = args[ "server" ]
             command = 'vncviewer %s ' % server
-            if args[ "fullscreen" ] == "True": command += "-fullscreen "
-            if args[ "viewonly" ] == "True": command += "-viewonly "
+            if args.getboolean( "fullscreen" ): command += "-fullscreen "
+            if args.getboolean( "viewonly" ): command += "-viewonly "
         options.log.info ("VNC: подключение к серверу %s. Команда запуска:", server)
         options.log.info (command)
         os.system(command + STD_TO_LOG)
@@ -306,13 +306,13 @@ class Vmware:
                 options.log.info ("VMware: подключение к серверу %s", args)
                 options.log.info (command)
             else:
-                command = 'vmware-view -q -s ' + args[0]
-                if args[1]: command += ' -u ' + args[1]
-                if args[2]: command += ' -d ' + args[2]
-                if args[4]: command += ' --fullscreen'
-                options.log.info ("VMware: подключение к серверу %s", args[0])
+                command = 'vmware-view -q -s %s' %  args[ "server" ]
+                if args.get( "user" , "" ): command += ' -u %s' % args[ "user" ]
+                if args.get( "domain" , "" ): command += ' -d %s' % args[ "domain" ]
+                if args.getboolean( "fullscreen" ): command += ' --fullscreen'
+                options.log.info ( "VMware: подключение к серверу %s", args[ "server" ] )
                 options.log.info (command)
-                if args[3]: command += ' -p ' + args[3]
+                if args.get( "password", "" ): command += ' -p %s' % args[ "password" ]
             os.system(command + STD_TO_LOG)
         else:
             options.log.warning ("VMware Horizon Client is not installed!")
@@ -326,9 +326,10 @@ def _missCitrix():
 class Citrix:
     """Класс для настройки ICA-соединения к Citrix-серверу"""
     def start(self, args):
-        if type(args) == list:
-            addr = args[0]
-        else: addr = args
+        if type(args) == str:
+            addr = args
+        else:
+            addr = args [ "server" ]
         if citrixCheck():
             options.log.info ("Citrix: подключение к серверу %s", addr)
             os.system('/opt/Citrix/ICAClient/util/storebrowse --addstore ' + addr + STD_TO_LOG)
@@ -344,9 +345,10 @@ class Citrix:
 class Web:
     """Класс для настройки подключения к WEB-ресурсу"""
     def start(self, args):
-        if type(args) == list:
-            addr = args[0]
-        else: addr = args
+        if type(args) == str:
+            addr = args
+        else:
+            addr = args [ "server" ]
         if  not addr.find("://") != -1:
             addr = "http://" + addr
         command = 'xdg-open "' + addr + '"'

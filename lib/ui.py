@@ -41,16 +41,17 @@ def connectFile(filename, openFile = False):
         if parameters != None:
             protocol = parameters[ "protocol" ]
             #if openFile: parameters.append(parameters[0]) #если открывается файл .ctor, то заголовок окна - адрес сервера
-            #else: parameters.append(options.nameFromFilename(filename))
+            #else: parameters.append(options.nameFromFilename(filename)) TODO - check after freerdp text format
             if protocol == 'RDP' and CONFIG[ 'rdp' ] == '1': #TODO 1=freerdp
                 try: parameters[40] = keyring.get_password(str(parameters[0]),str(parameters[1]))
                 except: pass
             connect = definition(protocol)
             connect.start(parameters)
-    except (IndexError, KeyError):
-        options.log.exception ( """Ошибка в файле %s: либо он создан в старой версии MyConnector,
-                                     либо программа по умолчанию выбрана отличная от сохраненного файла""" % filename.replace( "tmp_","" ))
-        os.system( "zenity --error --icon-name=myconnector --text='\nПроверьте настройки программ по умолчанию.' --no-wrap" )
+    #except IndexError #TODO - after remmina rdp и vnc text format
+    except KeyError:
+        e = "Ошибка в файле %s: адрес сервера не указан (параметр server)." % filename.replace( "tmp_", "" )
+        options.log.exception ( e )
+        os.system( "zenity --error --icon-name=myconnector --text='\n%s' --no-wrap" % e )
 
 def connectFileRdp(filename):
     """Connect to the server with file .rdp"""
@@ -468,8 +469,8 @@ class Gui(Gtk.Application):
         """В этой функции параметры загружаются из сохраненного файла"""
         if not args: return False
         if protocol == 'VNC' and CONFIG[ 'vnc' ] == '1': #TODO vncviewer
-            if args[ "fullscreen" ] == 'True': self.VNC_viewmode.set_active( True )
-            if args[ "viewonly" ] == 'True': self.VNC_viewonly.set_active( True )
+            if args.getboolean( "fullscreen" ): self.VNC_viewmode.set_active( True )
+            if args.getboolean( "viewonly" ): self.VNC_viewonly.set_active( True )
 
         if protocol == 'VNC' and CONFIG[ 'vnc' ] == '0': #TODO remmina
             self.VNC_user.set_text(args[1])
@@ -483,10 +484,10 @@ class Gui(Gtk.Application):
             else: self.VNC_showcursor.set_active(False)
 
         if protocol == 'VMWARE':
-            self.VMWARE_user.set_text(args[1])
-            self.VMWARE_domain.set_text(args[2])
-            self.VMWARE_password.set_text(args[3])
-            self.VMWARE_fullscreen.set_active(args[4])
+            self.VMWARE_user.set_text( args.get( "user", "" ) )
+            self.VMWARE_domain.set_text( args.get( "domain", "" ) )
+            self.VMWARE_password.set_text( args.get( "password", "" ) )
+            if args.getboolean( "fullscreen" ): self.VMWARE_fullscreen.set_active( True )
 
         if protocol == 'XDMCP':
             self.XDMCP_color.set_active_id(args[1])
@@ -807,11 +808,12 @@ class Gui(Gtk.Application):
         """В этой функции параметры для подключения собираются из окна Доп. параметры в список"""
 
         if protocol == 'VMWARE':
-            user = self.VMWARE_user.get_text()
-            domain = self.VMWARE_domain.get_text()
-            password = self.VMWARE_password.get_text()
-            fullscreen = self.VMWARE_fullscreen.get_active()
-            args = [user, domain, password, fullscreen]
+            args = dict(
+                user = self.VMWARE_user.get_text(),
+                domain = self.VMWARE_domain.get_text(),
+                password = self.VMWARE_password.get_text(),
+                fullscreen = str (self.VMWARE_fullscreen.get_active() )
+            )
 
         if self.changeProgram(protocol) == "RDP":
             user = self.RDP_user.get_text()
@@ -952,9 +954,10 @@ class Gui(Gtk.Application):
             args = [user, quality, color, viewmode, viewonly, crypt, clipboard, showcursor]
 
         if self.changeProgram(protocol) == "VNC1":
-            args = {}
-            args[ "fullscreen" ] = str( self.VNC_viewmode.get_active() )
-            args[ "viewonly" ] = str( self.VNC_viewonly.get_active() )
+            args = dict(
+                fullscreen = str( self.VNC_viewmode.get_active() ),
+                viewonly = str( self.VNC_viewonly.get_active() )
+            )
 
         if protocol == 'XDMCP':
             color = self.XDMCP_color.get_active_id()
@@ -1186,9 +1189,9 @@ class Gui(Gtk.Application):
         elif options.searchName(name) and not self.citrixEditClick and not self.webEditClick:
             os.system( "zenity --error --text='\nПодключение с именем \"%s\" уже существует!' --no-wrap --icon-name=myconnector" % name )
         else:
-            parameters = []
-            parameters.append(protocol)
-            parameters.append(server)
+            parameters = { "name"     : name,
+                           "protocol" : protocol,
+                           "server"   : server }
             if self.citrixEditClick or self.webEditClick:
                 fileName = self.resaveFileCtor(name, protocol, server)
             else:
