@@ -41,16 +41,17 @@ def connectFile(filename, openFile = False):
         if parameters != None:
             protocol = parameters[ "protocol" ]
             #if openFile: parameters.append(parameters[0]) #если открывается файл .ctor, то заголовок окна - адрес сервера
-            #else: parameters.append(options.nameFromFilename(filename))
+            #else: parameters.append(options.nameFromFilename(filename)) TODO - check after freerdp text format
             if protocol == 'RDP' and CONFIG[ 'rdp' ] == '1': #TODO 1=freerdp
                 try: parameters[40] = keyring.get_password(str(parameters[0]),str(parameters[1]))
                 except: pass
             connect = definition(protocol)
             connect.start(parameters)
-    except (IndexError, KeyError):
-        options.log.exception ( """Ошибка в файле %s: либо он создан в старой версии MyConnector,
-                                     либо программа по умолчанию выбрана отличная от сохраненного файла""" % filename.replace( "tmp_","" ))
-        os.system( "zenity --error --icon-name=myconnector --text='\nПроверьте настройки программ по умолчанию.' --no-wrap" )
+    #except IndexError #TODO - after remmina rdp и vnc text format
+    except KeyError:
+        e = "Ошибка в файле %s: адрес сервера не указан (параметр server)." % filename.replace( "tmp_", "" )
+        options.log.exception ( e )
+        os.system( "zenity --error --icon-name=myconnector --text='\n%s' --no-wrap" % e )
 
 def connectFileRdp(filename):
     """Connect to the server with file .rdp"""
