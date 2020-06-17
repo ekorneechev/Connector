@@ -1160,8 +1160,9 @@ class Gui(Gtk.Application):
         elif options.searchName(name) and not self.editClick:
             os.system( "zenity --error --text='\nПодключение с именем \"%s\" уже существует!' --no-wrap --icon-name=myconnector" % name )
         else:
-            parameters[ "server" ] = server
+            parameters[ "name" ] = name
             parameters[ "protocol" ] = protocol
+            parameters[ "server" ] = server
             if self.editClick:#если нажата кнопка Изменить, то пересохранить
                 fileName = self.resaveFileCtor(name, protocol, server)
             else:

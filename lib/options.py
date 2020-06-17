@@ -20,7 +20,6 @@ from gi import require_version
 require_version('Gtk', '3.0')
 
 from pickle import ( load,
-                     dump,
                      UnpicklingError )
 import myconnector.ui
 from gi.repository import Gtk
@@ -39,11 +38,11 @@ log = FakeLog()
 os.system("mkdir -p " + LOGFOLDER)
 
 def saveInFile(fileName, obj):
-    """Запись параметров в файл:
-    saveInFile(<имя файла>, <имя объекта для записи>)"""
-    dbfile = open(WORKFOLDER+fileName, 'wb')
-    dump( obj, dbfile )
-    dbfile.close()
+    """Save connection parameters to file *.ctor)"""
+    conf = ConfigParser()
+    conf [ "myconnector" ] = obj
+    with open( WORKFOLDER + fileName, 'w' ) as fileCtor:
+        conf.write( fileCtor )
 
 def loadFromFile(fileName, window = None):
     """Загрузка сохраненных параметров из файла"""
@@ -60,6 +59,10 @@ def loadFromFile(fileName, window = None):
         log.exception("Файл %s c сохраненными настройками не найден! Подробнее:", fileName)
         return None
     except ( UnpicklingError, EOFError ):
+        conf = ConfigParser()
+        conf.read( WORKFOLDER + fileName )
+        return conf[ "myconnector" ]
+    except:
         dialog = Gtk.MessageDialog(window, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK,
                  "Файл %s\nимеет неверный формат" % fileName.replace("tmp_",""))
         response = dialog.run()

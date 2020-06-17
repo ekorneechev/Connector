@@ -17,6 +17,7 @@ along with this program. If not, see http://www.gnu.org/licenses/.
 -->
 <mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
    <mime-type type="application/x-myconnector">
+     <sub-class-of type="text/plain"/>
      <comment>MyConnector connection file</comment>
      <comment xml:lang="ru">Файл подключения MyConnector</comment>
      <glob pattern="*.ctor"/>
