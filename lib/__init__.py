@@ -44,10 +44,8 @@ def main():
     if args.disable_kiosk:
         if getuid() == 0:
             try:
-                from kiosk.kiosk import ( disable_kiosk,
-                                          config_init )
+                from kiosk.kiosk import disable_kiosk
                 disable_kiosk()
-                config_init()
                 exit (0)
             except ImportError:
                 print ( "The mode KIOSK unavailable, package is not installed." )

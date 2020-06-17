@@ -18,9 +18,9 @@
 # Checking avaiable chromium
 which chromium > /dev/null 2>&1
 if [ "$?" -eq 0 ]; then
-    KIOSK_COMMAND="chromium --incognito"
+    KIOSK_COMMAND="chromium --kiosk --incognito"
 else
-    KIOSK_COMMAND="firefox --private-window"
+    KIOSK_COMMAND="firefox --kiosk --private-window"
 fi
 
 # marco - default window manager in MATE.
@@ -29,5 +29,5 @@ marco --replace &
 
 while :
 do
-$KIOSK_COMMAND --kiosk $1
+$KIOSK_COMMAND $1
 done

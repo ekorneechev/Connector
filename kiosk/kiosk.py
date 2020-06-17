@@ -50,6 +50,7 @@ def lightdm_clear_autologin():
 
 def load_kiosk_user():
     """Load username for KIOSK from the config"""
+    _config.read( _kiosk_conf )
     try: username = _config.get( "kiosk", "user" )
     except: username = "kiosk"
     return username
@@ -103,6 +104,9 @@ def disable_kiosk():
     lightdm_clear_autologin()
     os.system("rm -f /etc/X11/xsession.user.d/%s" % load_kiosk_user())
     os.system("rm -f %s/myconnector-*.desktop" % _etc_dir)
+    _config['kiosk']['mode'] = '0'
+    with open( _kiosk_conf, 'w' ) as configfile:
+        _config.write( configfile )
 
 def enable_ctrl():
     """Enable key 'Ctrl' in webkiosk"""
