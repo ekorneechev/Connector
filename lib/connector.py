@@ -146,8 +146,8 @@ class VncViewer:
         else:
             server = args[ "server" ]
             command = 'vncviewer %s ' % server
-            if args[ "fullscreen" ] == "True": command += "-fullscreen "
-            if args[ "viewonly" ] == "True": command += "-viewonly "
+            if args.getboolean( "fullscreen" ): command += "-fullscreen "
+            if args.getboolean( "viewonly" ): command += "-viewonly "
         options.log.info ("VNC: подключение к серверу %s. Команда запуска:", server)
         options.log.info (command)
         os.system(command + STD_TO_LOG)
@@ -307,12 +307,12 @@ class Vmware:
                 options.log.info (command)
             else:
                 command = 'vmware-view -q -s %s' %  args[ "server" ]
-                if args[ "user" ]: command += ' -u %s' % args[ "user" ]
-                if args[ "domain" ]: command += ' -d %s' % args[ "domain" ]
+                if args.get( "user" , "" ): command += ' -u %s' % args[ "user" ]
+                if args.get( "domain" , "" ): command += ' -d %s' % args[ "domain" ]
                 if args.getboolean( "fullscreen" ): command += ' --fullscreen'
                 options.log.info ( "VMware: подключение к серверу %s", args[ "server" ] )
                 options.log.info (command)
-                if args[ "password" ]: command += ' -p %s' % args[ "password" ]
+                if args.get( "password", "" ): command += ' -p %s' % args[ "password" ]
             os.system(command + STD_TO_LOG)
         else:
             options.log.warning ("VMware Horizon Client is not installed!")

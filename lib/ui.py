@@ -483,10 +483,10 @@ class Gui(Gtk.Application):
             else: self.VNC_showcursor.set_active(False)
 
         if protocol == 'VMWARE':
-            self.VMWARE_user.set_text( args[ "user" ] )
-            self.VMWARE_domain.set_text( args[ "domain" ] )
-            self.VMWARE_password.set_text( args[ "password" ] )
-            self.VMWARE_fullscreen.set_active( args.getboolean( "fullscreen" ) )
+            self.VMWARE_user.set_text( args.get( "user", "" ) )
+            self.VMWARE_domain.set_text( args.get( "domain", "" ) )
+            self.VMWARE_password.set_text( args.get( "password", "" ) )
+            if args.getboolean( "fullscreen" ): self.VMWARE_fullscreen.set_active( True )
 
         if protocol == 'XDMCP':
             self.XDMCP_color.set_active_id(args[1])
