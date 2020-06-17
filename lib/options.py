@@ -53,29 +53,22 @@ def loadFromFile(fileName, window = None):
         dbfile.close()
         return obj
     except FileNotFoundError:
-        if fileName.find('default.conf') != -1: #если загружаем параметры программы
-            #при неудаче - создает файл со значениями по умолчанию
-            log.warning ("Файл с настройками по умолчанию (default.conf) не найден, сгенерирован новый!")
-            saveInFile(fileName, DEFAULT)
-            return DEFAULT
-        else: #если загружаем параметры одного из сохраненных подключений
-            dialog = Gtk.MessageDialog(window, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK,
-                    "Файл " + fileName + "\nc сохраненными настройками не найден")
-            response = dialog.run()
-            dialog.destroy()
-            log.exception("Файл %s c сохраненными настройками не найден! Подробнее:", fileName)
-            return None
+        dialog = Gtk.MessageDialog(window, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK,
+                "Файл " + fileName + "\nc сохраненными настройками не найден")
+        response = dialog.run()
+        dialog.destroy()
+        log.exception("Файл %s c сохраненными настройками не найден! Подробнее:", fileName)
+        return None
     except ( UnpicklingError, EOFError ):
         dialog = Gtk.MessageDialog(window, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK,
                  "Файл %s\nимеет неверный формат" % fileName.replace("tmp_",""))
         response = dialog.run()
         dialog.destroy()
         log.exception("Файл %s имеет неверный формат! Подробнее:", fileName.replace("tmp_",""))
-        if fileName.find('default.conf') != -1: saveInFile(fileName, DEFAULT); return DEFAULT
         return None
 
-try: enableLog = loadFromFile('default.conf')['LOG']
-except KeyError: enableLog = DEFAULT['LOG']
+try: enableLog = CONFIG.getboolean( 'log' )
+except KeyError: enableLog = DEFAULT[ 'log' ]
 if enableLog:
     log = getLogger( "myconnector" )
     basicConfig (
@@ -198,7 +191,7 @@ class Properties(Gtk.Window):
         self.show_all()
 
     def initParameters(self):
-        """Initializing parameters from a file default.conf"""
+        """Initializing parameters from a file myconnector.conf"""
         if CONFIG[ 'rdp' ] == '1': #TODO 1=freerdp
             self.changeRdpFree.set_active( True )
         if CONFIG[ 'vnc' ] == '1': #TODO 1=vncviewer
