@@ -468,8 +468,8 @@ class Gui(Gtk.Application):
         """В этой функции параметры загружаются из сохраненного файла"""
         if not args: return False
         if protocol == 'VNC' and CONFIG[ 'vnc' ] == '1': #TODO vncviewer
-            if args[ "fullscreen" ] == 'True': self.VNC_viewmode.set_active( True )
-            if args[ "viewonly" ] == 'True': self.VNC_viewonly.set_active( True )
+            if args.getboolean( "fullscreen" ): self.VNC_viewmode.set_active( True )
+            if args.getboolean( "viewonly" ): self.VNC_viewonly.set_active( True )
 
         if protocol == 'VNC' and CONFIG[ 'vnc' ] == '0': #TODO remmina
             self.VNC_user.set_text(args[1])
@@ -483,10 +483,10 @@ class Gui(Gtk.Application):
             else: self.VNC_showcursor.set_active(False)
 
         if protocol == 'VMWARE':
-            self.VMWARE_user.set_text(args[1])
-            self.VMWARE_domain.set_text(args[2])
-            self.VMWARE_password.set_text(args[3])
-            self.VMWARE_fullscreen.set_active(args[4])
+            self.VMWARE_user.set_text( args[ "user" ] )
+            self.VMWARE_domain.set_text( args[ "domain" ] )
+            self.VMWARE_password.set_text( args[ "password" ] )
+            self.VMWARE_fullscreen.set_active( args.getboolean( "fullscreen" ) )
 
         if protocol == 'XDMCP':
             self.XDMCP_color.set_active_id(args[1])
@@ -807,11 +807,12 @@ class Gui(Gtk.Application):
         """В этой функции параметры для подключения собираются из окна Доп. параметры в список"""
 
         if protocol == 'VMWARE':
-            user = self.VMWARE_user.get_text()
-            domain = self.VMWARE_domain.get_text()
-            password = self.VMWARE_password.get_text()
-            fullscreen = self.VMWARE_fullscreen.get_active()
-            args = [user, domain, password, fullscreen]
+            args = dict(
+                user = self.VMWARE_user.get_text(),
+                domain = self.VMWARE_domain.get_text(),
+                password = self.VMWARE_password.get_text(),
+                fullscreen = str (self.VMWARE_fullscreen.get_active() )
+            )
 
         if self.changeProgram(protocol) == "RDP":
             user = self.RDP_user.get_text()
@@ -952,9 +953,10 @@ class Gui(Gtk.Application):
             args = [user, quality, color, viewmode, viewonly, crypt, clipboard, showcursor]
 
         if self.changeProgram(protocol) == "VNC1":
-            args = {}
-            args[ "fullscreen" ] = str( self.VNC_viewmode.get_active() )
-            args[ "viewonly" ] = str( self.VNC_viewonly.get_active() )
+            args = dict(
+                fullscreen = str( self.VNC_viewmode.get_active() ),
+                viewonly = str( self.VNC_viewonly.get_active() )
+            )
 
         if protocol == 'XDMCP':
             color = self.XDMCP_color.get_active_id()

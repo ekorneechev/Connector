@@ -306,13 +306,13 @@ class Vmware:
                 options.log.info ("VMware: подключение к серверу %s", args)
                 options.log.info (command)
             else:
-                command = 'vmware-view -q -s ' + args[0]
-                if args[1]: command += ' -u ' + args[1]
-                if args[2]: command += ' -d ' + args[2]
-                if args[4]: command += ' --fullscreen'
-                options.log.info ("VMware: подключение к серверу %s", args[0])
+                command = 'vmware-view -q -s %s' %  args[ "server" ]
+                if args[ "user" ]: command += ' -u %s' % args[ "user" ]
+                if args[ "domain" ]: command += ' -d %s' % args[ "domain" ]
+                if args.getboolean( "fullscreen" ): command += ' --fullscreen'
+                options.log.info ( "VMware: подключение к серверу %s", args[ "server" ] )
                 options.log.info (command)
-                if args[3]: command += ' -p ' + args[3]
+                if args[ "password" ]: command += ' -p %s' % args[ "password" ]
             os.system(command + STD_TO_LOG)
         else:
             options.log.warning ("VMware Horizon Client is not installed!")
