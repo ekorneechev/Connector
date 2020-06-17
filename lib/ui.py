@@ -39,7 +39,7 @@ def connectFile(filename, openFile = False):
     try:
         parameters = options.loadFromFile(filename)
         if parameters != None:
-            protocol = parameters[ "protocol" ]
+            protocol = parameters[ "protocol" ] #TODO - add try/except and log
             #if openFile: parameters.append(parameters[0]) #если открывается файл .ctor, то заголовок окна - адрес сервера
             #else: parameters.append(options.nameFromFilename(filename)) TODO - check after freerdp text format
             if protocol == 'RDP' and CONFIG[ 'rdp' ] == '1': #TODO 1=freerdp
@@ -349,10 +349,10 @@ class Gui(Gtk.Application):
             filename = dialog.get_filename()
             parameters = options.importFromFile(filename)
             if parameters != None:
-                protocol = parameters [ "protocol" ]
+                protocol = parameters [ "protocol" ] #TODO - add try/except and log
                 if self.correctProgram(parameters):
                     if protocol == 'CITRIX' or protocol == 'WEB':
-                        self.onWCEdit( '', parameters [ "server" ], protocol )
+                        self.onWCEdit( '', parameters[ "server" ], protocol ) #TODO - add try/except and log
                     else:
                         analogEntry = self.AnalogEntry(protocol, parameters)
                         self.onButtonPref(analogEntry)
@@ -1256,7 +1256,7 @@ class Gui(Gtk.Application):
         nameConnect, fileCtor = table[indexRow][0], table[indexRow][3]
         parameters = options.loadFromFile(fileCtor, self.window)
         if parameters is not None: #если файл .ctor имеет верный формат
-            protocol = parameters[ "protocol" ]
+            protocol = parameters[ "protocol" ] #TODO - add try/except and log
             if self.correctProgram(parameters):
                 parameters[ "name" ] = nameConnect
                 try:
@@ -1280,10 +1280,10 @@ class Gui(Gtk.Application):
         nameConnect, self.fileCtor = table[indexRow][0], table[indexRow][3]
         parameters = options.loadFromFile(self.fileCtor, self.window)
         if parameters is not None: #если файл .ctor имеет верный формат
-            protocol = parameters [ "protocol" ]
+            protocol = parameters [ "protocol" ] #TODO - add try/except and log
             if self.correctProgram(parameters):
                 if protocol == 'CITRIX' or protocol == 'WEB':
-                    self.onWCEdit( nameConnect, parameters [ "server" ], protocol )
+                    self.onWCEdit( nameConnect, parameters [ "server" ], protocol ) #TODO - add try/except and log or parameters.get
                 else:
                     self.editClick = True
                     analogEntry = self.AnalogEntry(protocol, parameters)
@@ -1296,11 +1296,11 @@ class Gui(Gtk.Application):
         nameConnect, self.fileCtor = table[indexRow][0], table[indexRow][3]
         parameters = options.loadFromFile(self.fileCtor, self.window)
         if parameters is not None: #если файл .ctor имеет верный формат
-            protocol = parameters[ "protocol" ]
+            protocol = parameters[ "protocol" ] #TODO - add try/except and log
             if self.correctProgram(parameters):
                 nameConnect = nameConnect + ' (копия)'
                 if protocol == 'CITRIX' or protocol == 'WEB':
-                    self.onWCEdit( nameConnect, parameters[ "server" ], protocol, False )
+                    self.onWCEdit( nameConnect, parameters[ "server" ], protocol, False ) #TODO - add try/except and log or parameters.get
                 else:
                     analogEntry = self.AnalogEntry(protocol, parameters)
                     self.onButtonPref(analogEntry, nameConnect)
@@ -1315,7 +1315,7 @@ class Gui(Gtk.Application):
         def get_name( self ):
             return self.name
         def get_text( self ):
-            return self.parameters[ "server" ]
+            return self.parameters[ "server" ]  #TODO - add try/except and log
         def loadParameters( self ):
             return self.parameters
 
