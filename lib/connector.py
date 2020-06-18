@@ -373,13 +373,13 @@ class FileServer:
                 command = _exec + args + '"'
                 server = args
         else:
-            try: protocol, server = args[0].split("://")
-            except: server = args[0]; protocol = args[4]
+            try: protocol, server = args[ "server" ].split("://") #TODO try/except
+            except: server = args[ "server" ]; protocol = args[ "type" ] #TODO try/except
             command = _exec + protocol + "://"
-            if args[2]: command += args[2] + ";"
-            if args[1]: command += args[1] + "@"
+            if args.get( "domain" , "" ): command += "%s;" % args[ "domain" ]
+            if args.get( "user" , "" ): command += "%s@" % args[ "user" ]
             command += server
-            if args[3]: command += '/' + args[3]
+            if args.get( "folder" , "" ): command += "/%s" % args[ "folder" ]
             command += '"'
         options.log.info ("Открытие файлового сервера %s. Команда запуска:", server)
         options.log.info (command)

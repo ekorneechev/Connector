@@ -652,14 +652,10 @@ class Gui(Gtk.Application):
                 self.SPICE_cacert.set_filename(args[7])
 
         if protocol == 'FS':
-            self.FS_user.set_text(args[1])
-            self.FS_domain.set_text(args[2])
-            self.FS_folder.set_text(args[3])
-            try: self.FS_type.set_active_id(args[4])
-            except: #совместимость с версиями ниже 1.8.2
-                protocol, server = args[0].split("://")
-                self.FS_type.set_active_id(protocol)
-                self.FS_server.set_text(server)
+            self.FS_user.set_text( args.get( "user", "" ) )
+            self.FS_domain.set_text( args.get( "domain", "" ) )
+            self.FS_folder.set_text( args.get( "folder", "" ) )
+            self.FS_type.set_active_id( args.get( "type", "" ) )
 
     def initPreferences(self, protocol):
         """В этой функции определяются различные для протоколов параметры"""
@@ -1020,11 +1016,12 @@ class Gui(Gtk.Application):
             args = [tls, viewonly, resize, clipboard, cards, sound, cacert]
 
         if protocol == 'FS':
-            user = self.FS_user.get_text()
-            domain = self.FS_domain.get_text()
-            folder = self.FS_folder.get_text()
-            _type = self.FS_type.get_active_id()
-            args = [user, domain, folder, _type]
+            args = dict(
+                user = self.FS_user.get_text(),
+                domain = self.FS_domain.get_text(),
+                folder = self.FS_folder.get_text(),
+                type = self.FS_type.get_active_id()
+            )
 
         return args
 
