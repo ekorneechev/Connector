@@ -34,7 +34,7 @@ UIFOLDER = "%s/ui" % MAINFOLDER
 
 #Установки по умолчанию для параметров программы (какие приложения использовать)
 DEFAULT = { "rdp"  : "freerdp",
-            "vnc"  : "vncvieiwer",
+            "vnc"  : "vncviewer",
             "tab"  : '0',
             "main" : '0' }
 
@@ -139,7 +139,8 @@ DEFAULT[ 'sort' ] = '0'
 #Параметры подключений по умолчанию
 #vncviewer
 DEFAULT [ "vnc1_args" ] = { "fullscreen" : "False",
-                            "viewonly"   : "False" }
+                            "viewonly"   : "False",
+                            "program"    : "vncviewer" }
 #FreeRDP:
 DEFAULT[ 'rdp1_args' ] = [ '','', 1, 1, '', '32', '', '', '', '', '', 0, 0, 0, 0, 0, 0, 0, None, 0, 0, 0, 0, 0, 0, 0, 0, None, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, '' ]
 #Remmina
@@ -151,7 +152,8 @@ DEFAULT[ "vnc_args" ] = { "username"          : "",
                           "viewonly"          : "0",
                           "disableencryption" : "0",
                           "disableclipboard"  : "0",
-                          "showcursor"        : "1" }
+                          "showcursor"        : "1",
+                          "program"           : "remmina" }
 DEFAULT[ 'nx_args' ] = [ '', '0', '', 1, '', 0, 0, '' ]
 DEFAULT[ 'xdmcp_args' ] = [ '0', 1, '', 0, 0, '' ]
 DEFAULT[ 'spice_args' ] = [0, 0, 0, 0, 0, 0, '' ]

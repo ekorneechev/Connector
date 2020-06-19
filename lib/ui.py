@@ -42,7 +42,7 @@ def connectFile(filename, openFile = False):
             protocol = parameters[ "protocol" ] #TODO - add try/except and log
             #if openFile: parameters.append(parameters[0]) #если открывается файл .ctor, то заголовок окна - адрес сервера
             #else: parameters.append(options.nameFromFilename(filename)) TODO - check after freerdp text format
-            if protocol == 'RDP' and CONFIG[ 'rdp' ] == '1': #TODO 1=freerdp
+            if parameters.get( "program" ) == "freerdp":
                 try: parameters[40] = keyring.get_password(str(parameters[0]),str(parameters[1]))
                 except: pass
             connect = definition(protocol)
@@ -55,7 +55,7 @@ def connectFile(filename, openFile = False):
 
 def connectFileRdp(filename):
     """Connect to the server with file .rdp"""
-    if CONFIG[ 'rdp' ] == '1': #TODO 1=freerdp
+    if CONFIG[ "rdp" ] == "freerdp":
         tmpfile = WORKFOLDER + ".tmp.rdp"
         os.system('cp -r "%s" "%s"' % (filename, tmpfile))
         os.system('xfreerdp "%s" -sec-nla %s' % (tmpfile, STD_TO_LOG))
@@ -272,16 +272,10 @@ class Gui(Gtk.Application):
         return check
 
     def initLabels(self, rdp, vnc, fs):
-        """Отбражает на главном окне выбранную программу для подключения RDP, VNC и FS"""
-        if CONFIG[ 'rdp' ] == '1': rdp.set_text( '(FreeRDP)' ) #TODO 1=freerdp
-        else: rdp.set_text('(Remmina)')
-        if CONFIG[ 'vnc' ] == '1': vnc.set_text( '(vncviewer)' ) #TODO 1=vncviewer
-        else: vnc.set_text('(Remmina)')
-        try:
-            fs_prog = CONFIG [ 'fs' ]
-        except KeyError:
-            fs_prog = DEFAULT[ 'fs' ]
-        fs.set_text('(' + fs_prog + ')')
+        """Display on the main window the program name for RDP, VNC and FS"""
+        rdp.set_text( "(%s)" % CONFIG.get( "rdp" ) )
+        vnc.set_text( "(%s)" % CONFIG.get( "vnc" ) )
+        fs.set_text ( "(%s)" % CONFIG.get( "fs"  ) )
 
     def onDeleteWindow(self, *args):
         """Закрытие программы"""
@@ -417,9 +411,8 @@ class Gui(Gtk.Application):
     def changeProgram(self, protocol):
         #Функция, возвращающая RDP1 или VNC1 при параметрах, отличных от Реммины
         try:
-            if CONFIG[ protocol ] == "1": protocol += "1" #TODO переделать
-        except KeyError:
-            pass #если нет возможности выбора программ для протокола
+            if CONFIG[ protocol ] != "remmina": protocol += "1"
+        except KeyError: pass
         return protocol
 
     def onButtonPref(self, entry_server, nameConnect = ''):
@@ -468,11 +461,11 @@ class Gui(Gtk.Application):
     def setPreferences(self, protocol, args):
         """В этой функции параметры загружаются из сохраненного файла"""
         if not args: return False
-        if protocol == 'VNC' and CONFIG[ 'vnc' ] == '1': #TODO vncviewer
+        if protocol == 'VNC' and CONFIG[ "vnc" ] == "vncviewer":
             if args.getboolean( "fullscreen" ): self.VNC_viewmode.set_active( True )
             if args.getboolean( "viewonly" ): self.VNC_viewonly.set_active( True )
 
-        if protocol == 'VNC' and CONFIG[ 'vnc' ] == '0': #TODO remmina
+        if protocol == 'VNC' and CONFIG[ "vnc" ] == "remmina":
             self.VNC_user.set_text( args.get( "username", "" ) )
             self.VNC_quality.set_active_id( args.get( "quality", "" ) )
             self.VNC_color.set_active_id( args.get( "colordepth", "" ) )
@@ -540,7 +533,7 @@ class Gui(Gtk.Application):
             if args[7]: self.NX_clipboard.set_active(True)
             self.NX_exec.set_text(args[8])
 
-        if protocol == 'RDP' and CONFIG[ 'rdp' ] == '0': #TODO remmina
+        if protocol == "RDP" and CONFIG[ "rdp" ] == "remmina":
             self.RDP_user.set_text(args[1])
             self.RDP_domain.set_text(args[2])
             self.RDP_color.set_active_id(args[3])
@@ -561,7 +554,7 @@ class Gui(Gtk.Application):
             self.RDP_sound.set_active_id(args[10])
             if args[11]: self.RDP_cards.set_active(True)
 
-        if protocol == 'RDP' and CONFIG[ 'rdp' ] == '1': #TODO freerdp
+        if protocol == "RDP" and CONFIG[ "rdp" ] == "freerdp":
             self.RDP_user.set_text(args[1])
             self.RDP_domain.set_text(args[2])
             if args[3]: self.RDP_fullscreen.set_active(True)
@@ -1220,13 +1213,11 @@ class Gui(Gtk.Application):
 
     def correctProgram(self, parameters):
         """Checking the correct program for connect"""
-        if parameters[ "protocol" ] == "VNC": #TODO ==remmina/freerdp, params.get (program, CONFIG)
-            if CONFIG[ "vnc" ] == "0" and parameters[ "program" ] == "remmina" : return True
-            elif CONFIG[ "vnc" ] == "1" and parameters[ "program" ] == "vncviewer" : return True
+        if parameters[ "protocol" ] == "VNC":
+            if CONFIG[ "vnc" ] == parameters.get( "program",  CONFIG[ "vnc" ] ): return True
             else: return False
         if parameters[ "protocol" ] == 'RDP':
-            if CONFIG[ "rdp" ] == "0" and parameters[ "program" ] == "remmina" : return True
-            elif CONFIG[ "rdp" ] == "1" and parameters[ "program" ] == "freerdp" : return True
+            if CONFIG[ "rdp" ] == parameters.get( "program",  CONFIG[ "rdp" ] ): return True
             else: return False
         return True
 

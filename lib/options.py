@@ -199,9 +199,9 @@ class Properties(Gtk.Window):
 
     def initParameters(self):
         """Initializing parameters from a file myconnector.conf"""
-        if CONFIG[ 'rdp' ] == '1': #TODO 1=freerdp
+        if CONFIG[ "rdp" ] == "freerdp":
             self.changeRdpFree.set_active( True )
-        if CONFIG[ 'vnc' ] == '1': #TODO 1=vncviewer
+        if CONFIG[ "vnc" ] == "vncviewer":
             self.changeVncView.set_active( True )
         try: self.combo_tabs.set_active_id( CONFIG[ 'tab' ] )
         except KeyError: self.combo_tabs.set_active_id( '0' )
@@ -237,11 +237,11 @@ class Properties(Gtk.Window):
     def onSave (self, *args):
         """Сохранение настроек программы"""
         if self.changeRdpRem.get_active():
-            CONFIG[ 'rdp' ] = '0'
-        else: CONFIG[ 'rdp' ] = '1'
+            CONFIG[ "rdp" ] = "remmina"
+        else: CONFIG[ "rdp" ] = "freerdp"
         if self.changeVncRem.get_active():
-            CONFIG[ 'vnc' ] = '0'
-        else: CONFIG[ 'vnc' ] = '1'
+            CONFIG[ "vnc" ] = "remmina"
+        else: CONFIG[ "vnc" ] = "vncviewer"
         CONFIG[ 'tab' ] = self.combo_tabs.get_active_id()
         CONFIG[ 'main' ] = self.combo_main.get_active_id()
         CONFIG[ 'fs' ] = self.entryFS.get_text()

@@ -388,11 +388,11 @@ class FileServer:
 def definition(protocol):
     """Функция определения протокола"""
     if protocol == 'VNC':
-        if CONFIG [ 'vnc' ] == '0': #TODO 0=remmina
+        if CONFIG [ "vnc" ] == "remmina":
             connect = VncRemmina()
         else: connect = VncViewer()
     elif protocol == 'RDP':
-        if CONFIG[ 'rdp' ] == '0': #TODO 0=remmina
+        if CONFIG[ "rdp" ] == "remmina":
             connect = RdpRemmina()
         else: connect = XFreeRdp()
     elif protocol == 'NX':
