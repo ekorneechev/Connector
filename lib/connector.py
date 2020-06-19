@@ -39,7 +39,8 @@ class Remmina:
     def create_cfg_file(self, args):
         """Создание файла конфигурации для соединения"""
         server, login = options.searchSshUser( args[ "server" ] )
-        if login: self.cfg[ "username"] = user
+        args[ "server" ] = server
+        if login: args[ "username" ] = login
         self.cfg[ "name" ] += args.get( "name" , server )
         f = open( WORKFOLDER + self.f_name, "w" )
         f.write( "[remmina]\n" )

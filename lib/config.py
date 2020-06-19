@@ -158,7 +158,11 @@ DEF_PROTO[ "vnc_args" ] = { "username"          : "",
 DEF_PROTO[ 'nx_args' ] = [ '', '0', '', 1, '', 0, 0, '' ]
 DEF_PROTO[ 'xdmcp_args' ] = [ '0', 1, '', 0, 0, '' ]
 DEF_PROTO[ 'spice_args' ] = [0, 0, 0, 0, 0, 0, '' ]
-DEF_PROTO[ 'ssh_args' ] = [ '', 0, '', 'UTF-8', '' ]
+DEF_PROTO[ 'ssh_args' ] = { "username"              : "",
+                            "ssh_auth"              : "0",
+                            "ssh_privatekey"        : "",
+                            "ssh_charset"           : "UTF-8",
+                            "exec"                  : "" }
 DEF_PROTO[ 'sftp_args' ] = [ '', 0, '', 'UTF-8', '/' ]
 
 _config = ConfigParser()
@@ -170,6 +174,7 @@ def config_save( default = False ):
         _config[ "myconnector" ] = DEFAULT
         _config[ "vncviewer" ] = DEF_PROTO[ "vnc1_args" ].copy()
         _config[ "remmina_vnc" ] = DEF_PROTO[ "vnc_args" ].copy()
+        _config[ "ssh" ] = DEF_PROTO[ "ssh_args" ].copy()
     with open( _config_file, 'w' ) as configfile:
         _config.write( configfile )
 
@@ -178,7 +183,8 @@ def config_init():
     _config.read( _config_file )
     main = _config[ "myconnector" ]
     protocols = { "VNC1" : _config[ "vncviewer" ],
-                  "VNC"  : _config[ "remmina_vnc" ] }
+                  "VNC"  : _config[ "remmina_vnc" ],
+                  "SSH"  : _config[ "ssh" ] }
     return main, protocols
 
 try:

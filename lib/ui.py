@@ -495,15 +495,15 @@ class Gui(Gtk.Application):
             self.XDMCP_exec.set_text(args[6])
 
         if protocol == 'SSH':
-            self.SSH_user.set_text(args[1])
-            if args[2] == 2: self.SSH_publickey.set_active(True)
-            elif args[2] == 1: self.SSH_keyfile.set_active(True)
+            self.SSH_user.set_text( args.get( "username", "" ) )
+            if args.get( "ssh_auth" ) == "3": self.SSH_publickey.set_active( True )
+            elif args.get( "ssh_auth" ) == "1": self.SSH_keyfile.set_active( True )
             else:
-                SSH_pwd = self.pref_builder.get_object("radio_SSH_pwd")
-                SSH_pwd.set_active(True)
-            self.SSH_path_keyfile.set_filename(args[3])
-            self.SSH_charset.set_text(args[4])
-            self.SSH_exec.set_text(args[5])
+                SSH_pwd = self.pref_builder.get_object( "radio_SSH_pwd" )
+                SSH_pwd.set_active( True )
+            self.SSH_path_keyfile.set_filename( args.get( "ssh_privatekey", "" ) )
+            self.SSH_charset.set_text( args.get( "ssh_charset", "" ) )
+            self.SSH_exec.set_text( args.get( "exec", "" ) )
 
         if protocol == 'SFTP':
             self.SFTP_user.set_text(args[1])
@@ -958,19 +958,18 @@ class Gui(Gtk.Application):
             args = [color, viewmode, resolution, once, showcursor, _exec]
 
         if protocol == 'SSH':
-            user = self.SSH_user.get_text()
-            charset = self.SSH_charset.get_text()
-            if not charset: charset = 'UTF-8'
-            _exec = self.SSH_exec.get_text()
+            args = dict(
+                username = self.SSH_user.get_text(),
+                ssh_charset = self.SSH_charset.get_text(),
+            )
+            args[ "exec" ] = self.SSH_exec.get_text()
             if self.SSH_publickey.get_active():
-                SSH_auth = 2
+                args[ "ssh_auth" ] = "3"
             elif self.SSH_keyfile.get_active():
-                SSH_auth = 1
-            else: SSH_auth = 0
-            if SSH_auth == 1:
-                keyfile = self.SSH_path_keyfile.get_filename()
-            else: keyfile = ''
-            args = [user, SSH_auth, keyfile, charset, _exec]
+                args[ "ssh_auth" ] = "1"
+            else: args[ "ssh_auth" ] = "0"
+            if args[ "ssh_auth" ] == "1":
+                args[ "ssh_privatekey" ] = self.SSH_path_keyfile.get_filename()
 
         if protocol == 'SFTP':
             user = self.SFTP_user.get_text()
