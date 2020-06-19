@@ -473,15 +473,15 @@ class Gui(Gtk.Application):
             if args.getboolean( "viewonly" ): self.VNC_viewonly.set_active( True )
 
         if protocol == 'VNC' and CONFIG[ 'vnc' ] == '0': #TODO remmina
-            self.VNC_user.set_text(args[1])
-            self.VNC_quality.set_active_id(args[2])
-            self.VNC_color.set_active_id(args[3])
-            if args[4] == 4: self.VNC_viewmode.set_active(True)
-            if args[5]: self.VNC_viewonly.set_active(True)
-            if args[6]: self.VNC_crypt.set_active(True)
-            if args[7]: self.VNC_clipboard.set_active(True)
-            if args[8]: self.VNC_showcursor.set_active(True)
-            else: self.VNC_showcursor.set_active(False)
+            self.VNC_user.set_text( args.get( "username", "" ) )
+            self.VNC_quality.set_active_id( args.get( "quality", "" ) )
+            self.VNC_color.set_active_id( args.get( "colordepth", "" ) )
+            if args.get( "viewmode" , "1" ) == "4": self.VNC_viewmode.set_active( True )
+            if args.getboolean( "viewonly" ): self.VNC_viewonly.set_active( True )
+            if args.getboolean( "disableencryption" ): self.VNC_crypt.set_active( True )
+            if args.getboolean( "disableclipboard" ): self.VNC_clipboard.set_active( True )
+            if args.getboolean( "showcursor" ): self.VNC_showcursor.set_active( True )
+            else: self.VNC_showcursor.set_active( False )
 
         if protocol == 'VMWARE':
             self.VMWARE_user.set_text( args.get( "user", "" ) )
@@ -934,20 +934,16 @@ class Gui(Gtk.Application):
             args = [user, quality, resolution, viewmode, keyfile, crypt, clipboard, _exec]
 
         if self.changeProgram(protocol) == "VNC":
-            user = self.VNC_user.get_text()
-            quality = self.VNC_quality.get_active_id()
-            color = self.VNC_color.get_active_id()
-            if self.VNC_crypt.get_active(): crypt = 1
-            else: crypt = 0
-            if self.VNC_clipboard.get_active(): clipboard = 1
-            else: clipboard = 0
-            if self.VNC_viewmode.get_active(): viewmode = 4
-            else: viewmode = 1
-            if self.VNC_viewonly.get_active(): viewonly = 1
-            else: viewonly = 0
-            if self.VNC_showcursor.get_active(): showcursor = 1
-            else: showcursor = 0
-            args = [user, quality, color, viewmode, viewonly, crypt, clipboard, showcursor]
+            args = dict(
+                username = self.VNC_user.get_text(),
+                quality = self.VNC_quality.get_active_id(),
+                colordepth = self.VNC_color.get_active_id(),
+                disableencryption = "1" if self.VNC_crypt.get_active() else "0",
+                disableclipboard = "1" if self.VNC_clipboard.get_active() else "0",
+                viewmode = "4" if self.VNC_viewmode.get_active() else "1",
+                showcursor = "1" if self.VNC_showcursor.get_active() else "0",
+                viewonly = "1" if self.VNC_viewonly.get_active() else "0",
+            )
 
         if self.changeProgram(protocol) == "VNC1":
             args = dict(
@@ -1163,6 +1159,8 @@ class Gui(Gtk.Application):
             parameters[ "name" ] = name
             parameters[ "protocol" ] = protocol
             parameters[ "server" ] = server
+            program = CONFIG.get( protocol.lower(), "" )
+            if program: parameters[ "program" ] = program
             if self.editClick:#если нажата кнопка Изменить, то пересохранить
                 fileName = self.resaveFileCtor(name, protocol, server)
             else:
@@ -1221,20 +1219,18 @@ class Gui(Gtk.Application):
         self.onWCEdit('','', protocol, False)
 
     def correctProgram(self, parameters):
-        """Функция проверки корректности параметров для запускаемой программы
-           - VNC - в remmina 10 параметров подключения, RDP - 13 (с 1.8.5 - минус 1, т.к. имя подключения не хранится).
-            Так как функционал в Remmina расширять не планируется, за основу при проверке берутся эти числа"""
-        if parameters[ "protocol" ] == 'VNC': #TODO ==remmina/freerdp
-            if CONFIG[ 'vnc' ] == '0' and len(parameters) == 10: return True
-            elif CONFIG[ 'vnc' ] == '1' and len(parameters) != 10: return True
+        """Checking the correct program for connect"""
+        if parameters[ "protocol" ] == "VNC": #TODO ==remmina/freerdp, params.get (program, CONFIG)
+            if CONFIG[ "vnc" ] == "0" and parameters[ "program" ] == "remmina" : return True
+            elif CONFIG[ "vnc" ] == "1" and parameters[ "program" ] == "vncviewer" : return True
             else: return False
         if parameters[ "protocol" ] == 'RDP':
-            if CONFIG[ 'rdp' ] == '0' and len(parameters) == 13: return True
-            elif CONFIG[ 'rdp' ] == '1' and len(parameters) != 13: return True
+            if CONFIG[ "rdp" ] == "0" and parameters[ "program" ] == "remmina" : return True
+            elif CONFIG[ "rdp" ] == "1" and parameters[ "program" ] == "freerdp" : return True
             else: return False
         return True
 
-    def dialogIncorrectProgram(self, _type, _protocol, _name):
+    def dialogIncorrectProgram(self, _type, _protocol, _name): #TODO переделать
         """Функция отображения диалогового окна ошибки формата файла подключения"""
         if _type == "open":
             text = "Не удается подключиться: неверный формат %s-подключения!" % _protocol

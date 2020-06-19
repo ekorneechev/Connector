@@ -46,10 +46,10 @@ class Remmina:
     f_name = ".tmp.remmina"
     def create_cfg_file(self, args):
         """Создание файла конфигурации для соединения"""
-        protocol = self.cfg['protocol']
-        server, login = options.searchSshUser(args[0])
+        protocol = self.cfg[ "protocol" ] #protocol = args[ "protocol" ].upper()
+        server, login = options.searchSshUser( args[ "server" ] )
         self.cfg['server'] = server
-        self.cfg['name'] = args.pop()
+        self.cfg['name'] = args.get( "name" , server )
         if protocol == 'RDP':
             #[user, domain, color, quality, resolution, viewmode, folder, printer, clipboard, sound]
             self.cfg['username'] = args[1]
@@ -75,14 +75,14 @@ class Remmina:
             self.cfg['exec'] = args[8]
         if protocol == 'VNC':
             #[user, quality, color, viewmode, viewonly, crypt, clipboard, showcursor]
-            self.cfg['username'] = args[1]
-            self.cfg['quality'] = args[2]
-            self.cfg['colordepth'] = args[3]
-            self.cfg['viewmode'] = args[4]
-            self.cfg['viewonly'] = args[5]
-            self.cfg['disableencryption'] = args[6]
-            self.cfg['disableclipboard'] = args[7]
-            self.cfg['showcursor'] = args[8]
+            self.cfg['username'] = args['username']
+            self.cfg['quality'] = args['quality']
+            self.cfg['colordepth'] = args['colordepth']
+            self.cfg['viewmode'] = args['viewmode']
+            self.cfg['viewonly'] = args['viewonly']
+            self.cfg['disableencryption'] = args['disableencryption']
+            self.cfg['disableclipboard'] = args['disableclipboard']
+            self.cfg['showcursor'] = args['showcursor']
         if protocol == 'XDMCP':
             #[color, viewmode, resolution, once, showcursor, _exec]
             self.cfg['colordepth'] = args[1]

@@ -33,7 +33,10 @@ ICONFOLDER = "%s/icons" % MAINFOLDER
 UIFOLDER = "%s/ui" % MAINFOLDER
 
 #Установки по умолчанию для параметров программы (какие приложения использовать)
-DEFAULT = dict( rdp = 1, vnc = 1, tab = '0', main = '0' )
+DEFAULT = { "rdp"  : "freerdp",
+            "vnc"  : "vncvieiwer",
+            "tab"  : '0',
+            "main" : '0' }
 
 #Исходные данные для ярлыка подключения
 DESKTOP_INFO = """#!/usr/bin/env xdg-open
@@ -141,7 +144,14 @@ DEFAULT [ "vnc1_args" ] = { "fullscreen" : "False",
 DEFAULT[ 'rdp1_args' ] = [ '','', 1, 1, '', '32', '', '', '', '', '', 0, 0, 0, 0, 0, 0, 0, None, 0, 0, 0, 0, 0, 0, 0, 0, None, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, '' ]
 #Remmina
 DEFAULT[ 'rdp_args' ] = [ '', '', '32', '0', '', 3, '', 0, 0, 'off', 0 ]
-DEFAULT[ 'vnc_args' ] = [ '', '9', '24', 1, 0, 0, 0, 1 ]
+DEFAULT[ "vnc_args" ] = { "username"          : "",
+                          "quality"           : "9",
+                          "colordepth"        : "24",
+                          "viewmode"          : "1",
+                          "viewonly"          : "0",
+                          "disableencryption" : "0",
+                          "disableclipboard"  : "0",
+                          "showcursor"        : "1" }
 DEFAULT[ 'nx_args' ] = [ '', '0', '', 1, '', 0, 0, '' ]
 DEFAULT[ 'xdmcp_args' ] = [ '0', 1, '', 0, 0, '' ]
 DEFAULT[ 'spice_args' ] = [0, 0, 0, 0, 0, 0, '' ]
@@ -156,6 +166,7 @@ def config_save( default = False ):
     if default:
         _config[ "myconnector" ] = DEFAULT
         _config[ "vncviewer" ] = DEFAULT [ "vnc1_args" ].copy()
+        _config[ "remmina_vnc" ] = DEFAULT [ "vnc_args" ].copy()
     with open( _config_file, 'w' ) as configfile:
         _config.write( configfile )
 
@@ -163,7 +174,8 @@ def config_init():
     """Parsing config file"""
     _config.read( _config_file )
     main = _config[ "myconnector" ]
-    protocols = { "VNC1" : _config[ "vncviewer" ] }
+    protocols = { "VNC1" : _config[ "vncviewer" ],
+                  "VNC"  : _config[ "remmina_vnc" ] }
     return main, protocols
 
 try:
