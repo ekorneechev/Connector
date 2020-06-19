@@ -136,29 +136,30 @@ DEFAULT[ 'check_version' ] = True
 #Default column by sort connections
 DEFAULT[ 'sort' ] = '0'
 
-#Параметры подключений по умолчанию
+#Protocols' default options
+DEF_PROTO = {}
 #vncviewer
-DEFAULT [ "vnc1_args" ] = { "fullscreen" : "False",
-                            "viewonly"   : "False",
-                            "program"    : "vncviewer" }
+DEF_PROTO[ "vnc1_args" ] = { "fullscreen" : "False",
+                             "viewonly"   : "False",
+                             "program"    : "vncviewer" }
 #FreeRDP:
-DEFAULT[ 'rdp1_args' ] = [ '','', 1, 1, '', '32', '', '', '', '', '', 0, 0, 0, 0, 0, 0, 0, None, 0, 0, 0, 0, 0, 0, 0, 0, None, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, '' ]
+DEF_PROTO[ 'rdp1_args' ] = [ '','', 1, 1, '', '32', '', '', '', '', '', 0, 0, 0, 0, 0, 0, 0, None, 0, 0, 0, 0, 0, 0, 0, 0, None, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, '' ]
 #Remmina
-DEFAULT[ 'rdp_args' ] = [ '', '', '32', '0', '', 3, '', 0, 0, 'off', 0 ]
-DEFAULT[ "vnc_args" ] = { "username"          : "",
-                          "quality"           : "9",
-                          "colordepth"        : "24",
-                          "viewmode"          : "1",
-                          "viewonly"          : "0",
-                          "disableencryption" : "0",
-                          "disableclipboard"  : "0",
-                          "showcursor"        : "1",
-                          "program"           : "remmina" }
-DEFAULT[ 'nx_args' ] = [ '', '0', '', 1, '', 0, 0, '' ]
-DEFAULT[ 'xdmcp_args' ] = [ '0', 1, '', 0, 0, '' ]
-DEFAULT[ 'spice_args' ] = [0, 0, 0, 0, 0, 0, '' ]
-DEFAULT[ 'ssh_args' ] = [ '', 0, '', 'UTF-8', '' ]
-DEFAULT[ 'sftp_args' ] = [ '', 0, '', 'UTF-8', '/' ]
+DEF_PROTO[ 'rdp_args' ] = [ '', '', '32', '0', '', 3, '', 0, 0, 'off', 0 ]
+DEF_PROTO[ "vnc_args" ] = { "username"          : "",
+                            "quality"           : "9",
+                            "colordepth"        : "24",
+                            "viewmode"          : "1",
+                            "viewonly"          : "0",
+                            "disableencryption" : "0",
+                            "disableclipboard"  : "0",
+                            "showcursor"        : "1",
+                            "program"           : "remmina" }
+DEF_PROTO[ 'nx_args' ] = [ '', '0', '', 1, '', 0, 0, '' ]
+DEF_PROTO[ 'xdmcp_args' ] = [ '0', 1, '', 0, 0, '' ]
+DEF_PROTO[ 'spice_args' ] = [0, 0, 0, 0, 0, 0, '' ]
+DEF_PROTO[ 'ssh_args' ] = [ '', 0, '', 'UTF-8', '' ]
+DEF_PROTO[ 'sftp_args' ] = [ '', 0, '', 'UTF-8', '/' ]
 
 _config = ConfigParser()
 _config_file = "%smyconnector.conf" % WORKFOLDER
@@ -167,8 +168,8 @@ def config_save( default = False ):
     """Default config for MyConnector"""
     if default:
         _config[ "myconnector" ] = DEFAULT
-        _config[ "vncviewer" ] = DEFAULT [ "vnc1_args" ].copy()
-        _config[ "remmina_vnc" ] = DEFAULT [ "vnc_args" ].copy()
+        _config[ "vncviewer" ] = DEF_PROTO[ "vnc1_args" ].copy()
+        _config[ "remmina_vnc" ] = DEF_PROTO[ "vnc_args" ].copy()
     with open( _config_file, 'w' ) as configfile:
         _config.write( configfile )
 
