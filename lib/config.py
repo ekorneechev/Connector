@@ -148,7 +148,7 @@ DEFAULT[ 'spice_args' ] = [0, 0, 0, 0, 0, 0, '' ]
 DEFAULT[ 'ssh_args' ] = [ '', 0, '', 'UTF-8', '' ]
 DEFAULT[ 'sftp_args' ] = [ '', 0, '', 'UTF-8', '/' ]
 
-_config = ConfigParser( interpolation = None )
+_config = ConfigParser()
 _config_file = "%smyconnector.conf" % WORKFOLDER
 
 def config_save( default = False ):
@@ -159,10 +159,19 @@ def config_save( default = False ):
     with open( _config_file, 'w' ) as configfile:
         _config.write( configfile )
 
-_result = _config.read( _config_file )
-if not _result:
-    config_save( default = True)
+def config_init():
+    """Parsing config file"""
     _config.read( _config_file )
-CONFIG = _config[ "myconnector" ]
-CONFIGS = { "VNC1": _config[ "vncviewer" ] }
+    main = _config[ "myconnector" ]
+    protocols = { "VNC1" : _config[ "vncviewer" ] }
+    return main, protocols
+
+try:
+    CONFIG, CONFIGS = config_init()
+except KeyError:
+    os.system( "zenity --error --no-wrap --icon-name=myconnector --text='Конфигурационный файл поврежден, создан новый!'")
+    if os.path.exists( _config_file ):
+        os.rename( _config_file, "%s.bak" % _config_file )
+    config_save( default = True )
+    CONFIG, CONFIGS = config_init()
 
