@@ -417,7 +417,7 @@ class Gui(Gtk.Application):
     def changeProgram(self, protocol):
         #Функция, возвращающая RDP1 или VNC1 при параметрах, отличных от Реммины
         try:
-            if CONFIG[ protocol ] and protocol != "FS": protocol += "1"
+            if CONFIG[ protocol ] == "1": protocol += "1" #TODO переделать
         except KeyError:
             pass #если нет возможности выбора программ для протокола
         return protocol
