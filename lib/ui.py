@@ -506,15 +506,15 @@ class Gui(Gtk.Application):
             self.SSH_exec.set_text( args.get( "exec", "" ) )
 
         if protocol == 'SFTP':
-            self.SFTP_user.set_text(args[1])
-            if args[2] == 2: self.SFTP_publickey.set_active(True)
-            elif args[2] == 1: self.SFTP_keyfile.set_active(True)
+            self.SFTP_user.set_text( args.get( "username", "" ) )
+            if args.get( "ssh_auth" ) == "3": self.SFTP_publickey.set_active( True )
+            elif args.get( "ssh_auth" ) == "1": self.SFTP_keyfile.set_active( True )
             else:
-                SFTP_pwd = self.pref_builder.get_object("radio_SFTP_pwd")
-                SFTP_pwd.set_active(True)
-            self.SFTP_path_keyfile.set_filename(args[3])
-            self.SFTP_charset.set_text(args[4])
-            self.SFTP_execpath.set_text(args[5])
+                SFTP_pwd = self.pref_builder.get_object( "radio_SFTP_pwd" )
+                SFTP_pwd.set_active( True )
+            self.SFTP_path_keyfile.set_filename( args.get( "ssh_privatekey", "" ) )
+            self.SFTP_charset.set_text( args.get( "ssh_charset", "" ) )
+            self.SFTP_execpath.set_text( args.get( "execpath", "" ) )
 
         if protocol == 'NX':
             self.NX_user.set_text(args[1])
@@ -960,7 +960,7 @@ class Gui(Gtk.Application):
         if protocol == 'SSH':
             args = dict(
                 username = self.SSH_user.get_text(),
-                ssh_charset = self.SSH_charset.get_text(),
+                ssh_charset = self.SSH_charset.get_text()
             )
             args[ "exec" ] = self.SSH_exec.get_text()
             if self.SSH_publickey.get_active():
@@ -972,19 +972,18 @@ class Gui(Gtk.Application):
                 args[ "ssh_privatekey" ] = self.SSH_path_keyfile.get_filename()
 
         if protocol == 'SFTP':
-            user = self.SFTP_user.get_text()
-            charset = self.SFTP_charset.get_text()
-            if not charset: charset = 'UTF-8'
-            execpath = self.SFTP_execpath.get_text()
+            args = dict(
+                username = self.SFTP_user.get_text(),
+                ssh_charset = self.SFTP_charset.get_text(),
+                execpath = self.SFTP_execpath.get_text()
+            )
             if self.SFTP_publickey.get_active():
-                SSH_auth = 2
+                args[ "ssh_auth" ] = "3"
             elif self.SFTP_keyfile.get_active():
-                SSH_auth = 1
-            else: SSH_auth = 0
-            if SSH_auth == 1:
-                keyfile = self.SFTP_path_keyfile.get_filename()
-            else: keyfile = ''
-            args = [user, SSH_auth, keyfile, charset, execpath]
+                args[ "ssh_auth" ] = "1"
+            else: args[ "ssh_auth" ] = "0"
+            if args[ "ssh_auth" ] == "1":
+                args[ "ssh_privatekey" ] = self.SFTP_path_keyfile.get_filename()
 
         if protocol == 'SPICE':
             if self.SPICE_tls.get_active(): tls = 1
