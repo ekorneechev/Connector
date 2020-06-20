@@ -205,23 +205,48 @@ class XdmcpRemmina(Remmina):
         self.cfg['exec'] = ''
         self.f_name = '.tmp_XDMCP.remmina'
 
-class SftpRemmina(Remmina):
-    """Класс для настройки SFTP-соединения через Remmina"""
-    def __init__(self):
-        self.cfg = dict(name='SFTP-connection: ', protocol='SFTP', ssh_enabled=0, ssh_auth=0,
-                        ssh_charset='UTF-8', ssh_privatekey='', username='', ssh_username='',
-                        group='', password='', execpath='/', server='', window_maximize=0,
-                        window_height=600, window_width=800, ftp_vpanedpos=360, viewmode=0, disablepasswordstoring=1)
-        self.f_name = '.tmp_SFTP.remmina'
+class SftpRemmina( Remmina ):
+    """Remmina SFTP connection"""
+    def __init__( self ):
+        self.cfg = { "name"                   : "SFTP-connection: ",
+                     "protocol"               : "SFTP",
+                     "ssh_auth"               : "0",
+                     "ssh_charset"            : "UTF-8",
+                     "ssh_privatekey"         : "",
+                     "username"               : "",
+                     "ssh_username"           : "",
+                     "group"                  : "",
+                     "password"               : "",
+                     "execpath"               : "/",
+                     "server"                 : "",
+                     "window_maximize"        : "0",
+                     "window_height"          : "600",
+                     "window_width"           : "800",
+                     "ftp_vpanedpos"          : "360",
+                     "viewmode"               : "0",
+                     "disablepasswordstoring" : "1" }
+        self.f_name = ".tmp_SFTP.remmina"
 
-class SshRemmina(Remmina):
-    """Класс для настройки SSH-соединения через Remmina"""
-    def __init__(self):
-        self.cfg = dict(name='SSH-connection: ', protocol='SSH', ssh_auth=0, ssh_charset='UTF-8',
-                        ssh_privatekey='', group='', password='', username='', ssh_username='', ssh_enabled=0,
-                        server='', window_maximize=0, window_width=500, window_height=500, viewmode=0, disablepasswordstoring=1)
-        self.cfg['exec'] = ''
-        self.f_name = '.tmp_SSH.remmina'
+class SshRemmina( Remmina ):
+    """Remmina SSH connection"""
+    def __init__( self ):
+        self.cfg = { "name"                   : "SSH-connection: ",
+                     "protocol"               : "SSH",
+                     "ssh_auth"               : "0",
+                     "ssh_charset"            : "UTF-8",
+                     "ssh_privatekey"         : "",
+                     "group"                  : "",
+                     "password"               : "",
+                     "username"               : "",
+                     "ssh_username"           : "",
+                     "server"                 : "",
+                     "window_maximize"        : "0",
+                     "window_width"           : "500",
+                     "window_height"          : "500",
+                     "viewmode"               : "0",
+                     "disablepasswordstoring" : "1",
+                     "exec"                   : "" }
+        self.f_name = ".tmp_SSH.remmina"
 
 class SpiceRemmina(Remmina):
     """Класс для настройки SPICE-соединения через Remmina"""
