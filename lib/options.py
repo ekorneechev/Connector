@@ -36,14 +36,14 @@ class FakeLog():
 
 log = FakeLog()
 
-def saveInFile(fileName, obj):
+def saveInFile(filename, obj):
     """Save connection parameters to file *.ctor)"""
     conf = ConfigParser()
     conf [ "myconnector" ] = obj
     with open( "%s/%s" % ( WORKFOLDER, filename ), "w" ) as fileCtor:
         conf.write( fileCtor )
 
-def loadFromFile(fileName, window = None):
+def loadFromFile(filename, window = None):
     """Загрузка сохраненных параметров из файла"""
     try:
         dbfile = open( "%s/%s" % ( WORKFOLDER, filename ), "rb" )
@@ -52,10 +52,10 @@ def loadFromFile(fileName, window = None):
         return obj
     except FileNotFoundError:
         dialog = Gtk.MessageDialog(window, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK,
-                "Файл " + fileName + "\nc сохраненными настройками не найден")
+                "Файл " + filename + "\nc сохраненными настройками не найден")
         response = dialog.run()
         dialog.destroy()
-        log.exception("Файл %s c сохраненными настройками не найден! Подробнее:", fileName)
+        log.exception("Файл %s c сохраненными настройками не найден! Подробнее:", filename)
         return None
     except ( UnpicklingError, EOFError ):
         conf = ConfigParser()
@@ -63,10 +63,10 @@ def loadFromFile(fileName, window = None):
         return conf[ "myconnector" ]
     except:
         dialog = Gtk.MessageDialog(window, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK,
-                 "Файл %s\nимеет неверный формат" % fileName.replace("tmp_",""))
+                 "Файл %s\nимеет неверный формат" % filename.replace("tmp_",""))
         response = dialog.run()
         dialog.destroy()
-        log.exception("Файл %s имеет неверный формат! Подробнее:", fileName.replace("tmp_",""))
+        log.exception("Файл %s имеет неверный формат! Подробнее:", filename.replace("tmp_",""))
         return None
 
 try: enableLog = CONFIG.getboolean( 'log' )
@@ -78,23 +78,23 @@ if enableLog:
         format = "--- %(levelname)-10s %(asctime)s --- %(message)s",
         level = INFO)
 
-def importFromFile(fileName, window = None):
+def importFromFile(filename, window = None):
     """Импорт параметров из файла .ctor"""
     try:
-        dbfile = open(fileName, 'rb')
+        dbfile = open(filename, 'rb')
         obj = load( dbfile )
         dbfile.close()
         return obj
     except ( UnpicklingError, EOFError ):
         conf = ConfigParser()
-        conf.read( fileName )
+        conf.read( filename )
         return conf[ "myconnector" ]
     except:
         dialog = Gtk.MessageDialog(window, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK,
-                 "Файл " + fileName + "\nимеет неверный формат")
+                 "Файл " + filename + "\nимеет неверный формат")
         response = dialog.run()
         dialog.destroy()
-        log.exception("Файл %s имеет неверный формат! Подробнее:", fileName)
+        log.exception("Файл %s имеет неверный формат! Подробнее:", filename)
         return None
 
 def searchSshUser(query):
@@ -149,16 +149,16 @@ def checkLogFile(filePath):
             import tarfile
             from datetime import datetime
             os.chdir(LOGFOLDER)
-            fileName = os.path.basename(filePath)
+            filename = os.path.basename(filePath)
             #'2017-04-05 15:09:52.981053' -> 20170405:
             dt = datetime.today()
             today = str(dt).split(' ')[0].split('-'); today = ''.join(today)
             tarName = filePath + '.' + today + '.tgz'
             tar = tarfile.open (tarName, "w:gz")
-            tar.add(fileName); os.remove(fileName)
+            tar.add(filename); os.remove(filename)
             os.chdir(MAINFOLDER)
             tar.close()
-            msg = "Логфайл %s превысил допустимый размер (10Мб), упакован в архив %s" % (fileName, os.path.basename(tarName))
+            msg = "Логфайл %s превысил допустимый размер (10Мб), упакован в архив %s" % (filename, os.path.basename(tarName))
             os.system( 'echo "--- INFO       %s  %s" >> %s' % ( str( dt ), msg, LOGFILE ))
 
 class Properties(Gtk.Window):
