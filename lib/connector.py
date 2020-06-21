@@ -284,14 +284,27 @@ class SshRemmina( Remmina ):
                      "exec"                   : "" }
         self.f_name = ".tmp_SSH.remmina"
 
-class SpiceRemmina(Remmina):
-    """Класс для настройки SPICE-соединения через Remmina"""
-    def __init__(self):
-        self.cfg = dict(name='SPICE-connection: ', protocol='SPICE', ssh_enabled=0, ssh_auth=0,
-                        disableclipboard=0, ssh_privatekey='', usertls=0, ssh_username='',
-                        enableaudio=0, password='', cacert='', server='', ssh_loopback=0,
-                        resizeguest=0, sharesmartcard=0, ssh_server='', viewonly=0, disablepasswordstoring=1)
-        self.f_name = '.tmp_SPICE.remmina'
+class SpiceRemmina( Remmina ):
+    """Remmina SPICE connection"""
+    def __init__( self ):
+        self.cfg = { "name"                   : "SPICE-connection: ",
+                     "protocol"               : "SPICE",
+                     "ssh_auth"               : "0",
+                     "disableclipboard"       : "0",
+                     "ssh_privatekey"         : "",
+                     "usertls"                : "0",
+                     "ssh_username"           : "",
+                     "enableaudio"            : "0",
+                     "password"               : "",
+                     "cacert"                 : "",
+                     "server"                 : "",
+                     "ssh_loopback"           : "0",
+                     "resizeguest"            : "0",
+                     "sharesmartcard"         : "0",
+                     "ssh_server"             : "",
+                     "viewonly"               : "0",
+                     "disablepasswordstoring" : "1" }
+        self.f_name = ".tmp_SPICE.remmina"
 
 class Vmware:
     """Класс для настройки соединения к VMWare серверу"""

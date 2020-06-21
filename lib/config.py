@@ -251,15 +251,15 @@ def config_init():
     """Parsing config file"""
     _config.read( _config_file )
     main = _config[ "myconnector" ]
-    protocols = { "VNC1" : _config[ "vncviewer"   ],
-                  "VNC"  : _config[ "remmina_vnc" ],
-                  "RDP"  : _config[ "remmina_rdp" ],
-                  "RDP1" : _config[ "freerdp"     ],
-                  "NX"   : _config[ "nx"          ],
-                  "SSH"  : _config[ "xdmcp"       ],
-                  "SSH"  : _config[ "spice"       ],
-                  "SSH"  : _config[ "ssh"         ],
-                  "SFTP" : _config[ "sftp"        ] }
+    protocols = { "VNC1"   : _config[ "vncviewer"   ],
+                  "VNC"    : _config[ "remmina_vnc" ],
+                  "RDP"    : _config[ "remmina_rdp" ],
+                  "RDP1"   : _config[ "freerdp"     ],
+                  "NX"     : _config[ "nx"          ],
+                  "XDMCP"  : _config[ "xdmcp"       ],
+                  "SPICE"  : _config[ "spice"       ],
+                  "SSH"    : _config[ "ssh"         ],
+                  "SFTP"   : _config[ "sftp"        ] }
     return main, protocols
 
 try:

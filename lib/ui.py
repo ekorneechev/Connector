@@ -633,16 +633,16 @@ class Gui(Gtk.Application):
             except IndexError: pass
 
         if protocol == 'SPICE':
-            if args[1]: self.SPICE_tls.set_active(True)
-            if args[2]: self.SPICE_viewonly.set_active(True)
-            if args[3]: self.SPICE_resize.set_active(True)
-            if args[4]: self.SPICE_clipboard.set_active(False)
-            if args[5]: self.SPICE_cards.set_active(True)
-            if args[6]: self.SPICE_sound.set_active(True)
-            if not args[7]: self.SPICE_CA.set_active(False)
+            if args.getboolean( "usetls" ): self.SPICE_tls.set_active( True )
+            if args.getboolean( "viewonly" ): self.SPICE_viewonly.set_active( True )
+            if args.getboolean( "resizeguest" ): self.SPICE_resize.set_active( True )
+            if args.getboolean( "disableclipboard" ): self.SPICE_clipboard.set_active( False )
+            if args.getboolean( "sharesmartcard" ): self.SPICE_cards.set_active( True )
+            if args.getboolean( "enableaudio" ): self.SPICE_sound.set_active( True )
+            if not args.get( "cacert", "" ): self.SPICE_CA.set_active( False )
             else:
-                self.SPICE_CA.set_active(True)
-                self.SPICE_cacert.set_filename(args[7])
+                self.SPICE_CA.set_active( True )
+                self.SPICE_cacert.set_filename( args[ "cacert" ] )
 
         if protocol == 'FS':
             self.FS_user.set_text( args.get( "user", "" ) )
@@ -981,21 +981,15 @@ class Gui(Gtk.Application):
                 args[ "ssh_privatekey" ] = self.SFTP_path_keyfile.get_filename()
 
         if protocol == 'SPICE':
-            if self.SPICE_tls.get_active(): tls = 1
-            else: tls = 0
-            if self.SPICE_viewonly.get_active(): viewonly = 1
-            else: viewonly = 0
-            if self.SPICE_resize.get_active(): resize = 1
-            else: resize = 0
-            if self.SPICE_clipboard.get_active(): clipboard = 0
-            else: clipboard = 1
-            if self.SPICE_cards.get_active(): cards = 1
-            else: cards = 0
-            if self.SPICE_sound.get_active(): sound = 1
-            else: sound = 0
-            if self.SPICE_CA.get_active(): cacert = self.SPICE_cacert.get_filename()
-            else: cacert = ''
-            args = [tls, viewonly, resize, clipboard, cards, sound, cacert]
+            args = dict(
+                usetls = "1" if self.SPICE_tls.get_active() else "0",
+                viewonly = "1" if self.SPICE_viewonly.get_active() else "0",
+                resizeguest = "1" if self.SPICE_resize.get_active() else "0",
+                disableclipboard = "0" if self.SPICE_clipboard.get_active() else "1",
+                sharesmartcard = "1" if self.SPICE_cards.get_active() else "0",
+                enableaudio = "1" if self.SPICE_sound.get_active() else "0",
+                cacert = self.SPICE_cacert.get_filename() if self.SPICE_CA.get_active() else ""
+            )
 
         if protocol == 'FS':
             args = dict(
