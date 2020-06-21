@@ -32,41 +32,6 @@ except KeyError: enableLog = DEFAULT[ 'log' ]
 if enableLog: STD_TO_LOG = ' >> ' + STDLOGFILE + " 2>&1 &"
 else: STD_TO_LOG = ' &'
 
-class Remmina:
-    """Класс, обеспечивающий подключение через remmina"""
-    cfg = {}
-    f_name = ".tmp.remmina"
-    def create_cfg_file(self, args):
-        """Создание файла конфигурации для соединения"""
-        server, login = options.searchSshUser( args[ "server" ] )
-        args[ "server" ] = server
-        if login: args[ "username" ] = login
-        self.cfg[ "name" ] += args.get( "name" , server )
-        f = open( WORKFOLDER + self.f_name, "w" )
-        f.write( "[remmina]\n" )
-        for key in self.cfg.keys():
-            self.cfg[ key ] = args.get( key, self.cfg[ key ] )
-            print( key, self.cfg[ key ], sep = "=", file = f )
-        f.close()
-
-    def start(self, parameters):
-        """Запуск remmina с необходимыми параметрами"""
-        self.create_cfg_file(parameters)
-        options.log.info ("Remmina: подключение по протоколу %s к серверу: %s", self.cfg['protocol'], self.cfg['server'])
-        command = 'remmina -c "' + WORKFOLDER + self.f_name + '"'
-        options.log.info (command)
-        os.system('cd $HOME && ' + command + STD_TO_LOG)
-
-class VncRemmina(Remmina):
-    """Класс для настройки VNC-соединения через Remmina"""
-    def __init__(self):
-        self.cfg = dict(keymap='', quality=9, disableencryption=0, colordepth=24,
-                       hscale=0, group='', password='', name='VNC-connection: ', viewonly=0,
-                       disableclipboard=0, protocol='VNC', vscale=0, username='', disablepasswordstoring=1,
-                       showcursor=0, disableserverinput=0, server='',aspectscale=0,
-                       window_maximize=1, window_width=800, window_height=600, viewmode=1)
-        self.f_name = '.tmp_VNC.remmina'
-
 class VncViewer:
     """Класс для настройки VNC-соединения через VncViewer"""
     def start(self, args):
@@ -86,17 +51,6 @@ class VncViewer:
         options.log.info ("VNC: подключение к серверу %s. Команда запуска:", server)
         options.log.info (command)
         os.system(command + STD_TO_LOG)
-
-class RdpRemmina(Remmina):
-    """Класс для настройки RDP-соединения через Remmina"""
-    def __init__(self):
-        self.cfg = dict(disableclipboard=0, clientname='', quality=0, console=0, sharesmartcard=0,
-                       resolution='', group='', password='', name='RDP-connection: ',
-                       shareprinter=0, security='', protocol='RDP', execpath='', disablepasswordstoring=1,
-                       sound='off', username='', sharefolder='', domain='', viewmode=3,
-                       server='', colordepth=32, window_maximize=1, window_width=800, window_height=600)
-        self.cfg['exec'] = ''
-        self.f_name = '.tmp_RDP.remmina'
 
 class XFreeRdp:
     """Класс для настройки RDP-соединения через xfreerdp"""
@@ -185,6 +139,88 @@ class XFreeRdp:
         else:
             options.log.warning ("FreeRDP is not installed!")
             os.system( "zenity --error --text='\nFreeRDP не установлен, подробности <a href=\"%s\">здесь</a>!' --no-wrap --icon-name=myconnector" % _link )
+
+class Remmina:
+    """Connection via Remmina"""
+    cfg = {}
+    f_name = ".tmp.remmina"
+    def create_cfg_file( self, args ):
+        """Create configuration file for connect"""
+        server, login = options.searchSshUser( args[ "server" ] )
+        args[ "server" ] = server
+        if login: args[ "username" ] = login
+        self.cfg[ "name" ] += args.get( "name" , server )
+        f = open( WORKFOLDER + self.f_name, "w" )
+        f.write( "[remmina]\n" )
+        for key in self.cfg.keys():
+            self.cfg[ key ] = args.get( key, self.cfg[ key ] )
+            print( key, self.cfg[ key ], sep = "=", file = f )
+        f.close()
+
+    def start( self, parameters ):
+        """Run connection via Remmina"""
+        self.create_cfg_file( parameters )
+        options.log.info ( "Remmina: подключение по протоколу %s к серверу: %s", self.cfg[ "protocol" ], self.cfg[ "server" ] )
+        command = "remmina -c \"%s%s\"" % ( WORKFOLDER, self.f_name )
+        options.log.info ( command )
+        os.system( "cd $HOME && %s%s" % ( command, STD_TO_LOG ) )
+
+class RdpRemmina( Remmina ):
+    """Remmina RDP connection"""
+    def __init__( self ):
+        self.cfg = { "disableclipboard"       : "0",
+                     "clientname"             : "",
+                     "quality"                : "0",
+                     "console"                : "0",
+                     "sharesmartcard"         : "0",
+                     "resolution"             : "",
+                     "group"                  : "",
+                     "password"               : "",
+                     "name"                   : "RDP-connection: ",
+                     "shareprinter"           : "0",
+                     "security"               : "",
+                     "protocol"               : "RDP",
+                     "execpath"               : "",
+                     "disablepasswordstoring" : "1",
+                     "sound"                  : "off",
+                     "username"               : "",
+                     "sharefolder"            : "",
+                     "domain"                 : "",
+                     "viewmode"               : "3",
+                     "server"                 : "",
+                     "colordepth"             : "32",
+                     "window_maximize"        : "1",
+                     "window_width"           : "800",
+                     "window_height"          : "600",
+                     "exec"                   : "" }
+        self.f_name = ".tmp_RDP.remmina"
+
+class VncRemmina( Remmina ):
+    """Remmina VNC connection"""
+    def __init__( self ):
+        self.cfg = { "keymap"                 : "",
+                     "quality"                : "9",
+                     "disableencryption"      : "0",
+                     "colordepth"             : "24",
+                     "hscale"                 : "0",
+                     "group"                  : "",
+                     "password"               : "",
+                     "name"                   : "VNC-connection: ",
+                     "viewonly"               : "0",
+                     "disableclipboard"       : "0",
+                     "protocol"               : "VNC",
+                     "vscale"                 : "0",
+                     "username"               : "",
+                     "disablepasswordstoring" : "1",
+                     "showcursor"             : "0",
+                     "disableserverinput"     : "0",
+                     "server"                 : "",
+                     "aspectscale"            : "0",
+                     "window_maximize"        : "1",
+                     "window_width"           : "800",
+                     "window_height"          : "600",
+                     "viewmode"               : "1" }
+        self.f_name = ".tmp_VNC.remmina"
 
 class NxRemmina(Remmina):
     """Класс для настройки NX-соединения через Remmina"""
