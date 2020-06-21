@@ -222,15 +222,28 @@ class VncRemmina( Remmina ):
                      "viewmode"               : "1" }
         self.f_name = ".tmp_VNC.remmina"
 
-class NxRemmina(Remmina):
-    """Класс для настройки NX-соединения через Remmina"""
-    def __init__(self):
-        self.cfg = dict(name='NX-connection: ', protocol='NX', quality=0, disableencryption=0,
-                        resolution='',group='',password='',username='',NX_privatekey='',
-                        showcursor=0, server='', disableclipboard=0, window_maximize=1,
-                        window_width=800, window_height=600, viewmode=4, disablepasswordstoring=1)
-        self.cfg['exec'] = ''
-        self.f_name = '.tmp_NX.remmina'
+class NxRemmina( Remmina ):
+    """Remmina NX connection"""
+    def __init__( self ):
+        self.cfg = { "name"                   : "NX-connection: ",
+                     "protocol"               : "NX",
+                     "quality"                : "0",
+                     "server"                 : "",
+                     "disableencryption"      : "0",
+                     "resolution"             : "",
+                     "group"                  : "",
+                     "password"               : "",
+                     "username"               : "",
+                     "NX_privatekey"          : "",
+                     "showcursor"             : "0",
+                     "disableclipboard"       : "0",
+                     "window_maximize"        : "1",
+                     "window_width"           : "800",
+                     "window_height"          : "600",
+                     "viewmode"               : "4",
+                     "disablepasswordstoring" : "1",
+                     "exec"                   : "" }
+        self.f_name = ".tmp_NX.remmina"
 
 class XdmcpRemmina(Remmina):
     """Класс для настройки XDMCP-соединения через Remmina"""

@@ -517,21 +517,21 @@ class Gui(Gtk.Application):
             self.SFTP_execpath.set_text( args.get( "execpath", "" ) )
 
         if protocol == 'NX':
-            self.NX_user.set_text(args[1])
-            self.NX_quality.set_active_id(args[2])
-            if args[3] == '': self.NX_resol_window.set_active(True)
+            self.NX_user.set_text( args.get ( "username", "" ) )
+            self.NX_quality.set_active_id( args.get ( "quality", "" ) )
+            if not args.get ( "resolution", "" ): self.NX_resol_window.set_active( True )
             else:
-                NX_resol_hand = self.pref_builder.get_object("radio_NX_resol_hand")
-                NX_resol_hand.set_active(True)
-                self.NX_resolution.set_active_id(args[3])
-            if args[4] == 4: self.NX_viewmode.set_active(True)
-            if not args[5]: self.NX_keyfile.set_active(False)
+                NX_resol_hand = self.pref_builder.get_object( "radio_NX_resol_hand" )
+                NX_resol_hand.set_active( True )
+                self.NX_resolution.set_active_id( args[ "resolution" ] )
+            if args.get ( "viewmode", "" ) == "4": self.NX_viewmode.set_active( True )
+            if not args.get ( "nx_privatekey", "" ): self.NX_keyfile.set_active(False)
             else:
-                self.NX_keyfile.set_active(True)
-                self.NX_path_keyfile.set_filename(args[5])
-            if args[6]: self.NX_crypt.set_active(True)
-            if args[7]: self.NX_clipboard.set_active(True)
-            self.NX_exec.set_text(args[8])
+                self.NX_keyfile.set_active( True )
+                self.NX_path_keyfile.set_filename( args[ "nx_privatekey" ] )
+            if args.getboolean( "disableencryption" ): self.NX_crypt.set_active( True )
+            if args.getboolean( "disableclipboard" ): self.NX_clipboard.set_active(True)
+            self.NX_exec.set_text( args.get ( "exec", "" ) )
 
         if protocol == "RDP" and CONFIG[ "rdp" ] == "remmina":
             self.RDP_user.set_text( args.get( "username", "" ) )
@@ -906,20 +906,16 @@ class Gui(Gtk.Application):
                     desktop, down, docs, gdi, reconnect, certignore, pwdsave, pwd, glyph, userparams]
 
         if protocol == 'NX':
-            user = self.NX_user.get_text()
-            quality = self.NX_quality.get_active_id()
-            _exec = self.NX_exec.get_text()
-            if self.NX_crypt.get_active(): crypt = 1
-            else: crypt = 0
-            if self.NX_clipboard.get_active(): clipboard = 1
-            else: clipboard = 0
-            if self.NX_keyfile.get_active(): keyfile = self.NX_path_keyfile.get_filename()
-            else: keyfile = ''
-            if self.NX_viewmode.get_active(): viewmode = 4
-            else: viewmode = 1
-            if self.NX_resol_window.get_active(): resolution = ''
-            else: resolution = self.NX_resolution.get_active_id()
-            args = [user, quality, resolution, viewmode, keyfile, crypt, clipboard, _exec]
+            args = dict(
+                username = self.NX_user.get_text(),
+                quality = self.NX_quality.get_active_id(),
+                disableencryption = "1" if self.NX_crypt.get_active() else "0",
+                disableclipboard = "1" if self.NX_clipboard.get_active() else "0",
+                nx_privatekey = self.NX_path_keyfile.get_filename() if self.NX_keyfile.get_active() else "",
+                viewmode = "4" if self.NX_viewmode.get_active() else "1",
+                resolution = "" if self.NX_resol_window.get_active() else self.NX_resolution.get_active_id()
+            )
+            args[ "exec" ] = self.NX_exec.get_text()
 
         if self.changeProgram(protocol) == "VNC":
             args = dict(
