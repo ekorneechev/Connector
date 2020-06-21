@@ -534,25 +534,25 @@ class Gui(Gtk.Application):
             self.NX_exec.set_text(args[8])
 
         if protocol == "RDP" and CONFIG[ "rdp" ] == "remmina":
-            self.RDP_user.set_text(args[1])
-            self.RDP_domain.set_text(args[2])
-            self.RDP_color.set_active_id(args[3])
-            self.RDP_quality.set_active_id(args[4])
-            if args[5] == '': self.RDP_resol_default.set_active(True)
+            self.RDP_user.set_text( args.get( "username", "" ) )
+            self.RDP_domain.set_text( args.get( "domain", "" ) )
+            self.RDP_color.set_active_id( args.get( "colordepth", "" ) )
+            self.RDP_quality.set_active_id( args.get( "quality", "" ) )
+            if not args.get( "resolution", "" ): self.RDP_resol_default.set_active( True )
             else:
-                RDP_resol_hand = self.pref_builder.get_object("radio_RDP_resol_hand")
-                RDP_resol_hand.set_active(True)
-                self.RDP_resolution.set_active_id(args[5])
-            if args[6] == 3: self.RDP_viewmode.set_active(True)
-            else: self.RDP_viewmode.set_active(False)
-            if args[7] == '': self.RDP_share_folder.set_active(False)
+                RDP_resol_hand = self.pref_builder.get_object( "radio_RDP_resol_hand" )
+                RDP_resol_hand.set_active( True )
+                self.RDP_resolution.set_active_id( args[ "resolution" ] )
+            if args.get( "viewmode", "" ) == "3": self.RDP_viewmode.set_active( True )
+            else: self.RDP_viewmode.set_active( False )
+            if not args.get( "sharefolder", "" ): self.RDP_share_folder.set_active( False )
             else:
-                self.RDP_share_folder.set_active(True)
-                self.RDP_name_folder.set_filename(args[7])
-            if args[8]: self.RDP_printers.set_active(True)
-            if args[9]: self.RDP_clipboard.set_active(False)
-            self.RDP_sound.set_active_id(args[10])
-            if args[11]: self.RDP_cards.set_active(True)
+                self.RDP_share_folder.set_active( True )
+                self.RDP_name_folder.set_filename( args[ "sharefolder" ] )
+            if args.getboolean( "shareprinter" ): self.RDP_printers.set_active( True )
+            if args.getboolean( "disableclipboard" ): self.RDP_clipboard.set_active( False )
+            self.RDP_sound.set_active_id( args.get( "sound", "" ) )
+            if args.getboolean( "sharesmartcard" ): self.RDP_cards.set_active( True )
 
         if protocol == "RDP" and CONFIG[ "rdp" ] == "freerdp":
             self.RDP_user.set_text(args[1])
@@ -804,25 +804,20 @@ class Gui(Gtk.Application):
                 fullscreen = str (self.VMWARE_fullscreen.get_active() )
             )
 
-        if self.changeProgram(protocol) == "RDP":
-            user = self.RDP_user.get_text()
-            domain = self.RDP_domain.get_text()
-            color = self.RDP_color.get_active_id()
-            quality = self.RDP_quality.get_active_id()
-            sound = self.RDP_sound.get_active_id()
-            if self.RDP_viewmode.get_active(): viewmode = 3
-            else: viewmode = 0
-            if self.RDP_resol_default.get_active(): resolution = ''
-            else: resolution = self.RDP_resolution.get_active_id()
-            if self.RDP_share_folder.get_active(): folder = self.RDP_name_folder.get_filename()
-            else: folder = ''
-            if self.RDP_printers.get_active(): printer = 1
-            else: printer = 0
-            if self.RDP_clipboard.get_active(): clipboard = 0
-            else: clipboard = 1
-            if self.RDP_cards.get_active(): smartcards = 1
-            else: smartcards = 0
-            args = [user, domain, color, quality, resolution, viewmode, folder, printer, clipboard, sound, smartcards]
+        if self.changeProgram( protocol ) == "RDP":
+            args = dict(
+                username = self.RDP_user.get_text(),
+                domain = self.RDP_domain.get_text(),
+                colordepth = self.RDP_color.get_active_id(),
+                quality = self.RDP_quality.get_active_id(),
+                sound = self.RDP_sound.get_active_id(),
+                viewmode = "3" if self.RDP_viewmode.get_active() else "0",
+                resolution = "" if self.RDP_resol_default.get_active() else self.RDP_resolution.get_active_id(),
+                sharefolder = self.RDP_name_folder.get_filename() if self.RDP_share_folder.get_active() else "",
+                shareprinter = "1" if self.RDP_printers.get_active() else "0",
+                disableclipboard = "0" if self.RDP_clipboard.get_active() else "1",
+                sharesmartcard = "1" if self.RDP_cards.get_active() else "0"
+            )
 
         if self.changeProgram(protocol) == "RDP1":
             user = self.RDP_user.get_text()

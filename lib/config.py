@@ -145,7 +145,18 @@ DEF_PROTO[ "vnc1_args" ] = { "fullscreen" : "False",
 #FreeRDP:
 DEF_PROTO[ 'rdp1_args' ] = [ '','', 1, 1, '', '32', '', '', '', '', '', 0, 0, 0, 0, 0, 0, 0, None, 0, 0, 0, 0, 0, 0, 0, 0, None, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, '' ]
 #Remmina
-DEF_PROTO[ 'rdp_args' ] = [ '', '', '32', '0', '', 3, '', 0, 0, 'off', 0 ]
+DEF_PROTO[ "rdp_args" ] = { "username"          : "",
+                            "domain"            : "",
+                            "colordepth"        : "32",
+                            "quality"           : "0",
+                            "resolution"        : "",
+                            "viewmode"          : "3",
+                            "sharefolder"       : "",
+                            "shareprinter"      : "0",
+                            "disableclipboard"  : "0",
+                            "sound"             : "off",
+                            "sharesmartcard"    : "0" ,
+                            "program"           : "remmina" }
 DEF_PROTO[ "vnc_args" ] = { "username"          : "",
                             "quality"           : "9",
                             "colordepth"        : "24",
@@ -180,6 +191,7 @@ def config_save( default = False ):
         _config[ "remmina_vnc" ] = DEF_PROTO[ "vnc_args" ].copy()
         _config[ "ssh" ] = DEF_PROTO[ "ssh_args" ].copy()
         _config[ "sftp" ] = DEF_PROTO[ "sftp_args" ].copy()
+        _config[ "remmina_rdp" ] = DEF_PROTO[ "rdp_args" ].copy()
     with open( _config_file, 'w' ) as configfile:
         _config.write( configfile )
 
@@ -189,6 +201,7 @@ def config_init():
     main = _config[ "myconnector" ]
     protocols = { "VNC1" : _config[ "vncviewer" ],
                   "VNC"  : _config[ "remmina_vnc" ],
+                  "RDP"  : _config[ "remmina_rdp" ],
                   "SSH"  : _config[ "ssh" ],
                   "SFTP" : _config[ "sftp" ]  }
     return main, protocols
