@@ -104,7 +104,7 @@ def initSignal(gui):
 def startDebug():
     """Start show log files online (uses xterm)"""
     if options.enableLog:
-        os.system( 'for i in all myconnector; do xterm -T "MyConnector DEBUG - $i.log" -e "tail -f %s$i.log" & done' % LOGFOLDER )
+        os.system( 'for i in all myconnector; do xterm -T "MyConnector DEBUG - $i.log" -e "tail -f %s/$i.log" & done' % LOGFOLDER )
         options.log.info ("The program is running in debug mode.")
     else:
         os.system( "zenity --error --icon-name=myconnector --text='\nВедение логов отключено. Отладка невозможна!' --no-wrap" )

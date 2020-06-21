@@ -22,7 +22,7 @@ from subprocess import ( check_output,
                          Popen )
 from configparser import ConfigParser
 
-VERSION = "2.0.rc0"
+VERSION    = "2.0.rc0"
 HOMEFOLDER = os.getenv('HOME')
 WORKFOLDER = "%s/.myconnector/" % HOMEFOLDER
 _CONNECTOR = "%s/.connector" % HOMEFOLDER
@@ -30,13 +30,20 @@ if os.path.exists( _CONNECTOR ) and not os.path.exists( WORKFOLDER ):
     os.rename( _CONNECTOR, WORKFOLDER )
 MAINFOLDER = "/usr/share/myconnector"
 ICONFOLDER = "%s/icons" % MAINFOLDER
-UIFOLDER = "%s/ui" % MAINFOLDER
+UIFOLDER   = "%s/ui" % MAINFOLDER
+LOGFOLDER  = "%slogs" % WORKFOLDER
+LOGFILE    = "%s/myconnector.log" % LOGFOLDER
+STDLOGFILE = "%s/all.log" % LOGFOLDER
 
-#Установки по умолчанию для параметров программы (какие приложения использовать)
-DEFAULT = { "rdp"  : "freerdp",
-            "vnc"  : "vncviewer",
-            "tab"  : '0',
-            "main" : '0' }
+DEFAULT    = { "rdp"            : "freerdp",
+               "vnc"            : "vncviewer",
+               "tab"            : "0",
+               "main"           : "0",
+               "log"            : "True",
+               "fs"             : "xdg-open",
+               "tray"           : "False",
+               "check_version"  : "True",
+               "sort"           : "0" }
 
 #Исходные данные для ярлыка подключения
 DESKTOP_INFO = """#!/usr/bin/env xdg-open
@@ -46,15 +53,7 @@ Type=Application
 Terminal=false
 Icon=myconnector
 """
-
-#Запускаемый файл приложения
 EXEC = "/usr/bin/myconnector "
-
-#Ведение логов
-DEFAULT[ 'log' ] = True
-LOGFOLDER = WORKFOLDER + "logs/"
-LOGFILE = LOGFOLDER + "myconnector.log"
-STDLOGFILE = LOGFOLDER + "all.log"
 
 #Определение путей до папок пользователя
 _dirs = {}
@@ -124,62 +123,108 @@ else:
     os.system( "zenity --error --no-wrap --icon-name=myconnector --text='Ваша операционная система не поддерживается.\n"
               "Некоторые функции программы могут не работать!\nПодробнее о поддерживаемых ОС <a href=\"http://wiki.myconnector.ru\">здесь</a>.'" )
 
-#Команда подключения сетевых файловых ресурсов
-DEFAULT[ 'fs' ] = 'xdg-open'
-
-#Tray icon is disabled by default
-DEFAULT[ 'tray' ] = False
-
-#Проверка обновлений программы
-DEFAULT[ 'check_version' ] = True
-
-#Default column by sort connections
-DEFAULT[ 'sort' ] = '0'
-
 #Protocols' default options
 DEF_PROTO = {}
 #vncviewer
-DEF_PROTO[ "vnc1_args" ] = { "fullscreen" : "False",
-                             "viewonly"   : "False",
-                             "program"    : "vncviewer" }
+DEF_PROTO[ "vnc1_args" ] = {  "fullscreen"        : "False",
+                              "viewonly"          : "False",
+                              "program"           : "vncviewer" }
 #FreeRDP:
-DEF_PROTO[ 'rdp1_args' ] = [ '','', 1, 1, '', '32', '', '', '', '', '', 0, 0, 0, 0, 0, 0, 0, None, 0, 0, 0, 0, 0, 0, 0, 0, None, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, '' ]
+DEF_PROTO[ "rdp1_args" ] = {  "username"          : "",
+                              "domain"            : "",
+                              "fullscreen"        : "True",
+                              "clipboard"         : "True",
+                              "resolution"        : "",
+                              "color"             : "32",
+                              "folder"            : "",
+                              "gserver"           : "",
+                              "guser"             : "",
+                              "gdomain"           : "",
+                              "gpasswd"           : "",
+                              "admin"             : "False",
+                              "smartcards"        : "False",
+                              "printers"          : "False",
+                              "sound"             : "False",
+                              "microphone"        : "False",
+                              "multimon"          : "False",
+                              "compression"       : "False",
+                              "compr_level"       : "False",
+                              "fonts"             : "False",
+                              "aero"              : "False",
+                              "drag"              : "False",
+                              "animation"         : "False",
+                              "theme"             : "False",
+                              "wallpapers"        : "False",
+                              "nsc"               : "False",
+                              "jpeg"              : "False",
+                              "jpeg_quality"      : "False",
+                              "usb"               : "False",
+                              "secnla"            : "False",
+                              "workarea"          : "False",
+                              "span"              : "False",
+                              "desktop"           : "False",
+                              "downloads"         : "False",
+                              "documents"         : "False",
+                              "gdi"               : "False",
+                              "reconnect"         : "True",
+                              "certignore"        : "True",
+                              "pwdsave"           : "False",
+                              "glyph"             : "False",
+                              "userparams"        : "",
+                              "program"           : "freerdp" }
 #Remmina
-DEF_PROTO[ "rdp_args" ] = { "username"          : "",
-                            "domain"            : "",
-                            "colordepth"        : "32",
-                            "quality"           : "0",
-                            "resolution"        : "",
-                            "viewmode"          : "3",
-                            "sharefolder"       : "",
-                            "shareprinter"      : "0",
-                            "disableclipboard"  : "0",
-                            "sound"             : "off",
-                            "sharesmartcard"    : "0" ,
-                            "program"           : "remmina" }
-DEF_PROTO[ "vnc_args" ] = { "username"          : "",
-                            "quality"           : "9",
-                            "colordepth"        : "24",
-                            "viewmode"          : "1",
-                            "viewonly"          : "0",
-                            "disableencryption" : "0",
-                            "disableclipboard"  : "0",
-                            "showcursor"        : "1",
-                            "program"           : "remmina" }
-DEF_PROTO[ 'nx_args' ] = [ '', '0', '', 1, '', 0, 0, '' ]
-DEF_PROTO[ 'xdmcp_args' ] = [ '0', 1, '', 0, 0, '' ]
-DEF_PROTO[ 'spice_args' ] = [0, 0, 0, 0, 0, 0, '' ]
-DEF_PROTO[ "ssh_args" ] = { "username"       : "",
-                            "ssh_auth"       : "0",
-                            "ssh_privatekey" : "",
-                            "ssh_charset"    : "UTF-8",
-                            "exec"           : "" }
-DEF_PROTO[ "sftp_args" ] = { "username"       : "",
-                             "ssh_auth"       : "0",
-                             "ssh_privatekey" : "",
-                             "ssh_charset"    : "UTF-8",
-                             "execpath"       : "/" }
-
+DEF_PROTO[ "rdp_args" ] = {   "username"          : "",
+                              "domain"            : "",
+                              "colordepth"        : "32",
+                              "quality"           : "0",
+                              "resolution"        : "",
+                              "viewmode"          : "3",
+                              "sharefolder"       : "",
+                              "shareprinter"      : "0",
+                              "disableclipboard"  : "0",
+                              "sound"             : "off",
+                              "sharesmartcard"    : "0" ,
+                              "program"           : "remmina" }
+DEF_PROTO[ "vnc_args" ] = {   "username"          : "",
+                              "quality"           : "9",
+                              "colordepth"        : "24",
+                              "viewmode"          : "1",
+                              "viewonly"          : "0",
+                              "disableencryption" : "0",
+                              "disableclipboard"  : "0",
+                              "showcursor"        : "1",
+                              "program"           : "remmina" }
+DEF_PROTO[ "nx_args" ] = {    "username"          : "",
+                              "quality"           : "0",
+                              "resolution"        : "",
+                              "viewmode"          : "1",
+                              "nx_privatekey"     : "",
+                              "disableencryption" : "0",
+                              "disableclipboard"  : "0",
+                              "exec"              : "" }
+DEF_PROTO[ "xdmcp_args" ] = { "colordepth"        : "0",
+                              "viewmode"          : "1",
+                              "resolution"        : "",
+                              "once"              : "0",
+                              "showcursor"        : "0",
+                              "exec"              : "" }
+DEF_PROTO[ "spice_args" ] = { "usetls"            : "0",
+                              "viewonly"          : "0",
+                              "resizeguest"       : "0",
+                              "disableclipboard"  : "0",
+                              "sharesmartcard"    : "0",
+                              "enableaudio"       : "0",
+                              "cacert"            : "" }
+DEF_PROTO[ "ssh_args" ] = {   "username"          : "",
+                              "ssh_auth"          : "0",
+                              "ssh_privatekey"    : "",
+                              "ssh_charset"       : "UTF-8",
+                              "exec"              : "" }
+DEF_PROTO[ "sftp_args" ] = {  "username"          : "",
+                              "ssh_auth"          : "0",
+                              "ssh_privatekey"    : "",
+                              "ssh_charset"       : "UTF-8",
+                              "execpath"          : "/" }
 _config = ConfigParser()
 _config_file = "%smyconnector.conf" % WORKFOLDER
 
@@ -187,11 +232,15 @@ def config_save( default = False ):
     """Default config for MyConnector"""
     if default:
         _config[ "myconnector" ] = DEFAULT
-        _config[ "vncviewer" ] = DEF_PROTO[ "vnc1_args" ].copy()
-        _config[ "remmina_vnc" ] = DEF_PROTO[ "vnc_args" ].copy()
-        _config[ "ssh" ] = DEF_PROTO[ "ssh_args" ].copy()
-        _config[ "sftp" ] = DEF_PROTO[ "sftp_args" ].copy()
-        _config[ "remmina_rdp" ] = DEF_PROTO[ "rdp_args" ].copy()
+        _config[ "vncviewer"   ] = DEF_PROTO[ "vnc1_args"  ].copy()
+        _config[ "remmina_vnc" ] = DEF_PROTO[ "vnc_args"   ].copy()
+        _config[ "ssh"         ] = DEF_PROTO[ "ssh_args"   ].copy()
+        _config[ "sftp"        ] = DEF_PROTO[ "sftp_args"  ].copy()
+        _config[ "remmina_rdp" ] = DEF_PROTO[ "rdp_args"   ].copy()
+        _config[ "nx"          ] = DEF_PROTO[ "nx_args"    ].copy()
+        _config[ "xdmcp"       ] = DEF_PROTO[ "xdmcp_args" ].copy()
+        _config[ "spice"       ] = DEF_PROTO[ "spice_args" ].copy()
+        _config[ "freerdp"     ] = DEF_PROTO[ "rdp1_args"  ].copy()
     with open( _config_file, 'w' ) as configfile:
         _config.write( configfile )
 
@@ -199,18 +248,22 @@ def config_init():
     """Parsing config file"""
     _config.read( _config_file )
     main = _config[ "myconnector" ]
-    protocols = { "VNC1" : _config[ "vncviewer" ],
+    protocols = { "VNC1" : _config[ "vncviewer"   ],
                   "VNC"  : _config[ "remmina_vnc" ],
                   "RDP"  : _config[ "remmina_rdp" ],
-                  "SSH"  : _config[ "ssh" ],
-                  "SFTP" : _config[ "sftp" ]  }
+                  "RDP1" : _config[ "freerdp"     ],
+                  "NX"   : _config[ "nx"          ],
+                  "SSH"  : _config[ "xdmcp"       ],
+                  "SSH"  : _config[ "spice"       ],
+                  "SSH"  : _config[ "ssh"         ],
+                  "SFTP" : _config[ "sftp"        ] }
     return main, protocols
 
 try:
     CONFIG, CONFIGS = config_init()
 except KeyError:
-    os.system( "zenity --error --no-wrap --icon-name=myconnector --text='Конфигурационный файл поврежден, создан новый!'")
     if os.path.exists( _config_file ):
+        os.system( "zenity --error --no-wrap --icon-name=myconnector --text='Конфигурационный файл поврежден, создан новый!'" )
         os.rename( _config_file, "%s.bak" % _config_file )
     config_save( default = True )
     CONFIG, CONFIGS = config_init()
