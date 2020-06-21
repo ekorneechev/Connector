@@ -150,7 +150,7 @@ class Remmina:
         args[ "server" ] = server
         if login: args[ "username" ] = login
         self.cfg[ "name" ] += args.get( "name" , server )
-        f = open( WORKFOLDER + self.f_name, "w" )
+        f = open( "%s/%s" % ( WORKFOLDER, self.f_name ), "w" )
         f.write( "[remmina]\n" )
         for key in self.cfg.keys():
             self.cfg[ key ] = args.get( key, self.cfg[ key ] )
@@ -161,7 +161,7 @@ class Remmina:
         """Run connection via Remmina"""
         self.create_cfg_file( parameters )
         options.log.info ( "Remmina: подключение по протоколу %s к серверу: %s", self.cfg[ "protocol" ], self.cfg[ "server" ] )
-        command = "remmina -c \"%s%s\"" % ( WORKFOLDER, self.f_name )
+        command = "remmina -c \"%s/%s\"" % ( WORKFOLDER, self.f_name )
         options.log.info ( command )
         os.system( "cd $HOME && %s%s" % ( command, STD_TO_LOG ) )
 

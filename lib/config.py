@@ -22,18 +22,21 @@ from subprocess import ( check_output,
                          Popen )
 from configparser import ConfigParser
 
-VERSION    = "2.0.rc0"
-HOMEFOLDER = os.getenv('HOME')
-WORKFOLDER = "%s/.myconnector/" % HOMEFOLDER
-_CONNECTOR = "%s/.connector" % HOMEFOLDER
+VERSION     = "2.0.rc0"
+HOMEFOLDER  = os.getenv( "HOME" )
+MAINFOLDER  = "/usr/share/myconnector"
+WORKFOLDER  = "%s/.myconnector"    % HOMEFOLDER
+_CONNECTOR  = "%s/.connector"      % HOMEFOLDER
+ICONFOLDER  = "%s/icons"           % MAINFOLDER
+UIFOLDER    = "%s/ui"              % MAINFOLDER
+LOGFOLDER   = "%s/logs"            % WORKFOLDER
+LOGFILE     = "%s/myconnector.log" % LOGFOLDER
+STDLOGFILE  = "%s/all.log"         % LOGFOLDER
+CONNECTIONS = "%s/connections.db"  % WORKFOLDER
+
 if os.path.exists( _CONNECTOR ) and not os.path.exists( WORKFOLDER ):
     os.rename( _CONNECTOR, WORKFOLDER )
-MAINFOLDER = "/usr/share/myconnector"
-ICONFOLDER = "%s/icons" % MAINFOLDER
-UIFOLDER   = "%s/ui" % MAINFOLDER
-LOGFOLDER  = "%slogs" % WORKFOLDER
-LOGFILE    = "%s/myconnector.log" % LOGFOLDER
-STDLOGFILE = "%s/all.log" % LOGFOLDER
+os.system( "mkdir -p %s" % LOGFOLDER )
 
 DEFAULT    = { "rdp"            : "freerdp",
                "vnc"            : "vncviewer",
@@ -226,7 +229,7 @@ DEF_PROTO[ "sftp_args" ] = {  "username"          : "",
                               "ssh_charset"       : "UTF-8",
                               "execpath"          : "/" }
 _config = ConfigParser()
-_config_file = "%smyconnector.conf" % WORKFOLDER
+_config_file = "%s/myconnector.conf" % WORKFOLDER
 
 def config_save( default = False ):
     """Default config for MyConnector"""

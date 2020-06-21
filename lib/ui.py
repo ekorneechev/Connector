@@ -56,7 +56,7 @@ def connectFile(filename, openFile = False):
 def connectFileRdp(filename):
     """Connect to the server with file .rdp"""
     if CONFIG[ "rdp" ] == "freerdp":
-        tmpfile = WORKFOLDER + ".tmp.rdp"
+        tmpfile =  "%s/.tmp.rdp" % WORKFOLDER
         os.system('cp -r "%s" "%s"' % (filename, tmpfile))
         os.system('xfreerdp "%s" -sec-nla %s' % (tmpfile, STD_TO_LOG))
     else:
@@ -71,8 +71,8 @@ def openFile(filename):
     ext = Path(filename).suffix.lower()
     if ext == ".ctor":
         tmpname = 'tmp_' + os.path.basename(filename)
-        os.system('cp "%s" "%s%s"' % (filename, WORKFOLDER, tmpname))
-        os.chdir(WORKFOLDER)
+        os.system('cp "%s" "%s/%s"' % (filename, WORKFOLDER, tmpname))
+        os.chdir( WORKFOLDER )
         connectFile(tmpname, True)
         os.remove(tmpname)
     elif ext == ".rdp": connectFileRdp(filename)
@@ -243,7 +243,7 @@ class Gui(Gtk.Application):
         """Инициализация списка сохраненных подключений в меню из трея"""
         exist = False
         for item in self.tray_submenu.get_children(): item.destroy() #очищение меню перед его заполнением
-        for connect in open(WORKFOLDER + "connections.db"):
+        for connect in open( CONNECTIONS ):
             exist = True
             record = connect.strip().split(':::')
             name, protocol = record[0], record[1]
@@ -1025,13 +1025,13 @@ class Gui(Gtk.Application):
 
     def createDb(self, filename):
         """Создает пустой файл БД (или любой другой)"""
-        f = open(WORKFOLDER + filename,"w")
+        f = open( "%s/%s" % ( WORKFOLDER, filename ),"w" )
         f.close()
 
     def getServersFromDb(self):
         """Чтение списка ранее посещенных серверов из файла"""
         try:
-            for server in open(WORKFOLDER + "servers.db"):
+            for server in open( "%s/servers.db" % WORKFOLDER ):
                 try: #попытка прочитать протокол/сервер
                     protocol, address = server.strip().split(':::')
                     self.liststore[protocol].append([address])
@@ -1045,7 +1045,7 @@ class Gui(Gtk.Application):
         """Чтение списка сохраненных соединений из файла"""
         self.liststore_connect.clear()
         try:
-            for connect in open(WORKFOLDER + "connections.db"):
+            for connect in open( CONNECTIONS ):
                 try: #попытка прочитать строку с параметрами подключений
                     record = list(connect.strip().split(':::'))
                     self.liststore_connect.append(record)
@@ -1057,7 +1057,7 @@ class Gui(Gtk.Application):
 
     def writeServerInDb(self, entry):
         """Запись сервера в файл со списком ранее посещенных серверов"""
-        db = open(WORKFOLDER + "servers.db", "r+")
+        db = open( "%s/servers.db" % WORKFOLDER , "r+" )
         protocol, address = entry.get_name(),entry.get_text()
         record, thereis = protocol + ':::' + address, False
         for server in db:
@@ -1107,15 +1107,15 @@ class Gui(Gtk.Application):
             fileName.append( choice( [ '0','1','2','3','4','5','6','7','8','9' ] ))
         fileName = "".join(fileName) + '.ctor'
         print (name + ':::' + protocol + ':::' + server + ':::' + fileName,
-               file = open(WORKFOLDER + "connections.db", "a"))
+               file = open( CONNECTIONS, "a" ) )
         options.log.info("Добавлено новое %s-подключение '%s' (host: %s)", protocol, name, server)
         return fileName
 
     def resaveFileCtor(self, name, protocol, server):
         """Пересохранение подключения с тем же именем файла .ctor"""
         fileName = self.fileCtor
-        dblines = open(WORKFOLDER + "connections.db").readlines()
-        dbFile = open(WORKFOLDER + "connections.db","w")
+        dblines = open( CONNECTIONS ).readlines()
+        dbFile = open( CONNECTIONS, "w" )
         for line in dblines:
             if line.find(fileName) != -1:#если найдено совпадение с название файла коннекта
                 line = name + ':::' + protocol + ':::' + server + ':::' + fileName  + '\n'
@@ -1307,9 +1307,9 @@ class Gui(Gtk.Application):
         if response == Gtk.ResponseType.YES:
             fileCtor = table[indexRow][3]
             #удаление из базы подключений
-            with open(WORKFOLDER + "connections.db") as fileDb:
+            with open( CONNECTIONS ) as fileDb:
                 tmpArr = fileDb.readlines()
-            endFile = open(WORKFOLDER + "connections.db", 'w')
+            endFile = open( CONNECTIONS , 'w')
             for row in tmpArr:
                 if row.find(fileCtor) == -1:
                     print(row.strip(), file = endFile)
@@ -1318,7 +1318,7 @@ class Gui(Gtk.Application):
             parameters = options.loadFromFile(fileCtor)
             try: keyring.delete_password(str(parameters[1]),str(parameters[2])) #удаление пароля из связки ключей
             except: pass
-            try: os.remove(WORKFOLDER + fileCtor) #удаление файла с настройками
+            try: os.remove( "%s/%s" % ( WORKFOLDER, fileCtor ) )
             except: pass
             options.log.info("Подключение '%s' удалено!", name)
             self.initSubmenuTray()

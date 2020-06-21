@@ -35,19 +35,18 @@ class FakeLog():
     def exception (self, *args, **kwargs): pass
 
 log = FakeLog()
-os.system("mkdir -p " + LOGFOLDER)
 
 def saveInFile(fileName, obj):
     """Save connection parameters to file *.ctor)"""
     conf = ConfigParser()
     conf [ "myconnector" ] = obj
-    with open( WORKFOLDER + fileName, 'w' ) as fileCtor:
+    with open( "%s/%s" % ( WORKFOLDER, filename ), "w" ) as fileCtor:
         conf.write( fileCtor )
 
 def loadFromFile(fileName, window = None):
     """Загрузка сохраненных параметров из файла"""
     try:
-        dbfile = open(WORKFOLDER + fileName, 'rb')
+        dbfile = open( "%s/%s" % ( WORKFOLDER, filename ), "rb" )
         obj = load( dbfile )
         dbfile.close()
         return obj
@@ -60,7 +59,7 @@ def loadFromFile(fileName, window = None):
         return None
     except ( UnpicklingError, EOFError ):
         conf = ConfigParser()
-        conf.read( WORKFOLDER + fileName )
+        conf.read( "%s/%s" % ( WORKFOLDER, filename ) )
         return conf[ "myconnector" ]
     except:
         dialog = Gtk.MessageDialog(window, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK,
@@ -111,7 +110,7 @@ def searchSshUser(query):
 def filenameFromName(name):
     """Определение имени конфигурационного файла подключения по имени подключения"""
     try:
-        for connect in open(WORKFOLDER + "connections.db"):
+        for connect in open( CONNECTIONS ):
             record = connect.strip().split(':::')
             if record[0] == name:
                 return record[3]
@@ -122,7 +121,7 @@ def filenameFromName(name):
 def nameFromFilename(filename):
     """Определение имени подключения по имени конфигурационного файла"""
     try:
-        for connect in open(WORKFOLDER + "connections.db"):
+        for connect in open( CONNECTIONS ):
             record = connect.strip().split(':::')
             if record[3] == filename:
                 return record[0]
@@ -133,7 +132,7 @@ def nameFromFilename(filename):
 def searchName(name):
     """Существует ли подключение с указанным именем"""
     try:
-        for connect in open(WORKFOLDER + "connections.db"):
+        for connect in open( CONNECTIONS ):
             record = connect.strip().split(':::')
             if record[0] == name:
                 return True
@@ -263,7 +262,7 @@ class Properties(Gtk.Window):
         dialog.format_secondary_text(message)
         response = dialog.run()
         if response == Gtk.ResponseType.OK:
-            f = open(WORKFOLDER + filename,"w")
+            f = open( "%s/%s" % ( WORKFOLDER, filename ), "w" )
             f.close()
             myconnector.ui.viewStatus(self.statusbar, "Выполнено, изменения вступят в силу после перезапуска...")
             log.info("Очищен файл %s", filename)
