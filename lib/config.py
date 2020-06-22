@@ -151,7 +151,7 @@ DEF_PROTO[ "rdp1_args" ] = {  "username"          : "",
                               "microphone"        : "False",
                               "multimon"          : "False",
                               "compression"       : "False",
-                              "compr_level"       : "False",
+                              "compr_level"       : "0",
                               "fonts"             : "False",
                               "aero"              : "False",
                               "drag"              : "False",
@@ -160,9 +160,9 @@ DEF_PROTO[ "rdp1_args" ] = {  "username"          : "",
                               "wallpapers"        : "False",
                               "nsc"               : "False",
                               "jpeg"              : "False",
-                              "jpeg_quality"      : "False",
+                              "jpeg_quality"      : "80.0",
                               "usb"               : "False",
-                              "secnla"            : "False",
+                              "disable_nla"       : "True",
                               "workarea"          : "False",
                               "span"              : "False",
                               "desktop"           : "False",
@@ -171,7 +171,7 @@ DEF_PROTO[ "rdp1_args" ] = {  "username"          : "",
                               "gdi"               : "False",
                               "reconnect"         : "True",
                               "certignore"        : "True",
-                              "pwdsave"           : "False",
+                              "passwdsave"        : "False",
                               "glyph"             : "False",
                               "userparams"        : "",
                               "program"           : "freerdp" }
@@ -228,7 +228,7 @@ DEF_PROTO[ "sftp_args" ] = {  "username"          : "",
                               "ssh_privatekey"    : "",
                               "ssh_charset"       : "UTF-8",
                               "execpath"          : "/" }
-_config = ConfigParser()
+_config = ConfigParser( interpolation = None )
 _config_file = "%s/myconnector.conf" % WORKFOLDER
 
 def config_save( default = False ):

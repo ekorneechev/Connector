@@ -43,7 +43,7 @@ def connectFile(filename, openFile = False):
             #if openFile: parameters.append(parameters[0]) #если открывается файл .ctor, то заголовок окна - адрес сервера
             #else: parameters.append(options.nameFromFilename(filename)) TODO - check after freerdp text format
             if parameters.get( "program" ) == "freerdp":
-                try: parameters[40] = keyring.get_password(str(parameters[0]),str(parameters[1]))
+                try: parameters[ "passwd" ] = keyring.get_password( parameters[ "server" ] ,parameters[ "username" ] )
                 except: pass
             connect = definition(protocol)
             connect.start(parameters)
@@ -555,82 +555,60 @@ class Gui(Gtk.Application):
             if args.getboolean( "sharesmartcard" ): self.RDP_cards.set_active( True )
 
         if protocol == "RDP" and CONFIG[ "rdp" ] == "freerdp":
-            self.RDP_user.set_text(args[1])
-            self.RDP_domain.set_text(args[2])
-            if args[3]: self.RDP_fullscreen.set_active(True)
-            elif args[5]:
-                RDP_resol_hand = self.pref_builder.get_object("radio_RDP1_resol_hand")
-                RDP_resol_hand.set_active(True)
-                self.RDP_resolution.set_text(args[5])
-            elif args[31]: self.RDP_workarea.set_active(True)
-            else: self.RDP_resol_default.set_active(True)
-            if args[4]: self.RDP_clipboard.set_active(True)
-            else: self.RDP_clipboard.set_active(False)
-            self.RDP_color.set_active_id(args[6])
-            if args[7] == '': self.RDP_share_folder.set_active(False)
+            self.RDP_user.set_text( args.get( "username", "" ) )
+            self.RDP_domain.set_text( args.get( "domain", "" ) )
+            if args.getboolean( "fullscreen" ): self.RDP_fullscreen.set_active( True )
+            elif args.get( "resolution", "" ):
+                RDP_resol_hand = self.pref_builder.get_object( "radio_RDP1_resol_hand" )
+                RDP_resol_hand.set_active( True )
+                self.RDP_resolution.set_text( args[ "resolution" ] )
+            elif args.getboolean( "workarea" ): self.RDP_workarea.set_active( True )
+            else: self.RDP_resol_default.set_active( True )
+            if args.getboolean( "clipboard" ): self.RDP_clipboard.set_active( True )
+            else: self.RDP_clipboard.set_active( False )
+            self.RDP_color.set_active_id( args.get( "color", "" ) )
+            if not args.get( "folder", "" ): self.RDP_share_folder.set_active( False )
             else:
-                self.RDP_share_folder.set_active(True)
-                self.RDP_name_folder.set_filename(args[7])
-            self.RDP_gserver.set_text(args[8])
-            self.RDP_guser.set_text(args[9])
-            self.RDP_gdomain.set_text(args[10])
-            self.RDP_gpasswd.set_text(args[11])
-            if args[12]: self.RDP_admin.set_active(True)
-            if args[13]: self.RDP_cards.set_active(True)
-            if args[14]: self.RDP_printers.set_active(True)
-            if args[15]: self.RDP_sound.set_active(True)
-            if args[16]: self.RDP_microphone.set_active(True)
-            if args[17]: self.RDP_multimon.set_active(True)
-            if args[18]: self.RDP_compression.set_active(True)
-            if args[19] or args[19] == 0: self.RDP_compr_level.set_active_id(args[19])
-            if args[20]: self.RDP_fonts.set_active(True)
-            if args[21]: self.RDP_aero.set_active(True)
-            if args[22]: self.RDP_drag.set_active(True)
-            if args[23]: self.RDP_animation.set_active(True)
-            if args[24]: self.RDP_theme.set_active(False)
-            if args[25]: self.RDP_wallpapers.set_active(False)
-            if args[26]: self.RDP_nsc.set_active(True)
-            if args[27]:
-                self.RDP_jpeg.set_active(True)
-                self.RDP_jpeg_quality.set_value(args[28])
-            if args[29]: self.RDP_usb.set_active(True)
-            if args[30]: self.RDP_nla.set_active(False)
-            try: #Добавлена совместимость с предыдущей версией =>1.3.24
-                if args[32]: self.RDP_span.set_active(True)
-            except IndexError:
-                self.RDP_span.set_active(False)
-            try:
-                if args[33]: self.RDP_desktop.set_active(True)
-                if args[34]: self.RDP_down.set_active(True)
-                if args[35]: self.RDP_docs.set_active(True)
-            except IndexError:
-                self.RDP_desktop.set_active(False)
-                self.RDP_down.set_active(False)
-                self.RDP_docs.set_active(False)
-            try:
-                if args[36]: self.RDP_gdi.set_active(True)
-            except IndexError:
-                self.RDP_gdi.set_active(False)
-            try:# <1.8.2
-                if args[37]: self.RDP_reconnect.set_active(False)
-                if args[38]: self.RDP_certignore.set_active(True)
-            except IndexError:
-                self.RDP_reconnect.set_active(False)
-                self.RDP_certignore.set_active(True)
-            try:
-                password = keyring.get_password(str(args[0]),str(args[1]))
-                if args[39] or password: self.RDP_pwdsave.set_active(True)
-                if not password: password = ''
-                self.RDP_pwd.set_text(password)
-            except IndexError:
-                self.RDP_pwdsave.set_active(False)
-                self.RDP_pwd.set_text('')
-            try:
-                if args[41]: self.RDP_glyph.set_active(True)
-            except IndexError: pass
-            try:
-                self.RDP_userparams.set_text(args[42])
-            except IndexError: pass
+                self.RDP_share_folder.set_active( True )
+                self.RDP_name_folder.set_filename( args[ "folder" ] )
+            self.RDP_gserver.set_text( args.get( "gserver", "" ) )
+            self.RDP_guser.set_text( args.get( "guser", "" ) )
+            self.RDP_gdomain.set_text( args.get( "gdomain", "" ) )
+            self.RDP_gpasswd.set_text( args.get( "gpasswd", "" ) )
+            if args.getboolean( "admin" ): self.RDP_admin.set_active( True )
+            if args.getboolean( "smartcards" ): self.RDP_cards.set_active ( True )
+            if args.getboolean( "printers" ): self.RDP_printers.set_active ( True )
+            if args.getboolean( "sound" ): self.RDP_sound.set_active ( True )
+            if args.getboolean( "microphone" ): self.RDP_microphone.set_active ( True )
+            if args.getboolean( "multimon" ): self.RDP_multimon.set_active ( True )
+            if args.getboolean( "compression" ):
+                self.RDP_compression.set_active ( True )
+                self.RDP_compr_level.set_active_id( args.get( "compr_level", "0" ) )
+            if args.getboolean( "fonts" ): self.RDP_fonts.set_active ( True )
+            if args.getboolean( "aero" ): self.RDP_aero.set_active ( True )
+            if args.getboolean( "drag" ): self.RDP_drag.set_active ( True )
+            if args.getboolean( "animation" ): self.RDP_animation.set_active ( True )
+            if args.getboolean( "theme" ): self.RDP_theme.set_active ( False )
+            if args.getboolean( "wallpapers" ): self.RDP_wallpapers.set_active ( False )
+            if args.getboolean( "nsc" ): self.RDP_nsc.set_active ( True )
+            if args.getboolean( "jpeg" ):
+                self.RDP_jpeg.set_active ( True )
+                self.RDP_jpeg_quality.set_value( float( args.get( "jpeg_quality", "80" ) ) )
+            if args.getboolean( "usb" ): self.RDP_usb.set_active ( True )
+            if args.getboolean( "secnla" ): self.RDP_nla.set_active ( True )
+            if args.getboolean( "span" ): self.RDP_span.set_active ( True )
+            if args.getboolean( "desktop" ): self.RDP_desktop.set_active ( True )
+            if args.getboolean( "downloads" ): self.RDP_down.set_active ( True )
+            if args.getboolean( "documents" ): self.RDP_docs.set_active ( True )
+            if args.getboolean( "gdi" ): self.RDP_gdi.set_active ( True )
+            if args.getboolean( "reconnect" ): self.RDP_reconnect.set_active ( False )
+            if args.getboolean( "certignore" ): self.RDP_certignore.set_active ( True )
+            password = keyring.get_password( args.get( "server", "" ), args.get( "username", "" ) )
+            if args.getboolean( "passwdsave" ) or password: self.RDP_pwdsave.set_active ( True )
+            if not password: password = args.get( "passwd", "" )
+            self.RDP_pwd.set_text( password )
+            if args.getboolean( "glyph" ): self.RDP_glyph.set_active ( True )
+            self.RDP_userparams.set_text( args.get( "userparams", "" ) )
 
         if protocol == 'SPICE':
             if args.getboolean( "usetls" ): self.SPICE_tls.set_active( True )
@@ -820,90 +798,61 @@ class Gui(Gtk.Application):
             )
 
         if self.changeProgram(protocol) == "RDP1":
-            user = self.RDP_user.get_text()
-            domain = self.RDP_domain.get_text()
-            color = self.RDP_color.get_active_id()
-            if self.RDP_fullscreen.get_active(): fullscreen = 1
-            else: fullscreen = 0
-            if self.RDP_clipboard.get_active(): clipboard = 1
-            else: clipboard = 0
-            workarea = 0
-            resolution = ''
-            if self.RDP_workarea.get_active(): workarea = 1
+            args = dict(
+                username = self.RDP_user.get_text(),
+                domain = self.RDP_domain.get_text(),
+                color = self.RDP_color.get_active_id(),
+                fullscreen = "True" if self.RDP_fullscreen.get_active() else "False",
+                clipboard = "True" if self.RDP_clipboard.get_active() else "False",
+                folder = self.RDP_name_folder.get_filename() if self.RDP_share_folder.get_active() else "",
+                gserver = self.RDP_gserver.get_text(),
+                guser = self.RDP_guser.get_text(),
+                gdomain = self.RDP_gdomain.get_text(),
+                gpasswd = self.RDP_gpasswd.get_text(),
+                admin = "True" if self.RDP_admin.get_active() else "False",
+                smartcards = "True" if self.RDP_cards.get_active() else "False",
+                printers = "True" if self.RDP_printers.get_active() else "False",
+                sound = "True" if self.RDP_sound.get_active() else "False",
+                microphone = "True" if self.RDP_microphone.get_active() else "False",
+                multimon = "True" if self.RDP_multimon.get_active() else "False",
+                fonts = "True" if self.RDP_fonts.get_active() else "False",
+                aero = "True" if self.RDP_aero.get_active() else "False",
+                drag = "True" if self.RDP_drag.get_active() else "False",
+                animation = "True" if self.RDP_animation.get_active() else "False",
+                theme = "False" if self.RDP_theme.get_active() else "True",
+                wallpapers = "False" if self.RDP_wallpapers.get_active() else "True",
+                nsc = "True" if self.RDP_nsc.get_active() else "False",
+                usb = "True" if self.RDP_usb.get_active() else "False",
+                disable_nla = "True" if self.RDP_nla.get_active() else "False",
+                span = "True" if self.RDP_span.get_active() else "False",
+                desktop = "True" if self.RDP_desktop.get_active() else "False",
+                downloads = "True" if self.RDP_down.get_active() else "False",
+                documents = "True" if self.RDP_docs.get_active() else "False",
+                gdi = "True" if self.RDP_gdi.get_active() else "False",
+                reconnect = "False" if self.RDP_reconnect.get_active() else "True",
+                certignore = "True" if self.RDP_certignore.get_active() else "False",
+                passwd = self.RDP_pwd.get_text(),
+                passwdsave = "True" if self.RDP_pwdsave.get_active() else "False",
+                glyph = "True" if self.RDP_glyph.get_active() else "False",
+                userparams = self.RDP_userparams.get_text()
+            )
+            args[ "workarea" ] = "False"
+            args[ "resolution" ] = ""
+            if self.RDP_workarea.get_active(): args[ "workarea" ] = "True"
             elif self.RDP_resol_default.get_active(): pass
-            else: resolution = self.RDP_resolution.get_text()
-            if self.RDP_share_folder.get_active(): folder = self.RDP_name_folder.get_filename()
-            else: folder = ''
-            gserver = self.RDP_gserver.get_text()
-            guser = self.RDP_guser.get_text()
-            gdomain = self.RDP_gdomain.get_text()
-            gpasswd = self.RDP_gpasswd.get_text()
-            if self.RDP_admin.get_active(): admin = 1
-            else: admin = 0
-            if self.RDP_cards.get_active(): smartcards = 1
-            else: smartcards = 0
-            if self.RDP_printers.get_active(): printers = 1
-            else: printers = 0
-            if self.RDP_sound.get_active(): sound = 1
-            else: sound = 0
-            if self.RDP_microphone.get_active(): microphone = 1
-            else: microphone = 0
-            if self.RDP_multimon.get_active(): multimon = 1
-            else: multimon = 0
+            else: args[ "resolution" ] = self.RDP_resolution.get_text()
             if self.RDP_compression.get_active():
-                compression = 1
-                compr_level = self.RDP_compr_level.get_active_id()
+                args[ "compression" ] = "True"
+                args[ "compr_level" ] = self.RDP_compr_level.get_active_id()
             else:
-                compression = 0
-                compr_level = None
-            if self.RDP_fonts.get_active(): fonts = 1
-            else: fonts = 0
-            if self.RDP_aero.get_active(): aero = 1
-            else: aero = 0
-            if self.RDP_drag.get_active(): drag = 1
-            else: drag = 0
-            if self.RDP_animation.get_active(): animation = 1
-            else: animation = 0
-            if self.RDP_theme.get_active(): theme = 0
-            else: theme = 1
-            if self.RDP_wallpapers.get_active(): wallpapers = 0
-            else: wallpapers = 1
-            if self.RDP_nsc.get_active(): nsc = 1
-            else: nsc = 0
+                args[ "compression" ] = "False"
+                args[ "compr_level" ] = "None"
             if self.RDP_jpeg.get_active():
-                jpeg = 1
-                jpeg_quality = int(self.RDP_jpeg_quality.get_value())
+                args[ "jpeg" ] = "True"
+                args[ "jpeg_quality" ] = str (self.RDP_jpeg_quality.get_value())
             else:
-                jpeg = 0
-                jpeg_quality = None
-            if self.RDP_usb.get_active(): usb = 1
-            else: usb = 0
-            if self.RDP_nla.get_active(): nla = 0
-            else: nla = 1
-            if self.RDP_span.get_active(): span = 1
-            else: span = 0
-            if self.RDP_desktop.get_active(): desktop = 1
-            else: desktop = 0
-            if self.RDP_down.get_active(): down = 1
-            else: down = 0
-            if self.RDP_docs.get_active(): docs = 1
-            else: docs = 0
-            if self.RDP_gdi.get_active(): gdi = 1
-            else: gdi = 0
-            if self.RDP_reconnect.get_active(): reconnect = 0
-            else: reconnect = 1
-            if self.RDP_certignore.get_active(): certignore = 1
-            else: certignore = 0
-            pwd = self.RDP_pwd.get_text()
-            if self.RDP_pwdsave.get_active(): pwdsave = 1
-            else: pwdsave = 0
-            if self.RDP_glyph.get_active(): glyph = 1
-            else: glyph = 0
-            userparams = self.RDP_userparams.get_text()
-            args = [user, domain, fullscreen, clipboard, resolution, color, folder, gserver, guser, gdomain, gpasswd,
-                    admin, smartcards, printers, sound, microphone, multimon, compression, compr_level, fonts,
-                    aero, drag, animation, theme, wallpapers, nsc, jpeg, jpeg_quality, usb, nla, workarea, span,
-                    desktop, down, docs, gdi, reconnect, certignore, pwdsave, pwd, glyph, userparams]
+                args[ "jpeg" ] = "False"
+                args[ "jpeg_quality" ] = "None"
 
         if protocol == 'NX':
             args = dict(
@@ -1117,12 +1066,6 @@ class Gui(Gtk.Application):
         protocol = entry.get_name()
         id_protocol = self.changeProgram(protocol)
         parameters = self.applyPreferences(protocol)
-        if id_protocol == 'RDP1':
-            if parameters[38]: keyring.set_password(server,str(parameters[0]),str(parameters[39]))
-            else:
-                try: keyring.delete_password(server,str(parameters[0]))
-                except: pass
-            parameters[39] = ''
         name = self.pref_builder.get_object("entry_" + id_protocol + "_name" ).get_text()
         if name == "":
             os.system( "zenity --error --text='\nУкажите имя подключения!' --no-wrap --icon-name=myconnector" )
@@ -1132,6 +1075,9 @@ class Gui(Gtk.Application):
             parameters[ "name" ] = name
             parameters[ "protocol" ] = protocol
             parameters[ "server" ] = server
+            if id_protocol == "RDP1" and parameters.get ( "username", "" ):
+                self.saveKeyring ( parameters.copy() )
+                parameters [ "passwd" ] = ""
             program = CONFIG.get( protocol.lower(), "" )
             if program: parameters[ "program" ] = program
             if self.editClick:#если нажата кнопка Изменить, то пересохранить
@@ -1224,8 +1170,8 @@ class Gui(Gtk.Application):
             if self.correctProgram(parameters):
                 parameters[ "name" ] = nameConnect
                 try:
-                    if self.changeProgram( protocol ) == 'RDP1' and parameters[39]:
-                        parameters[40] = keyring.get_password(str(parameters[0]),str(parameters[1]))
+                    if self.changeProgram( protocol ) == 'RDP1' and parameters.getboolean( "passwdsave" ):
+                        parameters[ "passwd" ] = keyring.get_password( parameters[ "server" ] ,parameters[ "username" ] )
                 except: pass
                 viewStatus(self.statusbar, 'Соединение с "' + nameConnect + '"...')
                 connect = definition(protocol)
@@ -1397,9 +1343,10 @@ class Gui(Gtk.Application):
 
     def saveKeyring(self, parameters):
         """Сохранение пароля в связу ключей и отметки об этом в файл подключения"""
-        if parameters[39]: keyring.set_password(str(parameters[0]),str(parameters[1]),str(parameters[40]))
+        if parameters.get( "passwdsave", "False" ) == "True":
+            keyring.set_password( parameters [ "server" ], parameters [ "username" ], parameters [ "passwd" ] )
         else:
-            try: keyring.delete_password(str(parameters[0]),str(parameters[1]))
+            try: keyring.delete_password( parameters [ "server" ],  parameters [ "username" ] )
             except: pass
 
     def onDeveloper(self, *args):

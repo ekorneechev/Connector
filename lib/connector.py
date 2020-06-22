@@ -42,8 +42,8 @@ class VncViewer:
         else:
             server = args[ "server" ]
             command = 'vncviewer %s ' % server
-            if args.getboolean( "fullscreen" ): command += "-fullscreen "
-            if args.getboolean( "viewonly" ): command += "-viewonly "
+            if args.get( "fullscreen", "False" ) == "True": command += "-fullscreen "
+            if args.get( "viewonly", "False"   ) == "True": command += "-viewonly "
         options.log.info ("VNC: подключение к серверу %s. Команда запуска:", server)
         options.log.info (command)
         os.system(command + STD_TO_LOG)
@@ -55,71 +55,60 @@ class XFreeRdp:
         if freerdpCheck():
             freerdpVersion = freerdpCheckVersion()
             if freerdpVersion > "1.2":
-                nameConnect = args[len(args)-1]
-                command = 'xfreerdp /v:' + args[0] + " /t:'" + nameConnect + "'"
-                if args[1]: command += ' /u:' + args[1]
-                if args[2]: command += ' /d:' + args[2]
-                if args[3]: command += ' /f'
-                if args[4]: command += ' +clipboard'
-                if args[5]: command += ' /size:' + args[5]
-                if args[6]: command += ' /bpp:' + args[6]
-                if args[7]: command += ' /drive:LocalFolder,"' + args[7] + '"'
-                if args[8]: command += ' /g:' + args[8]
-                if args[9]: command += ' /gu:' + args[9]
-                if args[10]: command += ' /gd:' + args[10]
-                if args[11]:
-                    command = "GATEPWD='" + args[11] + "' && " + command
-                    command += ' /gp:$GATEPWD'
-                if args[12]: command += ' /admin'
-                if args[13]: command += SCARD
-                if args[14]: command += ' /printer'
-                if args[15]: command += ' /sound:sys:alsa'
-                if args[16]: command += ' /microphone:sys:alsa'
-                if args[17]: command += ' /multimon'
-                if args[18]: command += ' +compression'
-                if args[19]: command += ' /compression-level:' + args[19]
-                if args[20]: command += ' +fonts'
-                if args[21]: command += ' +aero'
-                if args[22]: command += ' +window-drag'
-                if args[23]: command += ' +menu-anims'
-                if args[24]: command += ' -themes'
-                if args[25]: command += ' -wallpaper'
-                if args[26]: command += ' /nsc'
-                if args[27]: command += ' /jpeg'
-                if args[28]: command += ' /jpeg-quality:' + str(args[28])
-                if args[29] and options.checkPath(USBPATH): command += ' /drive:MEDIA,' + USBPATH
-                if args[31]: command += ' /workarea'
-                try: #Добавлена совместимость с предыдущей версией; < 1.4.0
-                    if args[32]: command += ' /span'
-                except IndexError: pass
-                try: #< 1.4.1
-                    if args[33]: command += ' /drive:Desktop,' + DESKFOLDER
-                    if args[34]: command += ' /drive:Downloads,' + DOWNFOLDER
-                    if args[35]: command += ' /drive:Documents,' + DOCSFOLDER
-                except IndexError: pass
-                try: #< 1.8.0
-                    if args[36]: command += ' /gdi:hw'
-                    else: command += ' /gdi:sw'
-                except IndexError: command += ' /gdi:sw'
-                try: #< 1.8.2
-                    if args[38]: command += ' /cert-ignore'
-                    if args[37]: command += ' +auto-reconnect'
-                except IndexError: command += ' +auto-reconnect /cert-ignore'
-                try:
-                    if args[40] and len(args) >= 42: command += ' /p:' + escape(args[40])
-                    elif args[30]: command += ' /p:' + escape(passwd(args[0], args[1]))
-                    else: command += ' -sec-nla'
-                except: command += ' -sec-nla'
-                try:
-                    if args[41] and len(args) >= 43: command += ' +glyph-cache'
-                except IndexError: pass
-                try:
-                    # for compatibility also need to check lenght of 'args'
-                    # length = 'last index' + 1 + 'title of the connect' (since version 1.5.6...)
-                    if args[42] and len(args) >= 44: command += ' ' + args[42]
-                except IndexError: pass
+                server = args [ "server" ]
+                username = args.get( "username" , "" )
+                command = "xfreerdp /v:%s /t:'%s'" % ( server, args.get( "name", server ) )
+                if username                                    : command += " /u:%s" % username
+                if args.get( "domain" , ""                    ): command += " /d:%s" % args[ "domain" ]
+                if args.get( "fullscreen", "True"   ) == "True": command += " /f"
+                if args.get( "clipboard" , "True"   ) == "True": command += " +clipboard"
+                if args.get( "resolution" , ""                ): command += " /size:%s" % args[ "resolution" ]
+                if args.get( "color" , ""                     ): command += " /bpp:%s" % args[ "color" ]
+                if args.get( "folder" , ""                    ): command += " /drive:SharedFolder,'%s'" % args[ "folder" ]
+                if args.get( "gserver" , ""                   ): command += " /g:%s" % args[ "gserver" ]
+                if args.get( "guser" , ""                     ): command += " /gu:%s" % args[ "guser" ]
+                if args.get( "gdomain" , ""                   ): command += " /gd:%s" % args[ "gdomain" ]
+                if args.get( "gpasswd" , "" ):
+                    command = "GATEPWD='%s' && %s" % ( args[ "gpasswd" ], command )
+                    command += " /gp:$GATEPWD"
+                if args.get( "admin", "False"       ) == "True": command += " /admin"
+                if args.get( "smartcards", "False"  ) == "True": command += SCARD
+                if args.get( "printers", "False"    ) == "True": command += " /printer"
+                if args.get( "sound", "False"       ) == "True": command += " /sound:sys:alsa"
+                if args.get( "microphone", "False"  ) == "True": command += " /microphone:sys:alsa"
+                if args.get( "multimon", "False"    ) == "True": command += " /multimon"
+                if args.get( "compression", "False" ) == "True": command += " +compression /compression-level:%s" % args.get( "compr_level" , "0" )
+                if args.get( "fonts", "False"       ) == "True": command += " +fonts"
+                if args.get( "aero", "False"        ) == "True": command += " +aero"
+                if args.get( "drag", "False"        ) == "True": command += " +window-drag"
+                if args.get( "animation", "False"   ) == "True": command += " +menu-anims"
+                if args.get( "theme", "False"       ) == "True": command += " -themes"
+                if args.get( "wallpapers", "False"  ) == "True": command += " -wallpaper"
+                if args.get( "nsc", "False"         ) == "True": command += " /nsc"
+                if args.get( "jpeg", "False"        ) == "True": command += " /jpeg /jpeg-quality:%s" % args.get( "jpeg_quality" , "80.0" )
+                if args.get( "usb", "False" ) and os.path.exists( USBPATH ):
+                    command += " /drive:MEDIA,%s" % USBPATH
+                if args.get( "workarea", "False"    ) == "True": command += " /workarea"
+                if args.get( "span", "False"        ) == "True": command += " /span"
+                if args.get( "desktop" , "False"    ) == "True": command += " /drive:Desktop,%s" % DESKFOLDER
+                if args.get( "downloads" , "False"  ) == "True": command += " /drive:Downloads,%s" % DOWNFOLDER
+                if args.get( "documents" , "False"  ) == "True": command += " /drive:Documents,%s" % DOCSFOLDER
+                if args.get( "gdi", "False"         ) == "True": command += " /gdi:hw"
+                else: command += " /gdi:sw"
+                if args.get( "certignore", "True"   ) == "True": command += " /cert-ignore"
+                if args.get( "reconnect", "True"    ) == "True": command += " +auto-reconnect"
+                if args.get( "glyph", "False"       ) == "True": command += " +glyph-cache"
+                if args.get( "userparams" , ""                ): command += " %s" % args[ "userparams" ]
+                disable_nla = args.get( "disable_nla", "True" )
+                if disable_nla == "True"                       : command += " -sec-nla"
+                password = args.get( "passwd" , "" )
+                if not password:
+                    password = keyring.get_password( server, username )
+                if not password and disable_nla != "True":
+                    password = passwd( server, username )
+                if password:
+                    command += " /p:%s" % escape( password )
 
-                server = args[0]
                 options.log.info ("FreeRDP: подключение к серверу %s. Команда запуска:", server)
                 try: cmd2log = command.replace("/p:" + command.split("/p:")[1].split(' ')[0],"/p:<hidden>")
                 except: cmd2log = command
@@ -335,10 +324,11 @@ class Vmware:
                 options.log.info ("VMware: подключение к серверу %s", args)
                 options.log.info (command)
             else:
+                if type( args ) == dict: args = ConfigParser()
                 command = 'vmware-view -q -s %s' %  args[ "server" ]
-                if args.get( "user" , "" ): command += ' -u %s' % args[ "user" ]
-                if args.get( "domain" , "" ): command += ' -d %s' % args[ "domain" ]
-                if args.getboolean( "fullscreen" ): command += ' --fullscreen'
+                if args.get( "user" , ""                     ): command += " -u %s" % args[ "user" ]
+                if args.get( "domain" , ""                   ): command += " -d %s" % args[ "domain" ]
+                if args.get( "fullscreen", "False" ) == "True": command += " --fullscreen"
                 options.log.info ( "VMware: подключение к серверу %s", args[ "server" ] )
                 options.log.info (command)
                 if args.get( "password", "" ): command += ' -p %s' % args[ "password" ]
@@ -402,7 +392,7 @@ class FileServer:
             except: server = args[ "server" ]; protocol = args[ "type" ] #TODO try/except
             command = _exec + protocol + "://"
             if args.get( "domain" , "" ): command += "%s;" % args[ "domain" ]
-            if args.get( "user" , "" ): command += "%s@" % args[ "user" ]
+            if args.get( "user" , ""   ): command += "%s@" % args[ "user" ]
             command += server
             if args.get( "folder" , "" ): command += "/%s" % args[ "folder" ]
             command += '"'
@@ -466,8 +456,6 @@ def freerdpCheckVersion():
 
 def passwd(server, username):
     """Ввод пароля и запрос о его сохранении в связке ключей"""
-    password = keyring.get_password(str(server),str(username))
-    if password: return password
     separator = "|CoNnEcToR|"
     try:
         password, save = check_output( "zenity --forms --title=\"Аутентификация (with NLA)\" --text=\"Имя пользователя: %s\""
