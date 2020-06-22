@@ -245,14 +245,25 @@ class NxRemmina( Remmina ):
                      "exec"                   : "" }
         self.f_name = ".tmp_NX.remmina"
 
-class XdmcpRemmina(Remmina):
-    """Класс для настройки XDMCP-соединения через Remmina"""
-    def __init__(self):
-        self.cfg = dict(resolution='', group='', password='', name='XDMCP-connection: ',
-                        protocol='XDMCP', once=0, showcursor=0, server='',colordepth=0,
-                        window_maximize=1, viewmode=1, window_width=800, window_height=600, disablepasswordstoring=1)
-        self.cfg['exec'] = ''
-        self.f_name = '.tmp_XDMCP.remmina'
+class XdmcpRemmina( Remmina ):
+    """Remmina XDMCP connection"""
+    def __init__( self ):
+        self.cfg = { "resolution"             : "",
+                     "group"                  : "",
+                     "password"               : "",
+                     "name"                   : "XDMCP-connection: ",
+                     "protocol"               : "XDMCP",
+                     "once"                   : "0",
+                     "showcursor"             : "0",
+                     "server"                 : "",
+                     "colordepth"             : "0",
+                     "window_maximize"        : "1",
+                     "viewmode"               : "1",
+                     "window_width"           : "800",
+                     "window_height"          : "600",
+                     "disablepasswordstoring" : "1",
+                     "exec"                   : "" }
+        self.f_name = ".tmp_XDMCP.remmina"
 
 class SftpRemmina( Remmina ):
     """Remmina SFTP connection"""
