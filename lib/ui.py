@@ -483,16 +483,16 @@ class Gui(Gtk.Application):
             if args.getboolean( "fullscreen" ): self.VMWARE_fullscreen.set_active( True )
 
         if protocol == 'XDMCP':
-            self.XDMCP_color.set_active_id(args[1])
-            if args[2] == 4: self.XDMCP_viewmode.set_active(True)
-            if args[3] == '': self.XDMCP_resol_default.set_active(True)
+            self.XDMCP_color.set_active_id( args.get( "colordepth", "" ) )
+            if args.get( "viewmode", "" ) == "4": self.XDMCP_viewmode.set_active( True )
+            if not args.get( "resolution", "" ): self.XDMCP_resol_default.set_active( True )
             else:
-                XDMCP_resol_hand = self.pref_builder.get_object("radio_XDMCP_resol_hand")
-                XDMCP_resol_hand.set_active(True)
-                self.XDMCP_resolution.set_active_id(args[3])
-            if args[4]: self.XDMCP_once.set_active(True)
-            if args[5]: self.XDMCP_showcursor.set_active(True)
-            self.XDMCP_exec.set_text(args[6])
+                XDMCP_resol_hand = self.pref_builder.get_object( "radio_XDMCP_resol_hand" )
+                XDMCP_resol_hand.set_active( True )
+                self.XDMCP_resolution.set_active_id( args[ "resolution" ] )
+            if args.getboolean( "once" ): self.XDMCP_once.set_active( True )
+            if args.getboolean( "showcursor" ): self.XDMCP_showcursor.set_active( True )
+            self.XDMCP_exec.set_text( args.get( "exec", "" ) )
 
         if protocol == 'SSH':
             self.SSH_user.set_text( args.get( "username", "" ) )
@@ -936,17 +936,14 @@ class Gui(Gtk.Application):
             )
 
         if protocol == 'XDMCP':
-            color = self.XDMCP_color.get_active_id()
-            _exec = self.XDMCP_exec.get_text()
-            if self.XDMCP_viewmode.get_active(): viewmode = 4
-            else: viewmode = 1
-            if self.XDMCP_resol_default.get_active(): resolution = ''
-            else: resolution = self.XDMCP_resolution.get_active_id()
-            if self.XDMCP_showcursor.get_active(): showcursor = 1
-            else: showcursor = 0
-            if self.XDMCP_once.get_active(): once = 1
-            else: once = 0
-            args = [color, viewmode, resolution, once, showcursor, _exec]
+            args = dict(
+                colordepth = self.XDMCP_color.get_active_id(),
+                viewmode = "4" if self.XDMCP_viewmode.get_active() else "1",
+                resolution = "" if self.XDMCP_resol_default.get_active() else self.XDMCP_resolution.get_active_id(),
+                showcursor = "1" if self.XDMCP_showcursor.get_active() else "0",
+                once = "1" if self.XDMCP_once.get_active() else "0"
+            )
+            args[ "exec" ] = self.XDMCP_exec.get_text()
 
         if protocol == 'SSH':
             args = dict(
