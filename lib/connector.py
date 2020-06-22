@@ -42,12 +42,8 @@ class VncViewer:
         else:
             server = args[ "server" ]
             command = 'vncviewer %s ' % server
-            fullscreen = args.getboolean( "fullscreen" )
-            if fullscreen == None: fullscreen = CONFIGS [ "VNC1" ].getboolean( "fullscreen" )
-            if fullscreen: command += "-fullscreen "
-            viewonly = args.getboolean( "viewonly" )
-            if viewonly == None: viewonly = CONFIGS [ "VNC1" ].getboolean( "viewonly" )
-            if viewonly: command += "-viewonly "
+            if args.getboolean( "fullscreen" ): command += "-fullscreen "
+            if args.getboolean( "viewonly" ): command += "-viewonly "
         options.log.info ("VNC: подключение к серверу %s. Команда запуска:", server)
         options.log.info (command)
         os.system(command + STD_TO_LOG)
