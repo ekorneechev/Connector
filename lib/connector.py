@@ -108,15 +108,15 @@ class XFreeRdp:
                     password = passwd( server, username )
                 if password:
                     command += " /p:%s" % escape( password )
-
-                options.log.info ("FreeRDP: подключение к серверу %s. Команда запуска:", server)
-                try: cmd2log = command.replace("/p:" + command.split("/p:")[1].split(' ')[0],"/p:<hidden>")
-                except: cmd2log = command
-                options.log.info (cmd2log)
-                os.system(command + STD_TO_LOG)
-                if enableLog:
-                    signal.signal( signal.SIGCHLD, signal.SIG_IGN ) # without zombie
-                    Popen( [ MAINFOLDER + "/myconnector-check-xfreerdp-errors" ] )
+                if password != False: #if there is password after zenity
+                    options.log.info ("FreeRDP: подключение к серверу %s. Команда запуска:", server)
+                    try: cmd2log = command.replace("/p:" + command.split("/p:")[1].split(' ')[0],"/p:<hidden>")
+                    except: cmd2log = command
+                    options.log.info (cmd2log)
+                    os.system(command + STD_TO_LOG)
+                    if enableLog:
+                        signal.signal( signal.SIGCHLD, signal.SIG_IGN ) # without zombie
+                        Popen( [ MAINFOLDER + "/myconnector-check-xfreerdp-errors" ] )
             else:
                 options.log.warning ("FreeRDP version below 1.2!")
                 os.system( "zenity --error --text='\nУстановленная версия FreeRDP (%s) не соответствует минимальным требованиям,"
@@ -462,10 +462,9 @@ def passwd(server, username):
             " --add-password=\"Пароль:\" --add-combo=\"Хранить пароль в связке ключей:\" --combo-values=\"Да|Нет\""
             " --separator=\"%s\" 2>/dev/null" % (username, separator),shell=True, universal_newlines=True).strip().split(separator)
         if save == "Да" and password: keyring.set_password(str(server),str(username),str(password))
-    #если окно zenity закрыто или нажата кнопка Отмена, делаем raise ошибки FreeRDP
     except ValueError:
-        password = " /CANCELED"
-        options.log.warning ("FreeRDP: подключение отменено пользователем (окно zenity закрыто или нажата кнопка Отмена):")
+        password = False
+        options.log.info ("FreeRDP: подключение отменено пользователем (окно запроса пароля закрыто или нажата кнопка Отмена).")
     return password
 
 if __name__ == "__main__":
