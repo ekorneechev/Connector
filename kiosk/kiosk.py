@@ -4,14 +4,14 @@
 import gi, os
 gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk
-import configparser
+from configparser import ConfigParser
 from urllib.parse import unquote
 import shutil
 
 _kiosk_dir = "/usr/share/connector/kiosk"
 _webkiosk = "%s/connector-webkiosk" % _kiosk_dir
 _kiosk_conf = "/etc/connector/kiosk.conf"
-_config = configparser.ConfigParser( interpolation = None )
+_config = ConfigParser( interpolation = None )
 _ligthdm_conf = "/etc/lightdm/lightdm.conf"
 _lightdm_conf_dir = "%s.d" % _ligthdm_conf
 _autologin_conf = "%s/kiosk.conf" % _lightdm_conf_dir
@@ -30,11 +30,10 @@ def lightdm_clear_autologin():
     if os.path.exists (_autologin_conf): os.remove(_autologin_conf)
 
 def load_kiosk_user():
-    """Load username for KIOSK from the config"""
-    _config.read( _kiosk_conf )
-    try: username = _config.get( "kiosk", "user" )
-    except: username = "kiosk"
-    return username
+    """Load username for KIOSK from the config file"""
+    tmp = ConfigParser( interpolation = None )
+    tmp.read( _kiosk_conf )
+    return tmp[ "kiosk" ].get( "user", "kiosk" )
 
 def autologin_enable(username):
     """Enable autologin for the mode KIOSK"""
@@ -54,7 +53,7 @@ test -n "$e" && `$e`""" % shortcut, file = f)
 
 def enable_kiosk( mode = "kiosk" ):
     """Exec connector in the mode KIOSK"""
-    username = load_kiosk_user()
+    username = _config[ "kiosk" ].get( "user", "kiosk" )
     if _config['kiosk']['autologin'] == "True":
         autologin_enable( username )
     else:
@@ -83,11 +82,9 @@ def enable_kiosk_web(url):
 def disable_kiosk():
     """Disable the mode KIOSK"""
     lightdm_clear_autologin()
-    os.system("rm -f /etc/X11/xsession.user.d/%s" % load_kiosk_user())
-    os.system("rm -f %s/connector-*.desktop" % _etc_dir)
-    _config['kiosk']['mode'] = '0'
-    with open( _kiosk_conf, 'w' ) as configfile:
-        _config.write( configfile )
+    os.system( "rm -f /etc/X11/xsession.user.d/%s" % load_kiosk_user() )
+    os.system( "rm -f %s/connector-*.desktop" % _etc_dir )
+    os.system( "sed -i s/^mode.*/mode\ =\ 0/g %s" % _kiosk_conf )
 
 def enable_ctrl():
     """Enable key 'Ctrl' in webkiosk"""
