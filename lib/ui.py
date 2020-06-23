@@ -24,7 +24,6 @@ from gi.repository import ( Gtk,
                             GdkPixbuf,
                             GLib,
                             Gio )
-from random import choice
 from myconnector.connector import *
 from myconnector.config import *
 from pathlib import Path
@@ -1024,16 +1023,13 @@ class Gui(Gtk.Application):
         """Окно параметров приложения"""
         window = options.Properties(self)
 
-    def saveFileCtor(self, name, protocol, server):
-        """Создание ассоциации файла подключения с подключением в списке"""
-        fileName = []
-        for i in range (12): #для случайного имени сохраняемого файла
-            fileName.append( choice( [ '0','1','2','3','4','5','6','7','8','9' ] ))
-        fileName = "".join(fileName) + '.ctor'
-        print (name + ':::' + protocol + ':::' + server + ':::' + fileName,
-               file = open( CONNECTIONS, "a" ) )
-        options.log.info("Добавлено новое %s-подключение '%s' (host: %s)", protocol, name, server)
-        return fileName
+    def saveFileCtor( self, name, protocol, server ):
+        """Connect file (.ctor) creation"""
+        filename = ( "%s_%s.ctor" % ( name, protocol ) ).lower()
+        print ( "%s:::%s:::%s:::%s" % ( name, protocol, server, filename ),
+                file = open( CONNECTIONS, "a" ) )
+        options.log.info( "Добавлено новое %s-подключение '%s' (host: %s)", protocol, name, server )
+        return filename
 
     def resaveFileCtor(self, name, protocol, server):
         """Пересохранение подключения с тем же именем файла .ctor"""
