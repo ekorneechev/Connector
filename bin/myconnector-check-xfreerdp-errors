@@ -21,11 +21,9 @@ from os import system
 from sys import exit
 
 def main():
-    cmd = check_output( "tail -n1 ~/.myconnector/logs/myconnector.log 2>/dev/null; exit 0", shell=True, universal_newlines=True ).strip()
-    if cmd.find("/CANCELED") != -1: exit (0)
-    LOG = "~/.myconnector/logs/all.log"
-    help = check_output("xfreerdp --help | tail -n8 2>/dev/null; exit 0",shell=True, universal_newlines=True).strip()
-    log = check_output("sleep 3; tail -n8 %s 2>/dev/null; exit 0" % LOG,shell=True, universal_newlines=True).strip()
+    LOG  = "~/.myconnector/logs/all.log"
+    help = check_output( "xfreerdp --help | tail -n10 2>/dev/null; exit 0", shell=True, universal_newlines=True ).strip()
+    log  = check_output( "sleep 3; tail -n10 %s 2>/dev/null; exit 0" % LOG, shell=True, universal_newlines=True ).strip()
     if help == log:
         system( "zenity --notification --window-icon=myconnector --text='Ошибка FreeRDP\nПроверьте правильность команды подключения.\nПодробнее в %s'" % LOG )
     if "AUTHENTICATION_FAILED" in log:
