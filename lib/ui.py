@@ -40,9 +40,7 @@ def connectFile(filename, openFile = False):
         parameters = options.loadFromFile(filename)
         if parameters != None:
             protocol = parameters[ "protocol" ] #TODO - add try/except and log
-            #if openFile: parameters.append(parameters[0]) #если открывается файл .ctor, то заголовок окна - адрес сервера
-            #else: parameters.append(options.nameFromFilename(filename)) TODO - check after freerdp text format
-            if parameters.get( "program" ) == "freerdp":
+            if parameters.get( "program", "" ) == "freerdp":
                 try: parameters[ "passwd" ] = keyring.get_password( parameters[ "server" ] ,parameters[ "username" ] )
                 except: pass
             connect = definition(protocol)
@@ -148,17 +146,17 @@ class Gui(Gtk.Application):
         self.window = self.builder.get_object("main_window")
         self.window.set_title("MyConnector")
         self.statusbar = self.builder.get_object("statusbar")
-        self.liststore = {'RDP' : self.builder.get_object("liststore_RDP"),
-                          'VNC' : self.builder.get_object("liststore_VNC"),
-                          'SSH' : self.builder.get_object("liststore_SSH"),
-                          'SFTP' : self.builder.get_object("liststore_SFTP"),
-                          'VMWARE' : self.builder.get_object("liststore_VMWARE"),
-                          'CITRIX' : self.builder.get_object("liststore_CITRIX"),
-                          'XDMCP' : self.builder.get_object("liststore_XDMCP"),
-                          'NX' : self.builder.get_object("liststore_NX"),
-                          'WEB' : self.builder.get_object("liststore_WEB"),
-                          'SPICE' : self.builder.get_object("liststore_SPICE"),
-                          'FS' : self.builder.get_object("liststore_FS")}
+        self.liststore = { "RDP"    : self.builder.get_object( "liststore_RDP"    ),
+                           "VNC"    : self.builder.get_object( "liststore_VNC"    ),
+                           "SSH"    : self.builder.get_object( "liststore_SSH"    ),
+                           "SFTP"   : self.builder.get_object( "liststore_SFTP"   ),
+                           "VMWARE" : self.builder.get_object( "liststore_VMWARE" ),
+                           "CITRIX" : self.builder.get_object( "liststore_CITRIX" ),
+                           "XDMCP"  : self.builder.get_object( "liststore_XDMCP"  ),
+                           "NX"     : self.builder.get_object( "liststore_NX"     ),
+                           "WEB"    : self.builder.get_object( "liststore_WEB"    ),
+                           "SPICE"  : self.builder.get_object( "liststore_SPICE"  ),
+                           "FS"     : self.builder.get_object( "liststore_FS"     ) }
 
         self.liststore_connect = Gtk.ListStore(str, str, str, str)
         self.getSavesFromDb()#запись из файла в ListStore
@@ -461,485 +459,475 @@ class Gui(Gtk.Application):
     def setPreferences(self, protocol, args):
         """В этой функции параметры загружаются из сохраненного файла"""
         if not args: return False
-        if protocol == 'VNC' and CONFIG[ "vnc" ] == "vncviewer":
+        if protocol == "VNC" and CONFIG[ "vnc" ] == "vncviewer":
             if args.getboolean( "fullscreen" ): self.VNC_viewmode.set_active( True )
-            if args.getboolean( "viewonly" ): self.VNC_viewonly.set_active( True )
+            if args.getboolean( "viewonly"   ): self.VNC_viewonly.set_active( True )
 
-        if protocol == 'VNC' and CONFIG[ "vnc" ] == "remmina":
-            self.VNC_user.set_text( args.get( "username", "" ) )
-            self.VNC_quality.set_active_id( args.get( "quality", "" ) )
-            self.VNC_color.set_active_id( args.get( "colordepth", "" ) )
-            if args.get( "viewmode" , "1" ) == "4": self.VNC_viewmode.set_active( True )
-            if args.getboolean( "viewonly" ): self.VNC_viewonly.set_active( True )
-            if args.getboolean( "disableencryption" ): self.VNC_crypt.set_active( True )
-            if args.getboolean( "disableclipboard" ): self.VNC_clipboard.set_active( True )
-            if args.getboolean( "showcursor" ): self.VNC_showcursor.set_active( True )
+        if protocol == "VNC" and CONFIG[ "vnc" ] == "remmina":
+            self.VNC_user.set_text(         args.get( "username",   "" ) )
+            self.VNC_quality.set_active_id( args.get( "quality",    "" ) )
+            self.VNC_color.set_active_id(   args.get( "colordepth", "" ) )
+            if args.get( "viewmode" , "1" ) == "4"   : self.VNC_viewmode.set_active(   True )
+            if args.getboolean( "viewonly"          ): self.VNC_viewonly.set_active(   True )
+            if args.getboolean( "disableencryption" ): self.VNC_crypt.set_active(      True )
+            if args.getboolean( "disableclipboard"  ): self.VNC_clipboard.set_active(  True )
+            if args.getboolean( "showcursor"        ): self.VNC_showcursor.set_active( True )
             else: self.VNC_showcursor.set_active( False )
 
-        if protocol == 'VMWARE':
-            self.VMWARE_user.set_text( args.get( "user", "" ) )
-            self.VMWARE_domain.set_text( args.get( "domain", "" ) )
+        if protocol == "VMWARE":
+            self.VMWARE_user.set_text(     args.get( "user", ""     ) )
+            self.VMWARE_domain.set_text(   args.get( "domain", ""   ) )
             self.VMWARE_password.set_text( args.get( "password", "" ) )
             if args.getboolean( "fullscreen" ): self.VMWARE_fullscreen.set_active( True )
 
-        if protocol == 'XDMCP':
+        if protocol == "XDMCP":
             self.XDMCP_color.set_active_id( args.get( "colordepth", "" ) )
-            if args.get( "viewmode", "" ) == "4": self.XDMCP_viewmode.set_active( True )
-            if not args.get( "resolution", "" ): self.XDMCP_resol_default.set_active( True )
+            self.XDMCP_exec.set_text(       args.get( "exec",       "" ) )
+            if args.get( "viewmode", "" ) == "4": self.XDMCP_viewmode.set_active(      True )
+            if not args.get( "resolution", "" ) : self.XDMCP_resol_default.set_active( True )
             else:
                 XDMCP_resol_hand = self.pref_builder.get_object( "radio_XDMCP_resol_hand" )
                 XDMCP_resol_hand.set_active( True )
                 self.XDMCP_resolution.set_active_id( args[ "resolution" ] )
-            if args.getboolean( "once" ): self.XDMCP_once.set_active( True )
-            if args.getboolean( "showcursor" ): self.XDMCP_showcursor.set_active( True )
-            self.XDMCP_exec.set_text( args.get( "exec", "" ) )
+            if args.getboolean( "once"         ): self.XDMCP_once.set_active(          True )
+            if args.getboolean( "showcursor"   ): self.XDMCP_showcursor.set_active(    True )
 
-        if protocol == 'SSH':
-            self.SSH_user.set_text( args.get( "username", "" ) )
-            if args.get( "ssh_auth" ) == "3": self.SSH_publickey.set_active( True )
-            elif args.get( "ssh_auth" ) == "1": self.SSH_keyfile.set_active( True )
+        if protocol == "SSH":
+            self.SSH_user.set_text(             args.get( "username",       "" ) )
+            self.SSH_path_keyfile.set_filename( args.get( "ssh_privatekey", "" ) )
+            self.SSH_charset.set_text(          args.get( "ssh_charset",    "" ) )
+            self.SSH_exec.set_text(             args.get( "exec",           "" ) )
+            if   args.get( "ssh_auth" ) == "3": self.SSH_publickey.set_active( True )
+            elif args.get( "ssh_auth" ) == "1": self.SSH_keyfile.set_active(   True )
             else:
                 SSH_pwd = self.pref_builder.get_object( "radio_SSH_pwd" )
                 SSH_pwd.set_active( True )
-            self.SSH_path_keyfile.set_filename( args.get( "ssh_privatekey", "" ) )
-            self.SSH_charset.set_text( args.get( "ssh_charset", "" ) )
-            self.SSH_exec.set_text( args.get( "exec", "" ) )
 
-        if protocol == 'SFTP':
-            self.SFTP_user.set_text( args.get( "username", "" ) )
-            if args.get( "ssh_auth" ) == "3": self.SFTP_publickey.set_active( True )
-            elif args.get( "ssh_auth" ) == "1": self.SFTP_keyfile.set_active( True )
+
+        if protocol == "SFTP":
+            self.SFTP_user.set_text(             args.get( "username",          "" ) )
+            self.SFTP_path_keyfile.set_filename( args.get( "ssh_privatekey",    "" ) )
+            self.SFTP_charset.set_text(          args.get( "ssh_charset",       "" ) )
+            self.SFTP_execpath.set_text(         args.get( "execpath",          "" ) )
+            if   args.get( "ssh_auth" ) == "3": self.SFTP_publickey.set_active( True )
+            elif args.get( "ssh_auth" ) == "1": self.SFTP_keyfile.set_active(   True )
             else:
                 SFTP_pwd = self.pref_builder.get_object( "radio_SFTP_pwd" )
                 SFTP_pwd.set_active( True )
-            self.SFTP_path_keyfile.set_filename( args.get( "ssh_privatekey", "" ) )
-            self.SFTP_charset.set_text( args.get( "ssh_charset", "" ) )
-            self.SFTP_execpath.set_text( args.get( "execpath", "" ) )
 
-        if protocol == 'NX':
-            self.NX_user.set_text( args.get ( "username", "" ) )
-            self.NX_quality.set_active_id( args.get ( "quality", "" ) )
-            if not args.get ( "resolution", "" ): self.NX_resol_window.set_active( True )
+        if protocol == "NX":
+            self.NX_user.set_text(         args.get ( "username", "" ) )
+            self.NX_quality.set_active_id( args.get ( "quality",  "" ) )
+            self.NX_exec.set_text(         args.get ( "exec",     "" ) )
+            if not args.get ( "resolution", "" ): self.NX_resol_window.set_active(   True )
             else:
                 NX_resol_hand = self.pref_builder.get_object( "radio_NX_resol_hand" )
                 NX_resol_hand.set_active( True )
                 self.NX_resolution.set_active_id( args[ "resolution" ] )
-            if args.get ( "viewmode", "" ) == "4": self.NX_viewmode.set_active( True )
-            if not args.get ( "nx_privatekey", "" ): self.NX_keyfile.set_active(False)
+            if args.get ( "viewmode", "" ) == "4"  : self.NX_viewmode.set_active(    True )
+            if not args.get ( "nx_privatekey", "" ): self.NX_keyfile.set_active(    False )
             else:
                 self.NX_keyfile.set_active( True )
                 self.NX_path_keyfile.set_filename( args[ "nx_privatekey" ] )
-            if args.getboolean( "disableencryption" ): self.NX_crypt.set_active( True )
-            if args.getboolean( "disableclipboard" ): self.NX_clipboard.set_active(True)
-            self.NX_exec.set_text( args.get ( "exec", "" ) )
+            if args.getboolean( "disableencryption" ): self.NX_crypt.set_active(     True )
+            if args.getboolean( "disableclipboard"  ): self.NX_clipboard.set_active( True )
 
         if protocol == "RDP" and CONFIG[ "rdp" ] == "remmina":
-            self.RDP_user.set_text( args.get( "username", "" ) )
-            self.RDP_domain.set_text( args.get( "domain", "" ) )
-            self.RDP_color.set_active_id( args.get( "colordepth", "" ) )
-            self.RDP_quality.set_active_id( args.get( "quality", "" ) )
-            if not args.get( "resolution", "" ): self.RDP_resol_default.set_active( True )
+            self.RDP_user.set_text(         args.get( "username",   "" ) )
+            self.RDP_domain.set_text(       args.get( "domain",     "" ) )
+            self.RDP_color.set_active_id(   args.get( "colordepth", "" ) )
+            self.RDP_quality.set_active_id( args.get( "quality",    "" ) )
+            self.RDP_sound.set_active_id(   args.get( "sound",      "" ) )
+            if not args.get( "resolution", "" ): self.RDP_resol_default.set_active(   True )
             else:
                 RDP_resol_hand = self.pref_builder.get_object( "radio_RDP_resol_hand" )
                 RDP_resol_hand.set_active( True )
                 self.RDP_resolution.set_active_id( args[ "resolution" ] )
-            if args.get( "viewmode", "" ) == "3": self.RDP_viewmode.set_active( True )
+            if args.get( "viewmode", "" ) == "3": self.RDP_viewmode.set_active(       True )
             else: self.RDP_viewmode.set_active( False )
-            if not args.get( "sharefolder", "" ): self.RDP_share_folder.set_active( False )
+            if not args.get( "sharefolder", "" ): self.RDP_share_folder.set_active(  False )
             else:
                 self.RDP_share_folder.set_active( True )
                 self.RDP_name_folder.set_filename( args[ "sharefolder" ] )
-            if args.getboolean( "shareprinter" ): self.RDP_printers.set_active( True )
+            if args.getboolean( "shareprinter"     ): self.RDP_printers.set_active(   True )
             if args.getboolean( "disableclipboard" ): self.RDP_clipboard.set_active( False )
-            self.RDP_sound.set_active_id( args.get( "sound", "" ) )
-            if args.getboolean( "sharesmartcard" ): self.RDP_cards.set_active( True )
+            if args.getboolean( "sharesmartcard"   ): self.RDP_cards.set_active(      True )
 
         if protocol == "RDP" and CONFIG[ "rdp" ] == "freerdp":
-            self.RDP_user.set_text( args.get( "username", "" ) )
-            self.RDP_domain.set_text( args.get( "domain", "" ) )
-            if args.getboolean( "fullscreen" ): self.RDP_fullscreen.set_active( True )
-            elif args.get( "resolution", "" ):
-                RDP_resol_hand = self.pref_builder.get_object( "radio_RDP1_resol_hand" )
+            self.RDP_user.set_text(       args.get( "username",   "" ) )
+            self.RDP_domain.set_text(     args.get( "domain",     "" ) )
+            self.RDP_gserver.set_text(    args.get( "gserver",    "" ) )
+            self.RDP_guser.set_text(      args.get( "guser",      "" ) )
+            self.RDP_gdomain.set_text(    args.get( "gdomain",    "" ) )
+            self.RDP_gpasswd.set_text(    args.get( "gpasswd",    "" ) )
+            self.RDP_color.set_active_id( args.get( "color",      "" ) )
+            self.RDP_userparams.set_text( args.get( "userparams", "" ) )
+            if args.getboolean( "fullscreen" ): self.RDP_fullscreen.set_active(    True )
+            elif args.get( "resolution",  "" ):
+                RDP_resol_hand = self.pref_builder.get_object( "radio_RDP1_resol_hand"  )
                 RDP_resol_hand.set_active( True )
                 self.RDP_resolution.set_text( args[ "resolution" ] )
-            elif args.getboolean( "workarea" ): self.RDP_workarea.set_active( True )
+            elif args.getboolean( "workarea" ): self.RDP_workarea.set_active(      True )
             else: self.RDP_resol_default.set_active( True )
-            if args.getboolean( "clipboard" ): self.RDP_clipboard.set_active( True )
+            if args.getboolean( "clipboard"  ): self.RDP_clipboard.set_active(     True )
             else: self.RDP_clipboard.set_active( False )
-            self.RDP_color.set_active_id( args.get( "color", "" ) )
-            if not args.get( "folder", "" ): self.RDP_share_folder.set_active( False )
+            if not args.get( "folder", ""    ): self.RDP_share_folder.set_active( False )
             else:
                 self.RDP_share_folder.set_active( True )
                 self.RDP_name_folder.set_filename( args[ "folder" ] )
-            self.RDP_gserver.set_text( args.get( "gserver", "" ) )
-            self.RDP_guser.set_text( args.get( "guser", "" ) )
-            self.RDP_gdomain.set_text( args.get( "gdomain", "" ) )
-            self.RDP_gpasswd.set_text( args.get( "gpasswd", "" ) )
-            if args.getboolean( "admin" ): self.RDP_admin.set_active( True )
-            if args.getboolean( "smartcards" ): self.RDP_cards.set_active ( True )
-            if args.getboolean( "printers" ): self.RDP_printers.set_active ( True )
-            if args.getboolean( "sound" ): self.RDP_sound.set_active ( True )
-            if args.getboolean( "microphone" ): self.RDP_microphone.set_active ( True )
-            if args.getboolean( "multimon" ): self.RDP_multimon.set_active ( True )
+            if args.getboolean( "admin"      ): self.RDP_admin.set_active(         True )
+            if args.getboolean( "smartcards" ): self.RDP_cards.set_active(         True )
+            if args.getboolean( "printers"   ): self.RDP_printers.set_active(      True )
+            if args.getboolean( "sound"      ): self.RDP_sound.set_active(         True )
+            if args.getboolean( "microphone" ): self.RDP_microphone.set_active(    True )
+            if args.getboolean( "multimon"   ): self.RDP_multimon.set_active(      True )
             if args.getboolean( "compression" ):
-                self.RDP_compression.set_active ( True )
+                self.RDP_compression.set_active( True )
                 self.RDP_compr_level.set_active_id( args.get( "compr_level", "0" ) )
-            if args.getboolean( "fonts" ): self.RDP_fonts.set_active ( True )
-            if args.getboolean( "aero" ): self.RDP_aero.set_active ( True )
-            if args.getboolean( "drag" ): self.RDP_drag.set_active ( True )
-            if args.getboolean( "animation" ): self.RDP_animation.set_active ( True )
-            if args.getboolean( "theme" ): self.RDP_theme.set_active ( False )
-            if args.getboolean( "wallpapers" ): self.RDP_wallpapers.set_active ( False )
-            if args.getboolean( "nsc" ): self.RDP_nsc.set_active ( True )
+            if args.getboolean( "fonts"      ): self.RDP_fonts.set_active(         True )
+            if args.getboolean( "aero"       ): self.RDP_aero.set_active(          True )
+            if args.getboolean( "drag"       ): self.RDP_drag.set_active(          True )
+            if args.getboolean( "animation"  ): self.RDP_animation.set_active(     True )
+            if args.getboolean( "theme"      ): self.RDP_theme.set_active(        False )
+            if args.getboolean( "wallpapers" ): self.RDP_wallpapers.set_active(   False )
+            if args.getboolean( "nsc"        ): self.RDP_nsc.set_active(           True )
             if args.getboolean( "jpeg" ):
-                self.RDP_jpeg.set_active ( True )
+                self.RDP_jpeg.set_active( True )
                 self.RDP_jpeg_quality.set_value( float( args.get( "jpeg_quality", "80" ) ) )
-            if args.getboolean( "usb" ): self.RDP_usb.set_active ( True )
-            if args.getboolean( "secnla" ): self.RDP_nla.set_active ( True )
-            if args.getboolean( "span" ): self.RDP_span.set_active ( True )
-            if args.getboolean( "desktop" ): self.RDP_desktop.set_active ( True )
-            if args.getboolean( "downloads" ): self.RDP_down.set_active ( True )
-            if args.getboolean( "documents" ): self.RDP_docs.set_active ( True )
-            if args.getboolean( "gdi" ): self.RDP_gdi.set_active ( True )
-            if args.getboolean( "reconnect" ): self.RDP_reconnect.set_active ( False )
-            if args.getboolean( "certignore" ): self.RDP_certignore.set_active ( True )
+            if args.getboolean( "usb"        ): self.RDP_usb.set_active(           True )
+            if args.getboolean( "secnla"     ): self.RDP_nla.set_active(           True )
+            if args.getboolean( "span"       ): self.RDP_span.set_active(          True )
+            if args.getboolean( "desktop"    ): self.RDP_desktop.set_active(       True )
+            if args.getboolean( "downloads"  ): self.RDP_down.set_active(          True )
+            if args.getboolean( "documents"  ): self.RDP_docs.set_active(          True )
+            if args.getboolean( "gdi"        ): self.RDP_gdi.set_active(           True )
+            if args.getboolean( "reconnect"  ): self.RDP_reconnect.set_active(    False )
+            if args.getboolean( "certignore" ): self.RDP_certignore.set_active(    True )
+            if args.getboolean( "glyph"      ): self.RDP_glyph.set_active(         True )
             password = keyring.get_password( args.get( "server", "" ), args.get( "username", "" ) )
-            if args.getboolean( "passwdsave" ) or password: self.RDP_pwdsave.set_active ( True )
+            if args.getboolean( "passwdsave" ) or password: self.RDP_pwdsave.set_active( True )
             if not password: password = args.get( "passwd", "" )
             self.RDP_pwd.set_text( password )
-            if args.getboolean( "glyph" ): self.RDP_glyph.set_active ( True )
-            self.RDP_userparams.set_text( args.get( "userparams", "" ) )
 
-        if protocol == 'SPICE':
-            if args.getboolean( "usetls" ): self.SPICE_tls.set_active( True )
-            if args.getboolean( "viewonly" ): self.SPICE_viewonly.set_active( True )
-            if args.getboolean( "resizeguest" ): self.SPICE_resize.set_active( True )
+        if protocol == "SPICE":
+            if args.getboolean( "usetls"           ): self.SPICE_tls.set_active(        True )
+            if args.getboolean( "viewonly"         ): self.SPICE_viewonly.set_active(   True )
+            if args.getboolean( "resizeguest"      ): self.SPICE_resize.set_active(     True )
             if args.getboolean( "disableclipboard" ): self.SPICE_clipboard.set_active( False )
-            if args.getboolean( "sharesmartcard" ): self.SPICE_cards.set_active( True )
-            if args.getboolean( "enableaudio" ): self.SPICE_sound.set_active( True )
-            if not args.get( "cacert", "" ): self.SPICE_CA.set_active( False )
+            if args.getboolean( "sharesmartcard"   ): self.SPICE_cards.set_active(      True )
+            if args.getboolean( "enableaudio"      ): self.SPICE_sound.set_active(      True )
+            if not args.get(    "cacert", ""       ): self.SPICE_CA.set_active(        False )
             else:
                 self.SPICE_CA.set_active( True )
                 self.SPICE_cacert.set_filename( args[ "cacert" ] )
 
-        if protocol == 'FS':
-            self.FS_user.set_text( args.get( "user", "" ) )
-            self.FS_domain.set_text( args.get( "domain", "" ) )
-            self.FS_folder.set_text( args.get( "folder", "" ) )
-            self.FS_type.set_active_id( args.get( "type", "" ) )
+        if protocol == "FS":
+            self.FS_user.set_text(      args.get( "user",   "" ) )
+            self.FS_domain.set_text(    args.get( "domain", "" ) )
+            self.FS_folder.set_text(    args.get( "folder", "" ) )
+            self.FS_type.set_active_id( args.get( "type",   "" ) )
 
-    def initPreferences(self, protocol):
+    def initPreferences( self, protocol ):
         """В этой функции определяются различные для протоколов параметры"""
-        if self.changeProgram(protocol) == "RDP": #remmina
-            self.RDP_user = self.pref_builder.get_object("entry_RDP_user")
-            self.RDP_domain = self.pref_builder.get_object("entry_RDP_dom")
-            self.RDP_color = self.pref_builder.get_object("entry_RDP_color")
-            self.RDP_quality = self.pref_builder.get_object("entry_RDP_quality")
-            self.RDP_resolution = self.pref_builder.get_object("entry_RDP_resolution")
-            self.RDP_viewmode = self.pref_builder.get_object("check_RDP_fullscreen")
-            self.RDP_resol_default = self.pref_builder.get_object("radio_RDP_resol_default")
-            self.RDP_share_folder = self.pref_builder.get_object("check_RDP_folder")
-            self.RDP_name_folder = self.pref_builder.get_object("RDP_share_folder")
-            self.RDP_name_folder.set_current_folder(HOMEFOLDER)
-            self.RDP_printers = self.pref_builder.get_object("check_RDP_printers")
-            self.RDP_clipboard = self.pref_builder.get_object("check_RDP_clipboard")
-            self.RDP_sound = self.pref_builder.get_object("entry_RDP_sound")
-            self.RDP_cards = self.pref_builder.get_object("check_RDP_cards")
+        if self.changeProgram( protocol ) == "RDP": #remmina
+            self.RDP_user          = self.pref_builder.get_object( "entry_RDP_user"          )
+            self.RDP_domain        = self.pref_builder.get_object( "entry_RDP_dom"           )
+            self.RDP_color         = self.pref_builder.get_object( "entry_RDP_color"         )
+            self.RDP_quality       = self.pref_builder.get_object( "entry_RDP_quality"       )
+            self.RDP_resolution    = self.pref_builder.get_object( "entry_RDP_resolution"    )
+            self.RDP_viewmode      = self.pref_builder.get_object( "check_RDP_fullscreen"    )
+            self.RDP_resol_default = self.pref_builder.get_object( "radio_RDP_resol_default" )
+            self.RDP_share_folder  = self.pref_builder.get_object( "check_RDP_folder"        )
+            self.RDP_name_folder   = self.pref_builder.get_object( "RDP_share_folder"        )
+            self.RDP_printers      = self.pref_builder.get_object( "check_RDP_printers"      )
+            self.RDP_clipboard     = self.pref_builder.get_object( "check_RDP_clipboard"     )
+            self.RDP_sound         = self.pref_builder.get_object( "entry_RDP_sound"         )
+            self.RDP_cards         = self.pref_builder.get_object( "check_RDP_cards"         )
+            self.RDP_name_folder.set_current_folder( HOMEFOLDER )
 
-        if self.changeProgram(protocol) == "RDP1": #freerdp
-            self.RDP_user = self.pref_builder.get_object("entry_RDP1_user")
-            self.RDP_domain = self.pref_builder.get_object("entry_RDP1_dom")
-            self.RDP_color = self.pref_builder.get_object("entry_RDP1_color")
-            self.RDP_resolution = self.pref_builder.get_object("entry_RDP1_resolution")
-            self.RDP_resolution.set_sensitive(False)
-            self.RDP_fullscreen = self.pref_builder.get_object("radio_RDP1_fullscreen")
-            self.RDP_resol_default = self.pref_builder.get_object("radio_RDP1_resol_default")
-            self.RDP_share_folder = self.pref_builder.get_object("check_RDP1_folder")
-            self.RDP_name_folder = self.pref_builder.get_object("RDP1_share_folder")
-            self.RDP_name_folder.set_current_folder(HOMEFOLDER)
-            self.RDP_clipboard = self.pref_builder.get_object("check_RDP1_clipboard")
-            self.RDP_guser = self.pref_builder.get_object("entry_RDP1_guser")
-            self.RDP_gdomain = self.pref_builder.get_object("entry_RDP1_gdom")
-            self.RDP_gserver = self.pref_builder.get_object("entry_RDP1_gserv")
-            self.RDP_gpasswd = self.pref_builder.get_object("entry_RDP1_gpwd")
-            self.RDP_admin = self.pref_builder.get_object("check_RDP1_adm")
-            self.RDP_cards = self.pref_builder.get_object("check_RDP1_cards")
-            self.RDP_printers = self.pref_builder.get_object("check_RDP1_printers")
-            self.RDP_sound = self.pref_builder.get_object("check_RDP1_sound")
-            self.RDP_microphone = self.pref_builder.get_object("check_RDP1_microphone")
-            self.RDP_multimon = self.pref_builder.get_object("check_RDP1_multimon")
-            self.RDP_compression = self.pref_builder.get_object("check_RDP1_compression")
-            self.RDP_compr_level = self.pref_builder.get_object("entry_RDP1_compr_level")
-            self.RDP_fonts = self.pref_builder.get_object("check_RDP1_fonts")
-            self.RDP_aero = self.pref_builder.get_object("check_RDP1_aero")
-            self.RDP_drag = self.pref_builder.get_object("check_RDP1_drag")
-            self.RDP_animation = self.pref_builder.get_object("check_RDP1_animation")
-            self.RDP_theme = self.pref_builder.get_object("check_RDP1_theme")
-            self.RDP_wallpapers = self.pref_builder.get_object("check_RDP1_wallpapers")
-            self.RDP_nsc = self.pref_builder.get_object("check_RDP1_nsc")
-            self.RDP_jpeg = self.pref_builder.get_object("check_RDP1_jpeg")
-            self.RDP_jpeg_quality = self.pref_builder.get_object("scale_RDP1_jpeg")
-            self.RDP_usb = self.pref_builder.get_object("check_RDP1_usb")
-            self.RDP_nla = self.pref_builder.get_object("check_RDP1_nla")
-            self.RDP_workarea = self.pref_builder.get_object("radio_RDP1_workarea")
-            self.RDP_span = self.pref_builder.get_object("check_RDP1_span")
-            self.RDP_desktop = self.pref_builder.get_object("check_RDP1_desktop")
-            self.RDP_down = self.pref_builder.get_object("check_RDP1_down")
-            self.RDP_docs = self.pref_builder.get_object("check_RDP1_docs")
-            self.RDP_gdi = self.pref_builder.get_object("check_RDP1_gdi")
-            self.RDP_reconnect = self.pref_builder.get_object("check_RDP1_reconnect")
-            self.RDP_certignore = self.pref_builder.get_object("check_RDP1_certignore")
-            self.RDP_pwd = self.pref_builder.get_object("entry_RDP1_pwd")
-            self.RDP_pwdsave = self.pref_builder.get_object("check_RDP1_pwd")
-            self.RDP_glyph = self.pref_builder.get_object("check_RDP1_glyph")
-            self.RDP_userparams = self.pref_builder.get_object("entry_RDP1_userparams")
+        if self.changeProgram( protocol ) == "RDP1": #freerdp
+            self.RDP_user          = self.pref_builder.get_object( "entry_RDP1_user"          )
+            self.RDP_domain        = self.pref_builder.get_object( "entry_RDP1_dom"           )
+            self.RDP_color         = self.pref_builder.get_object( "entry_RDP1_color"         )
+            self.RDP_resolution    = self.pref_builder.get_object( "entry_RDP1_resolution"    )
+            self.RDP_fullscreen    = self.pref_builder.get_object( "radio_RDP1_fullscreen"    )
+            self.RDP_resol_default = self.pref_builder.get_object( "radio_RDP1_resol_default" )
+            self.RDP_share_folder  = self.pref_builder.get_object( "check_RDP1_folder"        )
+            self.RDP_name_folder   = self.pref_builder.get_object( "RDP1_share_folder"        )
+            self.RDP_clipboard     = self.pref_builder.get_object( "check_RDP1_clipboard"     )
+            self.RDP_guser         = self.pref_builder.get_object( "entry_RDP1_guser"         )
+            self.RDP_gdomain       = self.pref_builder.get_object( "entry_RDP1_gdom"          )
+            self.RDP_gserver       = self.pref_builder.get_object( "entry_RDP1_gserv"         )
+            self.RDP_gpasswd       = self.pref_builder.get_object( "entry_RDP1_gpwd"          )
+            self.RDP_admin         = self.pref_builder.get_object( "check_RDP1_adm"           )
+            self.RDP_cards         = self.pref_builder.get_object( "check_RDP1_cards"         )
+            self.RDP_printers      = self.pref_builder.get_object( "check_RDP1_printers"      )
+            self.RDP_sound         = self.pref_builder.get_object( "check_RDP1_sound"         )
+            self.RDP_microphone    = self.pref_builder.get_object( "check_RDP1_microphone"    )
+            self.RDP_multimon      = self.pref_builder.get_object( "check_RDP1_multimon"      )
+            self.RDP_compression   = self.pref_builder.get_object( "check_RDP1_compression"   )
+            self.RDP_compr_level   = self.pref_builder.get_object( "entry_RDP1_compr_level"   )
+            self.RDP_fonts         = self.pref_builder.get_object( "check_RDP1_fonts"         )
+            self.RDP_aero          = self.pref_builder.get_object( "check_RDP1_aero"          )
+            self.RDP_drag          = self.pref_builder.get_object( "check_RDP1_drag"          )
+            self.RDP_animation     = self.pref_builder.get_object( "check_RDP1_animation"     )
+            self.RDP_theme         = self.pref_builder.get_object( "check_RDP1_theme"         )
+            self.RDP_wallpapers    = self.pref_builder.get_object( "check_RDP1_wallpapers"    )
+            self.RDP_nsc           = self.pref_builder.get_object( "check_RDP1_nsc"           )
+            self.RDP_jpeg          = self.pref_builder.get_object( "check_RDP1_jpeg"          )
+            self.RDP_jpeg_quality  = self.pref_builder.get_object( "scale_RDP1_jpeg"          )
+            self.RDP_usb           = self.pref_builder.get_object( "check_RDP1_usb"           )
+            self.RDP_nla           = self.pref_builder.get_object( "check_RDP1_nla"           )
+            self.RDP_workarea      = self.pref_builder.get_object( "radio_RDP1_workarea"      )
+            self.RDP_span          = self.pref_builder.get_object( "check_RDP1_span"          )
+            self.RDP_desktop       = self.pref_builder.get_object( "check_RDP1_desktop"       )
+            self.RDP_down          = self.pref_builder.get_object( "check_RDP1_down"          )
+            self.RDP_docs          = self.pref_builder.get_object( "check_RDP1_docs"          )
+            self.RDP_gdi           = self.pref_builder.get_object( "check_RDP1_gdi"           )
+            self.RDP_reconnect     = self.pref_builder.get_object( "check_RDP1_reconnect"     )
+            self.RDP_certignore    = self.pref_builder.get_object( "check_RDP1_certignore"    )
+            self.RDP_pwd           = self.pref_builder.get_object( "entry_RDP1_pwd"           )
+            self.RDP_pwdsave       = self.pref_builder.get_object( "check_RDP1_pwd"           )
+            self.RDP_glyph         = self.pref_builder.get_object( "check_RDP1_glyph"         )
+            self.RDP_userparams    = self.pref_builder.get_object( "entry_RDP1_userparams"    )
+            self.RDP_resolution.set_sensitive( False )
+            self.RDP_name_folder.set_current_folder( HOMEFOLDER )
 
-        if protocol == 'NX':
-            self.NX_user = self.pref_builder.get_object("entry_NX_user")
-            self.NX_keyfile = self.pref_builder.get_object("check_NX_keyfile")
-            self.NX_path_keyfile = self.pref_builder.get_object("NX_keyfile")
-            self.NX_path_keyfile.set_current_folder(HOMEFOLDER)
-            self.NX_quality = self.pref_builder.get_object("entry_NX_quality")
-            self.NX_resolution = self.pref_builder.get_object("entry_NX_resolution")
-            self.NX_viewmode = self.pref_builder.get_object("check_NX_fullscreen")
-            self.NX_resol_window = self.pref_builder.get_object("radio_NX_resol_window")
-            self.NX_exec = self.pref_builder.get_object("entry_NX_exec")
-            self.NX_crypt = self.pref_builder.get_object("check_NX_crypt")
-            self.NX_clipboard = self.pref_builder.get_object("check_NX_clipboard")
+        if protocol == "NX":
+            self.NX_user         = self.pref_builder.get_object( "entry_NX_user"         )
+            self.NX_keyfile      = self.pref_builder.get_object( "check_NX_keyfile"      )
+            self.NX_path_keyfile = self.pref_builder.get_object( "NX_keyfile"            )
+            self.NX_quality      = self.pref_builder.get_object( "entry_NX_quality"      )
+            self.NX_resolution   = self.pref_builder.get_object( "entry_NX_resolution"   )
+            self.NX_viewmode     = self.pref_builder.get_object( "check_NX_fullscreen"   )
+            self.NX_resol_window = self.pref_builder.get_object( "radio_NX_resol_window" )
+            self.NX_exec         = self.pref_builder.get_object( "entry_NX_exec"         )
+            self.NX_crypt        = self.pref_builder.get_object( "check_NX_crypt"        )
+            self.NX_clipboard    = self.pref_builder.get_object( "check_NX_clipboard"    )
+            self.NX_path_keyfile.set_current_folder( HOMEFOLDER )
 
         if self.changeProgram(protocol) == "VNC": #remmina
-            self.VNC_user = self.pref_builder.get_object("entry_VNC_user")
-            self.VNC_color = self.pref_builder.get_object("entry_VNC_color")
-            self.VNC_quality = self.pref_builder.get_object("entry_VNC_quality")
-            self.VNC_viewmode = self.pref_builder.get_object("check_VNC_fullscreen")
-            self.VNC_viewonly = self.pref_builder.get_object("check_VNC_viewonly")
-            self.VNC_showcursor = self.pref_builder.get_object("check_VNC_showcursor")
-            self.VNC_crypt = self.pref_builder.get_object("check_VNC_crypt")
-            self.VNC_clipboard = self.pref_builder.get_object("check_VNC_clipboard")
+            self.VNC_user       = self.pref_builder.get_object( "entry_VNC_user"       )
+            self.VNC_color      = self.pref_builder.get_object( "entry_VNC_color"      )
+            self.VNC_quality    = self.pref_builder.get_object( "entry_VNC_quality"    )
+            self.VNC_viewmode   = self.pref_builder.get_object( "check_VNC_fullscreen" )
+            self.VNC_viewonly   = self.pref_builder.get_object( "check_VNC_viewonly"   )
+            self.VNC_showcursor = self.pref_builder.get_object( "check_VNC_showcursor" )
+            self.VNC_crypt      = self.pref_builder.get_object( "check_VNC_crypt"      )
+            self.VNC_clipboard  = self.pref_builder.get_object( "check_VNC_clipboard"  )
 
         if self.changeProgram(protocol) == "VNC1": #vncvieiwer
-            self.VNC_viewmode = self.pref_builder.get_object("check_VNC1_fullscreen")
-            self.VNC_viewonly = self.pref_builder.get_object("check_VNC1_viewonly")
+            self.VNC_viewmode = self.pref_builder.get_object( "check_VNC1_fullscreen" )
+            self.VNC_viewonly = self.pref_builder.get_object( "check_VNC1_viewonly"   )
 
-        if protocol == 'XDMCP':
-            self.XDMCP_color = self.pref_builder.get_object("entry_XDMCP_color")
-            self.XDMCP_resolution = self.pref_builder.get_object("entry_XDMCP_resolution")
-            self.XDMCP_viewmode = self.pref_builder.get_object("check_XDMCP_fullscreen")
-            self.XDMCP_resol_default = self.pref_builder.get_object("radio_XDMCP_resol_default")
-            self.XDMCP_showcursor = self.pref_builder.get_object("check_XDMCP_showcursor")
-            self.XDMCP_once = self.pref_builder.get_object("check_XDMCP_once")
-            self.XDMCP_exec = self.pref_builder.get_object("entry_XDMCP_exec")
+        if protocol == "XDMCP":
+            self.XDMCP_color         = self.pref_builder.get_object( "entry_XDMCP_color"         )
+            self.XDMCP_resolution    = self.pref_builder.get_object( "entry_XDMCP_resolution"    )
+            self.XDMCP_viewmode      = self.pref_builder.get_object( "check_XDMCP_fullscreen"    )
+            self.XDMCP_resol_default = self.pref_builder.get_object( "radio_XDMCP_resol_default" )
+            self.XDMCP_showcursor    = self.pref_builder.get_object( "check_XDMCP_showcursor"    )
+            self.XDMCP_once          = self.pref_builder.get_object( "check_XDMCP_once"          )
+            self.XDMCP_exec          = self.pref_builder.get_object( "entry_XDMCP_exec"          )
 
-        if protocol == 'SSH':
-            self.SSH_user = self.pref_builder.get_object("entry_SSH_user")
-            self.SSH_publickey = self.pref_builder.get_object("radio_SSH_publickey")
-            self.SSH_keyfile = self.pref_builder.get_object("radio_SSH_keyfile")
-            self.SSH_path_keyfile = self.pref_builder.get_object("SSH_keyfile")
-            self.SSH_path_keyfile.set_current_folder(HOMEFOLDER)
-            self.SSH_exec = self.pref_builder.get_object("entry_SSH_exec")
-            self.SSH_charset = self.pref_builder.get_object("entry_SSH_charset")
+        if protocol == "SSH":
+            self.SSH_user         = self.pref_builder.get_object( "entry_SSH_user"      )
+            self.SSH_publickey    = self.pref_builder.get_object( "radio_SSH_publickey" )
+            self.SSH_keyfile      = self.pref_builder.get_object( "radio_SSH_keyfile"   )
+            self.SSH_path_keyfile = self.pref_builder.get_object( "SSH_keyfile"         )
+            self.SSH_exec         = self.pref_builder.get_object( "entry_SSH_exec"      )
+            self.SSH_charset      = self.pref_builder.get_object( "entry_SSH_charset"   )
+            self.SSH_path_keyfile.set_current_folder( HOMEFOLDER )
 
-        if protocol == 'SFTP':
-            self.SFTP_user = self.pref_builder.get_object("entry_SFTP_user")
-            self.SFTP_publickey = self.pref_builder.get_object("radio_SFTP_publickey")
-            self.SFTP_keyfile = self.pref_builder.get_object("radio_SFTP_keyfile")
-            self.SFTP_path_keyfile = self.pref_builder.get_object("SFTP_keyfile")
-            self.SFTP_path_keyfile.set_current_folder(HOMEFOLDER)
-            self.SFTP_execpath = self.pref_builder.get_object("entry_SFTP_execpath")
-            self.SFTP_charset = self.pref_builder.get_object("entry_SFTP_charset")
+        if protocol == "SFTP":
+            self.SFTP_user         = self.pref_builder.get_object( "entry_SFTP_user"      )
+            self.SFTP_publickey    = self.pref_builder.get_object( "radio_SFTP_publickey" )
+            self.SFTP_keyfile      = self.pref_builder.get_object( "radio_SFTP_keyfile"   )
+            self.SFTP_path_keyfile = self.pref_builder.get_object( "SFTP_keyfile"         )
+            self.SFTP_execpath     = self.pref_builder.get_object( "entry_SFTP_execpath"  )
+            self.SFTP_charset      = self.pref_builder.get_object( "entry_SFTP_charset"   )
+            self.SFTP_path_keyfile.set_current_folder( HOMEFOLDER )
 
-        if protocol == 'VMWARE':
-            self.VMWARE_user = self.pref_builder.get_object("entry_VMWARE_user")
-            self.VMWARE_domain = self.pref_builder.get_object("entry_VMWARE_dom")
-            self.VMWARE_password = self.pref_builder.get_object("entry_VMWARE_pwd")
-            self.VMWARE_fullscreen = self.pref_builder.get_object("check_VMWARE_fullscreen")
+        if protocol == "VMWARE":
+            self.VMWARE_user       = self.pref_builder.get_object( "entry_VMWARE_user"       )
+            self.VMWARE_domain     = self.pref_builder.get_object( "entry_VMWARE_dom"        )
+            self.VMWARE_password   = self.pref_builder.get_object( "entry_VMWARE_pwd"        )
+            self.VMWARE_fullscreen = self.pref_builder.get_object( "check_VMWARE_fullscreen" )
 
-        if protocol == 'SPICE':
-            self.SPICE_tls = self.pref_builder.get_object("check_SPICE_tls")
-            self.SPICE_viewonly = self.pref_builder.get_object("check_SPICE_viewonly")
-            self.SPICE_resize = self.pref_builder.get_object("check_SPICE_resize")
-            self.SPICE_clipboard = self.pref_builder.get_object("check_SPICE_clipboard")
-            self.SPICE_cards = self.pref_builder.get_object("check_SPICE_cards")
-            self.SPICE_sound = self.pref_builder.get_object("check_SPICE_sound")
-            self.SPICE_CA = self.pref_builder.get_object("check_SPICE_CA")
-            self.SPICE_cacert = self.pref_builder.get_object("SPICE_CA")
+        if protocol == "SPICE":
+            self.SPICE_tls       = self.pref_builder.get_object( "check_SPICE_tls"       )
+            self.SPICE_viewonly  = self.pref_builder.get_object( "check_SPICE_viewonly"  )
+            self.SPICE_resize    = self.pref_builder.get_object( "check_SPICE_resize"    )
+            self.SPICE_clipboard = self.pref_builder.get_object( "check_SPICE_clipboard" )
+            self.SPICE_cards     = self.pref_builder.get_object( "check_SPICE_cards"     )
+            self.SPICE_sound     = self.pref_builder.get_object( "check_SPICE_sound"     )
+            self.SPICE_CA        = self.pref_builder.get_object( "check_SPICE_CA"        )
+            self.SPICE_cacert    = self.pref_builder.get_object( "SPICE_CA"              )
 
-        if protocol == 'FS':
-            self.FS_user = self.pref_builder.get_object("entry_FS_user")
-            self.FS_domain = self.pref_builder.get_object("entry_FS_dom")
-            self.FS_folder = self.pref_builder.get_object("entry_FS_folder")
-            self.FS_type = self.pref_builder.get_object("entry_FS_type")
-            self.FS_server = self.pref_builder.get_object("entry_FS_serv")
+        if protocol == "FS":
+            self.FS_user   = self.pref_builder.get_object( "entry_FS_user"   )
+            self.FS_domain = self.pref_builder.get_object( "entry_FS_dom"    )
+            self.FS_folder = self.pref_builder.get_object( "entry_FS_folder" )
+            self.FS_type   = self.pref_builder.get_object( "entry_FS_type"   )
+            self.FS_server = self.pref_builder.get_object( "entry_FS_serv"   )
 
-    def applyPreferences(self, protocol):
+    def applyPreferences( self, protocol ):
         """В этой функции параметры для подключения собираются из окна Доп. параметры в список"""
 
-        if protocol == 'VMWARE':
+        if protocol == "VMWARE":
             args = dict(
-                user = self.VMWARE_user.get_text(),
-                domain = self.VMWARE_domain.get_text(),
-                password = self.VMWARE_password.get_text(),
-                fullscreen = str (self.VMWARE_fullscreen.get_active() )
-            )
+                user       =      self.VMWARE_user.get_text(),
+                domain     =      self.VMWARE_domain.get_text(),
+                password   =      self.VMWARE_password.get_text(),
+                fullscreen = str( self.VMWARE_fullscreen.get_active() ) )
 
         if self.changeProgram( protocol ) == "RDP":
             args = dict(
-                username = self.RDP_user.get_text(),
-                domain = self.RDP_domain.get_text(),
-                colordepth = self.RDP_color.get_active_id(),
-                quality = self.RDP_quality.get_active_id(),
-                sound = self.RDP_sound.get_active_id(),
-                viewmode = "3" if self.RDP_viewmode.get_active() else "0",
-                resolution = "" if self.RDP_resol_default.get_active() else self.RDP_resolution.get_active_id(),
-                sharefolder = self.RDP_name_folder.get_filename() if self.RDP_share_folder.get_active() else "",
-                shareprinter = "1" if self.RDP_printers.get_active() else "0",
-                disableclipboard = "0" if self.RDP_clipboard.get_active() else "1",
-                sharesmartcard = "1" if self.RDP_cards.get_active() else "0"
-            )
+                username         = self.RDP_user.get_text(),
+                domain           = self.RDP_domain.get_text(),
+                colordepth       = self.RDP_color.get_active_id(),
+                quality          = self.RDP_quality.get_active_id(),
+                sound            = self.RDP_sound.get_active_id(),
+                sharefolder      = self.RDP_name_folder.get_filename() if self.RDP_share_folder.get_active() else "",
+                viewmode         = "3" if self.RDP_viewmode.get_active()      else "0",
+                resolution       = ""  if self.RDP_resol_default.get_active() else self.RDP_resolution.get_active_id(),
+                shareprinter     = "1" if self.RDP_printers.get_active()      else "0",
+                disableclipboard = "0" if self.RDP_clipboard.get_active()     else "1",
+                sharesmartcard   = "1" if self.RDP_cards.get_active()         else "0" )
 
-        if self.changeProgram(protocol) == "RDP1":
+        if self.changeProgram( protocol ) == "RDP1":
             args = dict(
-                username = self.RDP_user.get_text(),
-                domain = self.RDP_domain.get_text(),
-                color = self.RDP_color.get_active_id(),
-                fullscreen = "True" if self.RDP_fullscreen.get_active() else "False",
-                clipboard = "True" if self.RDP_clipboard.get_active() else "False",
-                folder = self.RDP_name_folder.get_filename() if self.RDP_share_folder.get_active() else "",
-                gserver = self.RDP_gserver.get_text(),
-                guser = self.RDP_guser.get_text(),
-                gdomain = self.RDP_gdomain.get_text(),
-                gpasswd = self.RDP_gpasswd.get_text(),
-                admin = "True" if self.RDP_admin.get_active() else "False",
-                smartcards = "True" if self.RDP_cards.get_active() else "False",
-                printers = "True" if self.RDP_printers.get_active() else "False",
-                sound = "True" if self.RDP_sound.get_active() else "False",
-                microphone = "True" if self.RDP_microphone.get_active() else "False",
-                multimon = "True" if self.RDP_multimon.get_active() else "False",
-                fonts = "True" if self.RDP_fonts.get_active() else "False",
-                aero = "True" if self.RDP_aero.get_active() else "False",
-                drag = "True" if self.RDP_drag.get_active() else "False",
-                animation = "True" if self.RDP_animation.get_active() else "False",
-                theme = "False" if self.RDP_theme.get_active() else "True",
-                wallpapers = "False" if self.RDP_wallpapers.get_active() else "True",
-                nsc = "True" if self.RDP_nsc.get_active() else "False",
-                usb = "True" if self.RDP_usb.get_active() else "False",
-                disable_nla = "True" if self.RDP_nla.get_active() else "False",
-                span = "True" if self.RDP_span.get_active() else "False",
-                desktop = "True" if self.RDP_desktop.get_active() else "False",
-                downloads = "True" if self.RDP_down.get_active() else "False",
-                documents = "True" if self.RDP_docs.get_active() else "False",
-                gdi = "True" if self.RDP_gdi.get_active() else "False",
-                reconnect = "False" if self.RDP_reconnect.get_active() else "True",
-                certignore = "True" if self.RDP_certignore.get_active() else "False",
-                passwd = self.RDP_pwd.get_text(),
-                passwdsave = "True" if self.RDP_pwdsave.get_active() else "False",
-                glyph = "True" if self.RDP_glyph.get_active() else "False",
-                userparams = self.RDP_userparams.get_text()
-            )
-            args[ "workarea" ] = "False"
+                username    = self.RDP_user.get_text(),
+                domain      = self.RDP_domain.get_text(),
+                color       = self.RDP_color.get_active_id(),
+                gserver     = self.RDP_gserver.get_text(),
+                guser       = self.RDP_guser.get_text(),
+                gdomain     = self.RDP_gdomain.get_text(),
+                gpasswd     = self.RDP_gpasswd.get_text(),
+                userparams  = self.RDP_userparams.get_text(),
+                passwd      = self.RDP_pwd.get_text(),
+                folder      = self.RDP_name_folder.get_filename() if self.RDP_share_folder.get_active() else "",
+                fullscreen  = "True"  if self.RDP_fullscreen.get_active() else "False",
+                clipboard   = "True"  if self.RDP_clipboard.get_active()  else "False",
+                admin       = "True"  if self.RDP_admin.get_active()      else "False",
+                smartcards  = "True"  if self.RDP_cards.get_active()      else "False",
+                printers    = "True"  if self.RDP_printers.get_active()   else "False",
+                sound       = "True"  if self.RDP_sound.get_active()      else "False",
+                microphone  = "True"  if self.RDP_microphone.get_active() else "False",
+                multimon    = "True"  if self.RDP_multimon.get_active()   else "False",
+                fonts       = "True"  if self.RDP_fonts.get_active()      else "False",
+                aero        = "True"  if self.RDP_aero.get_active()       else "False",
+                drag        = "True"  if self.RDP_drag.get_active()       else "False",
+                animation   = "True"  if self.RDP_animation.get_active()  else "False",
+                theme       = "False" if self.RDP_theme.get_active()      else "True",
+                wallpapers  = "False" if self.RDP_wallpapers.get_active() else "True",
+                nsc         = "True"  if self.RDP_nsc.get_active()        else "False",
+                usb         = "True"  if self.RDP_usb.get_active()        else "False",
+                disable_nla = "True"  if self.RDP_nla.get_active()        else "False",
+                span        = "True"  if self.RDP_span.get_active()       else "False",
+                desktop     = "True"  if self.RDP_desktop.get_active()    else "False",
+                downloads   = "True"  if self.RDP_down.get_active()       else "False",
+                documents   = "True"  if self.RDP_docs.get_active()       else "False",
+                gdi         = "True"  if self.RDP_gdi.get_active()        else "False",
+                reconnect   = "False" if self.RDP_reconnect.get_active()  else "True",
+                certignore  = "True"  if self.RDP_certignore.get_active() else "False",
+                passwdsave  = "True"  if self.RDP_pwdsave.get_active()    else "False",
+                glyph       = "True"  if self.RDP_glyph.get_active()      else "False" )
+            args[ "workarea"   ] = "False"
             args[ "resolution" ] = ""
             if self.RDP_workarea.get_active(): args[ "workarea" ] = "True"
             elif self.RDP_resol_default.get_active(): pass
             else: args[ "resolution" ] = self.RDP_resolution.get_text()
             if self.RDP_compression.get_active():
-                args[ "compression" ] = "True"
-                args[ "compr_level" ] = self.RDP_compr_level.get_active_id()
+                args[ "compression"  ] = "True"
+                args[ "compr_level"  ] = self.RDP_compr_level.get_active_id()
             else:
-                args[ "compression" ] = "False"
-                args[ "compr_level" ] = "None"
+                args[ "compression"  ] = "False"
+                args[ "compr_level"  ] = "None"
             if self.RDP_jpeg.get_active():
-                args[ "jpeg" ] = "True"
-                args[ "jpeg_quality" ] = str (self.RDP_jpeg_quality.get_value())
+                args[ "jpeg"         ] = "True"
+                args[ "jpeg_quality" ] = str( self.RDP_jpeg_quality.get_value() )
             else:
-                args[ "jpeg" ] = "False"
+                args[ "jpeg"         ] = "False"
                 args[ "jpeg_quality" ] = "None"
 
-        if protocol == 'NX':
+        if protocol == "NX":
             args = dict(
-                username = self.NX_user.get_text(),
-                quality = self.NX_quality.get_active_id(),
-                disableencryption = "1" if self.NX_crypt.get_active() else "0",
-                disableclipboard = "1" if self.NX_clipboard.get_active() else "0",
-                nx_privatekey = self.NX_path_keyfile.get_filename() if self.NX_keyfile.get_active() else "",
-                viewmode = "4" if self.NX_viewmode.get_active() else "1",
-                resolution = "" if self.NX_resol_window.get_active() else self.NX_resolution.get_active_id()
-            )
+                username          = self.NX_user.get_text(),
+                quality           = self.NX_quality.get_active_id(),
+                nx_privatekey     = self.NX_path_keyfile.get_filename() if self.NX_keyfile.get_active() else "",
+                disableencryption = "1" if self.NX_crypt.get_active()        else "0",
+                disableclipboard  = "1" if self.NX_clipboard.get_active()    else "0",
+                viewmode          = "4" if self.NX_viewmode.get_active()     else "1",
+                resolution        = ""  if self.NX_resol_window.get_active() else self.NX_resolution.get_active_id() )
             args[ "exec" ] = self.NX_exec.get_text()
 
-        if self.changeProgram(protocol) == "VNC":
+        if self.changeProgram( protocol ) == "VNC":
             args = dict(
-                username = self.VNC_user.get_text(),
-                quality = self.VNC_quality.get_active_id(),
-                colordepth = self.VNC_color.get_active_id(),
-                disableencryption = "1" if self.VNC_crypt.get_active() else "0",
-                disableclipboard = "1" if self.VNC_clipboard.get_active() else "0",
-                viewmode = "4" if self.VNC_viewmode.get_active() else "1",
-                showcursor = "1" if self.VNC_showcursor.get_active() else "0",
-                viewonly = "1" if self.VNC_viewonly.get_active() else "0",
-            )
+                username          = self.VNC_user.get_text(),
+                quality           = self.VNC_quality.get_active_id(),
+                colordepth        = self.VNC_color.get_active_id(),
+                disableencryption = "1" if self.VNC_crypt.get_active()      else "0",
+                disableclipboard  = "1" if self.VNC_clipboard.get_active()  else "0",
+                viewmode          = "4" if self.VNC_viewmode.get_active()   else "1",
+                showcursor        = "1" if self.VNC_showcursor.get_active() else "0",
+                viewonly          = "1" if self.VNC_viewonly.get_active()   else "0" )
 
-        if self.changeProgram(protocol) == "VNC1":
+        if self.changeProgram( protocol ) == "VNC1":
             args = dict(
                 fullscreen = str( self.VNC_viewmode.get_active() ),
-                viewonly = str( self.VNC_viewonly.get_active() )
-            )
+                viewonly   = str( self.VNC_viewonly.get_active() ) )
 
-        if protocol == 'XDMCP':
+        if protocol == "XDMCP":
             args = dict(
                 colordepth = self.XDMCP_color.get_active_id(),
-                viewmode = "4" if self.XDMCP_viewmode.get_active() else "1",
-                resolution = "" if self.XDMCP_resol_default.get_active() else self.XDMCP_resolution.get_active_id(),
-                showcursor = "1" if self.XDMCP_showcursor.get_active() else "0",
-                once = "1" if self.XDMCP_once.get_active() else "0"
-            )
+                viewmode   = "4" if self.XDMCP_viewmode.get_active()      else "1",
+                resolution = ""  if self.XDMCP_resol_default.get_active() else self.XDMCP_resolution.get_active_id(),
+                showcursor = "1" if self.XDMCP_showcursor.get_active()    else "0",
+                once       = "1" if self.XDMCP_once.get_active()          else "0" )
             args[ "exec" ] = self.XDMCP_exec.get_text()
 
-        if protocol == 'SSH':
+        if protocol == "SSH":
             args = dict(
-                username = self.SSH_user.get_text(),
-                ssh_charset = self.SSH_charset.get_text()
-            )
-            args[ "exec" ] = self.SSH_exec.get_text()
+                username    = self.SSH_user.get_text(),
+                ssh_charset = self.SSH_charset.get_text() )
+            args[ "exec"  ] = self.SSH_exec.get_text()
             if self.SSH_publickey.get_active():
-                args[ "ssh_auth" ] = "3"
+                args[ "ssh_auth"   ] = "3"
             elif self.SSH_keyfile.get_active():
-                args[ "ssh_auth" ] = "1"
+                args[ "ssh_auth"   ] = "1"
             else: args[ "ssh_auth" ] = "0"
             if args[ "ssh_auth" ] == "1":
                 args[ "ssh_privatekey" ] = self.SSH_path_keyfile.get_filename()
 
-        if protocol == 'SFTP':
+        if protocol == "SFTP":
             args = dict(
-                username = self.SFTP_user.get_text(),
+                username    = self.SFTP_user.get_text(),
                 ssh_charset = self.SFTP_charset.get_text(),
-                execpath = self.SFTP_execpath.get_text()
-            )
+                execpath    = self.SFTP_execpath.get_text() )
             if self.SFTP_publickey.get_active():
-                args[ "ssh_auth" ] = "3"
+                args[ "ssh_auth"   ] = "3"
             elif self.SFTP_keyfile.get_active():
-                args[ "ssh_auth" ] = "1"
+                args[ "ssh_auth"   ] = "1"
             else: args[ "ssh_auth" ] = "0"
             if args[ "ssh_auth" ] == "1":
                 args[ "ssh_privatekey" ] = self.SFTP_path_keyfile.get_filename()
 
-        if protocol == 'SPICE':
+        if protocol == "SPICE":
             args = dict(
-                usetls = "1" if self.SPICE_tls.get_active() else "0",
-                viewonly = "1" if self.SPICE_viewonly.get_active() else "0",
-                resizeguest = "1" if self.SPICE_resize.get_active() else "0",
+                usetls           = "1" if self.SPICE_tls.get_active()       else "0",
+                viewonly         = "1" if self.SPICE_viewonly.get_active()  else "0",
+                resizeguest      = "1" if self.SPICE_resize.get_active()    else "0",
                 disableclipboard = "0" if self.SPICE_clipboard.get_active() else "1",
-                sharesmartcard = "1" if self.SPICE_cards.get_active() else "0",
-                enableaudio = "1" if self.SPICE_sound.get_active() else "0",
-                cacert = self.SPICE_cacert.get_filename() if self.SPICE_CA.get_active() else ""
-            )
+                sharesmartcard   = "1" if self.SPICE_cards.get_active()     else "0",
+                enableaudio      = "1" if self.SPICE_sound.get_active()     else "0",
+                cacert           = self.SPICE_cacert.get_filename() if self.SPICE_CA.get_active() else "" )
 
-        if protocol == 'FS':
+        if protocol == "FS":
             args = dict(
-                user = self.FS_user.get_text(),
+                user   = self.FS_user.get_text(),
                 domain = self.FS_domain.get_text(),
                 folder = self.FS_folder.get_text(),
-                type = self.FS_type.get_active_id()
-            )
+                type   = self.FS_type.get_active_id() )
 
         return args
 
