@@ -391,7 +391,7 @@ class Gui(Gtk.Application):
                 program = self.changeProgram( protocol )
                 try: parameters = CONFIGS[ program ]
                 except KeyError:
-                    try: parameters = DEF_PROTO[ "%s_args" % program.lower() ].copy()
+                    try: parameters = DEF_PROTO[ program ].copy()
                     except KeyError: parameters = server
                 try:
                     parameters[ "server" ] = server #для заголовка окна
@@ -446,7 +446,7 @@ class Gui(Gtk.Application):
             try: parameters = CONFIGS[ name ]
             except KeyError:
                 try:
-                    parameters = DEFAULT[ "%s_args" % name.lower() ].copy()
+                    parameters = DEF_PROTO[ name ].copy()
                 except KeyError:
                     parameters = None
             if type(parameters) == dict:

@@ -129,105 +129,105 @@ else:
 #Protocols' default options
 DEF_PROTO = {}
 #vncviewer
-DEF_PROTO[ "vnc1_args" ] = {  "fullscreen"        : "False",
-                              "viewonly"          : "False",
-                              "program"           : "vncviewer" }
+DEF_PROTO[ "VNC1" ] = {  "fullscreen"        : "False",
+                         "viewonly"          : "False",
+                         "program"           : "vncviewer" }
 #FreeRDP:
-DEF_PROTO[ "rdp1_args" ] = {  "username"          : "",
-                              "domain"            : "",
-                              "fullscreen"        : "True",
-                              "clipboard"         : "True",
-                              "resolution"        : "",
-                              "color"             : "32",
-                              "folder"            : "",
-                              "gserver"           : "",
-                              "guser"             : "",
-                              "gdomain"           : "",
-                              "gpasswd"           : "",
-                              "admin"             : "False",
-                              "smartcards"        : "False",
-                              "printers"          : "False",
-                              "sound"             : "False",
-                              "microphone"        : "False",
-                              "multimon"          : "False",
-                              "compression"       : "False",
-                              "compr_level"       : "0",
-                              "fonts"             : "False",
-                              "aero"              : "False",
-                              "drag"              : "False",
-                              "animation"         : "False",
-                              "theme"             : "False",
-                              "wallpapers"        : "False",
-                              "nsc"               : "False",
-                              "jpeg"              : "False",
-                              "jpeg_quality"      : "80.0",
-                              "usb"               : "False",
-                              "disable_nla"       : "True",
-                              "workarea"          : "False",
-                              "span"              : "False",
-                              "desktop"           : "False",
-                              "downloads"         : "False",
-                              "documents"         : "False",
-                              "gdi"               : "False",
-                              "reconnect"         : "True",
-                              "certignore"        : "True",
-                              "passwdsave"        : "False",
-                              "glyph"             : "False",
-                              "userparams"        : "",
-                              "program"           : "freerdp" }
+DEF_PROTO[ "RDP1" ] = {  "username"          : "",
+                         "domain"            : "",
+                         "fullscreen"        : "True",
+                         "clipboard"         : "True",
+                         "resolution"        : "",
+                         "color"             : "32",
+                         "folder"            : "",
+                         "gserver"           : "",
+                         "guser"             : "",
+                         "gdomain"           : "",
+                         "gpasswd"           : "",
+                         "admin"             : "False",
+                         "smartcards"        : "False",
+                         "printers"          : "False",
+                         "sound"             : "False",
+                         "microphone"        : "False",
+                         "multimon"          : "False",
+                         "compression"       : "False",
+                         "compr_level"       : "0",
+                         "fonts"             : "False",
+                         "aero"              : "False",
+                         "drag"              : "False",
+                         "animation"         : "False",
+                         "theme"             : "False",
+                         "wallpapers"        : "False",
+                         "nsc"               : "False",
+                         "jpeg"              : "False",
+                         "jpeg_quality"      : "80.0",
+                         "usb"               : "False",
+                         "disable_nla"       : "True",
+                         "workarea"          : "False",
+                         "span"              : "False",
+                         "desktop"           : "False",
+                         "downloads"         : "False",
+                         "documents"         : "False",
+                         "gdi"               : "False",
+                         "reconnect"         : "True",
+                         "certignore"        : "True",
+                         "passwdsave"        : "False",
+                         "glyph"             : "False",
+                         "userparams"        : "",
+                         "program"           : "freerdp" }
 #Remmina
-DEF_PROTO[ "rdp_args" ] = {   "username"          : "",
-                              "domain"            : "",
-                              "colordepth"        : "32",
-                              "quality"           : "0",
-                              "resolution"        : "",
-                              "viewmode"          : "3",
-                              "sharefolder"       : "",
-                              "shareprinter"      : "0",
-                              "disableclipboard"  : "0",
-                              "sound"             : "off",
-                              "sharesmartcard"    : "0" ,
-                              "program"           : "remmina" }
-DEF_PROTO[ "vnc_args" ] = {   "username"          : "",
-                              "quality"           : "9",
-                              "colordepth"        : "24",
-                              "viewmode"          : "1",
-                              "viewonly"          : "0",
-                              "disableencryption" : "0",
-                              "disableclipboard"  : "0",
-                              "showcursor"        : "1",
-                              "program"           : "remmina" }
-DEF_PROTO[ "nx_args" ] = {    "username"          : "",
-                              "quality"           : "0",
-                              "resolution"        : "",
-                              "viewmode"          : "1",
-                              "nx_privatekey"     : "",
-                              "disableencryption" : "0",
-                              "disableclipboard"  : "0",
-                              "exec"              : "" }
-DEF_PROTO[ "xdmcp_args" ] = { "colordepth"        : "0",
-                              "viewmode"          : "1",
-                              "resolution"        : "",
-                              "once"              : "0",
-                              "showcursor"        : "0",
-                              "exec"              : "" }
-DEF_PROTO[ "spice_args" ] = { "usetls"            : "0",
-                              "viewonly"          : "0",
-                              "resizeguest"       : "0",
-                              "disableclipboard"  : "0",
-                              "sharesmartcard"    : "0",
-                              "enableaudio"       : "0",
-                              "cacert"            : "" }
-DEF_PROTO[ "ssh_args" ] = {   "username"          : "",
-                              "ssh_auth"          : "0",
-                              "ssh_privatekey"    : "",
-                              "ssh_charset"       : "UTF-8",
-                              "exec"              : "" }
-DEF_PROTO[ "sftp_args" ] = {  "username"          : "",
-                              "ssh_auth"          : "0",
-                              "ssh_privatekey"    : "",
-                              "ssh_charset"       : "UTF-8",
-                              "execpath"          : "/" }
+DEF_PROTO[ "RDP" ] = {   "username"          : "",
+                         "domain"            : "",
+                         "colordepth"        : "32",
+                         "quality"           : "0",
+                         "resolution"        : "",
+                         "viewmode"          : "3",
+                         "sharefolder"       : "",
+                         "shareprinter"      : "0",
+                         "disableclipboard"  : "0",
+                         "sound"             : "off",
+                         "sharesmartcard"    : "0" ,
+                         "program"           : "remmina" }
+DEF_PROTO[ "VNC" ] = {   "username"          : "",
+                         "quality"           : "9",
+                         "colordepth"        : "24",
+                         "viewmode"          : "1",
+                         "viewonly"          : "0",
+                         "disableencryption" : "0",
+                         "disableclipboard"  : "0",
+                         "showcursor"        : "1",
+                         "program"           : "remmina" }
+DEF_PROTO[ "NX" ] = {    "username"          : "",
+                         "quality"           : "0",
+                         "resolution"        : "",
+                         "viewmode"          : "1",
+                         "nx_privatekey"     : "",
+                         "disableencryption" : "0",
+                         "disableclipboard"  : "0",
+                         "exec"              : "" }
+DEF_PROTO[ "XDMCP" ] = { "colordepth"        : "0",
+                         "viewmode"          : "1",
+                         "resolution"        : "",
+                         "once"              : "0",
+                         "showcursor"        : "0",
+                         "exec"              : "" }
+DEF_PROTO[ "SPICE" ] = { "usetls"            : "0",
+                         "viewonly"          : "0",
+                         "resizeguest"       : "0",
+                         "disableclipboard"  : "0",
+                         "sharesmartcard"    : "0",
+                         "enableaudio"       : "0",
+                         "cacert"            : "" }
+DEF_PROTO[ "SSH" ] = {   "username"          : "",
+                         "ssh_auth"          : "0",
+                         "ssh_privatekey"    : "",
+                         "ssh_charset"       : "UTF-8",
+                         "exec"              : "" }
+DEF_PROTO[ "SFTP" ] = {  "username"          : "",
+                         "ssh_auth"          : "0",
+                         "ssh_privatekey"    : "",
+                         "ssh_charset"       : "UTF-8",
+                         "execpath"          : "/" }
 _config = ConfigParser( interpolation = None )
 _config_file = "%s/myconnector.conf" % WORKFOLDER
 
@@ -235,15 +235,15 @@ def config_save( default = False ):
     """Default config for MyConnector"""
     if default:
         _config[ "myconnector" ] = DEFAULT
-        _config[ "vncviewer"   ] = DEF_PROTO[ "vnc1_args"  ].copy()
-        _config[ "remmina_vnc" ] = DEF_PROTO[ "vnc_args"   ].copy()
-        _config[ "ssh"         ] = DEF_PROTO[ "ssh_args"   ].copy()
-        _config[ "sftp"        ] = DEF_PROTO[ "sftp_args"  ].copy()
-        _config[ "remmina_rdp" ] = DEF_PROTO[ "rdp_args"   ].copy()
-        _config[ "nx"          ] = DEF_PROTO[ "nx_args"    ].copy()
-        _config[ "xdmcp"       ] = DEF_PROTO[ "xdmcp_args" ].copy()
-        _config[ "spice"       ] = DEF_PROTO[ "spice_args" ].copy()
-        _config[ "freerdp"     ] = DEF_PROTO[ "rdp1_args"  ].copy()
+        _config[ "vncviewer"   ] = DEF_PROTO[ "VNC1"  ].copy()
+        _config[ "remmina_vnc" ] = DEF_PROTO[ "VNC"   ].copy()
+        _config[ "ssh"         ] = DEF_PROTO[ "SSH"   ].copy()
+        _config[ "sftp"        ] = DEF_PROTO[ "SFTP"  ].copy()
+        _config[ "remmina_rdp" ] = DEF_PROTO[ "RDP"   ].copy()
+        _config[ "nx"          ] = DEF_PROTO[ "NX"    ].copy()
+        _config[ "xdmcp"       ] = DEF_PROTO[ "XDMCP" ].copy()
+        _config[ "spice"       ] = DEF_PROTO[ "SPICE" ].copy()
+        _config[ "freerdp"     ] = DEF_PROTO[ "RDP1"  ].copy()
     with open( _config_file, 'w' ) as configfile:
         _config.write( configfile )
 
