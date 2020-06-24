@@ -346,7 +346,7 @@ class Gui(Gtk.Application):
                         self.onWCEdit( '', parameters[ "server" ], protocol ) #TODO - add try/except and log
                     else:
                         analogEntry = self.AnalogEntry(protocol, parameters)
-                        self.onButtonPref(analogEntry)
+                        self.onButtonPref( analogEntry, parameters.get( "name", "" ) )
                     msg = "Импортирован файл " + filename
                     options.log.info (msg)
                     viewStatus(self.statusbar, msg)
