@@ -400,35 +400,22 @@ class FileServer:
         options.log.info (command)
         os.system (command + STD_TO_LOG)
 
-def definition(protocol):
+def definition( name ):
     """Функция определения протокола"""
-    if protocol == 'VNC':
-        if CONFIG [ "vnc" ] == "remmina":
-            connect = VncRemmina()
-        else: connect = VncViewer()
-    elif protocol == 'RDP':
-        if CONFIG[ "rdp" ] == "remmina":
-            connect = RdpRemmina()
-        else: connect = XFreeRdp()
-    elif protocol == 'NX':
-        connect = NxRemmina()
-    elif protocol == 'XDMCP':
-        connect = XdmcpRemmina()
-    elif protocol == 'SSH':
-        connect = SshRemmina()
-    elif protocol == 'SFTP':
-        connect = SftpRemmina()
-    elif protocol == 'VMWARE':
-        connect = Vmware()
-    elif protocol == 'CITRIX':
-        connect = Citrix()
-    elif protocol == 'WEB':
-        connect = Web()
-    elif protocol == 'SPICE':
-        connect = SpiceRemmina()
-    elif protocol == 'FS':
-        connect = FileServer()
-    return connect
+    protocols = { "VNC"    : VncRemmina(),
+                  "VNC1"   : VncViewer(),
+                  "RDP"    : RdpRemmina(),
+                  "RDP1"   : XFreeRdp(),
+                  "NX"     : VncViewer(),
+                  "XDMCP"  : XdmcpRemmina(),
+                  "SSH"    : SshRemmina(),
+                  "SFTP"   : SftpRemmina(),
+                  "VMWARE" : Vmware(),
+                  "CITRIX" : Citrix(),
+                  "WEB"    : Web(),
+                  "SPICE"  : SpiceRemmina(),
+                  "FS"     : FileServer() }
+    return protocols[ name ]
 
 def citrixCheck():
     """Фунцкия проверки наличия в системе Citrix Receiver"""

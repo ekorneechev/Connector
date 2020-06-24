@@ -1637,7 +1637,7 @@ along with this program. If not, see http://www.gnu.org/licenses/.
             <property name="entry_text_column">0</property>
             <child internal-child="entry">
               <object class="GtkEntry" id="entry_VNC1_serv">
-                <property name="name">VNC</property>
+                <property name="name">VNC1</property>
                 <property name="can_focus">True</property>
                 <property name="tooltip_text" translatable="yes">Поддерживается следующий формат:
  - сервер
@@ -2417,7 +2417,7 @@ along with this program. If not, see http://www.gnu.org/licenses/.
                     <property name="entry_text_column">0</property>
                     <child internal-child="entry">
                       <object class="GtkEntry" id="entry_RDP1_serv">
-                        <property name="name">RDP</property>
+                        <property name="name">RDP1</property>
                         <property name="can_focus">True</property>
                         <property name="tooltip_text" translatable="yes">Поддерживается следующий формат:
  - сервер
