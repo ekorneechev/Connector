@@ -91,7 +91,7 @@ if OS == "altlinux":
     _udisks2 = check_output( "/usr/sbin/control udisks2; exit 0", shell=True, universal_newlines=True ).strip()
     if _udisks2 == 'default':
         USBPATH = "/run/media/$USER"
-    if _udisks2 == 'shared':
+    else:
         USBPATH = "/media"
 
     #Команда проверки наличия в системе Citrix Receiver
