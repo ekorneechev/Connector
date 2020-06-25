@@ -1029,7 +1029,7 @@ class Gui(Gtk.Application):
 
     def saveFileCtor( self, name, protocol, server ):
         """Connect file (.myc) creation"""
-        filename = ( "%s_%s.myc" % ( name, protocol ) ).lower()
+        filename = ( "%s_%s.myc" % ( name.replace( " ", "_" ), protocol ) ).lower()
         print ( "%s:::%s:::%s:::%s" % ( name, protocol, server, filename ),
                 file = open( CONNECTIONS, "a" ) )
         options.log.info( "Добавлено новое %s-подключение '%s' (host: %s)", protocol, name, server )
