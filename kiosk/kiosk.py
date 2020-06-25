@@ -161,6 +161,9 @@ class Kiosk(Gtk.Window):
         disable_kiosk()
         _config['kiosk']['autologin'] = str( self.checkKioskAutologin.get_active() )
         user = self.entryKioskUser.get_text()
+        if user == "root":
+            os.system( "zenity --error --title='Connector Kiosk' --icon-name=connector --text='Root is not allowed to use the mode!'" )
+            return 1
         if user == "": user = "kiosk"
         _config['kiosk']['user'] = user
         if self.checkKioskAdduser.get_active() and not self.changeKioskOff.get_active():
