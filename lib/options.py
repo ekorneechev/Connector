@@ -107,39 +107,6 @@ def searchSshUser(query):
         server = query
     return server, login
 
-def filenameFromName(name):
-    """Определение имени конфигурационного файла подключения по имени подключения"""
-    try:
-        for connect in open( CONNECTIONS ):
-            record = connect.strip().split(':::')
-            if record[0] == name:
-                return record[3]
-    except FileNotFoundError:
-        log.warning("Файл сохраненных подключений (connections.db) не найден!")
-    return False
-
-def nameFromFilename(filename):
-    """Определение имени подключения по имени конфигурационного файла"""
-    try:
-        for connect in open( CONNECTIONS ):
-            record = connect.strip().split(':::')
-            if record[3] == filename:
-                return record[0]
-    except FileNotFoundError:
-        log.warning("Файл сохраненных подключений (connections.db) не найден!")
-    return False
-
-def searchName(name):
-    """Существует ли подключение с указанным именем"""
-    try:
-        for connect in open( CONNECTIONS ):
-            record = connect.strip().split(':::')
-            if record[0] == name:
-                return True
-    except FileNotFoundError:
-        log.warning("Файл сохраненных подключений (connections.db) не найден!")
-    return False
-
 def checkLogFile(filePath):
     """Функция проверки размера лог-файла и его архивация, если он больше 10Мб"""
     if os.path.exists( filePath ):

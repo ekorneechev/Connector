@@ -32,7 +32,6 @@ UIFOLDER    = "%s/ui"              % MAINFOLDER
 LOGFOLDER   = "%s/logs"            % WORKFOLDER
 LOGFILE     = "%s/myconnector.log" % LOGFOLDER
 STDLOGFILE  = "%s/all.log"         % LOGFOLDER
-CONNECTIONS = "%s/connections.db"  % WORKFOLDER
 
 if os.path.exists( _CONNECTOR ) and not os.path.exists( WORKFOLDER ):
     os.rename( _CONNECTOR, WORKFOLDER )

@@ -114,6 +114,20 @@ def quitApp():
     options.log.info ( "The MyConnector is forcibly closed (from cmdline)." )
     os.system( "pkill [my]?connector" )
 
+def getSaveConnections():
+    """List of save connections from files in WORKFOLDER"""
+    saves = []
+    for mycfile in os.listdir( WORKFOLDER ):
+        if Path( mycfile ).suffix.lower() == ".myc":
+            conf = ConfigParser()
+            conf.read( "%s/%s" % ( WORKFOLDER, mycfile ) )
+            save = [ conf[ "myconnector" ][ "name"     ],
+                     conf[ "myconnector" ][ "protocol" ],
+                     conf[ "myconnector" ][ "server"   ],
+                     mycfile ]
+            saves.append( save )
+    return saves
+
 class TrayIcon:
     """Класс, описывающий индикатор и меню в трее (пока только для MATE)
        Thanks: https://eax.me/python-gtk/"""
@@ -161,7 +175,7 @@ class Gui(Gtk.Application):
                            "FS"     : self.builder.get_object( "liststore_FS"     ) }
 
         self.liststore_connect = Gtk.ListStore(str, str, str, str)
-        self.getSavesFromDb()#запись из файла в ListStore
+        self.setSavesToListstore()
         self.filterConnections = self.liststore_connect.filter_new()
         self.filterConnections.set_visible_func(self.listFilter) #добавление фильтра для поиска
         self.currentFilter = ''
@@ -243,9 +257,8 @@ class Gui(Gtk.Application):
         """Инициализация списка сохраненных подключений в меню из трея"""
         exist = False
         for item in self.tray_submenu.get_children(): item.destroy() #очищение меню перед его заполнением
-        for connect in open( CONNECTIONS ):
+        for record in getSaveConnections():
             exist = True
-            record = connect.strip().split(':::')
             name, protocol = record[0], record[1]
             item = Gtk.ImageMenuItem(name)
             image = Gtk.Image()
@@ -261,7 +274,7 @@ class Gui(Gtk.Application):
 
     def onTrayConnect(self, menuitem, name):
         """Функция запуска сохраненного подключения из трея"""
-        fileCtor = options.filenameFromName(name)
+        fileCtor = self.filenameFromName( name )
         if fileCtor: connectFile(fileCtor)
 
     def optionEnabled(self, option):
@@ -968,19 +981,11 @@ class Gui(Gtk.Application):
             options.log.warning("Список серверов (servers.db) не найден, создан пустой.")
             self.createDb("servers.db")
 
-    def getSavesFromDb(self):
-        """Чтение списка сохраненных соединений из файла"""
+    def setSavesToListstore(self):
+        """Set the list of save connections to ListStore"""
         self.liststore_connect.clear()
-        try:
-            for connect in open( CONNECTIONS ):
-                try: #попытка прочитать строку с параметрами подключений
-                    record = list(connect.strip().split(':::'))
-                    self.liststore_connect.append(record)
-                except ValueError:
-                    options.log.warning("Неверный формат строки в файле connections.db; skipped")
-        except FileNotFoundError:
-            options.log.warning("Список подключений (connections.db) не найден, создан пустой.")
-            self.createDb("connections.db")
+        for record in getSaveConnections():
+            self.liststore_connect.append( record )
 
     def writeServerInDb(self, entry):
         """Запись сервера в файл со списком ранее посещенных серверов"""
@@ -1031,21 +1036,12 @@ class Gui(Gtk.Application):
     def saveFileCtor( self, name, protocol, server ):
         """Connect file (.myc) creation"""
         filename = ( "%s_%s.myc" % ( name.replace( " ", "_" ), protocol ) ).lower()
-        print ( "%s:::%s:::%s:::%s" % ( name, protocol, server, filename ),
-                file = open( CONNECTIONS, "a" ) )
         options.log.info( "Добавлено новое %s-подключение '%s' (host: %s)", protocol, name, server )
         return filename
 
     def resaveFileCtor(self, name, protocol, server):
         """Пересохранение подключения с тем же именем файла .myc"""
         fileName = self.fileCtor
-        dblines = open( CONNECTIONS ).readlines()
-        dbFile = open( CONNECTIONS, "w" )
-        for line in dblines:
-            if line.find(fileName) != -1:#если найдено совпадение с название файла коннекта
-                line = name + ':::' + protocol + ':::' + server + ':::' + fileName  + '\n'
-            dbFile.write(line)
-        dbFile.close()
         options.log.info("Внесены изменения в подключение '%s'", name)
         return fileName
 
@@ -1068,7 +1064,7 @@ class Gui(Gtk.Application):
         namesave = self.pref_builder.get_object( "entry_%s_name" % name ).get_text()
         if namesave == "":
             os.system( "zenity --error --text='\nУкажите имя подключения!' --no-wrap --icon-name=myconnector" )
-        elif options.searchName( namesave ) and not self.editClick:
+        elif self.searchName( namesave ) and not self.editClick:
             os.system( "zenity --error --text='\nПодключение с именем \"%s\" уже существует!' --no-wrap --icon-name=myconnector" % namesave )
         else:
             parameters[ "name"     ] = namesave
@@ -1085,7 +1081,7 @@ class Gui(Gtk.Application):
                 fileName = self.saveFileCtor( namesave, protocol, server )
                 self.initSubmenuTray()
             options.saveInFile( fileName, parameters )
-            self.getSavesFromDb()
+            self.setSavesToListstore()
             self.pref_window.destroy()
             self.editClick = False
             self.prefClick = False
@@ -1099,7 +1095,7 @@ class Gui(Gtk.Application):
         name = self.builder.get_object("entry_" + protocol + "_name").get_text()
         if name == "":
             os.system( "zenity --error --text='\nУкажите имя подключения!' --no-wrap --icon-name=myconnector" )
-        elif options.searchName(name) and not self.citrixEditClick and not self.webEditClick:
+        elif self.searchName( name ) and not self.citrixEditClick and not self.webEditClick:
             os.system( "zenity --error --text='\nПодключение с именем \"%s\" уже существует!' --no-wrap --icon-name=myconnector" % name )
         else:
             parameters = { "name"     : name,
@@ -1111,7 +1107,7 @@ class Gui(Gtk.Application):
                 fileName = self.saveFileCtor(name, protocol, server)
                 self.initSubmenuTray()
             options.saveInFile(fileName, parameters)
-            self.getSavesFromDb()
+            self.setSavesToListstore()
             self.citrixEditClick = False
             self.webEditClick = False
             self.changePage()
@@ -1217,20 +1213,12 @@ class Gui(Gtk.Application):
         response = dialog.run()
         if response == Gtk.ResponseType.YES:
             fileCtor = table[indexRow][3]
-            #удаление из базы подключений
-            with open( CONNECTIONS ) as fileDb:
-                tmpArr = fileDb.readlines()
-            endFile = open( CONNECTIONS , 'w')
-            for row in tmpArr:
-                if row.find(fileCtor) == -1:
-                    print(row.strip(), file = endFile)
-            endFile.close()
-            self.getSavesFromDb() #удаление из liststore
             parameters = options.loadFromFile(fileCtor)
             try: keyring.delete_password( parameters.get( "server", "" ), parameters.get( "username", "" ) )
             except: pass
             try: os.remove( "%s/%s" % ( WORKFOLDER, fileCtor ) )
             except: pass
+            self.setSavesToListstore()
             options.log.info("Подключение '%s' удалено!", name)
             self.initSubmenuTray()
         dialog.destroy()
@@ -1343,10 +1331,24 @@ class Gui(Gtk.Application):
         from myconnector.kiosk import Kiosk
         window = Kiosk()
 
+    def filenameFromName( self, name ):
+        """Определение имени конфигурационного файла подключения по имени подключения"""
+        for record in getSaveConnections():
+            if record[0] == name:
+                return record[3]
+        return False
+
+    def searchName( self, name ):
+        """Существует ли подключение с указанным именем"""
+        for record in getSaveConnections():
+            if record[0] == name:
+                return True
+        return False
+
 def f_main(pwd="/tmp/", name=""):
     """Main function"""
     if name:
-        fileCtor = options.filenameFromName(name)
+        fileCtor = Gui.filenameFromName( None, name )
         if fileCtor:
             options.log.info ("Запуск сохраненного подключения: " + name)
             connectFile(fileCtor)
