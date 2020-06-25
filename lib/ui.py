@@ -34,7 +34,7 @@ def viewStatus(bar, message):
     bar.push(bar.get_context_id ("statusbar"), message)
 
 def connectFile(filename, openFile = False):
-    """Connect to the server with file .ctor"""
+    """Connect to the server with file .myc"""
     try:
         parameters = options.loadFromFile(filename)
         if parameters != None:
@@ -65,9 +65,9 @@ def connectFileRemmina(filename):
     os.system('remmina --connect "%s" %s' % (filename, STD_TO_LOG))
 
 def openFile(filename):
-    """Open file connection (.ctor, .rdp or .remmina)"""
+    """Open file connection (.myc, .rdp or .remmina)"""
     ext = Path(filename).suffix.lower()
-    if ext == ".ctor":
+    if ext == ".myc":
         tmpname = 'tmp_' + os.path.basename(filename)
         os.system('cp "%s" "%s/%s"' % (filename, WORKFOLDER, tmpname))
         os.chdir( WORKFOLDER )
@@ -75,6 +75,8 @@ def openFile(filename):
         os.remove(tmpname)
     elif ext == ".rdp": connectFileRdp(filename)
     elif ext == ".remmina": connectFileRemmina(filename)
+    elif ext == ".ctor": os.system( "zenity --error --icon-name=myconnector --text=\"Устаревший формат файла\!\n"
+                                    "Воспользуйтесь конвертером ctor2myc или импортируйте через меню Файл -> Импорт\" --no-wrap" )
     else: os.system( "zenity --error --icon-name=myconnector --text='\nНеподдерживаемый тип файла!' --no-wrap" )
     options.log.info ("Открыт файл " + filename)
 
@@ -357,7 +359,7 @@ class Gui(Gtk.Application):
     def addFilters(self, dialog):
         filter_ctor = Gtk.FileFilter()
         filter_ctor.set_name( "Файлы подключений MyConnector" )
-        filter_ctor.add_pattern("*.ctor")
+        filter_ctor.add_pattern("*.myc")
         dialog.add_filter(filter_ctor)
         filter_rdp = Gtk.FileFilter()
         filter_rdp.set_name("Файлы подключений RDP (Windows)")
@@ -1026,15 +1028,15 @@ class Gui(Gtk.Application):
         window = options.Properties(self)
 
     def saveFileCtor( self, name, protocol, server ):
-        """Connect file (.ctor) creation"""
-        filename = ( "%s_%s.ctor" % ( name, protocol ) ).lower()
+        """Connect file (.myc) creation"""
+        filename = ( "%s_%s.myc" % ( name, protocol ) ).lower()
         print ( "%s:::%s:::%s:::%s" % ( name, protocol, server, filename ),
                 file = open( CONNECTIONS, "a" ) )
         options.log.info( "Добавлено новое %s-подключение '%s' (host: %s)", protocol, name, server )
         return filename
 
     def resaveFileCtor(self, name, protocol, server):
-        """Пересохранение подключения с тем же именем файла .ctor"""
+        """Пересохранение подключения с тем же именем файла .myc"""
         fileName = self.fileCtor
         dblines = open( CONNECTIONS ).readlines()
         dbFile = open( CONNECTIONS, "w" )
@@ -1148,7 +1150,7 @@ class Gui(Gtk.Application):
         table, indexRow = treeView.get_selection().get_selected()
         nameConnect, fileCtor = table[indexRow][0], table[indexRow][3]
         parameters = options.loadFromFile(fileCtor, self.window)
-        if parameters is not None: #если файл .ctor имеет верный формат
+        if parameters is not None: #если файл .myc имеет верный формат
             parameters[ "name" ] = nameConnect
             name = self.changeProgram( parameters[ "protocol" ], parameters.get( "program", "" ) ) #TODO - add try/except and log
             if name == "RDP1" and parameters.getboolean( "passwdsave" ):
@@ -1168,7 +1170,7 @@ class Gui(Gtk.Application):
         table, indexRow = treeView.get_selection().get_selected()
         nameConnect, self.fileCtor = table[indexRow][0], table[indexRow][3]
         parameters = options.loadFromFile(self.fileCtor, self.window)
-        if parameters is not None: #если файл .ctor имеет верный формат
+        if parameters is not None: #если файл .myc имеет верный формат
             protocol = parameters [ "protocol" ] #TODO - add try/except and log
             if protocol in [ "CITRIX", "WEB" ]:
                 self.onWCEdit( nameConnect, parameters [ "server" ], protocol ) #TODO - add try/except and log or parameters.get
@@ -1182,7 +1184,7 @@ class Gui(Gtk.Application):
         table, indexRow = treeView.get_selection().get_selected()
         nameConnect, self.fileCtor = table[indexRow][0], table[indexRow][3]
         parameters = options.loadFromFile(self.fileCtor, self.window)
-        if parameters is not None: #если файл .ctor имеет верный формат
+        if parameters is not None: #если файл .myc имеет верный формат
             protocol = parameters[ "protocol" ] #TODO - add try/except and log
             nameConnect = "%s (копия)" % nameConnect
             if protocol in [ "CITRIX", "WEB" ]:

@@ -23,7 +23,7 @@ Citrix, VMware и прочие).
 .PP
 \fB<имя_файла>\fR
 .RS 3
-возможно подключение с помощью файлов .ctor, .remmina и .rdp
+возможно подключение с помощью файлов .myc, .remmina и .rdp
 .RE
 .PP
 \fB--disable-kiosk\fR

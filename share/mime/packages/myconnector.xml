@@ -20,7 +20,7 @@ along with this program. If not, see http://www.gnu.org/licenses/.
      <sub-class-of type="text/plain"/>
      <comment>MyConnector connection file</comment>
      <comment xml:lang="ru">Файл подключения MyConnector</comment>
-     <glob pattern="*.ctor"/>
+     <glob pattern="*.myc"/>
      <icon name="myconnector"/>
    </mime-type>
 </mime-info>

@@ -37,7 +37,7 @@ class FakeLog():
 log = FakeLog()
 
 def saveInFile(filename, obj):
-    """Save connection parameters to file *.ctor)"""
+    """Save connection parameters to file *.myc)"""
     conf = ConfigParser()
     conf [ "myconnector" ] = obj
     with open( "%s/%s" % ( WORKFOLDER, filename ), "w" ) as fileCtor:
@@ -79,7 +79,7 @@ if enableLog:
         level = INFO)
 
 def importFromFile(filename, window = None):
-    """Импорт параметров из файла .ctor"""
+    """Import from files: .myc, .ctor, .rdp, .remmina"""
     try:
         dbfile = open(filename, 'rb')
         obj = load( dbfile )

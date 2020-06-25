@@ -32,7 +32,7 @@ def parseArgs():
     args.add_argument ('-v', '--version', action = 'version', help = "show the application version", version = about)
     args.add_argument ('-d', '--debug', action = 'store_true', default = False, help = "show log files online")
     args.add_argument ('-q', '--quit', action = 'store_true', default = False, help = "quit the application")
-    args.add_argument('name', type = str, nargs = '?', help = 'name of the file (.ctor, .remmina, .rdp) or saved connection')
+    args.add_argument('name', type = str, nargs = '?', help = 'name of the file (.myc, .remmina, .rdp) or saved connection')
     return args.parse_args()
 
 def main():
