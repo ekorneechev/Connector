@@ -985,7 +985,8 @@ class Gui(Gtk.Application):
     def writeServerInDb(self, entry):
         """Запись сервера в файл со списком ранее посещенных серверов"""
         db = open( "%s/servers.db" % WORKFOLDER , "r+" )
-        protocol, address = entry.get_name(),entry.get_text()
+        protocol = entry.get_name().replace( "1", "" )
+        address  = entry.get_text()
         record, thereis = protocol + ':::' + address, False
         for server in db:
             #проверка на наличие сервера в базе
