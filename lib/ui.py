@@ -1227,7 +1227,7 @@ class Gui(Gtk.Application):
             endFile.close()
             self.getSavesFromDb() #удаление из liststore
             parameters = options.loadFromFile(fileCtor)
-            try: keyring.delete_password(str(parameters[1]),str(parameters[2])) #удаление пароля из связки ключей
+            try: keyring.delete_password( parameters.get( "server", "" ), parameters.get( "username", "" ) )
             except: pass
             try: os.remove( "%s/%s" % ( WORKFOLDER, fileCtor ) )
             except: pass
