@@ -168,6 +168,8 @@ class Kiosk(Gtk.Window):
         _config['kiosk']['user'] = user
         if self.checkKioskAdduser.get_active() and not self.changeKioskOff.get_active():
             os.system( "xterm -e 'adduser %s'" % user )
+            os.system( "zenity --info --title='Connector Kiosk' --icon-name=connector"
+                       " --text='User \"%s\" will been created without password! Set, if need.'" % user )
         if self.changeKioskAll.get_active():
             mode = "1"
             enable_kiosk()
