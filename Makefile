@@ -50,6 +50,7 @@ install:
 	sed -i s#$(PREFIX)/applications#/usr/share/applications#g $(GLOBAL)
 	@if [ -n "$(DATESTAMP)" ]; then sed -i s#git#git.$(DATESTAMP)#g $(GLOBAL); fi
 	install -m755 bin/$(TARGET) $(PREFIX_BIN)
+	install -m755 bin/ctor2myc $(PREFIX_BIN)
 	cp -r share $(LOCAL)
 	mkdir -p $(PYTHON) $(MAN) $(ETC) $(KIOSK_DIR)
 	install -m644 lib/*.py $(PYTHON)
