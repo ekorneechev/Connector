@@ -179,13 +179,13 @@ class Kiosk(Gtk.Window):
                     shutil.copy( source, file )
                     shutil.chown ( file, user, user )
                 except FileNotFoundError as e:
-                    os.system( "zenity --error --title='Connector Kiosk' --text='%s\nFile did not copy to home dir!'" )
-                    file = source
+                    os.system( "zenity --error --title='Connector Kiosk' --icon-name=connector --text='%s'" % e )
+                    return 1
                 except shutil.SameFileError:
                     pass
                 enable_kiosk_ctor( file )
             else:
-                os.system( "zenity --error --title='Connector Kiosk' --text='No connection file specified!'" )
+                os.system( "zenity --error --title='Connector Kiosk' --icon-name=connector --text='No connection file specified!'" )
                 return 1
         if self.changeKioskWeb.get_active():
             mode = "3"
