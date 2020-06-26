@@ -43,7 +43,7 @@ def connectFile(filename, openFile = False):
             if program == "freerdp":
                 try: parameters[ "passwd" ] = keyring.get_password( parameters[ "server" ] ,parameters[ "username" ] )
                 except: pass
-            connect = definition( Gui.changeProgram( None, protocol, program ) )
+            connect = definition( changeProgram( protocol, program ) )
             connect.start(parameters)
     #except IndexError #TODO - after remmina rdp и vnc text format
     except KeyError:
@@ -127,6 +127,17 @@ def getSaveConnections():
                      mycfile ]
             saves.append( save )
     return saves
+
+def changeProgram( protocol, program = "" ):
+    """Return {RDP,VNC}1 if program not remmina"""
+    if program:
+        if program in [ "freerdp", "vncviewer" ]:
+            return "%s1" % protocol
+        else: return protocol
+    try:
+        if CONFIG[ protocol ] != "remmina" and protocol != "FS": protocol += "1"
+    except KeyError: pass
+    return protocol
 
 class TrayIcon:
     """Класс, описывающий индикатор и меню в трее (пока только для MATE)
@@ -394,14 +405,13 @@ class Gui(Gtk.Application):
         server = entry.get_text()
         protocol = entry.get_name()
         if server:
-            name = self.changeProgram( protocol )
+            name = changeProgram( protocol )
             connect = definition( name )
             if self.prefClick: #если нажата кнопка Доп. Параметры
                 parameters = self.applyPreferences( name )
                 parameters[ "server" ] = server
                 if name == "RDP1":
                     self.saveKeyring ( parameters.copy() )
-                    #_name = self.pref_builder.get_object("entry_" + self.changeProgram(protocol) + "_name" % name ).get_text()
             else:
                 try: parameters = CONFIGS[ name ]
                 except KeyError:
@@ -418,15 +428,6 @@ class Gui(Gtk.Application):
 
     def onCitrixPref(self, *args):
         Citrix.preferences()
-
-    def changeProgram(self, protocol, program = "" ):
-        #Функция, возвращающая RDP1 или VNC1 при параметрах, отличных от Реммины
-        if program in [ "freerdp", "vncviewer" ]:
-            protocol += "1"
-        try:
-            if CONFIG[ protocol ] != "remmina": protocol += "1"
-        except KeyError: pass
-        return protocol
 
     def onButtonPref(self, entry_server, nameConnect = ''):
         """Дополнительные параметры подключения к серверу.
@@ -446,9 +447,9 @@ class Gui(Gtk.Application):
         self.pref_builder.connect_signals(self)
         if 'loadParameters' in dir(entry_server): #если изменяется или копируется соединение, то загружаем параметры (фэйковый класс Entry)
             parameters = entry_server.loadParameters()
-            name = self.changeProgram( protocol, parameters.get( "program", "" ) )
+            name = changeProgram( protocol, parameters.get( "program", "" ) )
         else: #иначе (новое подключение), пытаемся загрузить дефолтные настройки
-            name = self.changeProgram( protocol )
+            name = changeProgram( protocol )
             try: parameters = CONFIGS[ name ]
             except KeyError:
                 try:
@@ -1149,7 +1150,7 @@ class Gui(Gtk.Application):
         parameters = options.loadFromFile(fileCtor, self.window)
         if parameters is not None: #если файл .myc имеет верный формат
             parameters[ "name" ] = nameConnect
-            name = self.changeProgram( parameters[ "protocol" ], parameters.get( "program", "" ) ) #TODO - add try/except and log
+            name = changeProgram( parameters[ "protocol" ], parameters.get( "program", "" ) ) #TODO - add try/except and log
             if name == "RDP1" and parameters.getboolean( "passwdsave" ):
                 parameters[ "passwd" ] = keyring.get_password( parameters[ "server" ] ,parameters[ "username" ] )
             viewStatus( self.statusbar, "Соединение с \"%s\"..." % nameConnect )
