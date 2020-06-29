@@ -7,6 +7,7 @@ from gi.repository import Gtk
 from configparser import ConfigParser
 from urllib.parse import unquote
 import shutil
+import pwd
 
 _kiosk_dir = "/usr/share/connector/kiosk"
 _webkiosk = "%s/connector-webkiosk" % _kiosk_dir
@@ -108,6 +109,15 @@ def config_init():
     with open( _kiosk_conf, 'w' ) as configfile:
         _config.write( configfile )
 
+def check_user( user ):
+    """User existence check"""
+    try:
+        pwd.getpwnam( user )
+    except KeyError:
+        os.system( "xterm -e 'adduser %s'" % user )
+        os.system( "zenity --info --title='Connector Kiosk' --icon-name=connector"
+                   " --text='User \"%s\" will been created without password! Set, if need.'" % user )
+
 class Kiosk(Gtk.Window):
     def __init__(self):
         """Window with settings of the mode KIOSK"""
@@ -130,7 +140,6 @@ class Kiosk(Gtk.Window):
         self.entryKioskUser = builder.get_object("entry_kiosk_user")
         self.checkKioskCtrl = builder.get_object("check_kiosk_safe")
         self.checkKioskAutologin = builder.get_object("check_kiosk_autologin")
-        self.checkKioskAdduser = builder.get_object("check_kiosk_adduser")
         box = builder.get_object("box")
         self.add(box)
         self.connect("delete-event", self.onClose)
@@ -166,10 +175,8 @@ class Kiosk(Gtk.Window):
             return 1
         if user == "": user = "kiosk"
         _config['kiosk']['user'] = user
-        if self.checkKioskAdduser.get_active() and not self.changeKioskOff.get_active():
-            os.system( "xterm -e 'adduser %s'" % user )
-            os.system( "zenity --info --title='Connector Kiosk' --icon-name=connector"
-                       " --text='User \"%s\" will been created without password! Set, if need.'" % user )
+        if not self.changeKioskOff.get_active():
+            check_user( user )
         if self.changeKioskAll.get_active():
             mode = "1"
             enable_kiosk()
