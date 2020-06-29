@@ -19,7 +19,7 @@ help:
 	@echo "... clean (сброс изменений в исходниках)"
 
 install:
-	apt-get remove connector -y
+	apt-get remove connector -y || /bin/true
 	sed -i s#/usr/share#$(PREFIX)#g source/* data/$(TARGET).desktop kiosk/*
 	sed -i s#/usr/bin/$(TARGET)#$(PREFIX_BIN)/$(TARGET)#g source/* data/$(TARGET).desktop kiosk/*
 	sed -i s#$(PREFIX)/applications#/usr/share/applications#g source/GLOBAL.py
