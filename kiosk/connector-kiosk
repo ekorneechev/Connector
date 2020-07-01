@@ -2,6 +2,8 @@
 
 . /usr/share/connector/kiosk/connector-kiosk-check
 
-${WM+$WM --replace &}
+if [ ! "x$WM" = "x" ]; then
+    $WM --replace &
+fi
 
 /usr/bin/connector $1
