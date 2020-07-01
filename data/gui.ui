@@ -478,7 +478,8 @@
                         <property name="sensitive">False</property>
                         <property name="can_focus">False</property>
                         <property name="tooltip_text" translatable="yes">Настройка режима КИОСК
-(доступно при наличии прав root и пакета connector-kiosk)</property>
+(доступно при наличии прав root, пакета connector-kiosk
+и одного из DM - LightDM или SDDM)</property>
                         <property name="label" translatable="yes">Режим КИОСК</property>
                         <signal name="activate" handler="onKiosk" swapped="no"/>
                       </object>

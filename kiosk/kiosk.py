@@ -16,12 +16,22 @@ _config = ConfigParser( interpolation = None )
 _ligthdm_conf = "/etc/lightdm/lightdm.conf"
 _lightdm_conf_dir = "%s.d" % _ligthdm_conf
 _autologin_conf = "%s/kiosk.conf" % _lightdm_conf_dir
+_sddm_conf = "/etc/X11/sddm/sddm.conf"
 _etc_dir = "/etc/kiosk"
 _true = ( "True", "true", "Yes", "yes" )
 
 def enabled():
     """Checking 'is root' and OS for access to settings"""
-    return (os.getuid() == 0) and (os.path.exists("/etc/altlinux-release"))
+    return os.getuid() == 0 and os.path.exists( "/etc/altlinux-release" ) and check_dm()
+
+def check_dm():
+    """Check DM"""
+    if os.path.exists( _ligthdm_conf ):
+        return "lightdm"
+    elif os.path.exists( _sddm_conf ):
+        return "sddm"
+    else:
+        return False
 
 def lightdm_clear_autologin():
     """Disable existing records for autologin-user"""
