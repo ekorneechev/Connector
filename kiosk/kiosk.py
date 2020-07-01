@@ -13,32 +13,36 @@ _kiosk_dir = "/usr/share/connector/kiosk"
 _webkiosk = "%s/connector-webkiosk" % _kiosk_dir
 _kiosk_conf = "/etc/connector/kiosk.conf"
 _config = ConfigParser( interpolation = None )
-_ligthdm_conf = "/etc/lightdm/lightdm.conf"
-_lightdm_conf_dir = "%s.d" % _ligthdm_conf
+_lightdm_conf = "/etc/lightdm/lightdm.conf"
+_lightdm_conf_dir = "%s.d" % _lightdm_conf
 _autologin_conf = "%s/kiosk.conf" % _lightdm_conf_dir
 _sddm_conf = "/etc/X11/sddm/sddm.conf"
 _etc_dir = "/etc/kiosk"
 _true = ( "True", "true", "Yes", "yes" )
 
-def enabled():
-    """Checking 'is root' and OS for access to settings"""
-    return os.getuid() == 0 and os.path.exists( "/etc/altlinux-release" ) and check_dm()
-
 def check_dm():
     """Check DM"""
-    if os.path.exists( _ligthdm_conf ):
+    if os.path.exists( _lightdm_conf ):
         return "lightdm"
     elif os.path.exists( _sddm_conf ):
         return "sddm"
     else:
         return False
+_DM = check_dm()
 
-def lightdm_clear_autologin():
+def enabled():
+    """Checking 'is-root', OS and DM for access to settings"""
+    return os.getuid() == 0 and os.path.exists( "/etc/altlinux-release" ) and _DM
+
+def dm_clear_autologin():
     """Disable existing records for autologin-user"""
-    clear_cmd = "sed -i \"s/^autologin-user.*/#autologin-user=/\""
-    os.system ("%s %s" % (clear_cmd, _ligthdm_conf))
-    if os.path.exists (_lightdm_conf_dir): os.system ("%s %s/*.conf 2>/dev/null" % (clear_cmd, _lightdm_conf_dir))
-    if os.path.exists (_autologin_conf): os.remove(_autologin_conf)
+    if _DM == "lightdm":
+        clear_cmd = "sed -i \"s/^autologin-user.*/#autologin-user=/\""
+        os.system ("%s %s" % (clear_cmd, _lightdm_conf))
+        if os.path.exists (_lightdm_conf_dir): os.system ("%s %s/*.conf 2>/dev/null" % (clear_cmd, _lightdm_conf_dir))
+        if os.path.exists (_autologin_conf): os.remove(_autologin_conf)
+    if _DM == "sddm":
+        os.system ( "sed -i s/^User.*/User=/ %s" % _sddm_conf )
 
 def load_kiosk_user():
     """Load username for KIOSK from the config file"""
@@ -48,9 +52,12 @@ def load_kiosk_user():
 
 def autologin_enable(username):
     """Enable autologin for the mode KIOSK"""
-    lightdm_clear_autologin()
-    with open (_autologin_conf, "w") as f:
-        print("[Seat:*]\nautologin-user=%s" % username, file = f)
+    dm_clear_autologin()
+    if _DM == "lightdm":
+        with open (_autologin_conf, "w") as f:
+            print("[Seat:*]\nautologin-user=%s" % username, file = f)
+    if _DM == "sddm":
+        os.system ( "sed -i s/^User.*/User=%s/ %s" % ( username, _sddm_conf ) )
 
 def create_kiosk_exec(username, shortcut):
     """Create executable file in X11 directory"""
@@ -68,7 +75,7 @@ def enable_kiosk( mode = "kiosk" ):
     if _config['kiosk']['autologin'] == "True":
         autologin_enable( username )
     else:
-        lightdm_clear_autologin()
+        dm_clear_autologin()
     shortcut = "connector-%s.desktop" % mode
     os.system ("install -m644 %s/%s %s/" % (_kiosk_dir, shortcut, _etc_dir))
     create_kiosk_exec(username, shortcut)
@@ -92,7 +99,7 @@ def enable_kiosk_web(url):
 
 def disable_kiosk():
     """Disable the mode KIOSK"""
-    lightdm_clear_autologin()
+    dm_clear_autologin()
     os.system( "rm -f /etc/X11/xsession.user.d/%s" % load_kiosk_user() )
     os.system( "rm -f %s/connector-*.desktop" % _etc_dir )
     os.system( "sed -i s/^mode.*/mode\ =\ 0/g %s" % _kiosk_conf )
