@@ -1,16 +1,10 @@
 #!/bin/bash
 
-# Checking avaiable chromium
-which chromium > /dev/null 2>&1
-if [ "$?" -eq 0 ]; then
-    KIOSK_COMMAND="chromium --kiosk --incognito"
-else
-    KIOSK_COMMAND="firefox --kiosk --private-window"
-fi
+. /usr/share/connector/kiosk/connector-kiosk-check
 
-# marco - default window manager in MATE.
-# You also may be try openbox, awesome and others WM.
-marco --replace &
+if [ ! "x$WM" = "x" ]; then
+    $WM --replace &
+fi
 
 while :
 do
