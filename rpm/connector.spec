@@ -22,6 +22,7 @@ Requires: remmina-plugins
 Requires: tigervnc
 Requires: xdg-utils
 Requires: xfreerdp
+Requires: zenity
 
 %define basedir %_datadir/%name
 
