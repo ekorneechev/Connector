@@ -1,5 +1,5 @@
 Name: connector
-Version: 1.9.5
+Version: 1.9.6
 Release: alt1
 
 Summary: Remote desktop chooser
@@ -82,6 +82,11 @@ install -pDm644 kiosk/%name-kiosk.man %buildroot%_man1dir/%name-kiosk.1
 %_man1dir/%name-kiosk.*
 
 %changelog
+* Mon Jul 06 2020 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.9.6-alt1
+- kiosk:
+ + added SDDM support
+ + 'root' is not allowed to use the mode
+
 * Tue Jun 23 2020 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.9.5-alt1
 - kiosk fixes
 
