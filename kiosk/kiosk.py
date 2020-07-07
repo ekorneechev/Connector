@@ -23,6 +23,7 @@ import os
 from gi.repository import Gtk
 from configparser import ConfigParser
 from urllib.parse import unquote
+import pwd
 from shutil import ( copy,
                      chown,
                      SameFileError )
@@ -34,19 +35,33 @@ _config = ConfigParser( interpolation = None )
 _ligthdm_conf = "/etc/lightdm/lightdm.conf"
 _lightdm_conf_dir = "%s.d" % _ligthdm_conf
 _autologin_conf = "%s/kiosk.conf" % _lightdm_conf_dir
+_sddm_conf = "/etc/X11/sddm/sddm.conf"
 _etc_dir = "/etc/kiosk"
 _true = ( "True", "true", "Yes", "yes" )
 
-def enabled():
-    """Checking 'is root' and OS for access to settings"""
-    return (os.getuid() == 0) and (os.path.exists("/etc/altlinux-release"))
+def check_dm():
+    """Check DM"""
+    if os.path.exists( _lightdm_conf ):
+        return "lightdm"
+    elif os.path.exists( _sddm_conf ):
+        return "sddm"
+    else:
+        return False
+_DM = check_dm()
 
-def lightdm_clear_autologin():
+def enabled():
+    """Checking 'is-root', OS and DM for access to settings"""
+    return os.getuid() == 0 and os.path.exists( "/etc/altlinux-release" ) and _DM
+
+def dm_clear_autologin():
     """Disable existing records for autologin-user"""
-    clear_cmd = "sed -i \"s/^autologin-user.*/#autologin-user=/\""
-    os.system ("%s %s" % (clear_cmd, _ligthdm_conf))
-    if os.path.exists (_lightdm_conf_dir): os.system ("%s %s/*.conf 2>/dev/null" % (clear_cmd, _lightdm_conf_dir))
-    if os.path.exists (_autologin_conf): os.remove(_autologin_conf)
+    if _DM == "lightdm":
+        clear_cmd = "sed -i \"s/^autologin-user.*/#autologin-user=/\""
+        os.system ("%s %s" % (clear_cmd, _lightdm_conf))
+        if os.path.exists (_lightdm_conf_dir): os.system ("%s %s/*.conf 2>/dev/null" % (clear_cmd, _lightdm_conf_dir))
+        if os.path.exists (_autologin_conf): os.remove(_autologin_conf)
+    if _DM == "sddm":
+        os.system ( "sed -i s/^User.*/User=/ %s" % _sddm_conf )
 
 def load_kiosk_user():
     """Load username for KIOSK from the config file"""
@@ -56,9 +71,12 @@ def load_kiosk_user():
 
 def autologin_enable(username):
     """Enable autologin for the mode KIOSK"""
-    lightdm_clear_autologin()
-    with open (_autologin_conf, "w") as f:
-        print("[Seat:*]\nautologin-user=%s" % username, file = f)
+    dm_clear_autologin()
+    if _DM == "lightdm":
+        with open (_autologin_conf, "w") as f:
+            print("[Seat:*]\nautologin-user=%s" % username, file = f)
+    if _DM == "sddm":
+        os.system ( "sed -i s/^User.*/User=%s/ %s" % ( username, _sddm_conf ) )
 
 def create_kiosk_exec(username, shortcut):
     """Create executable file in X11 directory"""
@@ -76,7 +94,7 @@ def enable_kiosk( mode = "kiosk" ):
     if _config['kiosk']['autologin'] == "True":
         autologin_enable( username )
     else:
-        lightdm_clear_autologin()
+        dm_clear_autologin()
     shortcut = "myconnector-%s.desktop" % mode
     os.system ("install -m644 %s/%s %s/" % (_kiosk_dir, shortcut, _etc_dir))
     create_kiosk_exec(username, shortcut)
@@ -100,7 +118,7 @@ def enable_kiosk_web(url):
 
 def disable_kiosk():
     """Disable the mode KIOSK"""
-    lightdm_clear_autologin()
+    dm_clear_autologin()
     os.system( "rm -f /etc/X11/xsession.user.d/%s" % load_kiosk_user() )
     os.system( "rm -f %s/myconnector-*.desktop" % _etc_dir )
     os.system( "sed -i s/^mode.*/mode\ =\ 0/g %s" % _kiosk_conf )
@@ -127,6 +145,15 @@ def config_init():
     with open( _kiosk_conf, 'w' ) as configfile:
         _config.write( configfile )
 
+def check_user( user ):
+    """User existence check"""
+    try:
+        pwd.getpwnam( user )
+    except KeyError:
+        os.system( "xterm -e 'adduser %s'" % user )
+        os.system( "zenity --info --title='Connector Kiosk' --icon-name=connector"
+                   " --text='User \"%s\" will been created without password! Set, if need.'" % user )
+
 class Kiosk(Gtk.Window):
     def __init__(self):
         """Window with settings of the mode KIOSK"""
@@ -149,7 +176,6 @@ class Kiosk(Gtk.Window):
         self.entryKioskUser = builder.get_object("entry_kiosk_user")
         self.checkKioskCtrl = builder.get_object("check_kiosk_safe")
         self.checkKioskAutologin = builder.get_object("check_kiosk_autologin")
-        self.checkKioskAdduser = builder.get_object("check_kiosk_adduser")
         box = builder.get_object("box")
         self.add(box)
         self.connect("delete-event", self.onClose)
@@ -180,10 +206,13 @@ class Kiosk(Gtk.Window):
         disable_kiosk()
         _config['kiosk']['autologin'] = str( self.checkKioskAutologin.get_active() )
         user = self.entryKioskUser.get_text()
+        if user == "root":
+            os.system( "zenity --error --title='Connector Kiosk' --icon-name=connector --text='Root is not allowed to use the mode!'" )
+            return 1
         if user == "": user = "kiosk"
         _config['kiosk']['user'] = user
-        if self.checkKioskAdduser.get_active() and not self.changeKioskOff.get_active():
-            os.system( "xterm -e 'adduser %s'" % user )
+        if not self.changeKioskOff.get_active():
+            check_user( user )
         if self.changeKioskAll.get_active():
             mode = "1"
             enable_kiosk()
@@ -198,8 +227,8 @@ class Kiosk(Gtk.Window):
                     copy( source, file )
                     chown( file, user, user )
                 except FileNotFoundError as e:
-                    os.system( "zenity --error --title='MyConnector Kiosk' --icon-name=myconnector--text='%s\nFile did not copy to home dir!'" )
-                    file = source
+                    os.system( "zenity --error --title='MyConnector Kiosk' --icon-name=myconnector --text='%s'" % e )
+                    return 1
                 except SameFileError:
                     pass
                 enable_kiosk_ctor( file )

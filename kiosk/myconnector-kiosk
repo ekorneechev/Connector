@@ -17,5 +17,11 @@
 
 # marco - default window manager in MATE.
 # You also may be try openbox, awesome and others WM.
-marco --replace &
+
+. /usr/share/myconnector/kiosk/myconnector-kiosk-check
+
+if [ ! "x$WM" = "x" ]; then
+    $WM --replace &
+fi
+
 /usr/bin/myconnector $1

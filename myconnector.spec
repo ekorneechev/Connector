@@ -24,6 +24,7 @@ Requires: remmina-plugins
 Requires: tigervnc
 Requires: xdg-utils
 Requires: xfreerdp
+Requires: zenity
 
 Provides: connector = %EVR
 Conflicts: connector < %EVR
@@ -61,6 +62,7 @@ mkdir -p %buildroot%basedir/kiosk/
 install -pm644 kiosk/kiosk.py %buildroot%python3_sitelibdir/%name
 install -pm644 kiosk/kiosk.ui %buildroot%basedir/ui
 install -pm755 kiosk/myconnector-*kiosk %buildroot%basedir/kiosk
+install -pm755 kiosk/myconnector-kiosk-check %buildroot%basedir/kiosk
 install -pm755 kiosk/*.desktop %buildroot%basedir/kiosk
 install -pDm600 kiosk/kiosk.conf %buildroot%_sysconfdir/%name/kiosk.conf
 install -pDm644 kiosk/%name-kiosk.man %buildroot%_man1dir/%name-kiosk.1
@@ -90,8 +92,21 @@ install -pDm644 kiosk/%name-kiosk.man %buildroot%_man1dir/%name-kiosk.1
 %_man1dir/%name-kiosk.*
 
 %changelog
-* Tue Jun 16 2020 Evgeniy Korneechev <ekorneechev@altlinux.org> 2.0.rc0-alt1
+* Mon Jul 06 2020 Evgeniy Korneechev <ekorneechev@altlinux.org> 2.0.rc0-alt1
 - MyConnector 2.0
+
+* Mon Jul 06 2020 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.9.6-alt1
+- kiosk:
+ + added SDDM support
+ + 'root' is not allowed to use the mode
+
+* Tue Jun 23 2020 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.9.5-alt1
+- kiosk fixes
+
+* Wed Jun 17 2020 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.9.4-alt1
+- kiosk:
+ + fixed disable from cmdline
+ + fixed webkiosk for firefox < 71
 
 * Tue Jun 09 2020 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.9.3-alt1
 - new stable version

@@ -59,6 +59,7 @@ install:
 	install -m644 kiosk/$(TARGET)-kiosk.man $(MAN)/$(TARGET)-kiosk.1
 	install -m644 kiosk/*.desktop $(KIOSK_DIR)
 	install -m755 kiosk/$(TARGET)-*kiosk $(KIOSK_DIR)
+	install -m755 kiosk/$(TARGET)-kiosk-check $(KIOSK_DIR)
 	install -m644 kiosk/kiosk.py $(PYTHON)
 	install -m644 kiosk/*.ui $(BASE)/ui
 	@if [ ! -f $(ETC)/$(KIOSK) ]; then install -m600 kiosk/$(KIOSK) $(ETC); fi
