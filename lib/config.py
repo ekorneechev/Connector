@@ -26,15 +26,12 @@ VERSION     = "2.0.rc0"
 HOMEFOLDER  = os.getenv( "HOME" )
 MAINFOLDER  = "/usr/share/myconnector"
 WORKFOLDER  = "%s/.myconnector"    % HOMEFOLDER
-_CONNECTOR  = "%s/.connector"      % HOMEFOLDER
 ICONFOLDER  = "%s/icons"           % MAINFOLDER
 UIFOLDER    = "%s/ui"              % MAINFOLDER
 LOGFOLDER   = "%s/logs"            % WORKFOLDER
 LOGFILE     = "%s/myconnector.log" % LOGFOLDER
 STDLOGFILE  = "%s/all.log"         % LOGFOLDER
 
-if os.path.exists( _CONNECTOR ) and not os.path.exists( WORKFOLDER ):
-    os.rename( _CONNECTOR, WORKFOLDER )
 os.system( "mkdir -p %s" % LOGFOLDER )
 
 DEFAULT    = { "rdp"            : "freerdp",
