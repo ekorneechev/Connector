@@ -32,8 +32,8 @@ _kiosk_dir = "/usr/share/myconnector/kiosk"
 _webkiosk = "%s/myconnector-webkiosk" % _kiosk_dir
 _kiosk_conf = "/etc/myconnector/kiosk.conf"
 _config = ConfigParser( interpolation = None )
-_ligthdm_conf = "/etc/lightdm/lightdm.conf"
-_lightdm_conf_dir = "%s.d" % _ligthdm_conf
+_lightdm_conf = "/etc/lightdm/lightdm.conf"
+_lightdm_conf_dir = "%s.d" % _lightdm_conf
 _autologin_conf = "%s/kiosk.conf" % _lightdm_conf_dir
 _sddm_conf = "/etc/X11/sddm/sddm.conf"
 _etc_dir = "/etc/kiosk"
@@ -151,7 +151,7 @@ def check_user( user ):
         pwd.getpwnam( user )
     except KeyError:
         os.system( "xterm -e 'adduser %s'" % user )
-        os.system( "zenity --info --title='Connector Kiosk' --icon-name=connector"
+        os.system( "zenity --info --title='MyConnector Kiosk' --icon-name=myconnector"
                    " --text='User \"%s\" will been created without password! Set, if need.'" % user )
 
 class Kiosk(Gtk.Window):
@@ -207,7 +207,7 @@ class Kiosk(Gtk.Window):
         _config['kiosk']['autologin'] = str( self.checkKioskAutologin.get_active() )
         user = self.entryKioskUser.get_text()
         if user == "root":
-            os.system( "zenity --error --title='Connector Kiosk' --icon-name=connector --text='Root is not allowed to use the mode!'" )
+            os.system( "zenity --error --title='MyConnector Kiosk' --icon-name=myconnector --text='Root is not allowed to use the mode!'" )
             return 1
         if user == "": user = "kiosk"
         _config['kiosk']['user'] = user

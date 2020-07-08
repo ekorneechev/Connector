@@ -3,7 +3,7 @@
 .SH NAME
 myconnector-kiosk \- Mode KIOSK for 'MyConnector'
 .SH DESCRIPTION
-Configuration file for Connector mode KIOSK - /etc/myconnector/kiosk.conf
+Configuration file for MyConnector mode KIOSK - /etc/myconnector/kiosk.conf
 
 .RE
 \fBmode\fR - one of the following operating modes:
