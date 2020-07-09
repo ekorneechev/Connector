@@ -47,7 +47,7 @@ def connectFile(filename, openFile = False):
             connect.start(parameters)
     #except IndexError #TODO - after remmina rdp и vnc text format
     except KeyError:
-        e = "Ошибка в файле %s: адрес сервера не указан (параметр server)." % filename.replace( "tmp_", "" )
+        e = "Ошибка в файле %s: не указан протокол подключения (параметр protocol)." % filename.replace( "tmp_", "" )
         options.log.exception ( e )
         os.system( "zenity --error --icon-name=myconnector --text='\n%s' --no-wrap" % e )
 
@@ -67,6 +67,7 @@ def connectFileRemmina(filename):
 def openFile(filename):
     """Open file connection (.myc, .rdp or .remmina)"""
     ext = Path(filename).suffix.lower()
+    options.log.info ( "Открывается файл %s" % filename )
     if ext == ".myc":
         tmpname = 'tmp_' + os.path.basename(filename)
         os.system('cp "%s" "%s/%s"' % (filename, WORKFOLDER, tmpname))
@@ -78,7 +79,6 @@ def openFile(filename):
     elif ext == ".ctor": os.system( "zenity --error --icon-name=myconnector --text=\"Устаревший формат файла\!\n"
                                     "Воспользуйтесь конвертером ctor2myc или импортируйте через меню Файл -> Импорт\" --no-wrap" )
     else: os.system( "zenity --error --icon-name=myconnector --text='\nНеподдерживаемый тип файла!' --no-wrap" )
-    options.log.info ("Открыт файл " + filename)
 
 def initSignal(gui):
     """Функция обработки сигналов SIGHUP, SIGINT и SIGTERM
