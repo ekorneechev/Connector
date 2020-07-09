@@ -121,11 +121,13 @@ def getSaveConnections():
         if Path( mycfile ).suffix.lower() == ".myc":
             conf = ConfigParser()
             conf.read( "%s/%s" % ( WORKFOLDER, mycfile ) )
-            save = [ conf[ "myconnector" ][ "name"     ],
-                     conf[ "myconnector" ][ "protocol" ],
-                     conf[ "myconnector" ][ "server"   ],
-                     mycfile ]
-            saves.append( save )
+            try:
+                save = [ conf[ "myconnector" ][ "name"     ],
+                         conf[ "myconnector" ][ "protocol" ],
+                         conf[ "myconnector" ][ "server"   ],
+                         mycfile ]
+                saves.append( save )
+            except KeyError: pass
     return saves
 
 def changeProgram( protocol, program = "" ):
