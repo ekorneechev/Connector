@@ -989,8 +989,7 @@ class Gui(Gtk.Application):
                 try: #попытка прочитать протокол/сервер
                     protocol, address = server.strip().split(':::')
                     self.liststore[protocol].append([address])
-                except ValueError:
-                    options.log.warning("Неверный формат строки в файле servers.db; skipped")
+                except: pass
         except FileNotFoundError:
             options.log.warning("Список серверов (servers.db) не найден, создан пустой.")
             self.createDb("servers.db")
