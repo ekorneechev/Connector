@@ -45,7 +45,12 @@ def connectFile(filename, openFile = False):
                 except: pass
             connect = definition( changeProgram( protocol, program ) )
             if connect:
-                connect.start( parameters )
+                if parameters.get( "server", "" ):
+                    connect.start( parameters )
+                else:
+                    msg = "Не указан сервер для подключения!"
+                    options.log.error( msg )
+                    os.system( "zenity --error --icon-name=myconnector --text='\n%s' --no-wrap" % msg )
             else:
                 msg = "Неподдерживаемый протокол: %s" % protocol
                 options.log.error( msg )
