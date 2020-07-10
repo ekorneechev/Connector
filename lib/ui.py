@@ -1351,19 +1351,19 @@ class Gui(Gtk.Application):
 def f_main(pwd="/tmp/", name=""):
     """Main function"""
     if name:
-        fileCtor = Gui.filenameFromName( None, name )
-        if fileCtor:
-            options.log.info ("Запуск сохраненного подключения: " + name)
-            connectFile(fileCtor)
+        #fileCtor = Gui.filenameFromName( None, name )
+        #if fileCtor:
+        #    options.log.info ("Запуск сохраненного подключения: " + name)
+        #    connectFile(fileCtor)
+        #else:
+        if name[0] == "'": name = name.replace( "'", "" ) #for KIOSK (mode=2)
+        #if not os.path.isfile(name): name = pwd + name
+        if os.path.isfile( name ): openFile( name )
         else:
-            if name[0] == "'": name = name.replace( "'", "" ) #for KIOSK (mode=2)
-            if not os.path.isfile(name): name = pwd + name
-            if os.path.isfile(name): openFile(name)
-            else:
-                error = "Проверьте правильность имени сохраненного подключения или файла с параметрами"
-                options.log.error ( "%s: %s" % ( error, name ) )
-                os.system( "zenity --error --icon-name=myconnector --text='\n%s!' --no-wrap" % error )
-                exit (1)
+            msg = "\"%s\": нет такого файла!" % name
+            options.log.error ( msg )
+            os.system( "zenity --error --icon-name=myconnector --text='\n%s' --no-wrap" % msg )
+            exit( 1 )
     else:
         gui = Gui()
         initSignal(gui)
