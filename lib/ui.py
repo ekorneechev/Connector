@@ -44,7 +44,12 @@ def connectFile(filename, openFile = False):
                 try: parameters[ "passwd" ] = keyring.get_password( parameters[ "server" ] ,parameters[ "username" ] )
                 except: pass
             connect = definition( changeProgram( protocol, program ) )
-            connect.start(parameters)
+            if connect:
+                connect.start( parameters )
+            else:
+                msg = "Неподдерживаемый протокол: %s" % protocol
+                options.log.error( msg )
+                os.system( "zenity --error --icon-name=myconnector --text='\n%s' --no-wrap" % msg )
     #except IndexError #TODO - after remmina rdp и vnc text format
     except KeyError:
         e = "Ошибка в файле %s: не указан протокол подключения (параметр protocol)." % filename.replace( "tmp_", "" )

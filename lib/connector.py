@@ -422,7 +422,10 @@ def definition( name ):
                   "WEB"    : Web(),
                   "SPICE"  : SpiceRemmina(),
                   "FS"     : FileServer() }
-    return protocols[ name ]
+    if name in protocols:
+        return protocols[ name ]
+    else:
+        return None
 
 def citrixCheck():
     """Фунцкия проверки наличия в системе Citrix Receiver"""
