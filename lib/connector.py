@@ -40,6 +40,8 @@ class VncViewer:
             command = 'vncviewer ' + args
             server = args
         else:
+            for key in CONFIGS[ "VNC1" ]:
+                if not key in args: args[ key ] = CONFIGS[ "VNC1" ][ key ]
             server = args[ "server" ]
             command = 'vncviewer %s ' % server
             if args.get( "fullscreen", "False" ) == "True": command += "-fullscreen "
@@ -55,6 +57,8 @@ class XFreeRdp:
         if freerdpCheck():
             freerdpVersion = freerdpCheckVersion()
             if freerdpVersion > "1.2":
+                for key in CONFIGS[ "RDP1" ]:
+                    if not key in args: args[ key ] = CONFIGS[ "RDP1" ][ key ]
                 server = args [ "server" ]
                 username = args.get( "username" , "" )
                 command = "xfreerdp /v:%s /t:'%s'" % ( server, args.get( "name", server ) )
@@ -137,9 +141,11 @@ class Remmina:
         self.cfg[ "name" ] += args.get( "name" , server )
         f = open( "%s/%s" % ( WORKFOLDER, self.f_name ), "w" )
         f.write( "[remmina]\n" )
+        protocol = args[ "protocol" ].upper()
         for key in self.cfg.keys():
-            self.cfg[ key ] = args.get( key, self.cfg[ key ] )
-            if key == "protocol": self.cfg[ key ] = self.cfg[ key ].upper()
+            default = CONFIGS[ protocol ][ key ] if key in CONFIGS[ protocol ] else self.cfg[ key ]
+            self.cfg[ key ] = args.get( key, default )
+            if key == "protocol": self.cfg[ key ] = protocol
             print( key, self.cfg[ key ], sep = "=", file = f )
         f.close()
 
