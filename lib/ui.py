@@ -38,7 +38,7 @@ def connectFile(filename, openFile = False):
     try:
         parameters = options.loadFromFile(filename)
         if parameters != None:
-            protocol = parameters[ "protocol" ] #TODO - add try/except and log
+            protocol = parameters[ "protocol" ]
             program  = parameters.get( "program", "" )
             if program == "freerdp":
                 try: parameters[ "passwd" ] = keyring.get_password( parameters[ "server" ] ,parameters[ "username" ] )
@@ -123,7 +123,7 @@ def getSaveConnections():
             conf.read( "%s/%s" % ( WORKFOLDER, mycfile ) )
             try:
                 save = [ conf[ "myconnector" ][ "name"     ],
-                         conf[ "myconnector" ][ "protocol" ],
+                         conf[ "myconnector" ][ "protocol" ].upper(),
                          conf[ "myconnector" ][ "server"   ],
                          mycfile ]
                 saves.append( save )
@@ -132,6 +132,7 @@ def getSaveConnections():
 
 def changeProgram( protocol, program = "" ):
     """Return {RDP,VNC}1 if program not remmina"""
+    protocol = protocol.upper()
     if program:
         if program in [ "freerdp", "vncviewer" ]:
             return "%s1" % protocol
@@ -369,7 +370,7 @@ class Gui(Gtk.Application):
             filename = dialog.get_filename()
             parameters = options.importFromFile(filename)
             if parameters != None:
-                protocol = parameters [ "protocol" ] #TODO - add try/except and log
+                protocol = parameters [ "protocol" ].upper() #TODO - add try/except and log
                 if protocol in [ "CITRIX", "WEB" ]:
                     self.onWCEdit( "", parameters[ "server" ], protocol ) #TODO - add try/except and log
                 else:
@@ -1135,16 +1136,6 @@ class Gui(Gtk.Application):
         protocol = item.get_name()
         self.onWCEdit('','', protocol, False)
 
-    def correctProgram(self, parameters):
-        """Checking the correct program for connect"""
-        if parameters[ "protocol" ] == "VNC":
-            if CONFIG[ "vnc" ] == parameters.get( "program",  CONFIG[ "vnc" ] ): return True
-            else: return False
-        if parameters[ "protocol" ] == 'RDP':
-            if CONFIG[ "rdp" ] == parameters.get( "program",  CONFIG[ "rdp" ] ): return True
-            else: return False
-        return True
-
     def onSaveConnect(self, treeView, *args):
         """Установка подключения по двойному щелчку на элементе списка"""
         table, indexRow = treeView.get_selection().get_selected()
@@ -1171,7 +1162,7 @@ class Gui(Gtk.Application):
         nameConnect, self.fileCtor = table[indexRow][0], table[indexRow][3]
         parameters = options.loadFromFile(self.fileCtor, self.window)
         if parameters is not None: #если файл .myc имеет верный формат
-            protocol = parameters [ "protocol" ] #TODO - add try/except and log
+            protocol = parameters [ "protocol" ].upper() #TODO - add try/except and log
             if protocol in [ "CITRIX", "WEB" ]:
                 self.onWCEdit( nameConnect, parameters [ "server" ], protocol ) #TODO - add try/except and log or parameters.get
             else:
@@ -1185,7 +1176,7 @@ class Gui(Gtk.Application):
         nameConnect, self.fileCtor = table[indexRow][0], table[indexRow][3]
         parameters = options.loadFromFile(self.fileCtor, self.window)
         if parameters is not None: #если файл .myc имеет верный формат
-            protocol = parameters[ "protocol" ] #TODO - add try/except and log
+            protocol = parameters[ "protocol" ].upper() #TODO - add try/except and log
             nameConnect = "%s (копия)" % nameConnect
             if protocol in [ "CITRIX", "WEB" ]:
                 self.onWCEdit( nameConnect, parameters[ "server" ], protocol, False ) #TODO - add try/except and log or parameters.get

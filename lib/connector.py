@@ -139,6 +139,7 @@ class Remmina:
         f.write( "[remmina]\n" )
         for key in self.cfg.keys():
             self.cfg[ key ] = args.get( key, self.cfg[ key ] )
+            if key == "protocol": self.cfg[ key ] = self.cfg[ key ].upper()
             print( key, self.cfg[ key ], sep = "=", file = f )
         f.close()
 
