@@ -31,6 +31,7 @@ def parseArgs():
                            epilog = "Do not specify parameters for starting the GUI.\n\nCopyright (C) 2014-2020 Evgeniy Korneechev <ek@myconnector.ru>")
     args.add_argument( "-c", "--connection", help = "name of the saved connection" )
     args.add_argument( "-f", "--file", help = "name of the file (.myc, .remmina, .rdp)" )
+    args.add_argument( "-l", "--list", action = "store_true", default = False, help = "list of the saved connections" )
     args.add_argument( "--disable-kiosk", action = "store_true", default = False, help = "disable the mode KIOSK" )
     args.add_argument( "-v", "--version", action = "version", help = "show the application version", version = about)
     args.add_argument( "-d", "--debug", action = "store_true", default = False, help = "show log files online")
@@ -59,6 +60,12 @@ def main():
     if args.debug:
         from .ui import startDebug as debug
         debug()
+    if args.list:
+        from .ui import getSaveConnections as list_connections
+        _list = list_connections()
+        for record in _list:
+            print( '"%s"' % record[ 0 ] )
+        exit( 0 )
     if args.connection:
         from .ui import connect
         connect( args.connection )
