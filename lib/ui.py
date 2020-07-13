@@ -1348,16 +1348,22 @@ class Gui(Gtk.Application):
                 return True
         return False
 
-def f_main(pwd="/tmp/", name=""):
+def connect( name ):
+    """Start connection by name"""
+    myc_file = Gui.filenameFromName( None, name )
+    if myc_file:
+        options.log.info( "Запуск сохраненного подключения: %s" % name )
+        connectFile( myc_file )
+    else:
+        msg = "\"%s\": подключение с таким именем не найдено!" % name
+        options.log.error ( msg )
+        os.system( "zenity --error --icon-name=myconnector --text='\n%s' --no-wrap" % msg )
+        exit( 1 )
+
+def main( name ):
     """Main function"""
     if name:
-        #fileCtor = Gui.filenameFromName( None, name )
-        #if fileCtor:
-        #    options.log.info ("Запуск сохраненного подключения: " + name)
-        #    connectFile(fileCtor)
-        #else:
         if name[0] == "'": name = name.replace( "'", "" ) #for KIOSK (mode=2)
-        #if not os.path.isfile(name): name = pwd + name
         if os.path.isfile( name ): openFile( name )
         else:
             msg = "\"%s\": нет такого файла!" % name
@@ -1370,5 +1376,3 @@ def f_main(pwd="/tmp/", name=""):
         gui.run(None)
         options.checkLogFile(LOGFILE); options.checkLogFile(STDLOGFILE)
 
-if __name__ == '__main__':
-    f_main()

@@ -60,11 +60,12 @@ def main():
         from .ui import startDebug as debug
         debug()
     if args.connection:
-        pass
+        from .ui import connect
+        connect( args.connection )
         exit( 0 )
     file = ""
     if args.file or args.name:
         file = args.file if args.file else args.name
-    from .ui import f_main as run
-    run ( name = file )
+    from .ui import main as run
+    run ( file )
 
