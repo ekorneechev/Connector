@@ -20,7 +20,8 @@ import os
 import signal
 from subprocess import ( check_output,
                          Popen )
-from configparser import ConfigParser
+from configparser import ( ConfigParser,
+                           ParsingError )
 
 VERSION     = "2.0.rc0"
 HOMEFOLDER  = os.getenv( "HOME" )

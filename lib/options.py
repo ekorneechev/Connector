@@ -59,8 +59,14 @@ def loadFromFile(filename, window = None):
         return None
     except ( UnpicklingError, EOFError ):
         conf = ConfigParser()
-        conf.read( "%s/%s" % ( WORKFOLDER, filename ) )
-        return conf[ "myconnector" ]
+        try:
+            conf.read( "%s/%s" % ( WORKFOLDER, filename ) )
+            try:
+                return conf[ "myconnector" ]
+            except KeyError:
+                msg_error( "Файл \"%s\" не содержит секцию [myconnector]." % filename.replace( "tmp_", "" ), log.exception )
+        except ParsingError:
+            msg_error( "Файл \"%s\" содержит ошибки." % filename.replace( "tmp_", "" ), log.exception )
     except:
         dialog = Gtk.MessageDialog(window, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK,
                  "Файл %s\nимеет неверный формат" % filename.replace("tmp_",""))
@@ -87,8 +93,14 @@ def importFromFile(filename, window = None):
         return obj
     except ( UnpicklingError, EOFError ):
         conf = ConfigParser()
-        conf.read( filename )
-        return conf[ "myconnector" ]
+        try:
+            conf.read( filename )
+            try:
+                return conf[ "myconnector" ]
+            except KeyError:
+                msg_error( "Файл \"%s\" не содержит секцию [myconnector]." % filename.replace( "tmp_", "" ), log.exception )
+        except ParsingError:
+            msg_error( "Файл \"%s\" содержит ошибки." % filename.replace( "tmp_", "" ), log.exception )
     except:
         dialog = Gtk.MessageDialog(window, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK,
                  "Файл " + filename + "\nимеет неверный формат")
