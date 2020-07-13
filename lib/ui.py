@@ -1300,9 +1300,7 @@ class Gui(Gtk.Application):
         for key in args.keys():
             CONFIGS[ name ][ key ] = args[ key ]
         config_save()
-        dialog = Gtk.MessageDialog( self.pref_window, 0, Gtk.MessageType.INFO, Gtk.ButtonsType.OK, "Настройки по умолчанию сохранены." )
-        response = dialog.run()
-        dialog.destroy()
+        viewStatus( self.statusbar, "Настройки по умолчанию сохранены" )
 
     def saveKeyring(self, parameters):
         """Сохранение пароля в связу ключей и отметки об этом в файл подключения"""
