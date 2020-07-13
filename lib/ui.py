@@ -48,18 +48,13 @@ def connectFile(filename, openFile = False):
                 if parameters.get( "server", "" ):
                     connect.start( parameters )
                 else:
-                    msg = "Не указан сервер для подключения!"
-                    options.log.error( msg )
-                    os.system( "zenity --error --icon-name=myconnector --text='\n%s' --no-wrap" % msg )
+                    options.msg_error( "Не указан сервер для подключения!", options.log.error )
             else:
-                msg = "Неподдерживаемый протокол: %s" % protocol
-                options.log.error( msg )
-                os.system( "zenity --error --icon-name=myconnector --text='\n%s' --no-wrap" % msg )
+                options.msg_error( "Неподдерживаемый протокол: %s" % protocol, options.log.error )
     #except IndexError #TODO - after remmina rdp и vnc text format
     except KeyError:
-        e = "Ошибка в файле %s: не указан протокол подключения (параметр protocol)." % filename.replace( "tmp_", "" )
-        options.log.exception ( e )
-        os.system( "zenity --error --icon-name=myconnector --text='\n%s' --no-wrap" % e )
+        options.msg_error( "Ошибка в файле %s: не указан протокол подключения (параметр protocol)."
+                           % filename.replace( "tmp_", "" ),  options.log.exception )
 
 def connectFileRdp(filename):
     """Connect to the server with file .rdp"""
@@ -1355,9 +1350,7 @@ def connect( name ):
         options.log.info( "Запуск сохраненного подключения: %s" % name )
         connectFile( myc_file )
     else:
-        msg = "\"%s\": подключение с таким именем не найдено!" % name
-        options.log.error ( msg )
-        os.system( "zenity --error --icon-name=myconnector --text='\n%s' --no-wrap" % msg )
+        options.msg_error( "\"%s\": подключение с таким именем не найдено!" % name, options.log.error )
         exit( 1 )
 
 def main( name ):
@@ -1366,9 +1359,7 @@ def main( name ):
         if name[0] == "'": name = name.replace( "'", "" ) #for KIOSK (mode=2)
         if os.path.isfile( name ): openFile( name )
         else:
-            msg = "\"%s\": нет такого файла!" % name
-            options.log.error ( msg )
-            os.system( "zenity --error --icon-name=myconnector --text='\n%s' --no-wrap" % msg )
+            options.msg_error( "\"%s\": нет такого файла!" % name, options.log.error )
             exit( 1 )
     else:
         gui = Gui()

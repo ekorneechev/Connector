@@ -128,6 +128,11 @@ def checkLogFile(filePath):
             msg = "Логфайл %s превысил допустимый размер (10Мб), упакован в архив %s" % (filename, os.path.basename(tarName))
             os.system( 'echo "--- INFO       %s  %s" >> %s' % ( str( dt ), msg, LOGFILE ))
 
+def msg_error( msg, func ):
+    """Message for logging and show in UI (zenity)"""
+    func ( msg )
+    os.system( "zenity --error --icon-name=myconnector --text='\n%s' --no-wrap" % msg )
+
 class Properties(Gtk.Window):
     def __init__(self, mainWindow):
         Gtk.Window.__init__(self, title = "Параметры программы")

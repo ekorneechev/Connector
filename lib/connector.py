@@ -53,7 +53,6 @@ class VncViewer:
 class XFreeRdp:
     """Класс для настройки RDP-соединения через xfreerdp"""
     def start(self, args):
-        _link = "http://wiki.myconnector.ru/install#freerdp"
         if freerdpCheck():
             freerdpVersion = freerdpCheckVersion()
             if freerdpVersion > "1.2":
@@ -122,12 +121,9 @@ class XFreeRdp:
                         signal.signal( signal.SIGCHLD, signal.SIG_IGN ) # without zombie
                         Popen( [ MAINFOLDER + "/myconnector-check-xfreerdp-errors" ] )
             else:
-                options.log.warning ("FreeRDP version below 1.2!")
-                os.system( "zenity --error --text='\nУстановленная версия FreeRDP (%s) не соответствует минимальным требованиям,"
-                          " подробности <a href=\"%s\">здесь</a>!' --no-wrap --icon-name=myconnector" % ( freerdpVersion, _link ))
+                options.msg_error ( "Версия FreeRDP (%s) не соответствует минимальным требованиям!" % freerdpVersion, options.log.warning )
         else:
-            options.log.warning ("FreeRDP is not installed!")
-            os.system( "zenity --error --text='\nFreeRDP не установлен, подробности <a href=\"%s\">здесь</a>!' --no-wrap --icon-name=myconnector" % _link )
+            options.msg_error ( "FreeRDP не установлен!", options.log.warning )
 
 class Remmina:
     """Connection via Remmina"""
@@ -341,13 +337,11 @@ class Vmware:
                 if args.get( "password", "" ): command += ' -p %s' % args[ "password" ]
             os.system(command + STD_TO_LOG)
         else:
-            options.log.warning ("VMware Horizon Client is not installed!")
-            os.system( "zenity --error --text='\nVMware Horizon Client не установлен!' --no-wrap --icon-name=myconnector" )
+            options.msg_error ( "VMware Horizon Client не установлен!", options.log.warning )
 
 def _missCitrix():
     """Message for user, if Citrix Receiver not installed"""
-    options.log.warning ("Citrix Receiver is not installed!")
-    os.system( "zenity --error --text='\nCitrix Receiver не установлен!' --no-wrap --icon-name=myconnector" )
+    options.msg_error ( "Citrix Receiver/Workspace не установлен!", options.log.warning )
 
 class Citrix:
     """Класс для настройки ICA-соединения к Citrix-серверу"""
