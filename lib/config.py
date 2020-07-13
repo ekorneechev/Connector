@@ -52,7 +52,7 @@ Type=Application
 Terminal=false
 Icon=myconnector
 """
-EXEC = "/usr/bin/myconnector "
+EXEC = "/usr/bin/myconnector -c "
 
 #Определение путей до папок пользователя
 _dirs = {}
