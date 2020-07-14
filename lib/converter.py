@@ -22,6 +22,22 @@ from argparse import ( ArgumentParser,
 _version = "0.1"
 _info    = "Converter from .ctor (outdated format Connector) to new .myc"
 
+def rdp_import( filename ):
+    """Get parameters from RDP file"""
+    return None
+
+def remmina_import( filename ):
+    """Get parameters from remmina file"""
+    return None
+
+def ctor_import( filename ):
+    """Get parameters from ctor (old format) file"""
+    return None
+
+def myc_save( filename ):
+    """Save imported parameters to myc file"""
+    result = ctor_import( filename )
+
 def parseArgs():
     """Description of the command line argument parser"""
     args = ArgumentParser( prog = "ctor2myc", formatter_class = RawTextHelpFormatter, description = _info )
@@ -32,4 +48,5 @@ def parseArgs():
 
 def main():
     args = parseArgs()
-    print ( args.filename )
+    myc_save( args.filename )
+

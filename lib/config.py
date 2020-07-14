@@ -22,6 +22,7 @@ from subprocess import ( check_output,
                          Popen )
 from configparser import ( ConfigParser,
                            ParsingError )
+from pathlib import Path
 
 VERSION     = "2.0.rc0"
 HOMEFOLDER  = os.getenv( "HOME" )
