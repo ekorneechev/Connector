@@ -373,7 +373,7 @@ class Gui(Gtk.Application):
         response = dialog.run()
         if response == Gtk.ResponseType.OK:
             filename = dialog.get_filename()
-            parameters = options.importFromFile(filename)
+            parameters = options.loadFromFile( filename, _import = True )
             if parameters != None:
                 protocol = parameters [ "protocol" ].upper() #TODO - add try/except and log
                 if protocol in [ "CITRIX", "WEB" ]:

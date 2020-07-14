@@ -19,8 +19,6 @@
 from gi import require_version
 require_version('Gtk', '3.0')
 
-from pickle import ( load,
-                     UnpicklingError )
 import myconnector.ui
 from gi.repository import Gtk
 from myconnector.config import *
@@ -43,36 +41,29 @@ def saveInFile(filename, obj):
     with open( "%s/%s" % ( WORKFOLDER, filename ), "w" ) as fileCtor:
         conf.write( fileCtor )
 
-def loadFromFile(filename, window = None):
-    """Загрузка сохраненных параметров из файла"""
+def loadFromFile( filename, window = None, _import = False ):
+    """Load/import parameters from file .myc or import from .ctor, .rdp, .remmina"""
+    if _import:
+        #TODO import from .ctor, .rdp, .remmina (by converter)
+        filepath = filename
+    else:
+        filepath = "%s/%s" % ( WORKFOLDER, filename )
+        filename = filename.replace( "tmp_", "" )
+        if not os.path.isfile( filepath ):
+            msg_error( "Файл \"%s\" c сохраненными настройками не найден." % filename, log.exception )
+            return None
     try:
-        dbfile = open( "%s/%s" % ( WORKFOLDER, filename ), "rb" )
-        obj = load( dbfile )
-        dbfile.close()
-        return obj
-    except FileNotFoundError:
-        dialog = Gtk.MessageDialog(window, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK,
-                "Файл " + filename + "\nc сохраненными настройками не найден")
-        response = dialog.run()
-        dialog.destroy()
-        log.exception("Файл %s c сохраненными настройками не найден! Подробнее:", filename)
-        return None
-    except ( UnpicklingError, EOFError ):
         conf = ConfigParser()
         try:
-            conf.read( "%s/%s" % ( WORKFOLDER, filename ) )
+            conf.read( filepath )
             try:
                 return conf[ "myconnector" ]
             except KeyError:
-                msg_error( "Файл \"%s\" не содержит секцию [myconnector]." % filename.replace( "tmp_", "" ), log.exception )
+                msg_error( "Файл \"%s\" не содержит секцию [myconnector]." % filename, log.exception )
         except ParsingError:
-            msg_error( "Файл \"%s\" содержит ошибки." % filename.replace( "tmp_", "" ), log.exception )
+            msg_error( "Файл \"%s\" содержит ошибки." % filename, log.exception )
     except:
-        dialog = Gtk.MessageDialog(window, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK,
-                 "Файл %s\nимеет неверный формат" % filename.replace("tmp_",""))
-        response = dialog.run()
-        dialog.destroy()
-        log.exception("Файл %s имеет неверный формат! Подробнее:", filename.replace("tmp_",""))
+        msg_error( "Файл \"%s\" имеет неверный формат!" % filename, log.exception )
         return None
 
 try: enableLog = CONFIG.getboolean( 'log' )
@@ -83,31 +74,6 @@ if enableLog:
         filename = LOGFILE,
         format = "--- %(levelname)-10s %(asctime)s --- %(message)s",
         level = INFO)
-
-def importFromFile(filename, window = None):
-    """Import from files: .myc, .ctor, .rdp, .remmina"""
-    try:
-        dbfile = open(filename, 'rb')
-        obj = load( dbfile )
-        dbfile.close()
-        return obj
-    except ( UnpicklingError, EOFError ):
-        conf = ConfigParser()
-        try:
-            conf.read( filename )
-            try:
-                return conf[ "myconnector" ]
-            except KeyError:
-                msg_error( "Файл \"%s\" не содержит секцию [myconnector]." % filename.replace( "tmp_", "" ), log.exception )
-        except ParsingError:
-            msg_error( "Файл \"%s\" содержит ошибки." % filename.replace( "tmp_", "" ), log.exception )
-    except:
-        dialog = Gtk.MessageDialog(window, 0, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK,
-                 "Файл " + filename + "\nимеет неверный формат")
-        response = dialog.run()
-        dialog.destroy()
-        log.exception("Файл %s имеет неверный формат! Подробнее:", filename)
-        return None
 
 def searchSshUser(query):
     """Определение имени пользователя и сервера
