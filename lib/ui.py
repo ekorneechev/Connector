@@ -147,6 +147,9 @@ def changeProgram( protocol, program = "" ):
     except KeyError: pass
     return protocol
 
+def protocol_not_found( name ):
+    options.msg_error( "Конфигурационный файл подключения \"%s\" поврежден - отсутствует протокол!" % name, options.log.exception )
+
 class TrayIcon:
     """Класс, описывающий индикатор и меню в трее (пока только для MATE)
        Thanks: https://eax.me/python-gtk/"""
@@ -375,7 +378,12 @@ class Gui(Gtk.Application):
             filename = dialog.get_filename()
             parameters = options.loadFromFile( filename, _import = True )
             if parameters != None:
-                protocol = parameters [ "protocol" ].upper() #TODO - add try/except and log
+                try:
+                    protocol = parameters [ "protocol" ].upper()
+                except KeyError:
+                    protocol_not_found( filename )
+                    dialog.destroy()
+                    return None
                 if protocol in [ "CITRIX", "WEB" ]:
                     self.onWCEdit( "", parameters[ "server" ], protocol ) #TODO - add try/except and log
                 else:
@@ -1147,7 +1155,11 @@ class Gui(Gtk.Application):
         parameters = options.loadFromFile(fileCtor, self.window)
         if parameters is not None: #если файл .myc имеет верный формат
             parameters[ "name" ] = nameConnect
-            name = changeProgram( parameters[ "protocol" ], parameters.get( "program", "" ) ) #TODO - add try/except and log
+            try:
+                name = changeProgram( parameters[ "protocol" ], parameters.get( "program", "" ) )
+            except KeyError:
+                protocol_not_found( nameConnect )
+                return None
             if name == "RDP1" and parameters.getboolean( "passwdsave" ):
                 parameters[ "passwd" ] = keyring.get_password( parameters[ "server" ] ,parameters[ "username" ] )
             viewStatus( self.statusbar, "Соединение с \"%s\"..." % nameConnect )
@@ -1166,7 +1178,11 @@ class Gui(Gtk.Application):
         nameConnect, self.fileCtor = table[indexRow][0], table[indexRow][3]
         parameters = options.loadFromFile(self.fileCtor, self.window)
         if parameters is not None: #если файл .myc имеет верный формат
-            protocol = parameters [ "protocol" ].upper() #TODO - add try/except and log
+            try:
+                protocol = parameters [ "protocol" ].upper()
+            except KeyError:
+                protocol_not_found( nameConnect )
+                return None
             if protocol in [ "CITRIX", "WEB" ]:
                 self.onWCEdit( nameConnect, parameters [ "server" ], protocol ) #TODO - add try/except and log or parameters.get
             else:
@@ -1180,7 +1196,11 @@ class Gui(Gtk.Application):
         nameConnect, self.fileCtor = table[indexRow][0], table[indexRow][3]
         parameters = options.loadFromFile(self.fileCtor, self.window)
         if parameters is not None: #если файл .myc имеет верный формат
-            protocol = parameters[ "protocol" ].upper() #TODO - add try/except and log
+            try:
+                protocol = parameters[ "protocol" ].upper()
+            except KeyError:
+                protocol_not_found( nameConnect )
+                return None
             nameConnect = "%s (копия)" % nameConnect
             if protocol in [ "CITRIX", "WEB" ]:
                 self.onWCEdit( nameConnect, parameters[ "server" ], protocol, False ) #TODO - add try/except and log or parameters.get
