@@ -389,8 +389,15 @@ class FileServer:
                 command = _exec + args + '"'
                 server = args
         else:
-            try: protocol, server = args[ "server" ].split("://") #TODO try/except
-            except: server = args[ "server" ]; protocol = args[ "type" ] #TODO try/except
+            try:
+                protocol, server = args[ "server" ].split("://")
+            except:
+                server = args[ "server" ]
+                try:
+                    protocol = args[ "type" ]
+                except KeyError:
+                    options.msg_error( "Конфигурационный файл FS-подключения поврежден - отсутствует тип!", options.log.exception )
+                    return 1
             command = _exec + protocol + "://"
             if args.get( "domain" , "" ): command += "%s;" % args[ "domain" ]
             if args.get( "user" , ""   ): command += "%s@" % args[ "user" ]
