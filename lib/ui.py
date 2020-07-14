@@ -150,6 +150,9 @@ def changeProgram( protocol, program = "" ):
 def protocol_not_found( name ):
     options.msg_error( "Конфигурационный файл подключения \"%s\" поврежден - отсутствует протокол!" % name, options.log.exception )
 
+def server_not_found( name ):
+    options.msg_error( "Конфигурационный файл подключения \"%s\" поврежден - отсутствует адрес сервера!" % name, options.log.exception )
+
 class TrayIcon:
     """Класс, описывающий индикатор и меню в трее (пока только для MATE)
        Thanks: https://eax.me/python-gtk/"""
@@ -385,7 +388,12 @@ class Gui(Gtk.Application):
                     dialog.destroy()
                     return None
                 if protocol in [ "CITRIX", "WEB" ]:
-                    self.onWCEdit( "", parameters[ "server" ], protocol ) #TODO - add try/except and log
+                    try:
+                        self.onWCEdit( "", parameters[ "server" ], protocol )
+                    except KeyError:
+                        server_not_found( filename )
+                        dialog.destroy()
+                        return None
                 else:
                     analogEntry = self.AnalogEntry( protocol, parameters )
                     self.onButtonPref( analogEntry, parameters.get( "name", "" ) )
@@ -1160,8 +1168,12 @@ class Gui(Gtk.Application):
             except KeyError:
                 protocol_not_found( nameConnect )
                 return None
+            server = parameters.get( "server", "" )
+            if not server:
+                server_not_found( nameConnect )
+                return None
             if name == "RDP1" and parameters.getboolean( "passwdsave" ):
-                parameters[ "passwd" ] = keyring.get_password( parameters[ "server" ] ,parameters[ "username" ] )
+                parameters[ "passwd" ] = keyring.get_password( server, parameters.get( "username", "" ) )
             viewStatus( self.statusbar, "Соединение с \"%s\"..." % nameConnect )
             connect = definition( name )
             connect.start( parameters )
@@ -1184,7 +1196,11 @@ class Gui(Gtk.Application):
                 protocol_not_found( nameConnect )
                 return None
             if protocol in [ "CITRIX", "WEB" ]:
-                self.onWCEdit( nameConnect, parameters [ "server" ], protocol ) #TODO - add try/except and log or parameters.get
+                try:
+                    self.onWCEdit( nameConnect, parameters [ "server" ], protocol )
+                except KeyError:
+                    server_not_found( nameConnect )
+                    return None
             else:
                 self.editClick = True
                 analogEntry = self.AnalogEntry( protocol, parameters )
@@ -1203,7 +1219,11 @@ class Gui(Gtk.Application):
                 return None
             nameConnect = "%s (копия)" % nameConnect
             if protocol in [ "CITRIX", "WEB" ]:
-                self.onWCEdit( nameConnect, parameters[ "server" ], protocol, False ) #TODO - add try/except and log or parameters.get
+                try:
+                    self.onWCEdit( nameConnect, parameters[ "server" ], protocol, False )
+                except KeyError:
+                    server_not_found( nameConnect )
+                    return None
             else:
                 analogEntry = self.AnalogEntry( protocol, parameters )
                 self.onButtonPref( analogEntry, nameConnect )
