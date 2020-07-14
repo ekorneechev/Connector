@@ -51,7 +51,6 @@ def connectFile(filename, openFile = False):
                     options.msg_error( "Не указан сервер для подключения!", options.log.error )
             else:
                 options.msg_error( "Неподдерживаемый протокол: %s" % protocol, options.log.error )
-    #except IndexError #TODO - after remmina rdp и vnc text format
     except KeyError:
         options.msg_error( "Ошибка в файле %s: не указан протокол подключения (параметр protocol)."
                            % filename.replace( "tmp_", "" ),  options.log.exception )
@@ -1237,7 +1236,7 @@ class Gui(Gtk.Application):
         def get_name( self ):
             return self.name
         def get_text( self ):
-            return self.parameters[ "server" ]  #TODO - add try/except and log
+            return self.parameters[ "server" ]
         def loadParameters( self ):
             return self.parameters
 
