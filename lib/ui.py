@@ -80,9 +80,9 @@ def openFile(filename):
         os.remove(tmpname)
     elif ext == ".rdp": connectFileRdp(filename)
     elif ext == ".remmina": connectFileRemmina(filename)
-    elif ext == ".ctor": os.system( "zenity --error --icon-name=myconnector --text=\"Устаревший формат файла\!\n"
-                                    "Воспользуйтесь конвертером ctor2myc или импортируйте через меню Файл -> Импорт\" --no-wrap" )
-    else: os.system( "zenity --error --icon-name=myconnector --text='\nНеподдерживаемый тип файла!' --no-wrap" )
+    elif ext == ".ctor":
+        options.msg_error( "Устаревший формат файла!\nВоспользуйтесь конвертером ctor2myc или импортируйте через меню Файл -> Импорт", options.log.error )
+    else: options.msg_error( "Неподдерживаемый тип файла!", options.log.error )
 
 def initSignal(gui):
     """Функция обработки сигналов SIGHUP, SIGINT и SIGTERM
