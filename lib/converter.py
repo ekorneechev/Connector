@@ -18,6 +18,9 @@
 
 from argparse import ( ArgumentParser,
                        RawTextHelpFormatter )
+from configparser import ( ConfigParser,
+                           ParsingError )
+from myconnector.options import log
 
 _version = "0.1"
 _info    = "Converter from .ctor (outdated format Connector) to new .myc"
@@ -28,7 +31,18 @@ def rdp_import( filename ):
 
 def remmina_import( filename ):
     """Get parameters from remmina file"""
-    return None
+    conf = ConfigParser()
+    try:
+        conf.read( filename )
+        try:
+            conf[ "remmina" ][ "program" ] = "remmina"
+            return conf[ "remmina" ]
+        except KeyError:
+            log.exception( "Файл \"%s\" не содержит секцию [remmina]." % filename )
+            return None
+    except ParsingError:
+        log.exception( "Файл \"%s\" содержит ошибки." % filename )
+        return None
 
 def ctor_import( filename ):
     """Get parameters from ctor (old format) file"""
