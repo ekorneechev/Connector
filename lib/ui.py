@@ -1239,7 +1239,10 @@ class Gui(Gtk.Application):
         def get_name( self ):
             return self.name
         def get_text( self ):
-            return self.parameters[ "server" ]
+            try:
+                return self.parameters[ "server" ]
+            except KeyError:
+                return ""
         def loadParameters( self ):
             return self.parameters
 
