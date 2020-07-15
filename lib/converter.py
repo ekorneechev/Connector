@@ -21,13 +21,35 @@ from argparse import ( ArgumentParser,
 from configparser import ( ConfigParser,
                            ParsingError )
 from myconnector.connector import options
+from os.path import basename
+from re import sub
 
 _version = "0.1"
 _info    = "Converter from .ctor (outdated format Connector) to new .myc"
 
 def rdp_import( filename ):
     """Get parameters from RDP file"""
-    return None
+    #TODO Fix if Unicode/Windows
+    tmpconf = "/tmp/%s" % basename( filename )
+    tmpfile = open( tmpconf, "w" )
+    print( "[rdp]", file = tmpfile )
+    with open( filename, "r", errors = "ignore" ) as f:
+        for line in f:
+             print( sub( ":.*:", "=", line.strip() ), file = tmpfile )
+    tmpfile.close()
+    conf = ConfigParser()
+    try:
+        conf.read( tmpconf )
+        try:
+            conf[ "rdp" ][ "program"  ] = "freerdp"
+            conf[ "rdp" ][ "protocol" ] = "RDP"
+            return conf[ "rdp" ]
+        except KeyError:
+            options.log.exception( "Файл \"%s\" не содержит секцию [rdp]." % filename )
+            return None
+    except ParsingError:
+        options.log.exception( "Файл \"%s\" содержит ошибки." % filename )
+        return None
 
 def remmina_import( filename ):
     """Get parameters from remmina file"""
