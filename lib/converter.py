@@ -20,7 +20,7 @@ from argparse import ( ArgumentParser,
                        RawTextHelpFormatter )
 from configparser import ( ConfigParser,
                            ParsingError )
-from myconnector.options import log
+from myconnector.connector import options
 
 _version = "0.1"
 _info    = "Converter from .ctor (outdated format Connector) to new .myc"
@@ -38,10 +38,10 @@ def remmina_import( filename ):
             conf[ "remmina" ][ "program" ] = "remmina"
             return conf[ "remmina" ]
         except KeyError:
-            log.exception( "Файл \"%s\" не содержит секцию [remmina]." % filename )
+            options.log.exception( "Файл \"%s\" не содержит секцию [remmina]." % filename )
             return None
     except ParsingError:
-        log.exception( "Файл \"%s\" содержит ошибки." % filename )
+        options.log.exception( "Файл \"%s\" содержит ошибки." % filename )
         return None
 
 def ctor_import( filename ):
