@@ -41,12 +41,17 @@ def rdp_import( filename ):
     try:
         conf.read( tmpconf )
         try:
-            conf[ "rdp" ][ "program"  ] = "freerdp"
-            conf[ "rdp" ][ "protocol" ] = "RDP"
-            return conf[ "rdp" ]
+            config = conf[ "rdp" ]
         except KeyError:
             options.log.exception( "Файл \"%s\" не содержит секцию [rdp]." % filename )
             return None
+        config[ "program"    ] = "freerdp"
+        config[ "protocol"   ] = "RDP"
+        config[ "fullscreen" ] = "True"
+        config[ "server"     ] = config.get( "full address"    , "" )
+        config[ "gserver"    ] = config.get( "gatewayhostname" , "" )
+        config[ "printers"   ] = str( config.getboolean( "redirectprinters" ) )
+        return config
     except ParsingError:
         options.log.exception( "Файл \"%s\" содержит ошибки." % filename )
         return None
