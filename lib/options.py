@@ -25,7 +25,6 @@ from myconnector.config import *
 from logging import ( getLogger,
                       basicConfig,
                       INFO )
-
 class FakeLog():
     def info (self, *args, **kwargs): pass
     def error (self, *args, **kwargs): pass
@@ -44,8 +43,24 @@ def saveInFile(filename, obj):
 def loadFromFile( filename, window = None, _import = False ):
     """Load/import parameters from file .myc or import from .ctor, .rdp, .remmina"""
     if _import:
-        #TODO import from .ctor, .rdp, .remmina (by converter)
-        filepath = filename
+        from myconnector.converter import ( ctor_import,
+                                            remmina_import,
+                                            rdp_import )
+        ext = Path( filename ).suffix.lower()
+        result = False
+        if ext == ".ctor":
+            result = ctor_import( filename )
+        if ext == ".remmina":
+            result = remmina_import( filename )
+        if ext in [ ".rdp", ".rdpx" ]:
+            result = rdp_import( filename )
+        if result == None:
+            msg_error( "Импорт из файла \"%s\" не удался!" % filename, log.error )
+            return None
+        elif result:
+            return result
+        else:
+            filepath = filename
     else:
         filepath = "%s/%s" % ( WORKFOLDER, filename )
         filename = filename.replace( "tmp_", "" )

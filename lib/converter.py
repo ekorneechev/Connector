@@ -18,9 +18,66 @@
 
 from argparse import ( ArgumentParser,
                        RawTextHelpFormatter )
+from configparser import ( ConfigParser,
+                           ParsingError )
+from myconnector.connector import options
+from os.path import basename
+from re import sub
 
 _version = "0.1"
 _info    = "Converter from .ctor (outdated format Connector) to new .myc"
+
+def rdp_import( filename ):
+    """Get parameters from RDP file"""
+    #TODO Fix if Unicode/Windows
+    tmpconf = "/tmp/%s" % basename( filename )
+    tmpfile = open( tmpconf, "w" )
+    print( "[rdp]", file = tmpfile )
+    with open( filename, "r", errors = "ignore" ) as f:
+        for line in f:
+             print( sub( ":.*:", "=", line.strip() ), file = tmpfile )
+    tmpfile.close()
+    conf = ConfigParser()
+    try:
+        conf.read( tmpconf )
+        try:
+            config = conf[ "rdp" ]
+        except KeyError:
+            options.log.exception( "Файл \"%s\" не содержит секцию [rdp]." % filename )
+            return None
+        config[ "program"    ] = "freerdp"
+        config[ "protocol"   ] = "RDP"
+        config[ "fullscreen" ] = "True"
+        config[ "server"     ] = config.get( "full address"    , "" )
+        config[ "gserver"    ] = config.get( "gatewayhostname" , "" )
+        config[ "printers"   ] = str( config.getboolean( "redirectprinters" ) )
+        return config
+    except ParsingError:
+        options.log.exception( "Файл \"%s\" содержит ошибки." % filename )
+        return None
+
+def remmina_import( filename ):
+    """Get parameters from remmina file"""
+    conf = ConfigParser()
+    try:
+        conf.read( filename )
+        try:
+            conf[ "remmina" ][ "program" ] = "remmina"
+            return conf[ "remmina" ]
+        except KeyError:
+            options.log.exception( "Файл \"%s\" не содержит секцию [remmina]." % filename )
+            return None
+    except ParsingError:
+        options.log.exception( "Файл \"%s\" содержит ошибки." % filename )
+        return None
+
+def ctor_import( filename ):
+    """Get parameters from ctor (old format) file"""
+    return None
+
+def myc_save( filename ):
+    """Save imported parameters to myc file"""
+    result = ctor_import( filename )
 
 def parseArgs():
     """Description of the command line argument parser"""
@@ -32,4 +89,5 @@ def parseArgs():
 
 def main():
     args = parseArgs()
-    print ( args.filename )
+    myc_save( args.filename )
+

@@ -26,7 +26,6 @@ from gi.repository import ( Gtk,
                             Gio )
 from myconnector.connector import *
 from myconnector.config import *
-from pathlib import Path
 
 def viewStatus(bar, message):
     """Функция отображения происходящих действий в строке состояния"""
@@ -404,10 +403,14 @@ class Gui(Gtk.Application):
         dialog.destroy()
 
     def addFilters(self, dialog):
+        filter_myc = Gtk.FileFilter()
+        filter_myc.set_name( "Файлы подключений MyConnector" )
+        filter_myc.add_pattern( "*.myc" )
+        dialog.add_filter( filter_myc )
         filter_ctor = Gtk.FileFilter()
-        filter_ctor.set_name( "Файлы подключений MyConnector" )
-        filter_ctor.add_pattern("*.myc")
-        dialog.add_filter(filter_ctor)
+        filter_ctor.set_name( "Файлы подключений Connector" )
+        filter_ctor.add_pattern( "*.ctor" )
+        dialog.add_filter( filter_ctor )
         filter_rdp = Gtk.FileFilter()
         filter_rdp.set_name("Файлы подключений RDP (Windows)")
         filter_rdp.add_pattern("*.rdp")
@@ -1236,7 +1239,10 @@ class Gui(Gtk.Application):
         def get_name( self ):
             return self.name
         def get_text( self ):
-            return self.parameters[ "server" ]
+            try:
+                return self.parameters[ "server" ]
+            except KeyError:
+                return ""
         def loadParameters( self ):
             return self.parameters
 
