@@ -48,10 +48,26 @@ def rdp_import( filename ):
         config[ "program"    ] = "freerdp"
         config[ "protocol"   ] = "RDP"
         config[ "fullscreen" ] = "True"
+        config[ "desktop"    ] = config[ "downloads" ] = config[ "documents" ]= "True" if config.get( "drivestoredirect", "" ) else "False"
         config[ "username"   ] = config.get( "username"    , "" ).replace( "\\", "\\\\" )
         config[ "server"     ] = config.get( "full address"    , "" )
         config[ "gserver"    ] = config.get( "gatewayhostname" , "" )
-        config[ "printers"   ] = str( config.getboolean( "redirectprinters" ) )
+        config[ "color"      ] = config.get( "session bpp" , "" )
+        config[ "gserver"    ] = config.get( "gatewayhostname" , "" )
+        config[ "usb"        ] = "True"  if config.get( "devicestoredirect", "" ) else "False"
+        config[ "sound"      ] = "True"  if config.get( "audiomode", "2" ) == "0" else "False"
+        config[ "printers"   ] = "True"  if config.getboolean( "redirectprinters" ) else "False"
+        config[ "smartcards" ] = "True"  if config.getboolean( "redirectsmartcards" ) else "False"
+        config[ "clipboard"  ] = "True"  if config.getboolean( "redirectclipboard" ) else "False"
+        config[ "reconnect"  ] = "True"  if config.getboolean( "autoreconnection enabled" )  else "False"
+        config[ "microphone" ] = "True"  if config.getboolean( "audiocapturemode" )  else "False"
+        config[ "multimon"   ] = "True"  if config.getboolean( "use multimon" )  else "False"
+        config[ "fonts"      ] = "True"  if config.getboolean( "allow font smoothing" )  else "False"
+        config[ "aero"       ] = "True"  if config.getboolean( "allow desktop composition" )  else "False"
+        config[ "theme"      ] = "True"  if config.getboolean( "disable themes" )  else "False"
+        config[ "wallpapers" ] = "True"  if config.getboolean( "disable wallpaper" )  else "False"
+        config[ "drag"       ] = "False" if config.getboolean( "disable full window drag" )  else "True"
+        config[ "animation"  ] = "False" if config.getboolean( "disable menu anims" )  else "True"
         return config
     except ParsingError:
         options.log.exception( "Файл \"%s\" содержит ошибки." % filename )
