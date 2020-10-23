@@ -48,6 +48,7 @@ def rdp_import( filename ):
         config[ "program"    ] = "freerdp"
         config[ "protocol"   ] = "RDP"
         config[ "fullscreen" ] = "True"
+        config[ "username"   ] = config.get( "username"    , "" ).replace( "\\", "\\\\" )
         config[ "server"     ] = config.get( "full address"    , "" )
         config[ "gserver"    ] = config.get( "gatewayhostname" , "" )
         config[ "printers"   ] = str( config.getboolean( "redirectprinters" ) )
