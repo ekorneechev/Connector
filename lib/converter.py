@@ -124,10 +124,14 @@ def ctor_import( filename ):
     conf [ "myconnector" ] = params_to_myc
     return conf [ "myconnector" ]
 
-def myc_save( filename ):
+def myc_save( ctorfile ):
     """Save imported parameters to myc file"""
-    result = ctor_import( filename )
-
+    _config = ConfigParser()
+    mycfile = ctorfile.replace( ".ctor", ".myc" )
+    _config [ "myconnector" ] = ctor_import( ctorfile )
+    with open( mycfile, "w" ) as configfile:
+        _config.write( configfile )
+    print( "The file (%s) has been successfully converted to the new format  - %s " % ( ctorfile, mycfile ) )
 
 def parseArgs():
     """Description of the command line argument parser"""
