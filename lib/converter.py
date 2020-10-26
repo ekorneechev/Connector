@@ -29,13 +29,12 @@ _info    = "Converter from .ctor (outdated format Connector) to new .myc"
 
 def rdp_import( filename ):
     """Get parameters from RDP file"""
-    #TODO Fix if Unicode/Windows
     tmpconf = "/tmp/%s" % basename( filename )
     tmpfile = open( tmpconf, "w" )
     print( "[rdp]", file = tmpfile )
     with open( filename, "r", errors = "ignore" ) as f:
-        for line in f:
-             print( sub( ":.*:", "=", line.strip() ), file = tmpfile )
+        text = f.read().replace( "\x00", "" ).replace( "\n\n", "\n" )
+        print( sub( ":.*:", "=", text ), file = tmpfile )
     tmpfile.close()
     conf = ConfigParser()
     try:
