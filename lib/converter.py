@@ -23,6 +23,8 @@ from configparser import ( ConfigParser,
 from myconnector.connector import options
 from os.path import basename
 from re import sub
+from pickle import load
+from myconnector.config import CONFIGS
 
 _version = "0.1"
 _info    = "Converter from .ctor (outdated format Connector) to new .myc"
@@ -48,11 +50,11 @@ def rdp_import( filename ):
         config[ "protocol"   ] = "RDP"
         config[ "fullscreen" ] = "True"
         config[ "desktop"    ] = config[ "downloads" ] = config[ "documents" ]= "True" if config.get( "drivestoredirect", "" ) else "False"
-        config[ "username"   ] = config.get( "username"    , "" ).replace( "\\", "\\\\" )
-        config[ "server"     ] = config.get( "full address"    , "" )
-        config[ "gserver"    ] = config.get( "gatewayhostname" , "" )
-        config[ "color"      ] = config.get( "session bpp" , "" )
-        config[ "gserver"    ] = config.get( "gatewayhostname" , "" )
+        config[ "username"   ] = config.get( "username",        "" ).replace( "\\", "\\\\" )
+        config[ "server"     ] = config.get( "full address",    "" )
+        config[ "gserver"    ] = config.get( "gatewayhostname", "" )
+        config[ "color"      ] = config.get( "session bpp",     "" )
+        config[ "gserver"    ] = config.get( "gatewayhostname", "" )
         config[ "usb"        ] = "True"  if config.get( "devicestoredirect", "" ) else "False"
         config[ "sound"      ] = "True"  if config.get( "audiomode", "2" ) == "0" else "False"
         config[ "printers"   ] = "True"  if config.getboolean( "redirectprinters" ) else "False"
@@ -89,11 +91,43 @@ def remmina_import( filename ):
 
 def ctor_import( filename ):
     """Get parameters from ctor (old format) file"""
-    return None
+    with open( filename, "rb" ) as ctorfile:
+        params_from_ctor = load( ctorfile )
+    protocol = params_from_ctor[ 0 ]
+    params_to_myc = {}
+    params_to_myc[ "protocol" ] = protocol
+    params_to_myc[ "server"   ] = params_from_ctor[ 1 ]
+
+    if protocol == "VNC":
+        if len( params_from_ctor ) == 4:
+            params_to_myc[ "program"    ] = "vncviewer"
+            params_to_myc[ "fullscreen" ] = bool( params_from_ctor[ 2 ] )
+            params_to_myc[ "viewonly"   ] = bool( params_from_ctor[ 3 ] )
+        else:
+            params_to_myc[ "program"           ] = "remmina"
+            params_to_myc[ "username"          ] = params_from_ctor[ 2 ]
+            params_to_myc[ "quality"           ] = params_from_ctor[ 3 ]
+            params_to_myc[ "colordepth"        ] = params_from_ctor[ 4 ]
+            params_to_myc[ "viewmode"          ] = params_from_ctor[ 5 ]
+            params_to_myc[ "viewonly"          ] = params_from_ctor[ 6 ]
+            params_to_myc[ "disableencryption" ] = params_from_ctor[ 7 ]
+            params_to_myc[ "disableclipboard"  ] = params_from_ctor[ 8 ]
+            params_to_myc[ "showcursor"        ] = params_from_ctor[ 9 ]
+
+    if protocol == "RDP":
+        if len( params_from_ctor ) == 13:
+            params_to_myc[ "program" ] = "remmina"
+        else:
+            params_to_myc[ "program" ] = "freerdp"
+
+    conf = ConfigParser()
+    conf [ "myconnector" ] = params_to_myc
+    return conf [ "myconnector" ]
 
 def myc_save( filename ):
     """Save imported parameters to myc file"""
     result = ctor_import( filename )
+
 
 def parseArgs():
     """Description of the command line argument parser"""
