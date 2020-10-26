@@ -116,9 +116,60 @@ def ctor_import( filename ):
 
     if protocol == "RDP":
         if len( params_from_ctor ) == 13:
-            params_to_myc[ "program" ] = "remmina"
+            params_to_myc[ "program"         ] = "remmina"
+            params_to_myc[ "username"        ] = params_from_ctor[ 2 ]
+            params_to_myc[ "domain"          ] = params_from_ctor[ 3 ]
+            params_to_myc[ "colordepth"      ] = params_from_ctor[ 4 ]
+            params_to_myc[ "quality"         ] = params_from_ctor[ 5 ]
+            params_to_myc[ "resolution"      ] = params_from_ctor[ 6 ]
+            params_to_myc[ "viewmode"        ] = params_from_ctor[ 7 ]
+            params_to_myc[ "sharefolder"     ] = params_from_ctor[ 8 ]
+            params_to_myc[ "shareprinter"    ] = params_from_ctor[ 9 ]
+            params_to_myc[ "disableclipboard"] = params_from_ctor[ 10 ]
+            params_to_myc[ "sound"           ] = params_from_ctor[ 11 ]
+            params_to_myc[ "sharesmartcard"  ] = params_from_ctor[ 12 ]
         else:
-            params_to_myc[ "program" ] = "freerdp"
+            params_to_myc[ "program"         ] = "freerdp"
+            params_to_myc[ "username"        ] = params_from_ctor[ 2 ]
+            params_to_myc[ "domain"          ] = params_from_ctor[ 3 ]
+            params_to_myc[ "fullscreen"      ] = bool( params_from_ctor[ 4 ] )
+            params_to_myc[ "clipboard"       ] = bool( params_from_ctor[ 5 ] )
+            params_to_myc[ "resolution"      ] = params_from_ctor[ 6 ]
+            params_to_myc[ "color"           ] = params_from_ctor[ 7 ]
+            params_to_myc[ "folder"          ] = params_from_ctor[ 8 ]
+            params_to_myc[ "gserver"         ] = params_from_ctor[ 9 ]
+            params_to_myc[ "guser"           ] = params_from_ctor[ 10 ]
+            params_to_myc[ "gdomain"         ] = params_from_ctor[ 11 ]
+            params_to_myc[ "gpasswd"         ] = params_from_ctor[ 12 ]
+            params_to_myc[ "admin"           ] = bool( params_from_ctor[ 13 ] )
+            params_to_myc[ "smartcards"      ] = bool( params_from_ctor[ 14 ] )
+            params_to_myc[ "printers"        ] = bool( params_from_ctor[ 15 ] )
+            params_to_myc[ "sound"           ] = bool( params_from_ctor[ 16 ] )
+            params_to_myc[ "microphone"      ] = bool( params_from_ctor[ 17 ] )
+            params_to_myc[ "multimon"        ] = bool( params_from_ctor[ 18 ] )
+            params_to_myc[ "compression"     ] = bool( params_from_ctor[ 19 ] )
+            params_to_myc[ "compr_level"     ] = str( params_from_ctor[ 20 ] )
+            params_to_myc[ "fonts"           ] = bool( params_from_ctor[ 21 ] )
+            params_to_myc[ "aero"            ] = bool( params_from_ctor[ 22 ] )
+            params_to_myc[ "drag"            ] = bool( params_from_ctor[ 23 ] )
+            params_to_myc[ "animation"       ] = bool( params_from_ctor[ 24 ] )
+            params_to_myc[ "theme"           ] = bool( params_from_ctor[ 25 ] )
+            params_to_myc[ "wallpapers"      ] = bool( params_from_ctor[ 26 ] )
+            params_to_myc[ "nsc"             ] = bool( params_from_ctor[ 27 ] )
+            params_to_myc[ "jpeg"            ] = bool( params_from_ctor[ 28 ] )
+            params_to_myc[ "jpeg_quality"    ] = str( params_from_ctor[ 29 ] )
+            params_to_myc[ "usb"             ] = bool( params_from_ctor[ 30 ] )
+            params_to_myc[ "disable_nla"     ] = bool( params_from_ctor[ 31 ] )
+            params_to_myc[ "workarea"        ] = bool( params_from_ctor[ 32 ] )
+            params_to_myc[ "span"            ] = bool( params_from_ctor[ 33 ] )
+            params_to_myc[ "desktop"         ] = bool( params_from_ctor[ 34 ] )
+            params_to_myc[ "downloads"       ] = bool( params_from_ctor[ 35 ] )
+            params_to_myc[ "documents"       ] = bool( params_from_ctor[ 36 ] )
+            params_to_myc[ "gdi"             ] = bool( params_from_ctor[ 37 ] )
+            params_to_myc[ "reconnect"       ] = bool( params_from_ctor[ 38 ] )
+            params_to_myc[ "certignore"      ] = bool( params_from_ctor[ 39 ] )
+            params_to_myc[ "glyph"           ] = bool( params_from_ctor[ 42 ] )
+            params_to_myc[ "userparams"      ] = params_from_ctor[ 43 ]
 
     conf = ConfigParser()
     conf [ "myconnector" ] = params_to_myc
