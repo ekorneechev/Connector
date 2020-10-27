@@ -39,7 +39,6 @@ os.system( "mkdir -p %s" % LOGFOLDER )
 DEFAULT    = { "rdp"            : "freerdp",
                "vnc"            : "vncviewer",
                "tab"            : "0",
-               "main"           : "0",
                "log"            : "True",
                "fs"             : "xdg-open",
                "tray"           : "False",

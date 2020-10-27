@@ -217,10 +217,6 @@ class Gui(Gtk.Application):
         self.webEditClick = False
         try: default_tab = CONFIG[ 'tab' ]
         except KeyError: default_tab = '0'
-        #try: default_main = CONFIG[ 'main' ]
-        #except KeyError: default_main = '0'
-        #self.main_note = self.builder.get_object("main_note")
-        #self.main_note.set_current_page(int(default_main))
         self.combo_protocols = self.builder.get_object( "combo_protocols" )
         self.combo_protocols.set_active_id( default_tab )
         self.conn_note.set_current_page(int(default_tab))
@@ -1113,7 +1109,6 @@ class Gui(Gtk.Application):
             self.pref_window.destroy()
             self.editClick = False
             self.prefClick = False
-            self.changePage()
             viewStatus( self.statusbar, "Подключение \"%s\" сохранено..." % namesave )
 
     def onWCSave(self, entry):
@@ -1138,7 +1133,6 @@ class Gui(Gtk.Application):
             self.setSavesToListstore()
             self.citrixEditClick = False
             self.webEditClick = False
-            self.changePage()
             viewStatus(self.statusbar, "Подключение \"" + name + "\" сохранено...")
 
     def onWCEdit(self, name, server, protocol, edit = True):
@@ -1149,7 +1143,6 @@ class Gui(Gtk.Application):
         if protocol == "WEB":
             self.webEditClick = edit
             index_tab = 9
-        #self.main_note.set_current_page(0)
         self.conn_note.set_current_page(index_tab)
         entry_serv = self.builder.get_object("entry_serv_" + protocol)
         entry_name = self.builder.get_object("entry_" + protocol + "_name")
@@ -1289,10 +1282,6 @@ class Gui(Gtk.Application):
             options.log.info("Для подключения '%s' сохранен ярлык быстрого запуска: '%s'", nameConnect, filename)
         dialog.destroy()
 
-    def onChangePage(self, notepad, box, page):
-        """Очистка строки состояния при переключении вкладок"""
-        viewStatus(self.statusbar, '')
-
     def listFilter(self, model, iter, data):
         """Функция для фильтра подключений в списке"""
         row = ''
@@ -1323,10 +1312,6 @@ class Gui(Gtk.Application):
     def onWiki(self, *args):
         """Открытие wiki в Интернете"""
         os.system ('xdg-open "http://wiki.myconnector.ru/"')
-
-    def changePage(self, index = 1):
-        #self.main_note.set_current_page(index)
-        pass
 
     def onShowWindow(self, *args):
         if self.window.is_active():
