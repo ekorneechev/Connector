@@ -27,7 +27,7 @@ def parseArgs():
     """Description of the command line argument parser"""
     about = "MyConnector - %s (%s)" % (VERSION, RELEASE)
     args = ArgumentParser( prog = "myconnector", formatter_class = RawTextHelpFormatter, usage = "%(prog)s [options]",
-                           description = "MyConnector - remote desktop chooser.",
+                           description = "MyConnector - remote desktop client.",
                            epilog = "Do not specify parameters for starting the GUI.\n\nCopyright (C) 2014-2020 Evgeniy Korneechev <ek@myconnector.ru>")
     args.add_argument( "-c", "--connection", help = "name of the saved connection" )
     args.add_argument( "-f", "--file", help = "name of the file (.myc, .remmina, .rdp)" )

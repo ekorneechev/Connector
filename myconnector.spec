@@ -4,7 +4,7 @@ Name:     myconnector
 Version:  2.0.rc0
 Release:  alt1
 
-Summary:  MyConnector - remote desktop chooser
+Summary:  MyConnector - remote desktop client
 License:  GPL-2.0
 Group:    Networking/Remote access
 
