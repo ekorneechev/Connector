@@ -134,6 +134,7 @@ class Properties(Gtk.Window):
         self.labelRDP = mainWindow.labelRDP
         self.labelVNC = mainWindow.labelVNC
         self.conn_note = mainWindow.conn_note
+        self.combo_protocols = mainWindow.combo_protocols
         self.labelFS = mainWindow.labelFS
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_resizable(False)
@@ -215,6 +216,7 @@ class Properties(Gtk.Window):
         if not self.checkLog.get_active(): log.warning("ВЕДЕНИЕ ЖУРНАЛА ПОСЛЕ ПЕРЕЗАПУСКА ПРОГРАММЫ БУДЕТ ОТКЛЮЧЕНО!")
         myconnector.ui.Gui.initLabels(True, self.labelRDP, self.labelVNC, self.labelFS)
         self.conn_note.set_current_page( int( CONFIG[ 'tab' ] ) )
+        self.combo_protocols.set_active_id( CONFIG[ 'tab' ] )
         self.updateTray()
 
     def clearFile(self, filename, title, message):
