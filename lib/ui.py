@@ -181,6 +181,7 @@ class Gui(Gtk.Application):
         self.editClick = False
         self.builder = Gtk.Builder()
         self.builder.add_from_file( "%s/gui.ui" % UIFOLDER )
+        self.conn_note = self.builder.get_object( "list_connect" )
         self.builder.connect_signals(self)
         self.window = self.builder.get_object("main_window")
         self.window.set_title("MyConnector")
@@ -216,11 +217,12 @@ class Gui(Gtk.Application):
         self.webEditClick = False
         try: default_tab = CONFIG[ 'tab' ]
         except KeyError: default_tab = '0'
-        try: default_main = CONFIG[ 'main' ]
-        except KeyError: default_main = '0'
-        self.main_note = self.builder.get_object("main_note")
-        self.main_note.set_current_page(int(default_main))
-        self.conn_note = self.builder.get_object("list_connect")
+        #try: default_main = CONFIG[ 'main' ]
+        #except KeyError: default_main = '0'
+        #self.main_note = self.builder.get_object("main_note")
+        #self.main_note.set_current_page(int(default_main))
+        self.combo_protocols = self.builder.get_object( "combo_protocols" )
+        self.combo_protocols.set_active_id( default_tab )
         self.conn_note.set_current_page(int(default_tab))
         self.labelRDP, self.labelVNC = self.builder.get_object("label_default_RDP"), self.builder.get_object("label_default_VNC")
         self.labelFS = self.builder.get_object("label_default_FS")
@@ -1147,7 +1149,7 @@ class Gui(Gtk.Application):
         if protocol == "WEB":
             self.webEditClick = edit
             index_tab = 9
-        self.main_note.set_current_page(0)
+        #self.main_note.set_current_page(0)
         self.conn_note.set_current_page(index_tab)
         entry_serv = self.builder.get_object("entry_serv_" + protocol)
         entry_name = self.builder.get_object("entry_" + protocol + "_name")
@@ -1323,7 +1325,8 @@ class Gui(Gtk.Application):
         os.system ('xdg-open "http://wiki.myconnector.ru/"')
 
     def changePage(self, index = 1):
-        self.main_note.set_current_page(index)
+        #self.main_note.set_current_page(index)
+        pass
 
     def onShowWindow(self, *args):
         if self.window.is_active():
@@ -1385,6 +1388,10 @@ class Gui(Gtk.Application):
             if record[0] == name:
                 return True
         return False
+
+    def protocolChange( self, widget ):
+        """Change protocol on main window"""
+        self.conn_note.set_current_page( int( widget.get_active_id() ) )
 
 def connect( name ):
     """Start connection by name"""
