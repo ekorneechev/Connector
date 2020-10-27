@@ -171,6 +171,59 @@ def ctor_import( filename ):
             params_to_myc[ "glyph"           ] = bool( params_from_ctor[ 42 ] )
             params_to_myc[ "userparams"      ] = params_from_ctor[ 43 ]
 
+    if protocol == "NX":
+        params_to_myc[ "username"            ] = params_from_ctor[ 2 ]
+        params_to_myc[ "quality"             ] = params_from_ctor[ 3 ]
+        params_to_myc[ "resolution"          ] = params_from_ctor[ 4 ]
+        params_to_myc[ "viewmode"            ] = params_from_ctor[ 5 ]
+        params_to_myc[ "nx_privatekey"       ] = params_from_ctor[ 6 ]
+        params_to_myc[ "disableencryption"   ] = params_from_ctor[ 7 ]
+        params_to_myc[ "disableclipboard"    ] = params_from_ctor[ 8 ]
+        params_to_myc[ "exec"                ] = params_from_ctor[ 9 ]
+
+    if protocol == "XDMCP":
+        params_to_myc[ "colordepth"          ] = params_from_ctor[ 2 ]
+        params_to_myc[ "viewmode"            ] = params_from_ctor[ 3 ]
+        params_to_myc[ "resolution"          ] = params_from_ctor[ 4 ]
+        params_to_myc[ "once"                ] = params_from_ctor[ 5 ]
+        params_to_myc[ "showcursor"          ] = params_from_ctor[ 6 ]
+        params_to_myc[ "exec"                ] = params_from_ctor[ 7 ]
+
+    if protocol == "SPICE":
+        params_to_myc[ "usetls"              ] = params_from_ctor[ 2 ]
+        params_to_myc[ "viewonly"            ] = params_from_ctor[ 3 ]
+        params_to_myc[ "resizeguest"         ] = params_from_ctor[ 4 ]
+        params_to_myc[ "disableclipboard"    ] = params_from_ctor[ 5 ]
+        params_to_myc[ "sharesmartcard"      ] = params_from_ctor[ 6 ]
+        params_to_myc[ "enableaudio"         ] = params_from_ctor[ 7 ]
+        params_to_myc[ "cacert"              ] = params_from_ctor[ 8 ]
+
+    if protocol == "SSH":
+        params_to_myc[ "username"            ] = params_from_ctor[ 2 ]
+        params_to_myc[ "ssh_auth"            ] = params_from_ctor[ 3 ]
+        params_to_myc[ "ssh_privatekey"      ] = params_from_ctor[ 4 ]
+        params_to_myc[ "ssh_charset"         ] = params_from_ctor[ 5 ]
+        params_to_myc[ "exec"                ] = params_from_ctor[ 6 ]
+
+    if protocol == "SFTP":
+        params_to_myc[ "username"            ] = params_from_ctor[ 2 ]
+        params_to_myc[ "ssh_auth"            ] = params_from_ctor[ 3 ]
+        params_to_myc[ "ssh_privatekey"      ] = params_from_ctor[ 4 ]
+        params_to_myc[ "ssh_charset"         ] = params_from_ctor[ 5 ]
+        params_to_myc[ "execpath"            ] = params_from_ctor[ 6 ]
+
+    if protocol == "FS":
+        params_to_myc[ "user"                ] = params_from_ctor[ 2 ]
+        params_to_myc[ "domain"              ] = params_from_ctor[ 3 ]
+        params_to_myc[ "folder"              ] = params_from_ctor[ 4 ]
+        params_to_myc[ "type"                ] = params_from_ctor[ 5 ]
+
+    if protocol == "VMWARE":
+        params_to_myc[ "user"                ] = params_from_ctor[ 2 ]
+        params_to_myc[ "domain"              ] = params_from_ctor[ 3 ]
+        params_to_myc[ "password"            ] = params_from_ctor[ 4 ]
+        params_to_myc[ "fullscreen"          ] = params_from_ctor[ 5 ]
+
     conf = ConfigParser()
     conf [ "myconnector" ] = params_to_myc
     return conf [ "myconnector" ]
