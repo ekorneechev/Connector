@@ -152,6 +152,21 @@ along with this program. If not, see http://www.gnu.org/licenses/.
     <property name="can_focus">False</property>
     <property name="pixbuf">../icons/WEB.png</property>
   </object>
+  <object class="GtkImage" id="image_connect">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-connect</property>
+  </object>
+  <object class="GtkImage" id="image_help">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-dialog-question</property>
+  </object>
+  <object class="GtkImage" id="image_home">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-home</property>
+  </object>
   <object class="GtkImage" id="image_param_tray">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -482,18 +497,20 @@ along with this program. If not, see http://www.gnu.org/licenses/.
       <object class="GtkHeaderBar" id="main_header">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="subtitle" translatable="yes">ex. Connector</property>
+        <property name="subtitle" translatable="yes">Remote desktop client</property>
         <property name="spacing">10</property>
         <property name="show_close_button">True</property>
         <child>
           <object class="GtkMenuBar" id="main_menu">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="margin_top">1</property>
             <child>
-              <object class="GtkMenuItem" id="file">
+              <object class="GtkImageMenuItem" id="file">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Файл</property>
+                <property name="image">image_home</property>
+                <property name="use_stock">False</property>
                 <child type="submenu">
                   <object class="GtkMenu" id="menu_file">
                     <property name="visible">True</property>
@@ -576,10 +593,11 @@ along with this program. If not, see http://www.gnu.org/licenses/.
               </object>
             </child>
             <child>
-              <object class="GtkMenuItem" id="connect">
+              <object class="GtkImageMenuItem" id="connect">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Подключение</property>
+                <property name="image">image_connect</property>
+                <property name="use_stock">False</property>
                 <child type="submenu">
                   <object class="GtkMenu" id="menu_connect">
                     <property name="visible">True</property>
@@ -721,10 +739,11 @@ along with this program. If not, see http://www.gnu.org/licenses/.
               </object>
             </child>
             <child>
-              <object class="GtkMenuItem" id="reference">
+              <object class="GtkImageMenuItem" id="reference">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Справка</property>
+                <property name="image">image_help</property>
+                <property name="use_stock">False</property>
                 <child type="submenu">
                   <object class="GtkMenu" id="menu_ref">
                     <property name="visible">True</property>
