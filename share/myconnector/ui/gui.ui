@@ -359,18 +359,6 @@ along with this program. If not, see http://www.gnu.org/licenses/.
       </attributes>
     </child>
   </object>
-  <object class="GtkListStore" id="liststore_connections">
-    <columns>
-      <!-- column-name name -->
-      <column type="gchararray"/>
-      <!-- column-name protocol -->
-      <column type="gchararray"/>
-      <!-- column-name host -->
-      <column type="gchararray"/>
-      <!-- column-name filename -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
   <object class="GtkListStore" id="liststore_tabs">
     <columns>
       <!-- column-name id -->
