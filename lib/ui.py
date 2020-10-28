@@ -126,6 +126,7 @@ def getSaveConnections():
             conf.read( "%s/%s" % ( WORKFOLDER, mycfile ) )
             try:
                 save = [ conf[ "myconnector" ][ "name"     ],
+                         conf[ "myconnector" ].get( "group", "" ),
                          conf[ "myconnector" ][ "protocol" ].upper(),
                          conf[ "myconnector" ][ "server"   ],
                          mycfile ]
@@ -198,7 +199,7 @@ class Gui(Gtk.Application):
                            "SPICE"  : self.builder.get_object( "liststore_SPICE"  ),
                            "FS"     : self.builder.get_object( "liststore_FS"     ) }
 
-        self.liststore_connect = Gtk.ListStore(str, str, str, str)
+        self.liststore_connect = Gtk.ListStore(str, str, str, str, str)
         self.setSavesToListstore()
         self.filterConnections = self.liststore_connect.filter_new()
         self.filterConnections.set_visible_func(self.listFilter) #добавление фильтра для поиска

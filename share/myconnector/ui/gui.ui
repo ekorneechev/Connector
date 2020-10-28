@@ -2341,15 +2341,29 @@ along with this program. If not, see http://www.gnu.org/licenses/.
                       </object>
                     </child>
                     <child>
-                      <object class="GtkTreeViewColumn" id="column_protocol">
-                        <property name="title" translatable="yes">Протокол</property>
+                      <object class="GtkTreeViewColumn" id="column_group">
+                        <property name="title" translatable="yes">Группа</property>
                         <property name="clickable">True</property>
                         <property name="sort_indicator">True</property>
                         <property name="sort_column_id">1</property>
                         <child>
-                          <object class="GtkCellRendererText" id="cellrenderertext9"/>
+                          <object class="GtkCellRendererText" id="cellrenderertext13"/>
                           <attributes>
                             <attribute name="text">1</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="column_protocol">
+                        <property name="title" translatable="yes">Протокол</property>
+                        <property name="clickable">True</property>
+                        <property name="sort_indicator">True</property>
+                        <property name="sort_column_id">2</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="cellrenderertext9"/>
+                          <attributes>
+                            <attribute name="text">2</attribute>
                           </attributes>
                         </child>
                       </object>
@@ -2359,11 +2373,11 @@ along with this program. If not, see http://www.gnu.org/licenses/.
                         <property name="title" translatable="yes">Адрес сервера</property>
                         <property name="clickable">True</property>
                         <property name="sort_indicator">True</property>
-                        <property name="sort_column_id">2</property>
+                        <property name="sort_column_id">3</property>
                         <child>
                           <object class="GtkCellRendererText" id="cellrenderertext10"/>
                           <attributes>
-                            <attribute name="text">2</attribute>
+                            <attribute name="text">3</attribute>
                           </attributes>
                         </child>
                       </object>
