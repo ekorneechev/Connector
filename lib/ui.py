@@ -119,20 +119,23 @@ def quitApp():
 
 def getSaveConnections():
     """List of save connections from files in WORKFOLDER"""
-    saves = []
+    saves  = []
+    groups = []
     for mycfile in os.listdir( WORKFOLDER ):
         if Path( mycfile ).suffix.lower() == ".myc":
             conf = ConfigParser()
             conf.read( "%s/%s" % ( WORKFOLDER, mycfile ) )
             try:
+                group = conf[ "myconnector" ].get( "group", "" )
                 save = [ conf[ "myconnector" ][ "name"     ],
-                         conf[ "myconnector" ].get( "group", "" ),
+                         group,
                          conf[ "myconnector" ][ "protocol" ].upper(),
                          conf[ "myconnector" ][ "server"   ],
                          mycfile ]
                 saves.append( save )
+                if group: groups.append( group )
             except KeyError: pass
-    return saves
+    return saves, list( set( groups ) ) #unique groups
 
 def changeProgram( protocol, program = "" ):
     """Return {RDP,VNC}1 if program not remmina"""
@@ -279,15 +282,25 @@ class Gui(Gtk.Application):
         """Инициализация списка сохраненных подключений в меню из трея"""
         exist = False
         for item in self.tray_submenu.get_children(): item.destroy() #очищение меню перед его заполнением
-        for record in getSaveConnections():
+        records, groups = getSaveConnections()
+        menus = {}
+        for group in groups:
+            group_item = Gtk.MenuItem( group )
+            self.tray_submenu.append( group_item )
+            menus[ group ] = Gtk.Menu()
+            group_item.set_submenu( menus[ group ] )
+        for record in records:
             exist = True
-            name, protocol = record[0], record[1]
+            name, group, protocol = record[0], record[1], record[2]
             item = Gtk.ImageMenuItem(name)
             image = Gtk.Image()
             image.set_from_pixbuf( GdkPixbuf.Pixbuf.new_from_file( "%s/%s.png" % ( ICONFOLDER, protocol )))
             item.set_image(image)
             item.connect("activate",self.onTrayConnect, name)
-            self.tray_submenu.append(item)
+            if group:
+                menus[ group ].append( item )
+            else:
+                self.tray_submenu.append( item )
         if not exist:
             tray_noexist = Gtk.MenuItem("<нет сохраненных подключений>")
             tray_noexist.set_sensitive(False)
@@ -1009,7 +1022,8 @@ class Gui(Gtk.Application):
     def setSavesToListstore(self):
         """Set the list of save connections to ListStore"""
         self.liststore_connect.clear()
-        for record in getSaveConnections():
+        records, groups = getSaveConnections()
+        for record in records:
             self.liststore_connect.append( record )
 
     def writeServerInDb(self, entry):
@@ -1363,14 +1377,16 @@ class Gui(Gtk.Application):
 
     def filenameFromName( self, name ):
         """Определение имени конфигурационного файла подключения по имени подключения"""
-        for record in getSaveConnections():
+        records, groups = getSaveConnections()
+        for record in records:
             if record[0] == name:
-                return record[3]
+                return record[4]
         return False
 
     def searchName( self, name ):
         """Существует ли подключение с указанным именем"""
-        for record in getSaveConnections():
+        records, groups = getSaveConnections()
+        for record in records:
             if record[0] == name:
                 return True
         return False
