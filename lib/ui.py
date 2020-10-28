@@ -1171,7 +1171,7 @@ class Gui(Gtk.Application):
     def onSaveConnect(self, treeView, *args):
         """Установка подключения по двойному щелчку на элементе списка"""
         table, indexRow = treeView.get_selection().get_selected()
-        nameConnect, fileCtor = table[indexRow][0], table[indexRow][3]
+        nameConnect, fileCtor = table[indexRow][0], table[indexRow][4]
         parameters = options.loadFromFile(fileCtor, self.window)
         if parameters is not None: #если файл .myc имеет верный формат
             parameters[ "name" ] = nameConnect
@@ -1199,7 +1199,7 @@ class Gui(Gtk.Application):
     def onPopupEdit(self, treeView):
         """Изменение выбранного подключения"""
         table, indexRow = treeView.get_selection().get_selected()
-        nameConnect, self.fileCtor = table[indexRow][0], table[indexRow][3]
+        nameConnect, self.fileCtor = table[indexRow][0], table[indexRow][4]
         parameters = options.loadFromFile(self.fileCtor, self.window)
         if parameters is not None: #если файл .myc имеет верный формат
             try:
@@ -1221,7 +1221,7 @@ class Gui(Gtk.Application):
     def onPopupCopy(self, treeView):
         """Копирование выбранного подключения"""
         table, indexRow = treeView.get_selection().get_selected()
-        nameConnect, self.fileCtor = table[indexRow][0], table[indexRow][3]
+        nameConnect, self.fileCtor = table[indexRow][0], table[indexRow][4]
         parameters = options.loadFromFile(self.fileCtor, self.window)
         if parameters is not None: #если файл .myc имеет верный формат
             try:
@@ -1265,7 +1265,7 @@ class Gui(Gtk.Application):
         dialog.format_secondary_text(name)
         response = dialog.run()
         if response == Gtk.ResponseType.YES:
-            fileCtor = table[indexRow][3]
+            fileCtor = table[indexRow][4]
             parameters = options.loadFromFile(fileCtor)
             try: keyring.delete_password( parameters.get( "server", "" ), parameters.get( "username", "" ) )
             except: pass
