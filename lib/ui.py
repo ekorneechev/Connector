@@ -507,8 +507,8 @@ class Gui(Gtk.Application):
         cancel.connect( "clicked", self.onCancel, self.pref_window )
         self.pref_window.connect( "delete-event", self.onClose )
         entryGroup = self.pref_builder.get_object( "entry_%s_group" % name )
-        print( "entry_%s_group" % name )
-        entryGroup.set_text( parameters.get( "group", "" ) )
+        try: entryGroup.set_text( parameters.get( "group", "" ) )
+        except: pass
         list_groups = Gtk.ListStore( str )
         records, groups = getSaveConnections()
         for group in groups:
