@@ -506,6 +506,15 @@ class Gui(Gtk.Application):
         cancel = self.pref_builder.get_object( "button_%s_cancel" % name )
         cancel.connect( "clicked", self.onCancel, self.pref_window )
         self.pref_window.connect( "delete-event", self.onClose )
+        entryGroup = self.pref_builder.get_object( "entry_%s_group" % name )
+        print( "entry_%s_group" % name )
+        entryGroup.set_text( parameters.get( "group", "" ) )
+        list_groups = Gtk.ListStore( str )
+        records, groups = getSaveConnections()
+        for group in groups:
+            list_groups.append( [ group ] )
+        combo_groups = self.pref_builder.get_object( "combo_%s_group" % name )
+        combo_groups.set_model( list_groups )
         self.initPreferences( name )
         self.setPreferences( name, parameters )
         self.pref_window.add(box)
@@ -1100,7 +1109,8 @@ class Gui(Gtk.Application):
         name     = entry.get_name()
         protocol = name.replace( "1", "" )
         parameters = self.applyPreferences( name )
-        namesave = self.pref_builder.get_object( "entry_%s_name" % name ).get_text()
+        namesave = self.pref_builder.get_object( "entry_%s_name"  % name ).get_text()
+        group    = self.pref_builder.get_object( "entry_%s_group" % name ).get_text()
         if namesave == "":
             os.system( "zenity --error --text='\nУкажите имя подключения!' --no-wrap --icon-name=myconnector" )
         elif self.searchName( namesave ) and not self.editClick:
@@ -1109,6 +1119,7 @@ class Gui(Gtk.Application):
             parameters[ "name"     ] = namesave
             parameters[ "protocol" ] = protocol
             parameters[ "server"   ] = server
+            parameters[ "group"    ] = group
             if name == "RDP1" and parameters.get ( "username", "" ):
                 self.saveKeyring ( parameters.copy() )
                 parameters [ "passwd" ] = ""
