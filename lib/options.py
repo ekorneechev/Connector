@@ -134,6 +134,7 @@ class Properties(Gtk.Window):
         self.labelRDP = mainWindow.labelRDP
         self.labelVNC = mainWindow.labelVNC
         self.conn_note = mainWindow.conn_note
+        self.combo_protocols = mainWindow.combo_protocols
         self.labelFS = mainWindow.labelFS
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_resizable(False)
@@ -147,7 +148,6 @@ class Properties(Gtk.Window):
         self.changeVncRem = builder.get_object("radio_VNC_remmina")
         self.statusbar = builder.get_object("statusbar")
         self.combo_tabs = builder.get_object("combo_tabs")
-        self.combo_main = builder.get_object("combo_main")
         self.changeRdpFree = builder.get_object("radio_RDP_freeRDP")
         self.changeVncView = builder.get_object("radio_VNC_viewer")
         self.entryFS = builder.get_object("entry_FS")
@@ -168,8 +168,6 @@ class Properties(Gtk.Window):
         if CONFIG[ "vnc" ] == "vncviewer":
             self.changeVncView.set_active( True )
         try: self.combo_tabs.set_active_id( CONFIG[ 'tab' ] )
-        except KeyError: self.combo_tabs.set_active_id( '0' )
-        try: self.combo_main.set_active_id( CONFIG[ 'main' ] )
         except KeyError: self.combo_tabs.set_active_id( '0' )
         try: self.entryFS.set_text( CONFIG[ 'fs' ] )
         except KeyError: self.entryFS.set_text( DEFAULT[ 'fs' ] )
@@ -207,7 +205,6 @@ class Properties(Gtk.Window):
             CONFIG[ "vnc" ] = "remmina"
         else: CONFIG[ "vnc" ] = "vncviewer"
         CONFIG[ 'tab' ] = self.combo_tabs.get_active_id()
-        CONFIG[ 'main' ] = self.combo_main.get_active_id()
         CONFIG[ 'fs' ] = self.entryFS.get_text()
         CONFIG[ 'tray' ] = str( self.checkTray.get_active() )
         CONFIG[ 'check_version' ] = str( self.checkVersion.get_active() )
@@ -219,6 +216,7 @@ class Properties(Gtk.Window):
         if not self.checkLog.get_active(): log.warning("ВЕДЕНИЕ ЖУРНАЛА ПОСЛЕ ПЕРЕЗАПУСКА ПРОГРАММЫ БУДЕТ ОТКЛЮЧЕНО!")
         myconnector.ui.Gui.initLabels(True, self.labelRDP, self.labelVNC, self.labelFS)
         self.conn_note.set_current_page( int( CONFIG[ 'tab' ] ) )
+        self.combo_protocols.set_active_id( CONFIG[ 'tab' ] )
         self.updateTray()
 
     def clearFile(self, filename, title, message):

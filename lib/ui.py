@@ -119,19 +119,23 @@ def quitApp():
 
 def getSaveConnections():
     """List of save connections from files in WORKFOLDER"""
-    saves = []
+    saves  = []
+    groups = []
     for mycfile in os.listdir( WORKFOLDER ):
         if Path( mycfile ).suffix.lower() == ".myc":
             conf = ConfigParser()
             conf.read( "%s/%s" % ( WORKFOLDER, mycfile ) )
             try:
+                group = conf[ "myconnector" ].get( "group", "" )
                 save = [ conf[ "myconnector" ][ "name"     ],
+                         group,
                          conf[ "myconnector" ][ "protocol" ].upper(),
                          conf[ "myconnector" ][ "server"   ],
                          mycfile ]
                 saves.append( save )
+                if group: groups.append( group )
             except KeyError: pass
-    return saves
+    return saves, list( set( groups ) ) #unique groups
 
 def changeProgram( protocol, program = "" ):
     """Return {RDP,VNC}1 if program not remmina"""
@@ -181,9 +185,10 @@ class Gui(Gtk.Application):
         self.editClick = False
         self.builder = Gtk.Builder()
         self.builder.add_from_file( "%s/gui.ui" % UIFOLDER )
+        self.conn_note = self.builder.get_object( "list_connect" )
         self.builder.connect_signals(self)
         self.window = self.builder.get_object("main_window")
-        self.window.set_title("MyConnector")
+        self.window.set_title( "MyConnector" )
         self.statusbar = self.builder.get_object("statusbar")
         self.liststore = { "RDP"    : self.builder.get_object( "liststore_RDP"    ),
                            "VNC"    : self.builder.get_object( "liststore_VNC"    ),
@@ -197,7 +202,7 @@ class Gui(Gtk.Application):
                            "SPICE"  : self.builder.get_object( "liststore_SPICE"  ),
                            "FS"     : self.builder.get_object( "liststore_FS"     ) }
 
-        self.liststore_connect = Gtk.ListStore(str, str, str, str)
+        self.liststore_connect = Gtk.ListStore(str, str, str, str, str)
         self.setSavesToListstore()
         self.filterConnections = self.liststore_connect.filter_new()
         self.filterConnections.set_visible_func(self.listFilter) #добавление фильтра для поиска
@@ -216,15 +221,13 @@ class Gui(Gtk.Application):
         self.webEditClick = False
         try: default_tab = CONFIG[ 'tab' ]
         except KeyError: default_tab = '0'
-        try: default_main = CONFIG[ 'main' ]
-        except KeyError: default_main = '0'
-        self.main_note = self.builder.get_object("main_note")
-        self.main_note.set_current_page(int(default_main))
-        self.conn_note = self.builder.get_object("list_connect")
+        self.combo_protocols = self.builder.get_object( "combo_protocols" )
+        self.combo_protocols.set_active_id( default_tab )
         self.conn_note.set_current_page(int(default_tab))
         self.labelRDP, self.labelVNC = self.builder.get_object("label_default_RDP"), self.builder.get_object("label_default_VNC")
         self.labelFS = self.builder.get_object("label_default_FS")
         self.initLabels(self.labelRDP, self.labelVNC, self.labelFS)
+        self.list_groups = self.initGroups()
         self.trayDisplayed = False
         self.tray_submenu = self.builder.get_object("tray_submenu")
         if self.optionEnabled( 'tray' ): self.trayDisplayed = self.initTray()
@@ -237,6 +240,17 @@ class Gui(Gtk.Application):
             self.menu_kiosk.set_sensitive( enabled() )
         except ImportError:
             options.log.warning ("The mode KIOSK unavailable, package is not installed.")
+
+    def initGroups( self ):
+        g = Gtk.ListStore( str )
+        records, groups = getSaveConnections()
+        for group in groups:
+            g.append( [ group ] )
+        groups_citrix = self.builder.get_object( "combo_CITRIX_group" )
+        groups_web    = self.builder.get_object( "combo_WEB_group"    )
+        groups_citrix.set_model( g )
+        groups_web.set_model( g )
+        return( g )
 
     def createDesktopFile(self, filename, nameConnect, nameDesktop):
         """Create desktop-file for connection"""
@@ -280,15 +294,25 @@ class Gui(Gtk.Application):
         """Инициализация списка сохраненных подключений в меню из трея"""
         exist = False
         for item in self.tray_submenu.get_children(): item.destroy() #очищение меню перед его заполнением
-        for record in getSaveConnections():
+        records, groups = getSaveConnections()
+        menus = {}
+        for group in groups:
+            group_item = Gtk.MenuItem( group )
+            self.tray_submenu.append( group_item )
+            menus[ group ] = Gtk.Menu()
+            group_item.set_submenu( menus[ group ] )
+        for record in records:
             exist = True
-            name, protocol = record[0], record[1]
+            name, group, protocol = record[0], record[1], record[2]
             item = Gtk.ImageMenuItem(name)
             image = Gtk.Image()
             image.set_from_pixbuf( GdkPixbuf.Pixbuf.new_from_file( "%s/%s.png" % ( ICONFOLDER, protocol )))
             item.set_image(image)
             item.connect("activate",self.onTrayConnect, name)
-            self.tray_submenu.append(item)
+            if group:
+                menus[ group ].append( item )
+            else:
+                self.tray_submenu.append( item )
         if not exist:
             tray_noexist = Gtk.MenuItem("<нет сохраненных подключений>")
             tray_noexist.set_sensitive(False)
@@ -387,7 +411,7 @@ class Gui(Gtk.Application):
                     return None
                 if protocol in [ "CITRIX", "WEB" ]:
                     try:
-                        self.onWCEdit( "", parameters[ "server" ], protocol )
+                        self.onWCEdit( "", parameters[ "server" ], protocol, parameters.get( "group", "" ) )
                     except KeyError:
                         server_not_found( filename )
                         dialog.destroy()
@@ -494,6 +518,11 @@ class Gui(Gtk.Application):
         cancel = self.pref_builder.get_object( "button_%s_cancel" % name )
         cancel.connect( "clicked", self.onCancel, self.pref_window )
         self.pref_window.connect( "delete-event", self.onClose )
+        entryGroup = self.pref_builder.get_object( "entry_%s_group" % name )
+        try: entryGroup.set_text( parameters.get( "group", "" ) )
+        except: pass
+        combo_groups = self.pref_builder.get_object( "combo_%s_group" % name )
+        combo_groups.set_model( self.list_groups )
         self.initPreferences( name )
         self.setPreferences( name, parameters )
         self.pref_window.add(box)
@@ -1010,7 +1039,8 @@ class Gui(Gtk.Application):
     def setSavesToListstore(self):
         """Set the list of save connections to ListStore"""
         self.liststore_connect.clear()
-        for record in getSaveConnections():
+        records, groups = getSaveConnections()
+        for record in records:
             self.liststore_connect.append( record )
 
     def writeServerInDb(self, entry):
@@ -1087,15 +1117,18 @@ class Gui(Gtk.Application):
         name     = entry.get_name()
         protocol = name.replace( "1", "" )
         parameters = self.applyPreferences( name )
-        namesave = self.pref_builder.get_object( "entry_%s_name" % name ).get_text()
+        namesave = self.pref_builder.get_object( "entry_%s_name"  % name ).get_text()
+        group    = self.pref_builder.get_object( "entry_%s_group" % name ).get_text()
+        error = ""
         if namesave == "":
-            os.system( "zenity --error --text='\nУкажите имя подключения!' --no-wrap --icon-name=myconnector" )
+            error = "Укажите имя подключения!"
         elif self.searchName( namesave ) and not self.editClick:
-            os.system( "zenity --error --text='\nПодключение с именем \"%s\" уже существует!' --no-wrap --icon-name=myconnector" % namesave )
+            error = "Подключение с именем \"%s\" уже существует!" % namesave
         else:
             parameters[ "name"     ] = namesave
             parameters[ "protocol" ] = protocol
             parameters[ "server"   ] = server
+            parameters[ "group"    ] = group
             if name == "RDP1" and parameters.get ( "username", "" ):
                 self.saveKeyring ( parameters.copy() )
                 parameters [ "passwd" ] = ""
@@ -1111,21 +1144,27 @@ class Gui(Gtk.Application):
             self.pref_window.destroy()
             self.editClick = False
             self.prefClick = False
-            self.changePage()
+            if group: self.initGroups()
             viewStatus( self.statusbar, "Подключение \"%s\" сохранено..." % namesave )
+        if error:
+            viewStatus( self.statusbar, error )
+            os.system( "zenity --error --text='\n%s!' --no-wrap --icon-name=myconnector" % error )
 
     def onWCSave(self, entry):
         """Сохранение подключения к Citrix или WEB"""
         server = entry.get_text()
         protocol = entry.get_name()
-        name = self.builder.get_object("entry_" + protocol + "_name").get_text()
+        name  = self.builder.get_object( "entry_%s_name"  % protocol ).get_text()
+        group = self.builder.get_object( "entry_%s_group" % protocol ).get_text()
+        error = ""
         if name == "":
-            os.system( "zenity --error --text='\nУкажите имя подключения!' --no-wrap --icon-name=myconnector" )
+            error = "Укажите имя подключения!"
         elif self.searchName( name ) and not self.citrixEditClick and not self.webEditClick:
-            os.system( "zenity --error --text='\nПодключение с именем \"%s\" уже существует!' --no-wrap --icon-name=myconnector" % name )
+            error = "Подключение с именем \"%s\" уже существует!" % name
         else:
             parameters = { "name"     : name,
                            "protocol" : protocol,
+                           "group"    : group,
                            "server"   : server }
             if self.citrixEditClick or self.webEditClick:
                 fileName = self.resaveFileCtor(name, protocol, server)
@@ -1136,10 +1175,13 @@ class Gui(Gtk.Application):
             self.setSavesToListstore()
             self.citrixEditClick = False
             self.webEditClick = False
-            self.changePage()
+            if group: self.initGroups()
             viewStatus(self.statusbar, "Подключение \"" + name + "\" сохранено...")
+        if error:
+            viewStatus( self.statusbar, error )
+            os.system( "zenity --error --text='\n%s' --no-wrap --icon-name=myconnector" % error )
 
-    def onWCEdit(self, name, server, protocol, edit = True):
+    def onWCEdit(self, name, server, protocol, group, edit = True):
         """Функция изменения Citrix или WEB-подключения """
         if protocol == "CITRIX":
             self.citrixEditClick = edit
@@ -1147,21 +1189,23 @@ class Gui(Gtk.Application):
         if protocol == "WEB":
             self.webEditClick = edit
             index_tab = 9
-        self.main_note.set_current_page(0)
         self.conn_note.set_current_page(index_tab)
-        entry_serv = self.builder.get_object("entry_serv_" + protocol)
-        entry_name = self.builder.get_object("entry_" + protocol + "_name")
-        entry_serv.set_text(server)
-        entry_name.set_text(name)
+        entry_serv  = self.builder.get_object( "entry_serv_%s"  % protocol )
+        entry_name  = self.builder.get_object( "entry_%s_name"  % protocol )
+        entry_group = self.builder.get_object( "entry_%s_group" % protocol )
+        entry_serv.set_text(  server )
+        entry_name.set_text(  name   )
+        entry_group.set_text( group  )
 
     def onWCMenu(self, item):
+        """Open WEB / CITRIX tab from main menu"""
         protocol = item.get_name()
-        self.onWCEdit('','', protocol, False)
+        self.onWCEdit( "", "", protocol, "", False )
 
     def onSaveConnect(self, treeView, *args):
         """Установка подключения по двойному щелчку на элементе списка"""
         table, indexRow = treeView.get_selection().get_selected()
-        nameConnect, fileCtor = table[indexRow][0], table[indexRow][3]
+        nameConnect, fileCtor = table[indexRow][0], table[indexRow][4]
         parameters = options.loadFromFile(fileCtor, self.window)
         if parameters is not None: #если файл .myc имеет верный формат
             parameters[ "name" ] = nameConnect
@@ -1189,7 +1233,7 @@ class Gui(Gtk.Application):
     def onPopupEdit(self, treeView):
         """Изменение выбранного подключения"""
         table, indexRow = treeView.get_selection().get_selected()
-        nameConnect, self.fileCtor = table[indexRow][0], table[indexRow][3]
+        nameConnect, self.fileCtor = table[indexRow][0], table[indexRow][4]
         parameters = options.loadFromFile(self.fileCtor, self.window)
         if parameters is not None: #если файл .myc имеет верный формат
             try:
@@ -1199,7 +1243,7 @@ class Gui(Gtk.Application):
                 return None
             if protocol in [ "CITRIX", "WEB" ]:
                 try:
-                    self.onWCEdit( nameConnect, parameters [ "server" ], protocol )
+                    self.onWCEdit( nameConnect, parameters [ "server" ], protocol, parameters.get( "group", "" ) )
                 except KeyError:
                     server_not_found( nameConnect )
                     return None
@@ -1211,7 +1255,7 @@ class Gui(Gtk.Application):
     def onPopupCopy(self, treeView):
         """Копирование выбранного подключения"""
         table, indexRow = treeView.get_selection().get_selected()
-        nameConnect, self.fileCtor = table[indexRow][0], table[indexRow][3]
+        nameConnect, self.fileCtor = table[indexRow][0], table[indexRow][4]
         parameters = options.loadFromFile(self.fileCtor, self.window)
         if parameters is not None: #если файл .myc имеет верный формат
             try:
@@ -1222,7 +1266,7 @@ class Gui(Gtk.Application):
             nameConnect = "%s (копия)" % nameConnect
             if protocol in [ "CITRIX", "WEB" ]:
                 try:
-                    self.onWCEdit( nameConnect, parameters[ "server" ], protocol, False )
+                    self.onWCEdit( nameConnect, parameters[ "server" ], protocol, parameters.get( "group", "" ), False )
                 except KeyError:
                     server_not_found( nameConnect )
                     return None
@@ -1255,7 +1299,7 @@ class Gui(Gtk.Application):
         dialog.format_secondary_text(name)
         response = dialog.run()
         if response == Gtk.ResponseType.YES:
-            fileCtor = table[indexRow][3]
+            fileCtor = table[indexRow][4]
             parameters = options.loadFromFile(fileCtor)
             try: keyring.delete_password( parameters.get( "server", "" ), parameters.get( "username", "" ) )
             except: pass
@@ -1287,10 +1331,6 @@ class Gui(Gtk.Application):
             options.log.info("Для подключения '%s' сохранен ярлык быстрого запуска: '%s'", nameConnect, filename)
         dialog.destroy()
 
-    def onChangePage(self, notepad, box, page):
-        """Очистка строки состояния при переключении вкладок"""
-        viewStatus(self.statusbar, '')
-
     def listFilter(self, model, iter, data):
         """Функция для фильтра подключений в списке"""
         row = ''
@@ -1321,9 +1361,6 @@ class Gui(Gtk.Application):
     def onWiki(self, *args):
         """Открытие wiki в Интернете"""
         os.system ('xdg-open "http://wiki.myconnector.ru/"')
-
-    def changePage(self, index = 1):
-        self.main_note.set_current_page(index)
 
     def onShowWindow(self, *args):
         if self.window.is_active():
@@ -1374,17 +1411,23 @@ class Gui(Gtk.Application):
 
     def filenameFromName( self, name ):
         """Определение имени конфигурационного файла подключения по имени подключения"""
-        for record in getSaveConnections():
+        records, groups = getSaveConnections()
+        for record in records:
             if record[0] == name:
-                return record[3]
+                return record[4]
         return False
 
     def searchName( self, name ):
         """Существует ли подключение с указанным именем"""
-        for record in getSaveConnections():
+        records, groups = getSaveConnections()
+        for record in records:
             if record[0] == name:
                 return True
         return False
+
+    def protocolChange( self, widget ):
+        """Change protocol on main window"""
+        self.conn_note.set_current_page( int( widget.get_active_id() ) )
 
 def connect( name ):
     """Start connection by name"""
