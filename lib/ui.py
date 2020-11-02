@@ -188,7 +188,7 @@ class Gui(Gtk.Application):
         self.conn_note = self.builder.get_object( "list_connect" )
         self.builder.connect_signals(self)
         self.window = self.builder.get_object("main_window")
-        self.window.set_title( "MyConnector %s" % VERSION )
+        self.window.set_title( "MyConnector" )
         self.statusbar = self.builder.get_object("statusbar")
         self.liststore = { "RDP"    : self.builder.get_object( "liststore_RDP"    ),
                            "VNC"    : self.builder.get_object( "liststore_VNC"    ),
