@@ -227,14 +227,7 @@ class Gui(Gtk.Application):
         self.labelRDP, self.labelVNC = self.builder.get_object("label_default_RDP"), self.builder.get_object("label_default_VNC")
         self.labelFS = self.builder.get_object("label_default_FS")
         self.initLabels(self.labelRDP, self.labelVNC, self.labelFS)
-        self.list_groups = Gtk.ListStore( str )
-        records, groups = getSaveConnections()
-        for group in groups:
-            self.list_groups.append( [ group ] )
-        groups_citrix = self.builder.get_object( "combo_CITRIX_group" )
-        groups_web    = self.builder.get_object( "combo_WEB_group"    )
-        groups_citrix.set_model( self.list_groups )
-        groups_web.set_model(    self.list_groups )
+        self.list_groups = self.initGroups()
         self.trayDisplayed = False
         self.tray_submenu = self.builder.get_object("tray_submenu")
         if self.optionEnabled( 'tray' ): self.trayDisplayed = self.initTray()
@@ -247,6 +240,17 @@ class Gui(Gtk.Application):
             self.menu_kiosk.set_sensitive( enabled() )
         except ImportError:
             options.log.warning ("The mode KIOSK unavailable, package is not installed.")
+
+    def initGroups( self ):
+        g = Gtk.ListStore( str )
+        records, groups = getSaveConnections()
+        for group in groups:
+            g.append( [ group ] )
+        groups_citrix = self.builder.get_object( "combo_CITRIX_group" )
+        groups_web    = self.builder.get_object( "combo_WEB_group"    )
+        groups_citrix.set_model( g )
+        groups_web.set_model( g )
+        return( g )
 
     def createDesktopFile(self, filename, nameConnect, nameDesktop):
         """Create desktop-file for connection"""
@@ -1139,6 +1143,7 @@ class Gui(Gtk.Application):
             self.pref_window.destroy()
             self.editClick = False
             self.prefClick = False
+            if group: self.initGroups()
             viewStatus( self.statusbar, "Подключение \"%s\" сохранено..." % namesave )
 
     def onWCSave(self, entry):
@@ -1165,6 +1170,7 @@ class Gui(Gtk.Application):
             self.setSavesToListstore()
             self.citrixEditClick = False
             self.webEditClick = False
+            if group: self.initGroups()
             viewStatus(self.statusbar, "Подключение \"" + name + "\" сохранено...")
 
     def onWCEdit(self, name, server, protocol, group, edit = True):
