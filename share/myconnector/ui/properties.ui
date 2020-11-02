@@ -47,10 +47,14 @@ along with this program. If not, see http://www.gnu.org/licenses/.
       </row>
       <row>
         <col id="0" translatable="yes">1</col>
-        <col id="1" translatable="yes">Протокол</col>
+        <col id="1" translatable="yes">Группа</col>
       </row>
       <row>
         <col id="0" translatable="yes">2</col>
+        <col id="1" translatable="yes">Протокол</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">3</col>
         <col id="1" translatable="yes">Адрес сервера</col>
       </row>
     </data>
