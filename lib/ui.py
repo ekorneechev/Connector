@@ -227,6 +227,14 @@ class Gui(Gtk.Application):
         self.labelRDP, self.labelVNC = self.builder.get_object("label_default_RDP"), self.builder.get_object("label_default_VNC")
         self.labelFS = self.builder.get_object("label_default_FS")
         self.initLabels(self.labelRDP, self.labelVNC, self.labelFS)
+        self.list_groups = Gtk.ListStore( str )
+        records, groups = getSaveConnections()
+        for group in groups:
+            self.list_groups.append( [ group ] )
+        groups_citrix = self.builder.get_object( "combo_CITRIX_group" )
+        groups_web    = self.builder.get_object( "combo_WEB_group"    )
+        groups_citrix.set_model( self.list_groups )
+        groups_web.set_model(    self.list_groups )
         self.trayDisplayed = False
         self.tray_submenu = self.builder.get_object("tray_submenu")
         if self.optionEnabled( 'tray' ): self.trayDisplayed = self.initTray()
@@ -399,7 +407,7 @@ class Gui(Gtk.Application):
                     return None
                 if protocol in [ "CITRIX", "WEB" ]:
                     try:
-                        self.onWCEdit( "", parameters[ "server" ], protocol )
+                        self.onWCEdit( "", parameters[ "server" ], protocol, parameters.get( "group", "" ) )
                     except KeyError:
                         server_not_found( filename )
                         dialog.destroy()
@@ -509,12 +517,8 @@ class Gui(Gtk.Application):
         entryGroup = self.pref_builder.get_object( "entry_%s_group" % name )
         try: entryGroup.set_text( parameters.get( "group", "" ) )
         except: pass
-        list_groups = Gtk.ListStore( str )
-        records, groups = getSaveConnections()
-        for group in groups:
-            list_groups.append( [ group ] )
         combo_groups = self.pref_builder.get_object( "combo_%s_group" % name )
-        combo_groups.set_model( list_groups )
+        combo_groups.set_model( self.list_groups )
         self.initPreferences( name )
         self.setPreferences( name, parameters )
         self.pref_window.add(box)
@@ -1141,7 +1145,8 @@ class Gui(Gtk.Application):
         """Сохранение подключения к Citrix или WEB"""
         server = entry.get_text()
         protocol = entry.get_name()
-        name = self.builder.get_object("entry_" + protocol + "_name").get_text()
+        name  = self.builder.get_object( "entry_%s_name"  % protocol ).get_text()
+        group = self.builder.get_object( "entry_%s_group" % protocol ).get_text()
         if name == "":
             os.system( "zenity --error --text='\nУкажите имя подключения!' --no-wrap --icon-name=myconnector" )
         elif self.searchName( name ) and not self.citrixEditClick and not self.webEditClick:
@@ -1149,6 +1154,7 @@ class Gui(Gtk.Application):
         else:
             parameters = { "name"     : name,
                            "protocol" : protocol,
+                           "group"    : group,
                            "server"   : server }
             if self.citrixEditClick or self.webEditClick:
                 fileName = self.resaveFileCtor(name, protocol, server)
@@ -1161,7 +1167,7 @@ class Gui(Gtk.Application):
             self.webEditClick = False
             viewStatus(self.statusbar, "Подключение \"" + name + "\" сохранено...")
 
-    def onWCEdit(self, name, server, protocol, edit = True):
+    def onWCEdit(self, name, server, protocol, group, edit = True):
         """Функция изменения Citrix или WEB-подключения """
         if protocol == "CITRIX":
             self.citrixEditClick = edit
@@ -1170,14 +1176,17 @@ class Gui(Gtk.Application):
             self.webEditClick = edit
             index_tab = 9
         self.conn_note.set_current_page(index_tab)
-        entry_serv = self.builder.get_object("entry_serv_" + protocol)
-        entry_name = self.builder.get_object("entry_" + protocol + "_name")
-        entry_serv.set_text(server)
-        entry_name.set_text(name)
+        entry_serv  = self.builder.get_object( "entry_serv_%s"  % protocol )
+        entry_name  = self.builder.get_object( "entry_%s_name"  % protocol )
+        entry_group = self.builder.get_object( "entry_%s_group" % protocol )
+        entry_serv.set_text(  server )
+        entry_name.set_text(  name   )
+        entry_group.set_text( group  )
 
     def onWCMenu(self, item):
+        """Open WEB / CITRIX tab from main menu"""
         protocol = item.get_name()
-        self.onWCEdit('','', protocol, False)
+        self.onWCEdit( "", "", protocol, "", False )
 
     def onSaveConnect(self, treeView, *args):
         """Установка подключения по двойному щелчку на элементе списка"""
@@ -1220,7 +1229,7 @@ class Gui(Gtk.Application):
                 return None
             if protocol in [ "CITRIX", "WEB" ]:
                 try:
-                    self.onWCEdit( nameConnect, parameters [ "server" ], protocol )
+                    self.onWCEdit( nameConnect, parameters [ "server" ], protocol, parameters.get( "group", "" ) )
                 except KeyError:
                     server_not_found( nameConnect )
                     return None
@@ -1243,7 +1252,7 @@ class Gui(Gtk.Application):
             nameConnect = "%s (копия)" % nameConnect
             if protocol in [ "CITRIX", "WEB" ]:
                 try:
-                    self.onWCEdit( nameConnect, parameters[ "server" ], protocol, False )
+                    self.onWCEdit( nameConnect, parameters[ "server" ], protocol, parameters.get( "group", "" ), False )
                 except KeyError:
                     server_not_found( nameConnect )
                     return None
