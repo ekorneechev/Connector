@@ -127,11 +127,13 @@ def getSaveConnections():
             conf.read( "%s/%s" % ( WORKFOLDER, mycfile ) )
             try:
                 group = conf[ "myconnector" ].get( "group", "" )
+                protocol = conf[ "myconnector" ][ "protocol" ].upper()
                 save = [ conf[ "myconnector" ][ "name"     ],
                          group,
-                         conf[ "myconnector" ][ "protocol" ].upper(),
+                         protocol,
                          conf[ "myconnector" ][ "server"   ],
-                         mycfile ]
+                         mycfile,
+                         GdkPixbuf.Pixbuf.new_from_file( "%s/%s.png" % ( ICONFOLDER, protocol ) ) ]
                 saves.append( save )
                 if group: groups.append( group )
             except KeyError: pass
@@ -202,7 +204,7 @@ class Gui(Gtk.Application):
                            "SPICE"  : self.builder.get_object( "liststore_SPICE"  ),
                            "FS"     : self.builder.get_object( "liststore_FS"     ) }
 
-        self.liststore_connect = Gtk.ListStore(str, str, str, str, str)
+        self.liststore_connect = Gtk.ListStore( str, str, str, str, str, GdkPixbuf.Pixbuf )
         self.setSavesToListstore()
         self.filterConnections = self.liststore_connect.filter_new()
         self.filterConnections.set_visible_func(self.listFilter) #добавление фильтра для поиска

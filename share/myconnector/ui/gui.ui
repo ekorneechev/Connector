@@ -2488,6 +2488,18 @@ along with this program. If not, see http://www.gnu.org/licenses/.
                       </object>
                     </child>
                     <child>
+                      <object class="GtkTreeViewColumn" id="column_icon">
+                        <property name="sizing">fixed</property>
+                        <property name="fixed_width">25</property>
+                        <child>
+                          <object class="GtkCellRendererPixbuf" id="cellrenderericon"/>
+                          <attributes>
+                            <attribute name="pixbuf">5</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
                       <object class="GtkTreeViewColumn" id="column_protocol">
                         <property name="resizable">True</property>
                         <property name="title" translatable="yes">Протокол</property>
