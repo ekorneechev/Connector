@@ -1119,10 +1119,11 @@ class Gui(Gtk.Application):
         parameters = self.applyPreferences( name )
         namesave = self.pref_builder.get_object( "entry_%s_name"  % name ).get_text()
         group    = self.pref_builder.get_object( "entry_%s_group" % name ).get_text()
+        error = ""
         if namesave == "":
-            os.system( "zenity --error --text='\nУкажите имя подключения!' --no-wrap --icon-name=myconnector" )
+            error = "Укажите имя подключения!"
         elif self.searchName( namesave ) and not self.editClick:
-            os.system( "zenity --error --text='\nПодключение с именем \"%s\" уже существует!' --no-wrap --icon-name=myconnector" % namesave )
+            error = "Подключение с именем \"%s\" уже существует!" % namesave
         else:
             parameters[ "name"     ] = namesave
             parameters[ "protocol" ] = protocol
@@ -1145,6 +1146,9 @@ class Gui(Gtk.Application):
             self.prefClick = False
             if group: self.initGroups()
             viewStatus( self.statusbar, "Подключение \"%s\" сохранено..." % namesave )
+        if error:
+            viewStatus( self.statusbar, error )
+            os.system( "zenity --error --text='\n%s!' --no-wrap --icon-name=myconnector" % error )
 
     def onWCSave(self, entry):
         """Сохранение подключения к Citrix или WEB"""
@@ -1152,10 +1156,11 @@ class Gui(Gtk.Application):
         protocol = entry.get_name()
         name  = self.builder.get_object( "entry_%s_name"  % protocol ).get_text()
         group = self.builder.get_object( "entry_%s_group" % protocol ).get_text()
+        error = ""
         if name == "":
-            os.system( "zenity --error --text='\nУкажите имя подключения!' --no-wrap --icon-name=myconnector" )
+            error = "Укажите имя подключения!"
         elif self.searchName( name ) and not self.citrixEditClick and not self.webEditClick:
-            os.system( "zenity --error --text='\nПодключение с именем \"%s\" уже существует!' --no-wrap --icon-name=myconnector" % name )
+            error = "Подключение с именем \"%s\" уже существует!" % name
         else:
             parameters = { "name"     : name,
                            "protocol" : protocol,
@@ -1172,6 +1177,9 @@ class Gui(Gtk.Application):
             self.webEditClick = False
             if group: self.initGroups()
             viewStatus(self.statusbar, "Подключение \"" + name + "\" сохранено...")
+        if error:
+            viewStatus( self.statusbar, error )
+            os.system( "zenity --error --text='\n%s' --no-wrap --icon-name=myconnector" % error )
 
     def onWCEdit(self, name, server, protocol, group, edit = True):
         """Функция изменения Citrix или WEB-подключения """
