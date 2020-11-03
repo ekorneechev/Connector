@@ -126,12 +126,14 @@ def getSaveConnections():
             conf = ConfigParser()
             conf.read( "%s/%s" % ( WORKFOLDER, mycfile ) )
             try:
-                group = conf[ "myconnector" ].get( "group", "" )
+                name     = conf[ "myconnector" ].get( "name",  "" )
+                group    = conf[ "myconnector" ].get( "group", "" )
                 protocol = conf[ "myconnector" ][ "protocol" ].upper()
-                save = [ conf[ "myconnector" ][ "name"     ],
+                if not name: name = mycfile
+                save = [ name,
                          group,
                          protocol,
-                         conf[ "myconnector" ][ "server"   ],
+                         conf[ "myconnector" ][ "server" ],
                          mycfile,
                          GdkPixbuf.Pixbuf.new_from_file( "%s/%s.png" % ( ICONFOLDER, protocol ) ) ]
                 saves.append( save )
