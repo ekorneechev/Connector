@@ -62,7 +62,7 @@ def main():
         debug()
     if args.list:
         from .ui import getSaveConnections as list_connections
-        _list = list_connections()
+        _list, _group = list_connections()
         for record in _list:
             print( '"%s"' % record[ 0 ] )
         exit( 0 )
