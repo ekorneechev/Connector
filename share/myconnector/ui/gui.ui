@@ -477,7 +477,6 @@ along with this program. If not, see http://www.gnu.org/licenses/.
     <property name="width_request">550</property>
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <property name="resizable">False</property>
     <property name="window_position">center</property>
     <property name="icon_name">myconnector</property>
     <signal name="delete-event" handler="onHideWindow" swapped="no"/>
@@ -788,6 +787,7 @@ along with this program. If not, see http://www.gnu.org/licenses/.
           <object class="GtkComboBox" id="combo_protocols">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="halign">start</property>
             <property name="model">liststore_tabs</property>
             <property name="id_column">0</property>
             <signal name="changed" handler="protocolChange" swapped="no"/>
@@ -2429,7 +2429,7 @@ along with this program. If not, see http://www.gnu.org/licenses/.
             </child>
           </object>
           <packing>
-            <property name="expand">True</property>
+            <property name="expand">False</property>
             <property name="fill">True</property>
             <property name="position">3</property>
           </packing>
@@ -2587,7 +2587,7 @@ along with this program. If not, see http://www.gnu.org/licenses/.
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
+            <property name="expand">True</property>
             <property name="fill">True</property>
             <property name="position">5</property>
           </packing>
