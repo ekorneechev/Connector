@@ -219,9 +219,9 @@ def ctor_import( filename ):
         params_to_myc[ "type"                ] = params_from_ctor[ 5 ]
 
     if protocol == "VMWARE":
-        params_to_myc[ "user"                ] = params_from_ctor[ 2 ]
+        params_to_myc[ "username"            ] = params_from_ctor[ 2 ]
         params_to_myc[ "domain"              ] = params_from_ctor[ 3 ]
-        params_to_myc[ "password"            ] = params_from_ctor[ 4 ]
+        params_to_myc[ "passwd"              ] = params_from_ctor[ 4 ]
         params_to_myc[ "fullscreen"          ] = params_from_ctor[ 5 ]
 
     conf = ConfigParser()

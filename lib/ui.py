@@ -462,7 +462,7 @@ class Gui(Gtk.Application):
             if self.prefClick: #если нажата кнопка Доп. Параметры
                 parameters = self.applyPreferences( name )
                 parameters[ "server" ] = server
-                if name == "RDP1":
+                if name == "RDP1" or name == "VMWARE":
                     self.saveKeyring ( parameters.copy() )
             else:
                 try: parameters = CONFIGS[ name ]
@@ -549,9 +549,12 @@ class Gui(Gtk.Application):
             else: self.VNC_showcursor.set_active( False )
 
         if protocol == "VMWARE":
-            self.VMWARE_user.set_text(     args.get( "user", ""     ) )
-            self.VMWARE_domain.set_text(   args.get( "domain", ""   ) )
-            self.VMWARE_password.set_text( args.get( "password", "" ) )
+            self.VMWARE_user.set_text( args.get( "username", "" ) )
+            self.VMWARE_domain.set_text( args.get( "domain", "" ) )
+            password = keyring.get_password( args.get( "server", "" ), args.get( "username", "" ) )
+            if args.getboolean( "passwdsave" ) or password: self.VMWARE_pwdsave.set_active( True )
+            if not password: password = args.get( "password", "" )
+            self.VMWARE_password.set_text( password )
             if args.getboolean( "fullscreen" ): self.VMWARE_fullscreen.set_active( True )
 
         if protocol == "XDMCP":
@@ -576,7 +579,6 @@ class Gui(Gtk.Application):
             else:
                 SSH_pwd = self.pref_builder.get_object( "radio_SSH_pwd" )
                 SSH_pwd.set_active( True )
-
 
         if protocol == "SFTP":
             self.SFTP_user.set_text(             args.get( "username",          "" ) )
@@ -825,6 +827,7 @@ class Gui(Gtk.Application):
             self.VMWARE_user       = self.pref_builder.get_object( "entry_VMWARE_user"       )
             self.VMWARE_domain     = self.pref_builder.get_object( "entry_VMWARE_dom"        )
             self.VMWARE_password   = self.pref_builder.get_object( "entry_VMWARE_pwd"        )
+            self.VMWARE_pwdsave    = self.pref_builder.get_object( "check_VMWARE_pwd"        )
             self.VMWARE_fullscreen = self.pref_builder.get_object( "check_VMWARE_fullscreen" )
 
         if protocol == "SPICE":
@@ -849,9 +852,10 @@ class Gui(Gtk.Application):
 
         if protocol == "VMWARE":
             args = dict(
-                user       =      self.VMWARE_user.get_text(),
-                domain     =      self.VMWARE_domain.get_text(),
-                password   =      self.VMWARE_password.get_text(),
+                username   = self.VMWARE_user.get_text(),
+                domain     = self.VMWARE_domain.get_text(),
+                passwd     = self.VMWARE_password.get_text(),
+                passwdsave = "True" if self.VMWARE_pwdsave.get_active() else "False",
                 fullscreen = str( self.VMWARE_fullscreen.get_active() ) )
 
         if protocol == "RDP":
@@ -1131,7 +1135,7 @@ class Gui(Gtk.Application):
             parameters[ "protocol" ] = protocol
             parameters[ "server"   ] = server
             parameters[ "group"    ] = group
-            if name == "RDP1" and parameters.get ( "username", "" ):
+            if ( name == "RDP1" or name =="VMWARE" ) and parameters.get ( "username", "" ):
                 self.saveKeyring ( parameters.copy() )
                 parameters [ "passwd" ] = ""
             program = self.getProgram( name )
