@@ -221,8 +221,9 @@ class Gui(Gtk.Application):
         self.treeview.connect("drag-data-get", self.onDragLabel)
         self.treeview.drag_source_add_uri_targets()
         if FIRSTRUN:
-            if os.path.exists( "%s/.connector" % HOMEFOLDER ):
-                self.importFromConnector()
+            connections = "%s/.connector/connections.db" % HOMEFOLDER
+            if os.path.exists( connections ):
+                self.importFromConnector( connections )
         self.getServersFromDb()
         self.citrixEditClick = False
         self.webEditClick = False
@@ -1440,9 +1441,25 @@ class Gui(Gtk.Application):
         """Change protocol on main window"""
         self.conn_note.set_current_page( int( widget.get_active_id() ) )
 
-    def importFromConnector():
+    def importFromConnector( self, connections ):
         """Autoimport connections from Connector"""
-        pass
+        dialog = Gtk.MessageDialog( self.window, 0, Gtk.MessageType.QUESTION, Gtk.ButtonsType.YES_NO,
+                                    "Обнаружены файлы подключений старой версии программы (Connector)." )
+        dialog.format_secondary_text( "Выполнить их импорт в данную версию?" )
+        response = dialog.run()
+        if response == Gtk.ResponseType.YES:
+            for connect in open( connections ):
+                try:
+                    record = connect.strip().split( ":::" )
+                    name     = record[ 0 ]
+                    ctorfile = "%s/.connector/%s" % ( HOMEFOLDER, record[ 3 ] )
+                    mycfile = "%s/%s_import.myc" % ( WORKFOLDER, name.lower() )
+                    call( [ "ctor2myc", ctorfile, mycfile ] )
+                    with open( mycfile, "a" ) as f:
+                        print( "name = %s" % name, file = f )
+                except: pass
+            self.setSavesToListstore()
+        dialog.destroy()
 
 def connect( name ):
     """Start connection by name"""

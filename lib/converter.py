@@ -95,7 +95,7 @@ def ctor_import( filename ):
         with open( filename, "rb" ) as ctorfile:
             params_from_ctor = load( ctorfile )
     except FileNotFoundError as e:
-        print( e )
+        print( "Import error. %s"% e )
         exit( 1 )
     except:
         print( "Import error. Is this Connector's file?" )
@@ -244,9 +244,12 @@ def myc_save( args ):
     except:
         mycfile = ctorfile.replace( ".ctor", ".myc" )
     _config [ "myconnector" ] = ctor_import( ctorfile )
-    with open( mycfile, "w" ) as configfile:
-        _config.write( configfile )
-    print( "The file (%s) has been successfully converted to the new format  - %s " % ( ctorfile, mycfile ) )
+    try:
+        with open( mycfile, "w" ) as configfile:
+            _config.write( configfile )
+        print( "The file (%s) has been successfully converted to the new format  - %s " % ( ctorfile, mycfile ) )
+    except FileNotFoundError as e:
+        print( "Import error. %s"% e )
 
 def parseArgs():
     """Description of the command line argument parser"""
