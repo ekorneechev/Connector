@@ -27,7 +27,7 @@ from pickle import load
 from myconnector.config import CONFIGS
 
 _version = "0.1"
-_info    = "Converter from .ctor (outdated format Connector) to new .myc"
+_info    = "Converter from .ctor (outdated format Connector) to new .myc (MyConnector)"
 
 def rdp_import( filename ):
     """Get parameters from RDP file"""
@@ -228,10 +228,14 @@ def ctor_import( filename ):
     conf [ "myconnector" ] = params_to_myc
     return conf [ "myconnector" ]
 
-def myc_save( ctorfile ):
+def myc_save( args ):
     """Save imported parameters to myc file"""
     _config = ConfigParser()
-    mycfile = ctorfile.replace( ".ctor", ".myc" )
+    ctorfile = args.input
+    try:
+        mycfile = args.output
+    except:
+        mycfile = ctorfile.replace( ".ctor", ".myc" )
     _config [ "myconnector" ] = ctor_import( ctorfile )
     with open( mycfile, "w" ) as configfile:
         _config.write( configfile )
@@ -239,13 +243,14 @@ def myc_save( ctorfile ):
 
 def parseArgs():
     """Description of the command line argument parser"""
-    args = ArgumentParser( prog = "ctor2myc", formatter_class = RawTextHelpFormatter, description = _info )
+    args = ArgumentParser( prog = "ctor2myc", formatter_class = RawTextHelpFormatter, add_help=False )
     args.add_argument( "-v", "--version", action = "version", help = "show the application version",
-                       version = "ctor2myc v%s\n%s (MyConnector)." % ( _version, _info ) )
-    args.add_argument( "filename", type = str, help = "name of the file .ctor for convert" )
+                       version = "ctor2myc v%s\n%s." % ( _version, _info ) )
+    args.add_argument( "input",  type = str, metavar = "input.ctor" )
+    args.add_argument( "output", type = str, metavar = "output.myc", nargs = "?" )
     return args.parse_args()
 
 def main():
     args = parseArgs()
-    myc_save( args.filename )
+    myc_save( args )
 
