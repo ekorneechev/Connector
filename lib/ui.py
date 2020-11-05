@@ -220,6 +220,9 @@ class Gui(Gtk.Application):
         self.treeview.enable_model_drag_source(Gdk.ModifierType.BUTTON1_MASK, [], Gdk.DragAction.MOVE)
         self.treeview.connect("drag-data-get", self.onDragLabel)
         self.treeview.drag_source_add_uri_targets()
+        if FIRSTRUN:
+            if os.path.exists( "%s/.connector" % HOMEFOLDER ):
+                self.importFromConnector()
         self.getServersFromDb()
         self.citrixEditClick = False
         self.webEditClick = False
@@ -1436,6 +1439,10 @@ class Gui(Gtk.Application):
     def protocolChange( self, widget ):
         """Change protocol on main window"""
         self.conn_note.set_current_page( int( widget.get_active_id() ) )
+
+    def importFromConnector():
+        """Autoimport connections from Connector"""
+        pass
 
 def connect( name ):
     """Start connection by name"""

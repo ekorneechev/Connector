@@ -33,6 +33,7 @@ UIFOLDER    = "%s/ui"              % MAINFOLDER
 LOGFOLDER   = "%s/logs"            % WORKFOLDER
 LOGFILE     = "%s/myconnector.log" % LOGFOLDER
 STDLOGFILE  = "%s/all.log"         % LOGFOLDER
+FIRSTRUN    = False if os.path.exists( WORKFOLDER ) else True
 
 os.system( "mkdir -p %s" % LOGFOLDER )
 
