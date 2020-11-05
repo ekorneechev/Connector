@@ -91,8 +91,15 @@ def remmina_import( filename ):
 
 def ctor_import( filename ):
     """Get parameters from ctor (old format) file"""
-    with open( filename, "rb" ) as ctorfile:
-        params_from_ctor = load( ctorfile )
+    try:
+        with open( filename, "rb" ) as ctorfile:
+            params_from_ctor = load( ctorfile )
+    except FileNotFoundError as e:
+        print( e )
+        exit( 1 )
+    except:
+        print( "Import error. Is this Connector's file?" )
+        exit( 1 )
     protocol = params_from_ctor[ 0 ]
     params_to_myc = {}
     params_to_myc[ "protocol" ] = protocol
