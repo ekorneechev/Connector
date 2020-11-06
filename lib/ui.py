@@ -117,28 +117,29 @@ def quitApp():
     options.log.info ( "The MyConnector is forcibly closed (from cmdline)." )
     os.system( "pkill [my]?connector" )
 
-def getSaveConnections():
+def getSaveConnections( fileFromConnection = "" ):
     """List of save connections from files in WORKFOLDER"""
     saves  = []
     groups = []
     for mycfile in os.listdir( WORKFOLDER ):
-        if Path( mycfile ).suffix.lower() == ".myc":
-            conf = ConfigParser()
-            conf.read( "%s/%s" % ( WORKFOLDER, mycfile ) )
-            try:
-                name     = conf[ "myconnector" ].get( "name",  "" )
-                group    = conf[ "myconnector" ].get( "group", "" )
-                protocol = conf[ "myconnector" ][ "protocol" ].upper()
-                if not name: name = mycfile
-                save = [ name,
-                         group,
-                         protocol,
-                         conf[ "myconnector" ][ "server" ],
-                         mycfile,
-                         GdkPixbuf.Pixbuf.new_from_file( "%s/%s.png" % ( ICONFOLDER, protocol ) ) ]
-                saves.append( save )
-                if group: groups.append( group )
-            except KeyError: pass
+        if mycfile != fileFromConnection: # pass editing file
+            if Path( mycfile ).suffix.lower() == ".myc":
+                conf = ConfigParser()
+                conf.read( "%s/%s" % ( WORKFOLDER, mycfile ) )
+                try:
+                    name     = conf[ "myconnector" ].get( "name",  "" )
+                    group    = conf[ "myconnector" ].get( "group", "" )
+                    protocol = conf[ "myconnector" ][ "protocol" ].upper()
+                    if not name: name = mycfile
+                    save = [ name,
+                             group,
+                             protocol,
+                             conf[ "myconnector" ][ "server" ],
+                             mycfile,
+                             GdkPixbuf.Pixbuf.new_from_file( "%s/%s.png" % ( ICONFOLDER, protocol ) ) ]
+                    saves.append( save )
+                    if group: groups.append( group )
+                except KeyError: pass
     return saves, list( set( groups ) ) #unique groups
 
 def changeProgram( protocol, program = "" ):
@@ -186,7 +187,6 @@ class Gui(Gtk.Application):
     def __init__(self):
         Gtk.Application.__init__(self, application_id="ru.myconnector.MyConnector", flags=Gio.ApplicationFlags.FLAGS_NONE)
         self.prefClick = False
-        self.editClick = False
         self.builder = Gtk.Builder()
         self.builder.add_from_file( "%s/gui.ui" % UIFOLDER )
         self.conn_note = self.builder.get_object( "list_connect" )
@@ -225,8 +225,6 @@ class Gui(Gtk.Application):
             if os.path.exists( connections ):
                 self.importFromConnector( connections )
         self.getServersFromDb()
-        self.citrixEditClick = False
-        self.webEditClick = False
         try: default_tab = CONFIG[ 'tab' ]
         except KeyError: default_tab = '0'
         self.combo_protocols = self.builder.get_object( "combo_protocols" )
@@ -1018,13 +1016,11 @@ class Gui(Gtk.Application):
         """Нажатие кнопки Отмена в окне доп. параметров"""
         window.destroy()
         self.prefClick = False
-        self.editClick = False
 
     def onClose (self, window, *args):
         """Закрытие окна доп. параметров"""
         window.destroy()
         self.prefClick = False
-        self.editClick = False
 
     def onFolderChoose(self, widget, *args):
         """При нажатии на выбор папки в окне доп. параметров"""
@@ -1133,7 +1129,7 @@ class Gui(Gtk.Application):
         error = ""
         if namesave == "":
             error = "Укажите имя подключения!"
-        elif self.searchName( namesave ) and not self.editClick:
+        elif self.searchName( namesave ):
             error = "Подключение с именем \"%s\" уже существует!" % namesave
         else:
             parameters[ "name"     ] = namesave
@@ -1145,18 +1141,22 @@ class Gui(Gtk.Application):
                 parameters [ "passwd" ] = ""
             program = self.getProgram( name )
             if program: parameters[ "program" ] = program
-            if self.editClick:#если нажата кнопка Изменить, то пересохранить
-                fileName = self.resaveFileCtor( namesave, protocol, server )
-            else:
+            if hasattr( self, "fileCtor" ): #checking - edit or new connection
+                if self.fileCtor: newfile = False
+                else: newfile = True
+            else: newfile = True
+            if newfile:
                 fileName = self.saveFileCtor( namesave, protocol, server )
                 self.initSubmenuTray()
+            else:
+                fileName = self.resaveFileCtor( namesave, protocol, server )
             options.saveInFile( fileName, parameters )
             self.setSavesToListstore()
             self.pref_window.destroy()
-            self.editClick = False
             self.prefClick = False
             if group: self.initGroups()
             viewStatus( self.statusbar, "Подключение \"%s\" сохранено..." % namesave )
+            self.fileCtor = ""
         if error:
             viewStatus( self.statusbar, error )
             os.system( "zenity --error --text='\n%s!' --no-wrap --icon-name=myconnector" % error )
@@ -1170,36 +1170,35 @@ class Gui(Gtk.Application):
         error = ""
         if name == "":
             error = "Укажите имя подключения!"
-        elif self.searchName( name ) and not self.citrixEditClick and not self.webEditClick:
+        elif self.searchName( name ):
             error = "Подключение с именем \"%s\" уже существует!" % name
         else:
             parameters = { "name"     : name,
                            "protocol" : protocol,
                            "group"    : group,
                            "server"   : server }
-            if self.citrixEditClick or self.webEditClick:
-                fileName = self.resaveFileCtor(name, protocol, server)
-            else:
-                fileName = self.saveFileCtor(name, protocol, server)
+            if hasattr( self, "fileCtor" ): #checking - edit or new connection
+                if self.fileCtor: newfile = False
+                else: newfile = True
+            else: newfile = True
+            if newfile:
+                fileName = self.saveFileCtor( name, protocol, server )
                 self.initSubmenuTray()
+            else:
+                fileName = self.resaveFileCtor( name, protocol, server )
             options.saveInFile(fileName, parameters)
             self.setSavesToListstore()
-            self.citrixEditClick = False
-            self.webEditClick = False
             if group: self.initGroups()
             viewStatus(self.statusbar, "Подключение \"" + name + "\" сохранено...")
+            self.fileCtor = ""
         if error:
             viewStatus( self.statusbar, error )
             os.system( "zenity --error --text='\n%s' --no-wrap --icon-name=myconnector" % error )
 
-    def onWCEdit(self, name, server, protocol, group, edit = True):
+    def onWCEdit(self, name, server, protocol, group ):
         """Функция изменения Citrix или WEB-подключения """
-        if protocol == "CITRIX":
-            self.citrixEditClick = edit
-            index_tab = 6
-        if protocol == "WEB":
-            self.webEditClick = edit
-            index_tab = 9
+        if protocol == "CITRIX": index_tab = 6
+        if protocol == "WEB":    index_tab = 9
         self.conn_note.set_current_page(index_tab)
         entry_serv  = self.builder.get_object( "entry_serv_%s"  % protocol )
         entry_name  = self.builder.get_object( "entry_%s_name"  % protocol )
@@ -1211,7 +1210,7 @@ class Gui(Gtk.Application):
     def onWCMenu(self, item):
         """Open WEB / CITRIX tab from main menu"""
         protocol = item.get_name()
-        self.onWCEdit( "", "", protocol, "", False )
+        self.onWCEdit( "", "", protocol, "" )
 
     def onSaveConnect(self, treeView, *args):
         """Установка подключения по двойному щелчку на элементе списка"""
@@ -1259,7 +1258,6 @@ class Gui(Gtk.Application):
                     server_not_found( nameConnect )
                     return None
             else:
-                self.editClick = True
                 analogEntry = self.AnalogEntry( protocol, parameters )
                 self.onButtonPref( analogEntry, nameConnect )
 
@@ -1277,7 +1275,7 @@ class Gui(Gtk.Application):
             nameConnect = "%s (копия)" % nameConnect
             if protocol in [ "CITRIX", "WEB" ]:
                 try:
-                    self.onWCEdit( nameConnect, parameters[ "server" ], protocol, parameters.get( "group", "" ), False )
+                    self.onWCEdit( nameConnect, parameters[ "server" ], protocol, parameters.get( "group", "" ) )
                 except KeyError:
                     server_not_found( nameConnect )
                     return None
@@ -1430,7 +1428,8 @@ class Gui(Gtk.Application):
 
     def searchName( self, name ):
         """Существует ли подключение с указанным именем"""
-        records, groups = getSaveConnections()
+        thereIsFile = self.fileCtor if hasattr( self, "fileCtor" ) else ""
+        records, groups = getSaveConnections( thereIsFile )
         for record in records:
             if record[0] == name:
                 return True
