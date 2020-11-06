@@ -2451,6 +2451,7 @@ along with this program. If not, see http://www.gnu.org/licenses/.
                   <object class="GtkTreeView" id="treeview_connections">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="enable_grid_lines">horizontal</property>
                     <property name="tooltip_column">3</property>
                     <signal name="button-press-event" handler="onPopupMenu" swapped="no"/>
                     <signal name="row-activated" handler="onSaveConnect" swapped="no"/>
