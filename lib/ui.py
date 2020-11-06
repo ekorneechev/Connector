@@ -1203,6 +1203,8 @@ class Gui(Gtk.Application):
         entry_serv  = self.builder.get_object( "entry_serv_%s"  % protocol )
         entry_name  = self.builder.get_object( "entry_%s_name"  % protocol )
         entry_group = self.builder.get_object( "entry_%s_group" % protocol )
+        protocols   = self.builder.get_object( "combo_protocols" )
+        protocols.set_active_id( str( index_tab ) )
         entry_serv.set_text(  server )
         entry_name.set_text(  name   )
         entry_group.set_text( group  )
