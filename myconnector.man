@@ -26,9 +26,9 @@ Citrix, VMware и прочие).
 возможно подключение с помощью файлов .myc, .remmina и .rdp
 .RE
 .PP
-\fB--disable-kiosk\fR
+\fB--kiosk\fR
 .RS 3
-отключение режима Киоск (при наличии доступа и пакета \fImyconnector-kiosk\fR)
+настройка режима Киоск (при наличии доступа и пакета \fImyconnector-kiosk\fR)
 .RE
 .PP
 \fB-h,\ --help\fR
