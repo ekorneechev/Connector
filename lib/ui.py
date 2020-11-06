@@ -677,7 +677,7 @@ class Gui(Gtk.Application):
                 self.RDP_jpeg.set_active( True )
                 self.RDP_jpeg_quality.set_value( float( args.get( "jpeg_quality", "80" ) ) )
             if args.getboolean( "usb"        ): self.RDP_usb.set_active(           True )
-            if args.getboolean( "secnla"     ): self.RDP_nla.set_active(           True )
+            if args.getboolean( "disable_nla"): self.RDP_nla.set_active(           True )
             if args.getboolean( "span"       ): self.RDP_span.set_active(          True )
             if args.getboolean( "desktop"    ): self.RDP_desktop.set_active(       True )
             if args.getboolean( "downloads"  ): self.RDP_down.set_active(          True )
