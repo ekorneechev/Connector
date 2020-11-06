@@ -235,7 +235,6 @@ class Gui(Gtk.Application):
         self.labelRDP, self.labelVNC = self.builder.get_object("label_default_RDP"), self.builder.get_object("label_default_VNC")
         self.labelFS = self.builder.get_object("label_default_FS")
         self.initLabels(self.labelRDP, self.labelVNC, self.labelFS)
-        self.list_groups = self.initGroups()
         self.trayDisplayed = False
         self.tray_submenu = self.builder.get_object("tray_submenu")
         if self.optionEnabled( 'tray' ): self.trayDisplayed = self.initTray()
@@ -530,7 +529,7 @@ class Gui(Gtk.Application):
         try: entryGroup.set_text( parameters.get( "group", "" ) )
         except: pass
         combo_groups = self.pref_builder.get_object( "combo_%s_group" % name )
-        combo_groups.set_model( self.list_groups )
+        combo_groups.set_model( self.initGroups() )
         self.initPreferences( name )
         self.setPreferences( name, parameters )
         self.pref_window.add(box)
