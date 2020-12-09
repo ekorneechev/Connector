@@ -10,6 +10,6 @@ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
 После выпуска стабильного релиза из ветки 1.9.x вся работа над новыми функциями, локализацией и прочими нововведениями будет вестить в новом репозитории: [MyConnector/MyConnector](https://github.com/MyConnector/MyConnector) (ожидайте **MyConnector 2.0**!!!). Здесь же только исправление ошибок.
 
 * [Веб-сайт проекта](http://myconnector.ru)
-* [Wiki-страничка](http://wiki.myconnector.ru) ([руководство пользователя](http://myconnector.ru/wiki/Connector_wiki.pdf))
+* [Wiki-страничка](http://oldwiki.myconnector.ru) ([руководство пользователя](http://myconnector.ru/wiki/Connector_wiki.pdf))
 * [Связь с разработчиком](mailto:ek@myconnector.ru)
 * [Поддержите проект](http://myconnector.ru/donate)
