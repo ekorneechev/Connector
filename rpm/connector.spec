@@ -82,7 +82,7 @@ install -pDm644 kiosk/%name-kiosk.man %buildroot%_man1dir/%name-kiosk.1
 %_man1dir/%name-kiosk.*
 
 %changelog
-* Tue Jun 29 2020 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.9.7-alt1
+* Tue Jun 29 2021 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.9.7-alt1
 - fixed icaclient start
 
 * Mon Jul 06 2020 Evgeniy Korneechev <ekorneechev@altlinux.org> 1.9.6-alt1
